@@ -16,7 +16,7 @@ Last updated: 2026-09-02
 
 ## File Structure
 ```
-SalesTrainer/               ← root folder (rename to MammothAcademy pending)
+MammothAcademy/             ← root folder
 ├── index.html              ← Homepage: hero, progress stats, zone grid, badge modal
 ├── library.html            ← Library: 24-module course library (AWS/Sales/Scrum tabs)
 ├── gym.html                ← Gym: flashcards + arch lab + sales scenarios
@@ -87,6 +87,7 @@ SalesTrainer/               ← root folder (rename to MammothAcademy pending)
 8. **Cross-module links** — Every module links to 2+ related modules
 9. **NotebookLM exports** — 24 .md files in notebooklm_exports/ for audio teacher generation
 10. **Full rebrand** — SalesTrainer → Mammoth Academy. MC palette, Outfit+JBMono fonts, logo, footer
+11. **CompTIA Pack (v1)** — Modularized `comptia-certifications.js` covering A+, Network+, Security+, and Cloud+ with Mammoth tone (Proxmox/pfSense/MSTR analogies).
 
 ---
 
@@ -123,8 +124,9 @@ SalesTrainer/               ← root folder (rename to MammothAcademy pending)
 ## Open Items / Roadmap
 | Priority | Item |
 |---|---|
+| Phase 2 | CompTIA: Build 90-question exam pool for `arena.html` hitting exact domain weights (Sec+ Ops 28%, etc.) |
+| Phase 2 | CompTIA: Add pfSense/Zero-Trust Architecture Scenarios to `gym.html` |
 | Low | Cost domain at 21% vs 24% target — add ~3 more cost questions |
-| Phase 2 | Course modularization to /courses/*.json files (for future subjects like Azure) |
+| Phase 3 | Course modularization to /courses/*.json files (for future subjects like Azure) |
 | Phase 3 | Capacitor wrapper for iOS/Android App Store submission |
-| Pending | Folder rename: SalesTrainer → MammothAcademy |
 | User action | NotebookLM audio: upload notebooklm_exports/*.md, use Deep Dive format with Mammoth Capital focus prompt |
