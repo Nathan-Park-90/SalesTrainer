@@ -35,7 +35,7 @@
         <div class="container">
             <div class="section-header">
                 <span class="section-label">Teaching Engine</span>
-                <h2 class="section-title">AWS & SE Curriculum</h2>
+                <h2 class="section-title">The Curriculum</h2>
                 <p class="section-desc">Master the foundational concepts before entering the test simulators.</p>
             </div>
             
@@ -67,6 +67,10 @@
     <script src="courses/aws-saa-c03.js"></script>
     <script src="courses/sales-engineering.js"></script>
     <script src="courses/psm-scrum.js"></script>
+    <script src="courses/comptia-securityplus.js"></script>
+    <script src="courses/comptia-networkplus.js"></script>
+    <script src="courses/comptia-aplus.js"></script>
+    <script src="courses/comptia-cloudplus.js"></script>
     <script src="course-loader.js"></script>
     <script src="achievements.js"></script>
     <script src="pwa.js"></script>
@@ -76,8 +80,10 @@
             if(typeof app === 'undefined' || !app.init) return;
             app.init();
 
-            // Deep-link support (e.g. from the Smart Path page): ?course=<courseId>&title=<module title>
-            // Resolved by course id + title, not array position, since position isn't stable.
+            // Deep-link support (e.g. from the homepage Certification Tracks or the
+            // Smart Path page): ?course=<courseId> alone jumps to that track's tab;
+            // adding &title=<module title> also opens that specific module. Resolved
+            // by course id + title, not array position, since position isn't stable.
             const params = new URLSearchParams(location.search);
             const courseId = params.get('course');
             const title = params.get('title');
@@ -87,6 +93,8 @@
                     app.setLibraryTab(courseId); // courseId IS the tab key now
                     app.renderLessonContent(modIdx, 0);
                 }
+            } else if (courseId) {
+                app.setLibraryTab(courseId);
             }
         });
     </script>
