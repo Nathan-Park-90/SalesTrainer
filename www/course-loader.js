@@ -28,11 +28,15 @@
         DATA._courseMeta.push(pack.meta);
 
         if (Array.isArray(pack.modules)) {
-            // Tag each module with its source course so consumers (e.g. the
-            // library tab filter) don't have to infer course membership from
-            // array position, which breaks silently if script load order
-            // or module counts ever change.
-            pack.modules.forEach(mod => { mod.courseId = pack.meta.id; });
+            // Tag each module with its source course, and with its position
+            // WITHIN that course (localIdx) — the stable identity used for
+            // display numbering, progress storage, and related-module links.
+            // Never use a module's position in the merged DATA.course array
+            // for any of those: that global position shifts if script load
+            // order changes or a course gains/loses modules, silently
+            // corrupting saved progress and cross-links (see courseId note
+            // above — localIdx exists for the same reason).
+            pack.modules.forEach((mod, i) => { mod.courseId = pack.meta.id; mod.localIdx = i; });
             DATA.course.push(...pack.modules);
         }
         if (Array.isArray(pack.flashcards)) {

@@ -192,6 +192,10 @@
     <script src="courses/aws-saa-c03.js"></script>
     <script src="courses/sales-engineering.js"></script>
     <script src="courses/psm-scrum.js"></script>
+    <script src="courses/comptia-securityplus.js"></script>
+    <script src="courses/comptia-networkplus.js"></script>
+    <script src="courses/comptia-aplus.js"></script>
+    <script src="courses/comptia-cloudplus.js"></script>
     <script src="course-loader.js"></script>
     <script src="achievements.js"></script>
     <script src="pwa.js"></script>
@@ -212,8 +216,10 @@
     }));
 
     function moduleComplete(mod) {
-        const modIdx = DATA.course.indexOf(mod);
-        return mod.topics.every((t, ti) => localStorage.getItem('st_quiz_' + modIdx + '_' + ti) === 'done');
+        // Keyed by courseId+localIdx (stable identity) to match app.js —
+        // NOT the module's position in the merged DATA.course array, which
+        // shifts if script load order or any course's module count changes.
+        return mod.topics.every((t, ti) => localStorage.getItem('st_quiz_' + mod.courseId + '_' + mod.localIdx + '_' + ti) === 'done');
     }
 
     function computeTrack(track) {

@@ -1,7 +1,7 @@
 /* Mammoth Academy — Course Pack */
 /* Auto-loaded by course-loader.js */
 
-var COURSE_AWS_SAA_C03 = {
+var COURSE_AWS = {
   "meta": {
     "id": "aws-saa-c03",
     "name": "AWS Solutions Architect",
@@ -25,7 +25,7 @@ var COURSE_AWS_SAA_C03 = {
   "modules": [
     {
       "id": 999,
-      "title": "Module 1: Cloud 101 (The Absolute Foundation)",
+      "title": "Cloud 101 (The Absolute Foundation)",
       "topics": [
         {
           "id": 9991,
@@ -92,13 +92,19 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        2,
-        9
+        {
+          "course": "aws-saa-c03",
+          "idx": 2
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 9
+        }
       ]
     },
     {
       "id": 998,
-      "title": "Module 2: High Availability & Scaling",
+      "title": "High Availability & Scaling",
       "topics": [
         {
           "id": 9981,
@@ -170,13 +176,18 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        9,
-        10
+        {
+          "course": "aws-saa-c03",
+          "idx": 9
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 10
+        }
       ]
     },
     {
-      "moduleId": 1,
-      "title": "Module 3: The Networking Thunderdome (VPC)",
+      "title": "The Networking Thunderdome (VPC)",
       "topics": [
         {
           "title": "VPC: Your Private Cloud Moat",
@@ -240,13 +251,18 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        10,
-        6
+        {
+          "course": "aws-saa-c03",
+          "idx": 10
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 6
+        }
       ]
     },
     {
-      "moduleId": 2,
-      "title": "Module 4: Compute (EC2 & Lambda)",
+      "title": "Compute (EC2 & Lambda)",
       "topics": [
         {
           "title": "EC2: The Workhorse",
@@ -312,13 +328,18 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        6,
-        7
+        {
+          "course": "aws-saa-c03",
+          "idx": 6
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 7
+        }
       ]
     },
     {
-      "moduleId": 3,
-      "title": "Module 5: Storage (S3 & EBS)",
+      "title": "Storage (S3 & EBS)",
       "topics": [
         {
           "title": "S3: The Infinite Hard Drive",
@@ -393,13 +414,18 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        5,
-        12
+        {
+          "course": "aws-saa-c03",
+          "idx": 5
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 12
+        }
       ]
     },
     {
-      "moduleId": 4,
-      "title": "Module 6: Databases (RDS & DynamoDB)",
+      "title": "Databases (RDS & DynamoDB)",
       "topics": [
         {
           "title": "RDS: The Relational Behemoth",
@@ -467,13 +493,19 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        4,
-        8
+        {
+          "course": "aws-saa-c03",
+          "idx": 4
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 8
+        }
       ]
     },
     {
       "id": 7000,
-      "title": "Module 7: Messaging & Decoupled Architecture",
+      "title": "Messaging & Decoupled Architecture",
       "topics": [
         {
           "id": 7001,
@@ -547,13 +579,18 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        3,
-        2
+        {
+          "course": "aws-saa-c03",
+          "idx": 3
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 2
+        }
       ]
     },
     {
-      "moduleId": 6,
-      "title": "Module 8: Advanced Networking & Content Delivery",
+      "title": "Advanced Networking & Content Delivery",
       "icon": "🌍",
       "topics": [
         {
@@ -624,13 +661,18 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        8,
-        3
+        {
+          "course": "aws-saa-c03",
+          "idx": 8
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 3
+        }
       ]
     },
     {
-      "moduleId": 7,
-      "title": "Module 9: Security, Identity, & Compliance",
+      "title": "Security, Identity, & Compliance",
       "icon": "🔒",
       "topics": [
         {
@@ -721,13 +763,18 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        7,
-        9
+        {
+          "course": "aws-saa-c03",
+          "idx": 7
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 9
+        }
       ]
     },
     {
-      "moduleId": 8,
-      "title": "Module 10: Management, Governance, & Analytics",
+      "title": "Management, Governance, & Analytics",
       "icon": "📊",
       "topics": [
         {
@@ -806,13 +853,18 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        1,
-        10
+        {
+          "course": "aws-saa-c03",
+          "idx": 1
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 10
+        }
       ]
     },
     {
-      "moduleId": 9,
-      "title": "Module 11: Advanced Compute & Containers",
+      "title": "Advanced Compute & Containers",
       "icon": "🐳",
       "topics": [
         {
@@ -870,13 +922,18 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        2,
-        6
+        {
+          "course": "aws-saa-c03",
+          "idx": 2
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 6
+        }
       ]
     },
     {
-      "moduleId": 10,
-      "title": "Module 12: Migration & Disaster Recovery",
+      "title": "Migration & Disaster Recovery",
       "icon": "🌋",
       "topics": [
         {
@@ -944,13 +1001,19 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        3,
-        4
+        {
+          "course": "aws-saa-c03",
+          "idx": 3
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 4
+        }
       ]
     },
     {
       "id": 15000,
-      "title": "Module 13: Cost Optimization (The CFO's Architecture)",
+      "title": "Cost Optimization (The CFO's Architecture)",
       "topics": [
         {
           "id": 15001,
@@ -1011,8 +1074,14 @@ var COURSE_AWS_SAA_C03 = {
         }
       ],
       "related": [
-        4,
-        5
+        {
+          "course": "aws-saa-c03",
+          "idx": 4
+        },
+        {
+          "course": "aws-saa-c03",
+          "idx": 5
+        }
       ]
     }
   ],
@@ -2463,6 +2532,42 @@ var COURSE_AWS_SAA_C03 = {
       ],
       "ans": 1,
       "exp": "AWS Compute Optimizer uses machine learning to analyze up to 14 days of CloudWatch utilization data—including CPU, memory (when the CloudWatch agent is installed), network throughput, and disk I/O—and recommends optimal EC2 instance types and sizes. This multi-dimensional analysis prevents the common mistake of right-sizing on CPU alone while ignoring memory bottlenecks, which is critical for Mammoth Capital's memory-intensive trading microservices. Trusted Advisor only flags idle/low-utilization instances based on CPU thresholds and lacks Compute Optimizer's granularity. Switching to T3 burstable instances is not universally appropriate—sustained workloads can exhaust CPU credits and become more expensive. Manual 7-day reviews are incomplete and error-prone compared to Compute Optimizer's automated, multi-metric analysis."
+    },
+    {
+      "q": "A company runs a massive data processing workload on EC2 instances every weekend. The workload is fault-tolerant and can be interrupted and resumed without issue. Which EC2 purchasing option provides the MOST cost-effective solution?",
+      "opts": [
+        "On-Demand Instances",
+        "Reserved Instances",
+        "Spot Instances",
+        "Dedicated Hosts"
+      ],
+      "ans": 2,
+      "exp": "Because the workload is fault-tolerant and can be interrupted, Spot Instances offer up to a 90% discount compared to On-Demand, making them the most cost-effective choice for flexible batch processing.",
+      "domain": "Cost"
+    },
+    {
+      "q": "An organization stores petabytes of compliance logs in Amazon S3. The logs must be retained for 7 years but are rarely accessed after 30 days. When they are needed, retrieval within 12 hours is acceptable. Which storage class minimizes cost?",
+      "opts": [
+        "S3 Standard",
+        "S3 Intelligent-Tiering",
+        "S3 Glacier Flexible Retrieval",
+        "S3 Glacier Deep Archive"
+      ],
+      "ans": 3,
+      "exp": "S3 Glacier Deep Archive is the lowest-cost storage class in AWS. It is designed for long-term retention of rarely accessed data where retrieval times of 12 hours are acceptable.",
+      "domain": "Cost"
+    },
+    {
+      "q": "A company wants to identify the AWS services and accounts responsible for their highest monthly expenditures. They also want to forecast their cloud spend for the next quarter based on historical data. Which AWS service should they use?",
+      "opts": [
+        "AWS Trusted Advisor",
+        "AWS Cost Explorer",
+        "AWS Pricing Calculator",
+        "AWS Billing Alarms"
+      ],
+      "ans": 1,
+      "exp": "AWS Cost Explorer allows you to visualize, understand, and manage your AWS costs and usage over time, and provides forecasting capabilities based on historical trends.",
+      "domain": "Cost"
     }
   ],
   "arch": [

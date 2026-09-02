@@ -642,7 +642,7 @@ const app = {
             html += `
                 <div class="toc-module ${isActive}">
                     <div class="toc-module-header" onclick="app.toggleModule(${modIndex})">
-                        <div class="mod-title">${mod.icon || '&#128214;'} ${mod.title}</div>
+                        <div class="mod-title">${mod.icon || '&#128214;'} Module ${mod.localIdx + 1}: ${mod.title}</div>
                         <div class="chevron">&#9660;</div>
                     </div>
                     <div class="toc-topics">
@@ -689,26 +689,40 @@ const app = {
         }
         this.renderLessonTOC();
         
-        // Next/Prev logic
+        // Next/Prev logic — stays within the current course. Reaching the last
+        // topic of a course's last module ends that course's flow rather than
+        // silently rolling into the next course's module 1 (which is what
+        // raw global-array-adjacency did before courses had their own
+        // identity), so "Next" never quietly walks you out of the class
+        // you're taking.
         let hasNext = false, hasPrev = false;
         let nextMod = modIdx, nextTopic = topicIdx + 1;
         let prevMod = modIdx, prevTopic = topicIdx - 1;
 
         if (nextTopic >= mod.topics.length) {
-            if (modIdx + 1 < DATA.course.length) { hasNext = true; nextMod = modIdx + 1; nextTopic = 0; }
+            const cand = modIdx + 1;
+            if (cand < DATA.course.length && DATA.course[cand].courseId === mod.courseId) {
+                hasNext = true; nextMod = cand; nextTopic = 0;
+            }
         } else { hasNext = true; }
 
         if (prevTopic < 0) {
-            if (modIdx - 1 >= 0) { hasPrev = true; prevMod = modIdx - 1; prevTopic = DATA.course[prevMod].topics.length - 1; }
+            const cand = modIdx - 1;
+            if (cand >= 0 && DATA.course[cand].courseId === mod.courseId) {
+                hasPrev = true; prevMod = cand; prevTopic = DATA.course[cand].topics.length - 1;
+            }
         } else { hasPrev = true; }
-        
+
         // Fade in animation
         canvas.style.opacity = 0;
-        
+
         const rawProse = topic.prose || topic.content || "";
-        
-        // Build quiz block
-        const quizKey = 'st_quiz_' + modIdx + '_' + topicIdx;
+
+        // Build quiz block — keyed by courseId+localIdx (stable identity), not
+        // modIdx (that module's position in the merged DATA.course array,
+        // which shifts if script load order or course sizes ever change and
+        // would silently point saved progress at the wrong module/topic).
+        const quizKey = 'st_quiz_' + mod.courseId + '_' + mod.localIdx + '_' + topicIdx;
         const quizDone = localStorage.getItem(quizKey) === 'done';
         let quizHtml = '';
         if (topic.quiz && topic.quiz.length > 0) {
@@ -736,19 +750,26 @@ const app = {
                 </div>`;
         }
 
-        // Build related modules block
+        // Build related modules block — related entries are {course, idx} pairs
+        // (a course id + that module's stable localIdx), not raw positions in
+        // the merged DATA.course array, so links stay correct across courses
+        // regardless of script load order or how many modules any course has.
         let relatedHtml = '';
         if (mod.related && mod.related.length > 0) {
-            const links = mod.related.map(rIdx => {
+            const links = mod.related.map(r => {
+                const rIdx = DATA.course.findIndex(m => m.courseId === r.course && m.localIdx === r.idx);
                 const rMod = DATA.course[rIdx];
                 return rMod ? `<button class="related-link" onclick="app.renderLessonContent(${rIdx}, 0)">${rMod.icon || '📖'} ${rMod.title}</button>` : '';
             }).join('');
             relatedHtml = `<div class="related-modules"><span class="related-label">🔗 Related Topics</span>${links}</div>`;
         }
 
+        const courseMeta = (DATA._courseMeta || []).find(m => m.id === mod.courseId);
+        const courseName = courseMeta ? courseMeta.name : '';
+
         canvas.innerHTML = `
             <div class="lesson-content-wrapper">
-                <div class="module-eyebrow">${mod.title}</div>
+                <div class="module-eyebrow">${courseName ? courseName + ' &middot; ' : ''}Module ${mod.localIdx + 1}: ${mod.title}</div>
                 <h1 class="lesson-title">${topic.title}</h1>
                 <div class="lesson-prose">
                     ${rawProse}
@@ -848,7 +869,8 @@ const app = {
     },
 
     answerQuiz(modIdx, topicIdx, qi, chosenOi) {
-        const topic = DATA.course[modIdx].topics[topicIdx];
+        const mod = DATA.course[modIdx];
+        const topic = mod.topics[topicIdx];
         const qItem = topic.quiz[qi];
         const blockId = 'qqb-' + modIdx + '-' + topicIdx + '-' + qi;
         const block = document.getElementById(blockId);
@@ -873,7 +895,7 @@ const app = {
         const totalQs = topic.quiz.length;
         const answeredQs = block.closest('.quiz-questions').querySelectorAll('.quiz-q-block .quiz-opt-btn.qopt-correct, .quiz-q-block .quiz-opt-btn.qopt-wrong').length;
         if (answeredQs >= totalQs) {
-            localStorage.setItem('st_quiz_' + modIdx + '_' + topicIdx, 'done');
+            localStorage.setItem('st_quiz_' + mod.courseId + '_' + mod.localIdx + '_' + topicIdx, 'done');
             if (typeof Achievements !== 'undefined') Achievements.check('quiz_complete');
         }
     }

@@ -16,8 +16,7 @@ var COURSE_SALES_ENGINEERING = {
   },
   "modules": [
     {
-      "moduleId": 11,
-      "title": "Module 14: Enterprise Sales Tech Stack",
+      "title": "Enterprise Sales Tech Stack",
       "topics": [
         {
           "title": "Salesforce is your Ledger",
@@ -70,13 +69,18 @@ var COURSE_SALES_ENGINEERING = {
         }
       ],
       "related": [
-        14,
-        15
+        {
+          "course": "sales-engineering",
+          "idx": 1
+        },
+        {
+          "course": "sales-engineering",
+          "idx": 2
+        }
       ]
     },
     {
-      "moduleId": 12,
-      "title": "Module 15: Zero Trust & Security Posture",
+      "title": "Zero Trust & Security Posture",
       "topics": [
         {
           "title": "Pitching Zero Trust",
@@ -130,13 +134,18 @@ var COURSE_SALES_ENGINEERING = {
         }
       ],
       "related": [
-        13,
-        16
+        {
+          "course": "sales-engineering",
+          "idx": 0
+        },
+        {
+          "course": "sales-engineering",
+          "idx": 3
+        }
       ]
     },
     {
-      "moduleId": 13,
-      "title": "Module 16: Handling the Hostile CTO",
+      "title": "Handling the Hostile CTO",
       "topics": [
         {
           "title": "The 'Build vs Buy' Trap",
@@ -189,13 +198,18 @@ var COURSE_SALES_ENGINEERING = {
         }
       ],
       "related": [
-        16,
-        17
+        {
+          "course": "sales-engineering",
+          "idx": 3
+        },
+        {
+          "course": "sales-engineering",
+          "idx": 4
+        }
       ]
     },
     {
-      "moduleId": 14,
-      "title": "Module 17: The Art of the Demo",
+      "title": "The Art of the Demo",
       "topics": [
         {
           "title": "Discovery First, Always",
@@ -248,13 +262,18 @@ var COURSE_SALES_ENGINEERING = {
         }
       ],
       "related": [
-        15,
-        17
+        {
+          "course": "sales-engineering",
+          "idx": 2
+        },
+        {
+          "course": "sales-engineering",
+          "idx": 4
+        }
       ]
     },
     {
-      "moduleId": 5,
-      "title": "Module 18: SE Career Portfolio Guidance",
+      "title": "SE Career Portfolio Guidance",
       "icon": "🚀",
       "topics": [
         {
@@ -322,8 +341,14 @@ var COURSE_SALES_ENGINEERING = {
         }
       ],
       "related": [
-        15,
-        16
+        {
+          "course": "sales-engineering",
+          "idx": 2
+        },
+        {
+          "course": "sales-engineering",
+          "idx": 3
+        }
       ]
     }
   ],

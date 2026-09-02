@@ -83,8 +83,14 @@ var COURSE_PSM_SCRUM = {
         }
       ],
       "related": [
-        19,
-        20
+        {
+          "course": "psm-scrum",
+          "idx": 1
+        },
+        {
+          "course": "psm-scrum",
+          "idx": 2
+        }
       ]
     },
     {
@@ -156,8 +162,14 @@ var COURSE_PSM_SCRUM = {
         }
       ],
       "related": [
-        18,
-        21
+        {
+          "course": "psm-scrum",
+          "idx": 0
+        },
+        {
+          "course": "psm-scrum",
+          "idx": 3
+        }
       ]
     },
     {
@@ -238,8 +250,14 @@ var COURSE_PSM_SCRUM = {
         }
       ],
       "related": [
-        19,
-        21
+        {
+          "course": "psm-scrum",
+          "idx": 1
+        },
+        {
+          "course": "psm-scrum",
+          "idx": 3
+        }
       ]
     },
     {
@@ -311,8 +329,14 @@ var COURSE_PSM_SCRUM = {
         }
       ],
       "related": [
-        20,
-        22
+        {
+          "course": "psm-scrum",
+          "idx": 2
+        },
+        {
+          "course": "psm-scrum",
+          "idx": 4
+        }
       ]
     },
     {
@@ -375,8 +399,14 @@ var COURSE_PSM_SCRUM = {
         }
       ],
       "related": [
-        18,
-        23
+        {
+          "course": "psm-scrum",
+          "idx": 0
+        },
+        {
+          "course": "psm-scrum",
+          "idx": 5
+        }
       ]
     },
     {
@@ -457,8 +487,14 @@ var COURSE_PSM_SCRUM = {
         }
       ],
       "related": [
-        18,
-        22
+        {
+          "course": "psm-scrum",
+          "idx": 0
+        },
+        {
+          "course": "psm-scrum",
+          "idx": 4
+        }
       ]
     }
   ],

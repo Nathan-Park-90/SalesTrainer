@@ -1407,63 +1407,51 @@ body {
 }
 
 /* ================== LIBRARY TABS ================== */
+/* A wrapping row of self-contained chips, not a fixed-width pill bar — a
+   pill sized for 3-4 equal-width tabs (the original AWS/Sales/Scrum lineup)
+   crushes down to unreadable slivers once the catalog grows past that, which
+   is exactly what happened once 4 CompTIA tracks were added on top. Chips
+   size to their own content and wrap onto additional rows instead. */
 .library-tabs {
     display: flex;
+    flex-wrap: wrap;
     margin-bottom: 25px;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(15px);
-    padding: 10px;
-    border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     gap: 10px;
 }
 
 .lib-tab {
-    flex: 1;
-    background: transparent;
-    border: none;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 2px solid var(--tab-color, var(--accent-primary));
     color: var(--text-muted);
-    padding: 16px 20px;
-    font-size: 1.15rem;
+    padding: 12px 18px;
+    font-size: 0.92rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
-    border-radius: 999px;
+    letter-spacing: 0.3px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
+    white-space: nowrap;
 }
 
 .tab-icon {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     filter: grayscale(100%) opacity(0.5);
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
 }
 
 .lib-tab:hover:not(.active) {
     color: #fff;
-    background: rgba(255, 255, 255, 0.05);
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.18);
 }
 
 .lib-tab:hover:not(.active) .tab-icon {
     filter: grayscale(50%) opacity(0.8);
-    transform: scale(1.1);
-}
-
-.lib-tab.active {
-    color: #fff;
-    font-weight: 800;
-    transform: scale(1.05);
-}
-
-.lib-tab.active .tab-icon {
-    filter: grayscale(0%) opacity(1);
-    transform: scale(1.2);
 }
 
 /* Each tab's accent comes from its course pack's own meta.color (set as the
@@ -1471,10 +1459,16 @@ body {
    button) instead of a hardcoded rule per subject — a new course pack needs
    zero CSS changes to get its own tab color. */
 .lib-tab.active {
-    background: var(--tab-color, var(--accent-primary));
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     color: #fff;
+    font-weight: 800;
+    background: var(--tab-color, var(--accent-primary));
+    border-color: var(--tab-color, var(--accent-primary));
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.lib-tab.active .tab-icon {
+    filter: grayscale(0%) opacity(1);
 }
 
 /* ================== UX OVERHAUL TOC ================== */
