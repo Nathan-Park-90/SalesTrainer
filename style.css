@@ -1106,15 +1106,8 @@ body {
         min-height: 220px;
     }
 
-    /* ── Arch Gym palette ── */
-    .arch-palette {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    .arch-token {
-        font-size: 0.82rem;
-        padding: 6px 12px;
-    }
+    /* Note: gym.html and sprint.html carry their own page-specific mobile rules
+       inline (Architecture Lab and Kanban Board layouts respectively). */
 
     /* ── Scrum Kanban ── */
     .war-room-container {
@@ -1473,21 +1466,15 @@ body {
     transform: scale(1.2);
 }
 
-.tab-aws.active {
-    background: linear-gradient(135deg, #FF9900, #ffb340);
-    box-shadow: 0 8px 25px rgba(255, 153, 0, 0.4);
-    color: #1a0f00;
-}
-
-.tab-sales.active {
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-}
-
-.tab-scrum.active {
-    background: linear-gradient(135deg, #10b981, #34d399);
-    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-    color: #022c1e;
+/* Each tab's accent comes from its course pack's own meta.color (set as the
+   --tab-color inline custom property when app.renderLibraryTabs() builds the
+   button) instead of a hardcoded rule per subject — a new course pack needs
+   zero CSS changes to get its own tab color. */
+.lib-tab.active {
+    background: var(--tab-color, var(--accent-primary));
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
 /* ================== UX OVERHAUL TOC ================== */

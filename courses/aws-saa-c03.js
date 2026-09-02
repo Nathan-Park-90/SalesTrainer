@@ -1,7 +1,7 @@
 /* Mammoth Academy — Course Pack */
 /* Auto-loaded by course-loader.js */
 
-const COURSE_AWS_SAA_C03 = {
+var COURSE_AWS_SAA_C03 = {
   "meta": {
     "id": "aws-saa-c03",
     "name": "AWS Solutions Architect",
@@ -9,6 +9,17 @@ const COURSE_AWS_SAA_C03 = {
     "icon": "☁️",
     "color": "#FF9900",
     "examKey": "aws",
+    "examName": "AWS SAA-C03 Exam",
+    "passThreshold": 0.72,
+    "examDurationMinutes": 130,
+    "flashcardCat": "AWS",
+    "dailyTrackKey": "aws",
+    "domains": {
+      "Secure": "Module 9: Security, Identity, & Compliance",
+      "Resilient": "Module 2: High Availability & Scaling",
+      "Performance": "Module 6: Databases (RDS & DynamoDB)",
+      "Cost": "Module 13: Cost Optimization (The CFO's Architecture)"
+    },
     "version": "1.0.0"
   },
   "modules": [
@@ -521,6 +532,18 @@ const COURSE_AWS_SAA_C03 = {
             "pubsub",
             "resilient"
           ]
+        },
+        {
+          "id": 7003,
+          "title": "Step Functions: Orchestrating Serverless Workflows",
+          "prose": "\n<p>Your order processing pipeline needs to: charge a credit card, reserve inventory, arrange shipping, and send a confirmation email — in that exact order, with automatic retries if the payment gateway times out, and a rollback (release the inventory hold) if shipping fails. Chaining four Lambda functions together with manual try/catch logic and hardcoded retry loops works for a demo. It becomes an unmaintainable mess the moment you need to see WHERE in that chain a specific order failed at 2 AM.</p>\n\n<p><strong>AWS Step Functions</strong> solves this by letting you define the workflow as a visual state machine (in Amazon States Language, a JSON-based spec) instead of imperative code. Each step — charge card, reserve inventory, ship, notify — is a state. Step Functions handles the orchestration: sequencing, parallel branches, conditional logic (choice states), automatic retries with exponential backoff, and catch/rollback logic, all visible as a live diagram in the console showing exactly which step failed and why.</p>\n\n<p><strong>Standard vs. Express Workflows:</strong><br>\n<strong>Standard Workflows</strong> run for up to a year, execute each step exactly once, and are priced per state transition. Built for long-running, auditable processes — order fulfillment, human-approval steps, multi-day batch jobs.<br>\n<strong>Express Workflows</strong> run for up to 5 minutes, execute at-least-once (so steps must be idempotent), and are priced by duration and requests — built for high-volume, short-duration event processing like IoT data ingestion or streaming transformations, where you might invoke thousands of executions per second.</p>\n\n<p><strong>Step Functions vs. SQS/SNS:</strong> SQS and SNS decouple services from each other — a producer doesn't know or care who consumes its messages. Step Functions does the opposite: it explicitly orchestrates a known sequence of steps with awareness of order, branching, and failure handling across the whole workflow. Use SQS/SNS when services should be independent. Use Step Functions when you need a single service to be the conductor of a defined multi-step process.</p>\n\n<div class=\"lesson-alert\" style=\"border-left-color: var(--accent-warning); background: rgba(245, 158, 11, 0.05);\"><strong>⚓ Anchor:</strong> SQS and SNS are the company mailroom — messages get delivered, but nobody's tracking whether the whole business process finished. Step Functions is the project manager standing at a whiteboard with the entire workflow mapped out, checking off each step, automatically re-assigning a task that failed, and immediately visible when the whole project is stuck.</div>\n\n<div class=\"lesson-alert\"><strong>Exam Tip:</strong> If a question describes coordinating multiple Lambda functions in a specific order with retry logic, parallel branches, or a visual audit trail of what happened — the answer is <strong>Step Functions</strong>, not \"chain the Lambdas together\" or \"use SQS.\" If it emphasizes very high throughput and short executions (millions of events per day, each finishing in seconds), look for <strong>Express Workflows</strong> specifically.</div>\n",
+          "tags": [
+            "messaging",
+            "orchestration",
+            "stepfunctions",
+            "serverless",
+            "performance"
+          ]
         }
       ],
       "related": [
@@ -683,6 +706,18 @@ const COURSE_AWS_SAA_C03 = {
             "iam",
             "credentials"
           ]
+        },
+        {
+          "id": 8005,
+          "title": "AWS Certificate Manager (ACM): Encryption in Transit",
+          "prose": "\n<p>Your application just passed a security review for encryption at rest — every S3 bucket and EBS volume is encrypted with KMS. Then the auditor asks: \"What about data moving between your users and your load balancer?\" That's a different problem entirely, and it's the one companies get fined for when a browser shows \"Not Secure\" or traffic gets intercepted in transit.</p>\n\n<p><strong>AWS Certificate Manager (ACM)</strong> provisions, manages, and automatically renews SSL/TLS certificates for use with AWS services — at no cost for public certificates. Before ACM, teams manually bought certificates from a CA, tracked expiration dates in a spreadsheet, and inevitably let one lapse, taking a production site down. ACM removes that failure mode: request a certificate, validate domain ownership (via DNS or email), and ACM auto-renews it for as long as it's attached to a resource.</p>\n\n<p><strong>Where ACM certificates actually attach — the exam trap:</strong> ACM certificates can be used with <strong>Elastic Load Balancers (ALB/NLB), Amazon CloudFront, and API Gateway</strong>. They <strong>cannot</strong> be installed directly onto an EC2 instance's operating system or exported for use outside these integrated services (public certificates, at least — ACM Private CA is a separate, paid feature for that). If a question describes needing HTTPS directly on an EC2 instance with no load balancer in front of it, ACM alone isn't the answer — that needs a manually installed certificate.</p>\n\n<p><strong>DNS validation vs. email validation:</strong> DNS validation (adding a CNAME record ACM gives you) is the recommended method — it's what enables fully automatic renewal, since ACM can just re-check the DNS record. Email validation requires someone to click a link every renewal cycle, which is exactly the manual failure mode ACM exists to eliminate.</p>\n\n<div class=\"lesson-alert\" style=\"border-left-color: var(--accent-warning); background: rgba(245, 158, 11, 0.05);\"><strong>⚓ Anchor:</strong> KMS is the lock on the warehouse door — it protects data sitting still. ACM is the armored truck protecting data while it's moving between the warehouse and the customer. You need both, and they solve completely different problems — a question about \"protecting data in transit\" is never answered with KMS alone.</div>\n\n<div class=\"lesson-alert\"><strong>Exam Tip:</strong> \"Free, auto-renewing HTTPS certificate for a CloudFront distribution or ALB\" = <strong>ACM with DNS validation</strong>. \"Certificate needs to be installed directly on an EC2 instance's web server\" = <strong>not ACM</strong> — that's a manually managed certificate (or ACM Private CA in an advanced scenario).</div>\n",
+          "tags": [
+            "security",
+            "acm",
+            "tls",
+            "encryption",
+            "certificates"
+          ]
         }
       ],
       "related": [
@@ -755,6 +790,18 @@ const COURSE_AWS_SAA_C03 = {
           "prose": "\n<p>Your IoT sensors are generating 1 million events per second. Your trading algorithms are producing 50,000 price ticks per minute. Your application logs are streaming at 10GB per hour. You cannot write this volume of data directly to a database — it will saturate the write capacity, spike costs, and crash the service before you've processed a fraction of it. You need a highway, not a parking lot.</p>\n\n<p><strong>Amazon Kinesis</strong> is that highway — a family of services for ingesting, processing, and analyzing real-time streaming data at any scale.</p>\n\n<p><strong>Kinesis Data Streams:</strong> The core ingestion layer. Producers push records to a Stream, which is divided into Shards (parallel processing lanes). Multiple consumers (Lambda, EC2 applications, Kinesis Data Analytics) can read from the same stream simultaneously — each at their own position. Records are retained for 24 hours by default (up to 365 days). Use when you need custom processing logic, multiple independent consumers, or replay capability.</p>\n\n<p><strong>Kinesis Data Firehose:</strong> The fully managed \"I just want to get data into S3/Redshift/OpenSearch\" service. Zero code required for the delivery pipeline. Firehose automatically buffers, batches, compresses, and optionally transforms records (via a Lambda) before loading them into the destination. Near-real-time (60-second buffer minimum). Use when you don't need custom processing — just reliable, cheap bulk ingestion into a data store.</p>\n\n<p><strong>Amazon Athena:</strong> Serverless SQL query engine for data sitting in S3. Your Firehose has been dumping JSON log files into S3 for a year. Athena lets you write standard SQL against that data without loading it into a database. You pay per TB scanned. For ad-hoc analytics on large datasets in S3, this is dramatically cheaper than loading into Redshift.</p>\n\n<div class=\"lesson-alert\" style=\"border-left-color: var(--accent-warning); background: rgba(245, 158, 11, 0.05);\"><strong>⚓ Anchor:</strong> Kinesis Data Streams is the interstate highway system — high-speed lanes (shards) carrying massive traffic (data) between producers and multiple independent consumers, all at once. Kinesis Firehose is a conveyor belt from the highway exit directly to the warehouse loading dock (S3/Redshift) — fully automated, no driver needed, loads it neatly in batches. Athena is the inventory auditor who can search any warehouse shelf by description without physically moving a single item.</div>\n\n<div class=\"lesson-alert\"><strong>Exam Tip:</strong> \"Real-time data\" + \"custom processing\" + \"multiple consumers\" = <strong>Kinesis Data Streams</strong>. \"Stream data to S3/Redshift with no custom code\" = <strong>Kinesis Firehose</strong>. The exam distinguishes these two consistently — don't conflate them.</div>\n",
           "tags": [
             "aws_core"
+          ]
+        },
+        {
+          "id": 9004,
+          "title": "AWS X-Ray: Distributed Tracing & Debugging",
+          "prose": "\n<p>A customer reports that checkout \"sometimes takes 8 seconds.\" The request flows through API Gateway → a Lambda function → a DynamoDB table → an SNS notification → a second Lambda. CloudWatch shows each of those five services individually looks healthy — average latency is fine on every dashboard. So where are the 8 seconds coming from? CloudWatch can't answer that, because it only sees each service in isolation. It has no concept of \"this one specific request.\"</p>\n\n<p><strong>AWS X-Ray</strong> solves this by tracing a single request end-to-end across every service it touches, stitching the whole journey into one trace with a visual service map. Each hop — API Gateway, Lambda, DynamoDB, SNS — becomes a segment (or subsegment) with its own timing. Open the trace for that one slow checkout, and X-Ray shows exactly which segment ate 6 of the 8 seconds — say, a DynamoDB query that scanned instead of using an index — instead of guessing across five separate CloudWatch dashboards.</p>\n\n<p><strong>X-Ray vs. CloudWatch — complementary, not competing:</strong> CloudWatch answers \"is this service healthy overall?\" (metrics, logs, alarms, aggregated across all requests). X-Ray answers \"what happened to this specific request as it moved through my whole distributed system?\" A mature production setup uses both: CloudWatch alarms tell you something is wrong, and X-Ray traces tell you exactly where.</p>\n\n<p><strong>Instrumentation is required:</strong> X-Ray doesn't automatically trace everything — you enable \"Active Tracing\" on Lambda/API Gateway and include the X-Ray SDK in your application code so segments get recorded and passed downstream (the trace ID propagates through HTTP headers between services). Annotations (indexed, filterable key-value data) and metadata (non-indexed, for context) can be attached to segments to make specific traces easy to search for later — e.g., annotate every segment with a customer ID to instantly pull every trace for one customer's support ticket.</p>\n\n<div class=\"lesson-alert\" style=\"border-left-color: var(--accent-warning); background: rgba(245, 158, 11, 0.05);\"><strong>⚓ Anchor:</strong> CloudWatch is airport departure boards — on-time percentage for every flight, aggregated. X-Ray is the individual boarding-pass scan log for one specific passenger's entire journey, showing exactly which connection they got stuck at. When one passenger complains about their trip, you don't re-check the departure boards — you pull their specific trace.</div>\n\n<div class=\"lesson-alert\"><strong>Exam Tip:</strong> \"Identify the bottleneck in a multi-service serverless request\" or \"visualize the flow of a request across microservices\" = <strong>X-Ray</strong>. \"Alarm when error rate exceeds a threshold\" or \"aggregate CPU/memory metrics\" = <strong>CloudWatch</strong>. A question combining both (\"monitor overall health AND pinpoint slow requests\") wants both services working together.</div>\n",
+          "tags": [
+            "aws_core",
+            "xray",
+            "observability",
+            "monitoring",
+            "debugging"
           ]
         }
       ],
@@ -1415,11 +1462,50 @@ const COURSE_AWS_SAA_C03 = {
         "trusted-advisor"
       ],
       "analogy": "Idle EC2 instances burning money are like leaving all the lights on in a building you're not using. Trusted Advisor is the automated janitor that walks the building and says 'these lights have been on for 30 days and nobody's home.'"
+    },
+    {
+      "id": 219,
+      "cat": "AWS",
+      "domain": "Resilient",
+      "front": "Step Functions vs. chaining Lambdas directly?",
+      "back": "Step Functions orchestrates a defined multi-step workflow with built-in retries, branching, and a visual audit trail. Chained Lambdas have none of that — just brittle custom code.",
+      "analogy": "Chained Lambdas are sticky notes passed hand to hand hoping nobody drops one. Step Functions is a project manager tracking every step on a whiteboard.",
+      "tags": [
+        "stepfunctions",
+        "orchestration",
+        "serverless"
+      ]
+    },
+    {
+      "id": 220,
+      "cat": "AWS",
+      "domain": "Secure",
+      "front": "Can you install an ACM public certificate directly on an EC2 instance?",
+      "back": "No. ACM public certificates only attach to ALB/NLB, CloudFront, and API Gateway — not directly to an EC2 instance's OS.",
+      "analogy": "ACM certs are keys that only fit the locks on the front gate (load balancer/CDN), not every door inside the building (individual EC2 instances).",
+      "tags": [
+        "acm",
+        "tls",
+        "security"
+      ]
+    },
+    {
+      "id": 221,
+      "cat": "AWS",
+      "domain": "Performance",
+      "front": "CloudWatch vs. X-Ray — what's the core difference?",
+      "back": "CloudWatch shows aggregated health per service (metrics, logs, alarms). X-Ray traces one specific request end-to-end across every service it touched.",
+      "analogy": "CloudWatch is the airport's overall on-time percentage. X-Ray is one passenger's full boarding-to-landing trace showing exactly which layover ran long.",
+      "tags": [
+        "xray",
+        "observability",
+        "debugging"
+      ]
     }
   ],
   "exam": [
     {
-      "q": "High Stakes Scenario 1: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
+      "q": "High Stakes Scenario: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
       "opts": [
         "AWS Shield Advanced",
         "AWS WAF",
@@ -1428,234 +1514,6 @@ const COURSE_AWS_SAA_C03 = {
       ],
       "ans": 0,
       "domain": "Secure",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 2: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Resilient",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 3: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Performance",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 4: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Cost",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 5: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Secure",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 6: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Resilient",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 7: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Performance",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 8: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Cost",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 9: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Secure",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 10: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Resilient",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 11: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Performance",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 12: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Cost",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 13: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Secure",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 14: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Resilient",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 15: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Performance",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 16: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Cost",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 17: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Secure",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 18: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Resilient",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 19: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Performance",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
-    },
-    {
-      "q": "High Stakes Scenario 20: Mammoth Capital is experiencing a massive DDoS attack at 3 AM during the Asian market open. The hostile CFO is screaming about latency. Which AWS service do you route traffic through to absorb the attack while maintaining sub-millisecond trading latency?",
-      "opts": [
-        "AWS Shield Advanced",
-        "AWS WAF",
-        "Amazon CloudFront",
-        "Route 53"
-      ],
-      "ans": 0,
-      "domain": "Cost",
       "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
     },
     {

@@ -22,7 +22,7 @@ const app = {
         examScore: 0,
         examQIdx: 0,
         archSetup: null,
-        activeLibraryTab: 'aws',
+        activeLibraryTab: null, // resolved to the first loaded course pack in renderLessonTOC()
         activeModuleIdx: 0,
         activeTopicIdx: 0
     },
@@ -35,13 +35,41 @@ const app = {
         
         // --- Amnesia Fix (localStorage) ---
         this.state.completedModules = JSON.parse(localStorage.getItem('st_completed')) || [];
-        this.state.highScore = localStorage.getItem('st_highscore') || 0;
+        // highScore is loaded per exam type inside startExam() — different exams have
+        // different question counts, so raw scores aren't comparable across types and
+        // are tracked under separate keys.
         // ----------------------------------
 
         // Auto-load course UI if on curriculum page
         if (document.getElementById('lesson-toc')) {
+            this.renderLibraryTabs();
             this.renderLessonTOC();
             this.renderLessonContent(0, 0); // Auto-load first topic immediately
+        }
+
+        // Auto-build the exam gauntlet buttons if on the Arena page
+        if (document.getElementById('gauntlet-btn-container')) {
+            this.renderExamGauntletButtons();
+        }
+    },
+
+    // Build one exam button per course pack that declares an exam — so a new
+    // exam-bearing subject needs only a courses/*.js file, no arena.html edits.
+    renderExamGauntletButtons() {
+        const container = document.getElementById('gauntlet-btn-container');
+        if (!container || !DATA._courseMeta) return;
+
+        const examPacks = DATA._courseMeta.filter(m => m.examKey);
+        container.innerHTML = examPacks.map(meta => `
+            <button class="gauntlet-btn" style="--tab-color:${meta.color || '#00f2ff'};" onclick="app.startExam('${meta.examKey}')">
+                Start ${meta.examName || meta.name + ' Exam'}
+            </button>
+        `).join('');
+
+        const descEl = document.getElementById('gauntlet-desc');
+        if (descEl && examPacks.length) {
+            const bars = examPacks.map(m => `${Math.round((m.passThreshold || 0.72) * 100)}% for ${m.examName || m.name}`).join(', ');
+            descEl.textContent = `Up to 65 questions, weighted toward the ones you've missed before. Passing bar matches each real exam's own cut score: ${bars}.`;
         }
     },
 
@@ -357,8 +385,15 @@ const app = {
     },
 
     // --- Exam Simulator ---
-    startExam(type = 'aws') {
-        const baseData = type === 'psm' ? DATA.exam_psm : (DATA.exam_aws || DATA.exam);
+    startExam(type) {
+        const examPacks = (DATA._courseMeta || []).filter(m => m.examKey);
+        if (!type) type = examPacks[0] && examPacks[0].examKey;
+
+        // The exam-bearing course pack whose meta.examKey matches — the single source
+        // of truth for this exam's display name, pass bar, and domain taxonomy, so a
+        // new exam-bearing subject just needs a courses/*.js file with these set.
+        const meta = examPacks.find(m => m.examKey === type);
+        const baseData = DATA['exam_' + type];
         if(!baseData || baseData.length === 0) return;
         
         // --- Spaced Repetition Logic ---
@@ -393,14 +428,15 @@ const app = {
         this.state.examScore = 0;
         this.state.examQIdx = 0;
         this.state.examType = type;
-        
-        this.state.domainStats = {
-            'Secure': { correct: 0, total: 0 },
-            'Resilient': { correct: 0, total: 0 },
-            'Performance': { correct: 0, total: 0 },
-            'Cost': { correct: 0, total: 0 },
-            'Other': { correct: 0, total: 0 }
-        };
+        this.state.examMeta = meta;
+        this.state.highScore = parseInt(localStorage.getItem('st_highscore_' + type) || '0');
+
+        // Domain categories are exam-specific (AWS SAA-C03's are the Well-Architected
+        // pillars; PSM I's mirror the Scrum Guide's own structure) — each course pack
+        // declares its own via meta.domains, so a new exam needs no app.js changes.
+        const domainNames = [...Object.keys((meta && meta.domains) || {}), 'Other'];
+        this.state.domainStats = {};
+        domainNames.forEach(d => { this.state.domainStats[d] = { correct: 0, total: 0 }; });
         
         this.renderExamQ();
     },
@@ -413,21 +449,38 @@ const app = {
         if(!currentExam) return;
         
         if(this.state.examQIdx >= currentExam.length) {
-            let pass = (this.state.examScore / currentExam.length) >= 0.72; // AWS passing score is ~72%
+            // Passing bar matches each real certification's actual cut score, not a generic
+            // guess — comes from the course pack's own meta.passThreshold.
+            let passThreshold = (this.state.examMeta && this.state.examMeta.passThreshold) || 0.72;
+            let pass = (this.state.examScore / currentExam.length) >= passThreshold;
             
-            // Save high score
+            // Save high score (per exam type — AWS and PSM have different question counts,
+            // so a raw score is only meaningful compared against others of the same type)
             if (this.state.examScore > this.state.highScore) {
                 this.state.highScore = this.state.examScore;
-                localStorage.setItem('st_highscore', this.state.examScore);
+                localStorage.setItem('st_highscore_' + this.state.examType, this.state.examScore);
             }
-            
+
+            // Persist domain performance cumulatively across attempts, so the Smart Path
+            // can spot genuinely weak domains instead of just the last exam's snapshot.
+            if (this.state.domainStats) {
+                const domKey = 'st_domain_perf_' + this.state.examType;
+                const persisted = JSON.parse(localStorage.getItem(domKey) || '{}');
+                for (const [dom, stats] of Object.entries(this.state.domainStats)) {
+                    if (!persisted[dom]) persisted[dom] = { correct: 0, total: 0 };
+                    persisted[dom].correct += stats.correct;
+                    persisted[dom].total += stats.total;
+                }
+                localStorage.setItem(domKey, JSON.stringify(persisted));
+            }
+
             // Build Domain Analytics HTML
             let analyticsHtml = '<div style="display:flex; justify-content:space-between; flex-wrap:wrap; margin-top:20px; gap:10px;">';
             if (this.state.domainStats) {
                 for (const [dom, stats] of Object.entries(this.state.domainStats)) {
                     if (stats.total > 0) {
                         let pct = Math.round((stats.correct / stats.total) * 100);
-                        let color = pct >= 72 ? 'var(--accent-success)' : 'var(--accent-danger)';
+                        let color = pct >= passThreshold * 100 ? 'var(--accent-success)' : 'var(--accent-danger)';
                         analyticsHtml += `
                             <div style="flex:1; min-width:140px; background:rgba(255,255,255,0.05); padding:15px; border-radius:8px; border-top:3px solid ${color};">
                                 <div style="font-size:0.85rem; color:var(--text-muted);">${dom}</div>
@@ -449,9 +502,10 @@ const app = {
                     
                     ${analyticsHtml}
 
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 30px;">
-                        <button class="btn-primary" onclick="app.startExam('aws')" style="background: #FF9900; border: none; padding: 12px 24px;">Retake AWS Exam</button>
-                        <button class="btn-primary" onclick="app.startExam('psm')" style="background: #0056D2; border: none; padding: 12px 24px;">Retake Scrum Exam</button>
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 30px;">
+                        ${(DATA._courseMeta || []).filter(m => m.examKey).map(m => `
+                            <button class="btn-primary" onclick="app.startExam('${m.examKey}')" style="background: ${m.color || 'var(--accent-primary)'}; border: none; padding: 12px 24px;">Retake ${m.name}</button>
+                        `).join('')}
                     </div>
                 </div>
             `;
@@ -465,7 +519,7 @@ const app = {
 
         ctr.innerHTML = `
             <div class="exam-status">
-                <div style="font-weight:700; color:var(--text-muted);">Question ${this.state.examQIdx + 1} of ${currentExam.length} (${this.state.examType === 'psm' ? 'Scrum PSM 1' : 'AWS SAA-C03'})</div>
+                <div style="font-weight:700; color:var(--text-muted);">Question ${this.state.examQIdx + 1} of ${currentExam.length} (${(this.state.examMeta && this.state.examMeta.name) || this.state.examType})</div>
                 <div class="timer">Live</div>
             </div>
             <div class="q-text">${q.q || q.front}</div>
@@ -533,18 +587,20 @@ const app = {
 
     // --- Course Engine ---
     setLibraryTab(tab) {
+        // The tab key IS the course id (see renderLibraryTabs) — no separate mapping
+        // table to keep in sync when a new course pack is added.
         this.state.activeLibraryTab = tab;
-        
+
         // Update tab UI
         document.querySelectorAll('.lib-tab').forEach(btn => btn.classList.remove('active'));
         const activeBtn = document.querySelector(`.lib-tab[onclick*="${tab}"]`);
         if (activeBtn) activeBtn.classList.add('active');
-        
-        // Find the first module index for this tab to auto-load
-        let firstModIdx = 0;
-        if (tab === 'sales') firstModIdx = 13;
-        if (tab === 'scrum') firstModIdx = 18;
-        
+
+        // Find the first module for this course by course id, not array position —
+        // a hardcoded index silently breaks if course sizes or load order ever change.
+        let firstModIdx = DATA.course.findIndex(m => m.courseId === tab);
+        if (firstModIdx === -1) firstModIdx = 0;
+
         this.activeModuleIdx = firstModIdx;
         this.activeTopicIdx = 0;
         
@@ -552,21 +608,35 @@ const app = {
         this.renderLessonContent(firstModIdx, 0);
     },
 
+    // Build the Library's subject tab bar from every loaded course pack — so dropping
+    // in a new courses/*.js file (with a <script> tag) is the only step needed to add
+    // a subject; no HTML or app.js changes required.
+    renderLibraryTabs() {
+        const container = document.getElementById('library-tabs');
+        if (!container || !DATA._courseMeta) return;
+
+        container.innerHTML = DATA._courseMeta.map((meta, i) => `
+            <button class="lib-tab ${i === 0 ? 'active' : ''}" style="--tab-color:${meta.color || '#00f2ff'};" onclick="app.setLibraryTab('${meta.id}')">
+                <span class="tab-icon">${meta.icon || '📖'}</span>
+                <span class="tab-text">${meta.name}</span>
+            </button>
+        `).join('');
+    },
+
     renderLessonTOC() {
         const toc = document.getElementById('lesson-toc');
         if (!toc || !DATA.course) return;
-        
+
         if (!this.state.activeLibraryTab) {
-            this.state.activeLibraryTab = 'aws'; // Default
+            // Default to the first loaded course pack, not a hardcoded id.
+            this.state.activeLibraryTab = (DATA._courseMeta[0] && DATA._courseMeta[0].id) || null;
         }
-        
+
         let html = '';
         DATA.course.forEach((mod, modIndex) => {
-            // Filter by active tab
+            // Filter by active tab (by the module's source course, not array position)
             const tab = this.state.activeLibraryTab;
-            if (tab === 'aws' && modIndex > 12) return;
-            if (tab === 'sales' && (modIndex <= 12 || modIndex > 17)) return;
-            if (tab === 'scrum' && modIndex <= 17) return;
+            if (mod.courseId !== tab) return;
 
             const isActive = modIndex === this.activeModuleIdx ? 'active' : '';
             html += `

@@ -1,7 +1,7 @@
 /* Mammoth Academy — Course Pack */
 /* Auto-loaded by course-loader.js */
 
-const COURSE_PSM_SCRUM = {
+var COURSE_PSM_SCRUM = {
   "meta": {
     "id": "psm-scrum",
     "name": "Professional Scrum Master",
@@ -9,6 +9,17 @@ const COURSE_PSM_SCRUM = {
     "icon": "🏃",
     "color": "#8b5cf6",
     "examKey": "psm",
+    "examName": "Scrum PSM I Exam",
+    "passThreshold": 0.85,
+    "examDurationMinutes": 60,
+    "flashcardCat": "Scrum",
+    "dailyTrackKey": "scrum",
+    "domains": {
+      "Theory": "Scrum Foundations & Values",
+      "Accountabilities": "Scrum Accountabilities",
+      "Events": "Scrum Events",
+      "Artifacts": "Artifacts & Commitments"
+    },
     "version": "1.0.0"
   },
   "modules": [
@@ -903,6 +914,7 @@ const COURSE_PSM_SCRUM = {
         "Any member of the Scrum Team."
       ],
       "ans": 2,
+      "domain": "Events",
       "explanation": "Only the Product Owner has the authority to cancel the Sprint, although they may do so under influence from the stakeholders, the Developers, or the Scrum Master."
     },
     {
@@ -914,6 +926,7 @@ const COURSE_PSM_SCRUM = {
         "Until all developers agree on the plan"
       ],
       "ans": 1,
+      "domain": "Events",
       "explanation": "Sprint Planning is timeboxed to a maximum of eight hours for a one-month Sprint. For shorter Sprints, the event is usually shorter."
     },
     {
@@ -925,6 +938,7 @@ const COURSE_PSM_SCRUM = {
         "Increment"
       ],
       "ans": 1,
+      "domain": "Artifacts",
       "explanation": "The three artifacts are the Product Backlog, Sprint Backlog, and Increment. The Sprint Goal is a *commitment* contained within the Sprint Backlog, not a standalone artifact."
     },
     {
@@ -936,6 +950,7 @@ const COURSE_PSM_SCRUM = {
         "The Developers, because they do the work."
       ],
       "ans": 2,
+      "domain": "Artifacts",
       "explanation": "If the Definition of Done for an increment is part of the standards of the organization, all Scrum Teams must follow it as a minimum. If it is not an organizational standard, the Scrum Team must create a Definition of Done appropriate for the product."
     },
     {
@@ -947,6 +962,7 @@ const COURSE_PSM_SCRUM = {
         "It returns to the Product Backlog."
       ],
       "ans": 3,
+      "domain": "Artifacts",
       "explanation": "If a Product Backlog item does not meet the Definition of Done, it cannot be released or even presented at the Sprint Review. It returns to the Product Backlog for future consideration."
     },
     {
@@ -958,6 +974,7 @@ const COURSE_PSM_SCRUM = {
         "Complete the work but don't mention it in the Daily Scrum to avoid distracting the team."
       ],
       "ans": 1,
+      "domain": "Accountabilities",
       "explanation": "Those wanting to change the Product Backlog can do so only by trying to convince the Product Owner. The Product Owner is accountable for maximizing the value of the product."
     },
     {
@@ -969,6 +986,7 @@ const COURSE_PSM_SCRUM = {
         "There is no difference; they are two names for the same event."
       ],
       "ans": 1,
+      "domain": "Events",
       "explanation": "The Sprint Review is to inspect the outcome of the Sprint (the Increment) and determine future adaptations. The Sprint Retrospective is to plan ways to increase quality and effectiveness (process)."
     },
     {
@@ -980,6 +998,7 @@ const COURSE_PSM_SCRUM = {
         "As many as the teams need to ensure fast decision making."
       ],
       "ans": 2,
+      "domain": "Accountabilities",
       "explanation": "One Product, One Product Backlog, One Product Owner. This remains true regardless of the number of Scrum Teams working on the product."
     },
     {
@@ -991,6 +1010,7 @@ const COURSE_PSM_SCRUM = {
         "Respect"
       ],
       "ans": 2,
+      "domain": "Theory",
       "explanation": "Openness: The Scrum Team and its stakeholders agree to be open about all the work and the challenges with performing the work."
     },
     {
@@ -1002,6 +1022,7 @@ const COURSE_PSM_SCRUM = {
         "The Developers"
       ],
       "ans": 3,
+      "domain": "Accountabilities",
       "explanation": "The Developers are always accountable for creating a plan for the Sprint, the Sprint Backlog. How they turn Product Backlog items into an Increment of value is solely up to them."
     },
     {
@@ -1013,6 +1034,7 @@ const COURSE_PSM_SCRUM = {
         "To make sure every team member answers the three questions."
       ],
       "ans": 2,
+      "domain": "Events",
       "explanation": "The Scrum Master enforces the rule that only Developers participate in the Daily Scrum. They do not have to attend unless they are actively working on items in the Sprint Backlog."
     },
     {
@@ -1024,6 +1046,7 @@ const COURSE_PSM_SCRUM = {
         "The Scrum Masters define it."
       ],
       "ans": 1,
+      "domain": "Artifacts",
       "explanation": "If there are multiple Scrum Teams working together on a product, they must mutually define and comply with the same Definition of Done."
     },
     {
@@ -1035,6 +1058,7 @@ const COURSE_PSM_SCRUM = {
         "It is finalized before the first Sprint."
       ],
       "ans": 1,
+      "domain": "Artifacts",
       "explanation": "The Product Backlog is never complete. The earliest development of it lays out the initially known and best-understood requirements, but it evolves as the product and the environment in which it will be used evolves."
     },
     {
@@ -1046,6 +1070,7 @@ const COURSE_PSM_SCRUM = {
         "The Project Manager"
       ],
       "ans": 2,
+      "domain": "Accountabilities",
       "explanation": "The Developers are always accountable for creating a plan for the Sprint (Sprint Backlog), instilling quality, and adapting their plan each day toward the Sprint Goal."
     },
     {
@@ -1057,6 +1082,7 @@ const COURSE_PSM_SCRUM = {
         "As long as it takes to show all the work"
       ],
       "ans": 2,
+      "domain": "Events",
       "explanation": "The Sprint Review is timeboxed to a maximum of four hours for a one-month Sprint. For shorter Sprints, the event is usually shorter."
     },
     {
@@ -1068,6 +1094,7 @@ const COURSE_PSM_SCRUM = {
         "A new Sprint Goal."
       ],
       "ans": 0,
+      "domain": "Events",
       "explanation": "The Sprint Review includes a discussion of what to do next, so the Product Backlog may also be adjusted to meet new opportunities. The result of the Sprint Review is a revised Product Backlog."
     },
     {
@@ -1077,6 +1104,7 @@ const COURSE_PSM_SCRUM = {
         "False"
       ],
       "ans": 1,
+      "domain": "Accountabilities",
       "explanation": "False. The Product Owner may delegate the work of managing the Product Backlog, but they remain accountable. The Scrum Master cannot arbitrarily take over this accountability."
     },
     {
@@ -1088,6 +1116,7 @@ const COURSE_PSM_SCRUM = {
         "A Sprint can never be cancelled."
       ],
       "ans": 2,
+      "domain": "Events",
       "explanation": "A Sprint could be cancelled if the Sprint Goal becomes obsolete. Only the Product Owner has the authority to cancel the Sprint."
     },
     {
@@ -1099,6 +1128,7 @@ const COURSE_PSM_SCRUM = {
         "Story points and velocity"
       ],
       "ans": 2,
+      "domain": "Theory",
       "explanation": "Scrum employs an iterative, incremental approach to optimize predictability and to control risk. It is founded on empiricism and lean thinking."
     },
     {
@@ -1110,6 +1140,7 @@ const COURSE_PSM_SCRUM = {
         "They speak multiple languages."
       ],
       "ans": 1,
+      "domain": "Accountabilities",
       "explanation": "Cross-functional teams have all competencies needed to accomplish the work without depending on others not part of the team."
     },
     {
@@ -1121,6 +1152,7 @@ const COURSE_PSM_SCRUM = {
         "Cancel the Sprint."
       ],
       "ans": 1,
+      "domain": "Events",
       "explanation": "If the Developers determine they have too much or too little work, they may renegotiate the selected Product Backlog items with the Product Owner."
     },
     {
@@ -1132,6 +1164,7 @@ const COURSE_PSM_SCRUM = {
         "By managing the team's velocity."
       ],
       "ans": 1,
+      "domain": "Accountabilities",
       "explanation": "The Scrum Master serves the Scrum Team in several ways, including causing the removal of impediments to the Scrum Team's progress and coaching the team members in self-management and cross-functionality."
     },
     {
@@ -1143,6 +1176,7 @@ const COURSE_PSM_SCRUM = {
         "The Project Manager"
       ],
       "ans": 1,
+      "domain": "Accountabilities",
       "explanation": "The Product Owner is accountable for maximizing the value of the product, which includes representing the desires of the stakeholders to the Scrum Team."
     },
     {
@@ -1154,6 +1188,7 @@ const COURSE_PSM_SCRUM = {
         "It is a fixed commitment that cannot change."
       ],
       "ans": 1,
+      "domain": "Artifacts",
       "explanation": "The Sprint Backlog is a plan by and for the Developers. It is a highly visible, real-time picture of the work that the Developers plan to accomplish during the Sprint in order to achieve the Sprint Goal."
     },
     {
@@ -1165,6 +1200,7 @@ const COURSE_PSM_SCRUM = {
         "By the end of the first Sprint."
       ],
       "ans": 2,
+      "domain": "Artifacts",
       "explanation": "If it is not an organizational standard, the Scrum Team must create a Definition of Done appropriate for the product before any Increment can be considered Done."
     },
     {
@@ -1174,6 +1210,7 @@ const COURSE_PSM_SCRUM = {
         "False"
       ],
       "ans": 1,
+      "domain": "Events",
       "explanation": "False. This was a rule in the 2017 Scrum Guide, but it was removed in the 2020 Scrum Guide to make the framework less prescriptive. It is a good practice, but not mandatory."
     },
     {
@@ -1185,6 +1222,7 @@ const COURSE_PSM_SCRUM = {
         "To update the burn-down chart."
       ],
       "ans": 1,
+      "domain": "Events",
       "explanation": "The heart of Scrum is a Sprint, a timebox of one month or less during which a \"Done\", useable, and potentially releasable product Increment is created."
     },
     {
@@ -1196,6 +1234,7 @@ const COURSE_PSM_SCRUM = {
         "The Scrum Team (or the Organization)"
       ],
       "ans": 3,
+      "domain": "Artifacts",
       "explanation": "If the Definition of Done for an increment is part of the standards of the organization, all Scrum Teams must follow it. If it is not an organizational standard, the Scrum Team must create a Definition of Done appropriate for the product."
     },
     {
@@ -1207,6 +1246,7 @@ const COURSE_PSM_SCRUM = {
         "Estimating the effort of Product Backlog items."
       ],
       "ans": 1,
+      "domain": "Accountabilities",
       "explanation": "The Scrum Master serves the Product Owner by helping find techniques for effective Product Goal definition and Product Backlog management, and helping the Scrum Team understand the need for clear and concise Product Backlog items."
     },
     {
@@ -1218,6 +1258,7 @@ const COURSE_PSM_SCRUM = {
         "Whenever the team feels they need to improve."
       ],
       "ans": 1,
+      "domain": "Events",
       "explanation": "The Sprint Retrospective concludes the Sprint. It is held after the Sprint Review and prior to the next Sprint Planning."
     },
     {
@@ -1229,6 +1270,7 @@ const COURSE_PSM_SCRUM = {
         "Tell the Product Owner to remove the items."
       ],
       "ans": 2,
+      "domain": "Accountabilities",
       "explanation": "The Scrum Master is a coach and facilitator. They help the team self-manage to solve their own problems, such as skill gaps."
     },
     {
@@ -1240,6 +1282,7 @@ const COURSE_PSM_SCRUM = {
         "It must only happen during Sprint Planning."
       ],
       "ans": 2,
+      "domain": "Artifacts",
       "explanation": "The 2017 Guide suggested 10%, but the 2020 Guide removed this. Refinement is an ongoing activity to add details, such as a description, order, and size. The Scrum Team decides how and when refinement is done."
     },
     {
@@ -1251,6 +1294,7 @@ const COURSE_PSM_SCRUM = {
         "Openness"
       ],
       "ans": 3,
+      "domain": "Theory",
       "explanation": "Openness. The Scrum Team and its stakeholders agree to be open about all the work and the challenges with performing the work."
     },
     {
@@ -1262,6 +1306,7 @@ const COURSE_PSM_SCRUM = {
         "There is no maximum"
       ],
       "ans": 2,
+      "domain": "Events",
       "explanation": "Sprints are fixed length events of one month or less to create consistency."
     },
     {
@@ -1273,6 +1318,7 @@ const COURSE_PSM_SCRUM = {
         "Management"
       ],
       "ans": 2,
+      "domain": "Artifacts",
       "explanation": "The Sprint Backlog is a plan by and for the Developers. Only the Developers can change its contents during a Sprint as they learn more about the work needed to achieve the Sprint Goal."
     },
     {
@@ -1284,6 +1330,7 @@ const COURSE_PSM_SCRUM = {
         "One per feature"
       ],
       "ans": 1,
+      "domain": "Artifacts",
       "explanation": "If there are multiple Scrum Teams working together on a product, they must mutually define and comply with the same Definition of Done."
     },
     {
@@ -1295,6 +1342,7 @@ const COURSE_PSM_SCRUM = {
         "The whole Scrum Team"
       ],
       "ans": 2,
+      "domain": "Accountabilities",
       "explanation": "The Developers who will be doing the work are responsible for the sizing. The Product Owner may influence the Developers by helping them understand and select trade-offs."
     },
     {
@@ -1306,6 +1354,7 @@ const COURSE_PSM_SCRUM = {
         "Sprint Retrospective"
       ],
       "ans": 2,
+      "domain": "Events",
       "explanation": "The purpose of the Sprint Review is to inspect the outcome of the Sprint and determine future adaptations. The Scrum Team presents the results of their work to key stakeholders."
     },
     {
@@ -1317,6 +1366,7 @@ const COURSE_PSM_SCRUM = {
         "Management has no role in Scrum."
       ],
       "ans": 1,
+      "domain": "Theory",
       "explanation": "Management supports the Scrum Team by providing resources, strategic direction, and helping remove organizational impediments."
     },
     {
@@ -1328,6 +1378,7 @@ const COURSE_PSM_SCRUM = {
         "Responding to change over individuals and interactions."
       ],
       "ans": 0,
+      "domain": "Theory",
       "explanation": "The Agile Manifesto values 'Responding to change over following a plan'."
     }
   ],

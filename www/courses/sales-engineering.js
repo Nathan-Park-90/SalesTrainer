@@ -1,7 +1,7 @@
 /* Mammoth Academy — Course Pack */
 /* Auto-loaded by course-loader.js */
 
-const COURSE_SALES_ENGINEERING = {
+var COURSE_SALES_ENGINEERING = {
   "meta": {
     "id": "sales-engineering",
     "name": "Sales Engineering",
@@ -9,6 +9,9 @@ const COURSE_SALES_ENGINEERING = {
     "icon": "🤝",
     "color": "#10b981",
     "examKey": null,
+    "flashcardCat": "Sales",
+    "dailyTrackKey": null,
+    "domains": null,
     "version": "1.0.0"
   },
   "modules": [

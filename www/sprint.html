@@ -4,6 +4,12 @@
     <link rel="stylesheet" href="fonts/mammoth-fonts.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MA Academy">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <title>MAMMOTH ACADEMY</title>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -190,6 +196,26 @@
             opacity: 0.5;
             cursor: grabbing;
         }
+
+        /* Tap-to-move: native HTML5 drag-and-drop doesn't work on touchscreens at
+           all, so tapping a ticket then tapping a column is the touch-friendly way
+           to move it — same tap-select-then-tap-target pattern as the Gym's
+           Architecture Lab. Works alongside dragging on desktop too. */
+        .ticket.selected {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px var(--accent-primary), 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        }
+        .column-body.move-target {
+            background: rgba(56, 189, 248, 0.06);
+            outline: 2px dashed var(--accent-primary);
+            outline-offset: -4px;
+        }
+        .kanban-move-hint {
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+        }
     </style>
 </head>
 <body>
@@ -204,6 +230,7 @@
             <li><a href="arena.html">ARENA</a></li>
             <li><a href="daily.html">DAILY</a></li>
             <li><a href="sprint.html" class="active">SPRINT</a></li>
+            <li><a href="path.html">PATH</a></li>
         </ul>
     </nav>
     
@@ -567,8 +594,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <div style="padding-top: 80px;">
         <div class="war-room-container">
-            
+
             <!-- Kanban Board -->
+            <div style="flex:3; display:flex; flex-direction:column; min-width:0;">
+            <div class="kanban-move-hint">Drag a ticket to move it — or on touch, tap a ticket then tap a column.</div>
             <div class="kanban-board">
                 
                 <!-- TO DO -->
@@ -617,12 +646,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         Increment (Done) <span class="column-count" id="count-done">0</span>
                     </div>
                     <div class="column-body" data-status="done">
-                        
+
                     </div>
                 </div>
-                
+
             </div>
-            
+            </div>
+
             <!-- Scrum Master Coach Panel -->
             <div class="scrum-coach-panel">
                 <div class="coach-header">
@@ -647,10 +677,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <!-- Load data first, then logic -->
     <script src="courses/aws-saa-c03.js"></script>
-    <script src="courses/psm-scrum.js"></script>
     <script src="courses/sales-engineering.js"></script>
+    <script src="courses/psm-scrum.js"></script>
     <script src="course-loader.js"></script>
     <script src="achievements.js"></script>
+    <script src="pwa.js"></script>
     <script src="scrum.js"></script>
     <script>
         // Setup particle background

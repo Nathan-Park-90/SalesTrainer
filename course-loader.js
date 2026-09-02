@@ -10,12 +10,12 @@
     const DATA = {
         course:         [],
         flashcards:     [],
-        exam_aws:       [],
-        exam_psm:       [],
         arch:           [],
         sales:          [],
         daily_lessons:  [],
         _courseMeta:    []   // registry of loaded course packs
+        // exam_<key> arrays (e.g. exam_aws, exam_psm) are created below, one per
+        // course pack that declares meta.examKey — no fixed list to maintain here.
     };
 
     // Auto-discover all COURSE_* globals on window
@@ -27,11 +27,31 @@
 
         DATA._courseMeta.push(pack.meta);
 
-        if (Array.isArray(pack.modules))    DATA.course.push(...pack.modules);
-        if (Array.isArray(pack.flashcards)) DATA.flashcards.push(...pack.flashcards);
+        if (Array.isArray(pack.modules)) {
+            // Tag each module with its source course so consumers (e.g. the
+            // library tab filter) don't have to infer course membership from
+            // array position, which breaks silently if script load order
+            // or module counts ever change.
+            pack.modules.forEach(mod => { mod.courseId = pack.meta.id; });
+            DATA.course.push(...pack.modules);
+        }
+        if (Array.isArray(pack.flashcards)) {
+            // Each pack numbers its own flashcards from ~1, so raw ids collide across
+            // packs once merged (e.g. AWS card 101 and Scrum card 101 both exist) —
+            // that made the mastery toggle capable of silently unmastering the wrong
+            // card. Prefix with the pack id so every card's id is globally unique.
+            pack.flashcards.forEach(card => { card.id = pack.meta.id + '_' + card.id; });
+            DATA.flashcards.push(...pack.flashcards);
+        }
         if (Array.isArray(pack.arch))       DATA.arch.push(...pack.arch);
         if (Array.isArray(pack.sales))      DATA.sales.push(...pack.sales);
-        if (Array.isArray(pack.daily))      DATA.daily_lessons.push(...pack.daily);
+        if (Array.isArray(pack.daily)) {
+            // Tag every daily lesson with its pack's dailyTrackKey unless the lesson
+            // already sets its own `track` (the original AWS lessons predate this field
+            // and rely on the "untagged = aws" convention, so don't override those).
+            pack.daily.forEach(l => { if (!l.track && pack.meta.dailyTrackKey) l.track = pack.meta.dailyTrackKey; });
+            DATA.daily_lessons.push(...pack.daily);
+        }
 
         if (Array.isArray(pack.exam) && pack.meta.examKey) {
             const key = 'exam_' + pack.meta.examKey;

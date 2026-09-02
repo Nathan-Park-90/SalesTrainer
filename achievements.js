@@ -9,7 +9,8 @@ const Achievements = {
         { id: 'overachiever',  icon: '🏆',  title: 'Overachiever',      desc: 'Scored 85%+ on the full exam',                 check: (s) => parseInt(s.highscore) >= 56 },
         { id: 'streak_3',      icon: '🔥',  title: 'On Fire',           desc: '3-day study streak',                           check: (s) => parseInt(s.streak) >= 3 },
         { id: 'streak_7',      icon: '💎',  title: 'Consistent',        desc: '7-day study streak',                           check: (s) => parseInt(s.streak) >= 7 },
-        { id: 'flash_master',  icon: '⚡',  title: 'Flash Master',      desc: 'Completed all 13 daily lessons',               check: (s) => parseInt(s.dailyDay) >= 13 },
+        { id: 'flash_master',  icon: '⚡',  title: 'Flash Master',      desc: 'Completed all 13 AWS daily lessons',           check: (s) => parseInt(s.dailyDayAws) >= 13 },
+        { id: 'sprint_ready',  icon: '🏃',  title: 'Sprint Ready',      desc: 'Completed all 7 Scrum daily lessons',          check: (s) => parseInt(s.dailyDayScrum) >= 7 },
         { id: 'card_sharp',    icon: '🃏',  title: 'Card Sharp',        desc: 'Mastered 30+ flashcards',                      check: (s) => s.mastered.length >= 30 },
         { id: 'ace',           icon: '🎯',  title: 'The Ace',           desc: 'Mastered 60+ flashcards',                      check: (s) => s.mastered.length >= 60 },
         { id: 'arch_initiate', icon: '🏗️',  title: 'Arch Initiate',     desc: 'Completed your first Architecture scenario',   check: (s) => s.archCompleted >= 1 },
@@ -24,7 +25,8 @@ const Achievements = {
         return {
             highscore:    localStorage.getItem('st_highscore') || 0,
             streak:       localStorage.getItem('st_streak') || 0,
-            dailyDay:     localStorage.getItem('st_daily_day') || 0,
+            dailyDayAws:   localStorage.getItem('st_daily_day_aws') || 0,
+            dailyDayScrum: localStorage.getItem('st_daily_day_scrum') || 0,
             mastered:     mastered,
             archCompleted: parseInt(localStorage.getItem('st_arch_completed') || '0'),
             quizzesDone:  quizKeys.length

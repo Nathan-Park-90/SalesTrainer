@@ -10,7 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const coachOutput = document.getElementById('coach-output');
-    
+
+    // Native HTML5 drag-and-drop (dragstart/dragover/drop below) doesn't fire at all
+    // on touchscreens, so it's the only way to move tickets on mobile/tablet. This
+    // tracks a tap-selected ticket so tapping a column moves it there instead —
+    // same tap-to-select-then-tap-target pattern as the Gym's Architecture Lab.
+    let selectedTicketId = null;
+
     function addCoachMessage(text, type = 'normal') {
         const msg = document.createElement('div');
         msg.className = `coach-message ${type}`;
@@ -18,16 +24,29 @@ document.addEventListener('DOMContentLoaded', () => {
         coachOutput.prepend(msg);
     }
 
+    function setSelectedTicket(ticketId) {
+        selectedTicketId = ticketId;
+        document.querySelectorAll('.ticket').forEach(el => el.classList.toggle('selected', el.id === ticketId));
+        document.querySelectorAll('.column-body').forEach(col => col.classList.toggle('move-target', !!ticketId));
+    }
+
+    function moveTicket(ticketObj, newStatus) {
+        if (!ticketObj || ticketObj.status === newStatus) return;
+        handleStatusChange(ticketObj, ticketObj.status, newStatus);
+        ticketObj.status = newStatus;
+        renderTickets();
+    }
+
     function renderTickets() {
         // Clear all columns
         document.querySelectorAll('.column-body').forEach(col => col.innerHTML = '');
-        
+
         initialTickets.forEach(ticket => {
             const el = document.createElement('div');
             el.className = `ticket ${ticket.type}`;
             el.draggable = true;
             el.id = ticket.id;
-            
+
             el.innerHTML = `
                 <span class="ticket-id">${ticket.id} (${ticket.type.toUpperCase()})</span>
                 <div class="ticket-title">${ticket.title}</div>
@@ -35,31 +54,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="ticket-points">${ticket.points} pts</span>
                 </div>
             `;
-            
+
             // Drag Start
             el.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', ticket.id);
                 setTimeout(() => el.classList.add('dragging'), 0);
             });
-            
+
             // Drag End
             el.addEventListener('dragend', () => {
                 el.classList.remove('dragging');
                 document.querySelectorAll('.column-body').forEach(col => col.classList.remove('drag-over'));
             });
-            
-            // Click for Coaching
+
+            // Tap/click: show coaching, and toggle this ticket as the one to move
+            // (tap it again, or tap elsewhere after moving, to deselect).
             el.addEventListener('click', () => {
                 handleTicketClick(ticket);
+                setSelectedTicket(selectedTicketId === ticket.id ? null : ticket.id);
             });
-            
+
             const column = document.querySelector(`.column-body[data-status="${ticket.status}"]`);
             if (column) column.appendChild(el);
         });
-        
+
+        if (selectedTicketId) setSelectedTicket(selectedTicketId);
         updateCounts();
     }
-    
+
     function updateCounts() {
         ['todo', 'sprint', 'progress', 'review', 'done'].forEach(status => {
             const count = document.querySelector(`.column-body[data-status="${status}"]`).children.length;
@@ -67,30 +89,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Drag and Drop Logic for Columns
+    // Drag and Drop Logic for Columns (mouse/trackpad) + tap-to-move (touch)
     document.querySelectorAll('.column-body').forEach(column => {
         column.addEventListener('dragover', e => {
             e.preventDefault();
             column.classList.add('drag-over');
         });
-        
+
         column.addEventListener('dragleave', () => {
             column.classList.remove('drag-over');
         });
-        
+
         column.addEventListener('drop', e => {
             e.preventDefault();
             column.classList.remove('drag-over');
-            
+
             const ticketId = e.dataTransfer.getData('text/plain');
             const ticketObj = initialTickets.find(t => t.id === ticketId);
-            const newStatus = column.getAttribute('data-status');
-            
-            if (ticketObj && ticketObj.status !== newStatus) {
-                handleStatusChange(ticketObj, ticketObj.status, newStatus);
-                ticketObj.status = newStatus;
-                renderTickets();
-            }
+            moveTicket(ticketObj, column.getAttribute('data-status'));
+        });
+
+        // Tap-to-move: only acts when a ticket is currently selected, so tapping
+        // an empty column area otherwise does nothing.
+        column.addEventListener('click', (e) => {
+            if (!selectedTicketId || e.target.closest('.ticket')) return;
+            const ticketObj = initialTickets.find(t => t.id === selectedTicketId);
+            moveTicket(ticketObj, column.getAttribute('data-status'));
+            setSelectedTicket(null);
         });
     });
 

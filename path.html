@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="fonts/mammoth-fonts.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MA Academy">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <title>MAMMOTH ACADEMY | Smart Path</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .path-hero {
+            padding: 100px 40px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ── Recommendation banner ── */
+        .path-reco {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(135deg, rgba(0,242,255,0.08), rgba(0,119,255,0.04));
+            border: 1px solid rgba(0,242,255,0.25);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 44px;
+            box-shadow: var(--shadow-glow);
+        }
+        .path-reco-icon { font-size: 2.4rem; line-height: 1; flex-shrink: 0; }
+        .path-reco-label {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-primary);
+            margin-bottom: 6px;
+        }
+        .path-reco-text { font-size: 1.05rem; color: var(--text-main); line-height: 1.5; }
+        .path-reco-text strong { color: var(--accent-primary); }
+        .path-reco-cta {
+            margin-left: auto;
+            flex-shrink: 0;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #020617;
+            background: var(--accent-primary);
+            border: none;
+            padding: 12px 22px;
+            border-radius: 999px;
+            cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: filter 0.2s ease;
+        }
+        .path-reco-cta:hover { filter: brightness(1.1); }
+
+        /* ── Track cards ── */
+        .path-tracks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .path-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .path-card-head { display: flex; align-items: center; gap: 12px; }
+        .path-card-icon { font-size: 1.8rem; }
+        .path-card-title { font-size: 1.15rem; font-weight: 800; color: var(--text-main); }
+        .path-card-subtitle { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+
+        .path-readiness { display: flex; align-items: baseline; gap: 8px; }
+        .path-readiness-val { font-family: var(--font-heading); font-size: 2.4rem; font-weight: 800; color: var(--text-main); line-height: 1; }
+        .path-readiness-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .path-bar-row { display: flex; flex-direction: column; gap: 4px; }
+        .path-bar-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); }
+        .path-bar-track { height: 6px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; }
+        .path-bar-fill { height: 100%; border-radius: 999px; background: var(--accent-primary); transition: width 0.4s ease; }
+        .path-bar-fill.warn { background: var(--accent-warning); }
+        .path-bar-fill.danger { background: var(--accent-danger); }
+        .path-bar-fill.good { background: var(--accent-success); }
+
+        .path-weak {
+            background: rgba(245,158,11,0.07);
+            border-left: 3px solid var(--accent-warning);
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 0.83rem;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+        .path-weak strong { color: var(--accent-warning); }
+        .path-empty {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .path-card-cta {
+            margin-top: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent-primary);
+            border: 1px solid rgba(0,242,255,0.3);
+            background: rgba(0,242,255,0.05);
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .path-card-cta:hover { background: rgba(0,242,255,0.12); border-color: rgba(0,242,255,0.5); }
+
+        .path-pass-pill {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .path-pass-pill.pass { background: rgba(16,185,129,0.15); color: var(--accent-success); }
+        .path-pass-pill.fail { background: rgba(239,68,68,0.15); color: var(--accent-danger); }
+        .path-pass-pill.untested { background: rgba(148,163,184,0.15); color: var(--text-muted); }
+
+        @media (max-width: 768px) {
+            .path-hero { padding: 110px 16px 40px; }
+            .path-reco { flex-wrap: wrap; padding: 18px 20px; gap: 12px; }
+            .path-reco-cta { margin-left: 0; width: 100%; text-align: center; }
+            .path-card-head { flex-wrap: wrap; }
+            .path-card-head > div:last-child { margin-left: 0 !important; }
+            .path-readiness-val { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand" style="text-decoration:none;display:flex;align-items:center;gap:10px;"><img src="assets/mammoth-logo.png" alt="Mammoth Capital" style="height:28px;width:auto;"><span style="font-weight:800;letter-spacing:1px;">MAMMOTH ACADEMY</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="library.html">LIBRARY</a></li>
+            <li><a href="gym.html">GYM</a></li>
+            <li><a href="arena.html">ARENA</a></li>
+            <li><a href="daily.html">DAILY</a></li>
+            <li><a href="sprint.html">SPRINT</a></li>
+            <li><a href="path.html" class="active">PATH</a></li>
+        </ul>
+    </nav>
+
+    <div class="path-hero">
+        <div class="section-header">
+            <span class="section-label">Career Readiness</span>
+            <h2 class="section-title">Your Smart Path</h2>
+            <p class="section-desc" id="path-desc">Every quiz, flashcard, and exam attempt rolled into one plan: what's weak, and what to do about it next.</p>
+        </div>
+
+        <div id="path-reco" class="path-reco">
+            <div class="path-reco-icon">🧭</div>
+            <div>
+                <div class="path-reco-label">Start Here</div>
+                <div class="path-reco-text" id="path-reco-text">Loading your progress&hellip;</div>
+            </div>
+            <a class="path-reco-cta" id="path-reco-cta" href="library.html">Go</a>
+        </div>
+
+        <div class="path-tracks" id="path-tracks"></div>
+    </div>
+
+    <script src="courses/aws-saa-c03.js"></script>
+    <script src="courses/sales-engineering.js"></script>
+    <script src="courses/psm-scrum.js"></script>
+    <script src="course-loader.js"></script>
+    <script src="achievements.js"></script>
+    <script src="pwa.js"></script>
+    <script src="app.js"></script>
+    <script>
+    // Every track card is built from each course pack's own meta — dropping in a new
+    // courses/*.js file (with a <script> tag) is all it takes to get a new track here,
+    // exam or no exam, with no path.html edits.
+    const TRACKS = (DATA._courseMeta || []).map(meta => ({
+        courseId: meta.id,
+        examType: meta.examKey || null,
+        cat: meta.flashcardCat,
+        icon: meta.icon || '📖',
+        name: meta.name,
+        sub: meta.examKey ? meta.subtitle : 'Career Track (no exam)',
+        domainModuleMap: meta.domains || null,
+        passThreshold: meta.passThreshold || 0.72
+    }));
+
+    function moduleComplete(mod) {
+        const modIdx = DATA.course.indexOf(mod);
+        return mod.topics.every((t, ti) => localStorage.getItem('st_quiz_' + modIdx + '_' + ti) === 'done');
+    }
+
+    function computeTrack(track) {
+        const modules = DATA.course.filter(m => m.courseId === track.courseId);
+        const completedModules = modules.filter(moduleComplete);
+        const moduleCompletionPct = modules.length ? completedModules.length / modules.length : 0;
+        const nextModule = modules.find(m => !moduleComplete(m)) || null;
+
+        const catCards = DATA.flashcards.filter(c => c.cat === track.cat);
+        const masteredIds = JSON.parse(localStorage.getItem('st_fc_mastered') || '[]');
+        const masteredInCat = catCards.filter(c => masteredIds.includes(c.id)).length;
+        const flashcardPct = catCards.length ? masteredInCat / catCards.length : 0;
+
+        let examPct = 0, examAttempted = false, examScore = 0, examMax = 0, passed = false, weak = null;
+        if (track.examType) {
+            const raw = localStorage.getItem('st_highscore_' + track.examType);
+            examAttempted = raw !== null;
+            examScore = parseInt(raw || '0');
+            const bank = DATA['exam_' + track.examType];
+            examMax = Math.min((bank || []).length, 65);
+            examPct = examMax ? examScore / examMax : 0;
+            const passBar = track.passThreshold;
+            passed = examAttempted && examPct >= passBar;
+
+            const domainPerf = JSON.parse(localStorage.getItem('st_domain_perf_' + track.examType) || '{}');
+            let worst = null;
+            Object.entries(domainPerf).forEach(([dom, stats]) => {
+                if (dom === 'Other' || stats.total < 3) return; // need enough samples to trust it
+                const pct = stats.correct / stats.total;
+                if (!worst || pct < worst.pct) worst = { dom, pct, total: stats.total };
+            });
+            if (worst && worst.pct < 0.75) weak = worst;
+        }
+
+        let readiness, scenarioPct = null, solvedCount = 0, salesTotal = 0;
+        if (track.examType) {
+            readiness = examAttempted
+                ? (moduleCompletionPct * 0.35 + flashcardPct * 0.25 + examPct * 0.40)
+                : (moduleCompletionPct * 0.6 + flashcardPct * 0.4) * 0.7;
+        } else {
+            salesTotal = DATA.sales.length;
+            solvedCount = JSON.parse(localStorage.getItem('st_sales_solved') || '[]').length;
+            scenarioPct = salesTotal ? solvedCount / salesTotal : 0;
+            readiness = moduleCompletionPct * 0.4 + flashcardPct * 0.3 + scenarioPct * 0.3;
+        }
+
+        return {
+            track, modules, completedModules: completedModules.length, totalModules: modules.length,
+            moduleCompletionPct, nextModule, flashcardPct, masteredInCat, totalCat: catCards.length,
+            examPct, examAttempted, examScore, examMax, passed, weak, readiness,
+            scenarioPct, solvedCount, salesTotal
+        };
+    }
+
+    function libraryLink(courseId, title) {
+        return 'library.html?course=' + encodeURIComponent(courseId) + '&title=' + encodeURIComponent(title);
+    }
+
+    function pct(x) { return Math.round(x * 100) + '%'; }
+    function barClass(x) { return x >= 0.75 ? 'good' : x >= 0.4 ? 'warn' : 'danger'; }
+
+    function renderCard(r) {
+        const t = r.track;
+        let passPill = '';
+        if (t.examType) {
+            passPill = r.examAttempted
+                ? `<span class="path-pass-pill ${r.passed ? 'pass' : 'fail'}">${r.passed ? 'Passing' : 'Below Bar'}</span>`
+                : `<span class="path-pass-pill untested">Not Attempted</span>`;
+        }
+
+        let weakHtml = '';
+        if (t.examType) {
+            if (r.weak) {
+                const modTitle = t.domainModuleMap[r.weak.dom];
+                weakHtml = `<div class="path-weak">📉 Weakest domain: <strong>${r.weak.dom}</strong> (${pct(r.weak.pct)} on ${r.weak.total} Qs).
+                    ${modTitle ? `<a href="${libraryLink(t.courseId, modTitle)}" style="color:var(--accent-warning);">Review ${modTitle} →</a>` : ''}</div>`;
+            } else if (r.examAttempted) {
+                weakHtml = `<div class="path-empty">No clear weak domain yet — solid, even performance across the board.</div>`;
+            } else {
+                weakHtml = `<div class="path-empty">Take a full exam in the Arena to see your domain breakdown.</div>`;
+            }
+        } else {
+            weakHtml = `<div class="path-bar-row">
+                <div class="path-bar-label"><span>Sales Scenarios Solved</span><span>${r.solvedCount} / ${r.salesTotal}</span></div>
+                <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.scenarioPct)}" style="width:${pct(r.scenarioPct)}"></div></div>
+            </div>`;
+        }
+
+        const ctaHref = r.nextModule ? libraryLink(t.courseId, r.nextModule.title) : (t.examType ? 'arena.html' : 'gym.html');
+        const ctaLabel = r.nextModule ? `Continue: ${r.nextModule.title.replace(/^Module \d+:\s*/, '')}` : (t.examType ? 'Take a Full Exam →' : 'Drill Sales Scenarios →');
+
+        return `
+            <div class="path-card">
+                <div class="path-card-head">
+                    <div class="path-card-icon">${t.icon}</div>
+                    <div>
+                        <div class="path-card-title">${t.name}</div>
+                        <div class="path-card-subtitle">${t.sub}</div>
+                    </div>
+                    ${passPill ? `<div style="margin-left:auto;">${passPill}</div>` : ''}
+                </div>
+
+                <div class="path-readiness">
+                    <div class="path-readiness-val">${pct(r.readiness)}</div>
+                    <div class="path-readiness-label">Readiness</div>
+                </div>
+
+                <div class="path-bar-row">
+                    <div class="path-bar-label"><span>Modules Completed</span><span>${r.completedModules} / ${r.totalModules}</span></div>
+                    <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.moduleCompletionPct)}" style="width:${pct(r.moduleCompletionPct)}"></div></div>
+                </div>
+
+                <div class="path-bar-row">
+                    <div class="path-bar-label"><span>Flashcards Mastered</span><span>${r.masteredInCat} / ${r.totalCat}</span></div>
+                    <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.flashcardPct)}" style="width:${pct(r.flashcardPct)}"></div></div>
+                </div>
+
+                ${t.examType ? `<div class="path-bar-row">
+                    <div class="path-bar-label"><span>Best Exam Score</span><span>${r.examAttempted ? r.examScore + ' / ' + r.examMax : '—'}</span></div>
+                    <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.examPct)}" style="width:${pct(r.examPct)}"></div></div>
+                </div>` : ''}
+
+                ${weakHtml}
+
+                <a class="path-card-cta" href="${ctaHref}">${ctaLabel}</a>
+            </div>`;
+    }
+
+    function pickRecommendation(results) {
+        // 1. Nobody's started a track at all → send them to module 1.
+        const notStarted = results.find(r => r.completedModules === 0 && r.moduleCompletionPct === 0 && r.totalModules > 0
+            && JSON.parse(localStorage.getItem('st_fc_mastered') || '[]').filter(id => String(id).startsWith(r.track.courseId)).length === 0);
+        if (notStarted && results.every(r => r.readiness < 0.05)) {
+            const mod = notStarted.modules[0];
+            return {
+                icon: notStarted.track.icon,
+                text: `You haven't started <strong>${notStarted.track.name}</strong> yet. Begin with <strong>${mod.title}</strong> in the Library.`,
+                href: libraryLink(notStarted.track.courseId, mod.title),
+                cta: 'Start Learning'
+            };
+        }
+
+        // 2. A confirmed weak domain (worst accuracy) beats everything else.
+        const withWeak = results.filter(r => r.weak).sort((a, b) => a.weak.pct - b.weak.pct);
+        if (withWeak.length > 0) {
+            const r = withWeak[0];
+            const modTitle = r.track.domainModuleMap[r.weak.dom];
+            return {
+                icon: '📉',
+                text: `Your weakest spot right now is <strong>${r.weak.dom}</strong> in ${r.track.name} — ${pct(r.weak.pct)} correct across ${r.weak.total} questions. Review <strong>${modTitle}</strong>.`,
+                href: libraryLink(r.track.courseId, modTitle),
+                cta: 'Review Module'
+            };
+        }
+
+        // 3. An exam track that's never been attempted, once modules are underway.
+        const untested = results.find(r => r.track.examType && !r.examAttempted && r.moduleCompletionPct > 0);
+        if (untested) {
+            return {
+                icon: '⚔️',
+                text: `You've made progress in <strong>${untested.track.name}</strong> but haven't taken a full practice exam yet. See where you really stand.`,
+                href: 'arena.html',
+                cta: 'Take the Exam'
+            };
+        }
+
+        // 4. Otherwise: whichever track has the lowest overall readiness.
+        const lowest = [...results].sort((a, b) => a.readiness - b.readiness)[0];
+        if (lowest.nextModule) {
+            return {
+                icon: lowest.track.icon,
+                text: `<strong>${lowest.track.name}</strong> is your lowest-readiness track right now (${pct(lowest.readiness)}). Keep going with <strong>${lowest.nextModule.title}</strong>.`,
+                href: libraryLink(lowest.track.courseId, lowest.nextModule.title),
+                cta: 'Continue'
+            };
+        }
+        return {
+            icon: '🏆',
+            text: `Every module across all three tracks is complete. Keep your edge sharp with a fresh Arena exam or a flashcard drill in the Gym.`,
+            href: 'arena.html',
+            cta: 'Stay Sharp'
+        };
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const names = TRACKS.map(t => t.name);
+        const subjectList = names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] : (names[0] || 'your subjects');
+        document.getElementById('path-desc').textContent = `Every quiz, flashcard, and exam attempt across ${subjectList} rolled into one plan: what's weak, and what to do about it next.`;
+
+        const results = TRACKS.map(computeTrack);
+        document.getElementById('path-tracks').innerHTML = results.map(renderCard).join('');
+
+        const reco = pickRecommendation(results);
+        document.getElementById('path-reco').querySelector('.path-reco-icon').textContent = reco.icon;
+        document.getElementById('path-reco-text').innerHTML = reco.text;
+        const cta = document.getElementById('path-reco-cta');
+        cta.href = reco.href;
+        cta.textContent = reco.cta;
+    });
+    </script>
+
+    <!-- MAMMOTH FOOTER -->
+    <footer class="mammoth-footer">
+      <div class="mammoth-footer-inner">
+        <a href="https://mammothcapital.site" target="_blank" rel="noreferrer" class="mammoth-footer-brand">
+          <img src="assets/mammoth-logo.png" alt="Mammoth Capital" style="height:22px;width:auto;opacity:0.7;">
+          <span>MAMMOTH CAPITAL</span>
+        </a>
+        <span class="mammoth-footer-divider">·</span>
+        <span class="mammoth-footer-copy">Mammoth Academy is a Mammoth Capital product.</span>
+        <span class="mammoth-footer-divider">·</span>
+        <a href="https://mammothcapital.site" target="_blank" rel="noreferrer" class="mammoth-footer-link">Visit Main Site →</a>
+      </div>
+    </footer>
+</body>
+</html>
