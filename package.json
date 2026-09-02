@@ -1,0 +1,18 @@
+{
+    "version": "1.0.0",
+    "name": "mammoth-academy",
+    "description": "Mammoth Academy — AWS SAA-C03, PSM 1 & Sales Engineering training engine by Mammoth Capital",
+    "scripts": {
+        "sync": "npx cap sync",
+        "build": "echo No build step required — static HTML/JS/CSS",
+        "open": "npx cap open android"
+    },
+    "dependencies": {
+        "@capacitor/android": "^8.5.1",
+        "@capacitor/cli": "^8.5.1",
+        "@capacitor/core": "^8.5.1",
+        "jsdom": "^29.1.1",
+        "puppeteer": "^25.9.0"
+    },
+    "private": true
+}

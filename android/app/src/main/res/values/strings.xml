@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Mammoth Academy</string>
+    <string name="title_activity_main">Mammoth Academy</string>
+    <string name="package_name">com.mammothcapital.academy</string>
+    <string name="custom_url_scheme">com.mammothcapital.academy</string>
+</resources>

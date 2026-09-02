@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="fonts/mammoth-fonts.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAMMOTH ACADEMY | Library</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand" style="text-decoration:none;display:flex;align-items:center;gap:10px;"><img src="assets/mammoth-logo.png" alt="Mammoth Capital" style="height:28px;width:auto;"><span style="font-weight:800;letter-spacing:1px;">MAMMOTH ACADEMY</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html" >HOME</a></li>
+            <li><a href="library.html" class="active">LIBRARY</a></li>
+            <li><a href="gym.html" >GYM</a></li>
+            <li><a href="arena.html" >ARENA</a></li>
+            <li><a href="daily.html">DAILY</a></li>
+            <li><a href="sprint.html">SPRINT</a></li>
+        </ul>
+    </nav>
+    
+    <div style="padding-top: 80px;">
+        
+    <section id="lessons" class="section" style="display:block;">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Teaching Engine</span>
+                <h2 class="section-title">AWS & SE Curriculum</h2>
+                <p class="section-desc">Master the foundational concepts before entering the test simulators.</p>
+            </div>
+            
+            <button id="mobile-toc-toggle" class="nav-btn" style="display: none; width: 100%; margin-bottom: 20px; justify-content: center; background: rgba(56, 189, 248, 0.1); border-color: var(--accent-primary);" onclick="document.getElementById('lesson-toc').classList.toggle('mobile-open')">
+                📖 Toggle Course Menu
+            </button>
+            <div class="library-tabs" style="margin-bottom: 40px; max-width: 900px; margin-left: auto; margin-right: auto;">
+                <button class="lib-tab tab-aws active" onclick="app.setLibraryTab('aws')">
+                    <span class="tab-icon">☁️</span> 
+                    <span class="tab-text">AWS Cloud</span>
+                </button>
+                <button class="lib-tab tab-sales" onclick="app.setLibraryTab('sales')">
+                    <span class="tab-icon">🤝</span> 
+                    <span class="tab-text">Sales Eng</span>
+                </button>
+                <button class="lib-tab tab-scrum" onclick="app.setLibraryTab('scrum')">
+                    <span class="tab-icon">⚡</span> 
+                    <span class="tab-text">Scrum</span>
+                </button>
+            </div>
+            
+            <div class="lesson-layout">
+                <aside class="lesson-sidebar" id="lesson-toc-container">
+                    <div id="lesson-toc">
+                        <!-- TOC injected by JS -->
+                    </div>
+                </aside>
+                <article class="lesson-canvas" id="lesson-canvas">
+                    <div class="lesson-placeholder">Select a module from the sidebar to begin.</div>
+                </article>
+                <aside class="lesson-intelligence" id="lesson-intelligence" style="display:none;">
+                    <!-- Contextual intelligence injected by JS -->
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    </div>
+
+    <script src="courses/aws-saa-c03.js"></script>
+    <script src="courses/psm-scrum.js"></script>
+    <script src="courses/sales-engineering.js"></script>
+    <script src="course-loader.js"></script>
+    <script src="achievements.js"></script>
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if(typeof app !== 'undefined' && app.init) app.init();
+        });
+    </script>
+
+    <!-- MAMMOTH FOOTER -->
+    <footer class="mammoth-footer">
+      <div class="mammoth-footer-inner">
+        <a href="https://mammothcapital.site" target="_blank" rel="noreferrer" class="mammoth-footer-brand">
+          <img src="assets/mammoth-logo.png" alt="Mammoth Capital" style="height:22px;width:auto;opacity:0.7;">
+          <span>MAMMOTH CAPITAL</span>
+        </a>
+        <span class="mammoth-footer-divider">·</span>
+        <span class="mammoth-footer-copy">Mammoth Academy is a Mammoth Capital product.</span>
+        <span class="mammoth-footer-divider">·</span>
+        <a href="https://mammothcapital.site" target="_blank" rel="noreferrer" class="mammoth-footer-link">Visit Main Site →</a>
+      </div>
+    </footer>
+</body>
+</html>
