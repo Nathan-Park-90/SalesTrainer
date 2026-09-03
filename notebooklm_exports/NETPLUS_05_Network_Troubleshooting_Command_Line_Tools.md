@@ -12,6 +12,8 @@ ACCURACY: Treat every fact, number, port, percentage, and step order in the sour
 
 When the network breaks, you live in the CLI. `ping` tests reachability. `tracert/traceroute` finds where packets die. `netstat` shows active connections. `nslookup/dig` interrogates DNS.
 
+Round it out with `ipconfig`/`ifconfig` to check your own machine's address and gateway, and `arp -a` to see which MAC address your machine currently associates with an IP — useful for catching an ARP spoofing attack or just confirming two devices actually agree on who's who on the local segment.
+
 **⚓ Anchor:** These commands are a stethoscope, blood pressure cuff, and thermometer — cheap, fast, and they tell you where to look before you order the expensive MRI. ping says the patient (host) is alive. tracert says exactly which hop of the journey the patient collapsed at. You reach for Wireshark (the MRI) only after the basic vitals point you somewhere specific.
 
 **Exam Tip (Network+):** ping fails two different ways and the exam expects you to know which is which — “Destination host unreachable” means YOUR router has no route to that network; “Request timed out” means a route exists but nothing answered along the way.
