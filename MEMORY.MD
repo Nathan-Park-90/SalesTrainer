@@ -38,7 +38,7 @@ MammothAcademy/
 │   ├── style.css              ← Global styles + all enhancement CSS
 │   ├── manifest.json           ← PWA manifest
 │   ├── assets/, fonts/         ← Logo/icons, offline font stack (mammoth-fonts.css + woff2s)
-├── notebooklm_exports/       ← 24 .md files for NotebookLM audio generation
+├── notebooklm_exports/       ← One .md transcript per module (47), for NotebookLM Audio Overviews
 └── MEMORY.MD                 ← This file
 ```
 
@@ -138,6 +138,21 @@ Gotcha: any element toggled via the `hidden` attribute that also has its own CSS
 
 ---
 
+## Audio Lectures (`notebooklm_exports/`)
+One Markdown transcript per module (47, one per `courses/*.js` module — regenerate with `npm run export-notebooklm`, which runs `www/courses/build-notebooklm-exports.js` against the live course data). Each file opens with a system note framing NotebookLM's Audio Overview hosts as senior-mentor-style teachers who must lean on the site's established analogies (Mammoth Capital, Proxmox, pfSense) and, critically, are told never to alter a specific fact, number, or step order — followed by the module's actual lesson prose with its anchor/tip callouts pulled out as clearly labeled lines.
+
+**Rebuild this whenever course content changes** — it went stale for a full session (24 files covering only the original AWS/Sales/Scrum modules, zero of the 23 CompTIA modules added later) before anyone noticed, because nothing regenerates it automatically. The old generator (`export_notebooklm.js`, removed) read a `data.js` file that no longer exists and detected course boundaries with hardcoded module-index ranges — the same "position instead of stable identity" bug fixed everywhere else; the new one reads `courses/*.js` directly via each module's real `courseId`.
+
+**Is NotebookLM the right tool for this?** Worth being honest about the trade-off rather than assuming yes:
+- **Good fit for**: building intuition and hearing concepts explained conversationally on a commute/workout — genuinely engaging, free, and it already matches the established teaching voice when fed these transcripts.
+- **Weak fit for**: exam-accurate drilling. Audio Overview hosts summarize and riff in their own words rather than reading verbatim — for content where the exact number matters (a port, a domain weight percentage, an exact step order), there's real drift/hallucination risk despite the system note's explicit "never alter a specific detail" instruction, which is a strong request, not a guarantee.
+- **Operational friction**: no batch API as of this writing — each module (or course, if grouped) has to be uploaded and "Generate Audio" clicked manually in the NotebookLM UI, one at a time, and re-running produces a different conversation each time with no version tracking against source changes.
+- **Alternative worth considering**: a straight TTS narration of the actual lesson prose (already written in the site's voice, not dry textbook copy) would be immune to the drift risk and could be scripted end-to-end with no manual UI clicking — but needs a TTS API/service, which isn't set up here.
+
+**Recommendation**: keep NotebookLM for the conceptual/intuition pass, but don't treat its audio as authoritative for exact facts close to exam day — go back to the actual Library lesson for that.
+
+---
+
 ## Open Items / Roadmap
 | Priority | Item |
 |---|---|
@@ -146,4 +161,4 @@ Gotcha: any element toggled via the `hidden` attribute that also has its own CSS
 | Low | AWS: exam bank is Cost-heavy vs. official weights (Cost ~25% vs 20% target, Resilient ~23% vs 26% target) — rebalance a few questions |
 | Low | CompTIA Security+ successor SY0-801 previews ~Oct 2026, GA ~Nov 2026 — re-audit Security+ content once its objectives publish (headline addition: AI/LLM security coverage) |
 | Phase 3 | Capacitor wrapper polish for iOS/Android App Store submission |
-| User action | NotebookLM audio: upload notebooklm_exports/*.md, use Deep Dive format with Mammoth Capital focus prompt |
+| User action | NotebookLM audio: upload notebooklm_exports/*.md (one course/notebook at a time — no batch upload), use Deep Dive format |
