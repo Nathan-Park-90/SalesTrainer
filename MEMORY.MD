@@ -70,10 +70,10 @@ Each file defines `var COURSE_<NAME> = { meta, modules, flashcards, exam, daily,
 | Professional Scrum Master | `psm-scrum` | PSM I, 2020 Scrum Guide (current) | 6 (last 2 are supplementary CSM content, outside PSM I's own scope) |
 | CompTIA Security+ | `comptia-securityplus` | SY0-701 (current; successor SY0-801 previews ~Oct 2026) | 5 |
 | CompTIA Network+ | `comptia-networkplus` | **N10-009** (relabeled 2026-09-03 — N10-008 is retired) | 5 |
-| CompTIA A+ | `comptia-aplus` | **Core 1 (220-1201) & Core 2 (220-1202)** (relabeled 2026-09-03 — 1101/1102 retired Sep 2025) | 5 |
+| CompTIA A+ | `comptia-aplus` | **Core 1 (220-1201) & Core 2 (220-1202)** (relabeled 2026-09-03 — 1101/1102 retired Sep 2025) | 8 |
 | CompTIA Cloud+ | `comptia-cloudplus` | **CV0-004** (relabeled 2026-09-03 — CV0-003 retired) | 5 |
 
-**Known content gap — CompTIA A+**: no module or exam coverage yet for the "Networking" domain (23% of Core 1), "Virtualization and Cloud" (11% of Core 1), or "Security" (28% of Core 2 — the single largest domain on either exam). The 5 existing modules cover Hardware/Troubleshooting, OS, Hardware Components, Mobile Devices, and Operational Procedures only. This needs new module authorship, not a data fix.
+**CompTIA A+ content gap — fixed 2026-09-03**: added 3 new modules (Networking, Virtualization & Cloud, and a 2-topic Security module) covering the domains that previously had zero content — Networking (23% of Core 1), Virtualization and Cloud (11% of Core 1), and Security (28% of Core 2, the single largest domain on either exam). A+ now has 8 modules and 19 exam questions across all 9 official domains.
 
 **Lower-priority gaps**: PSM I's exam bank is 40 questions vs. the real exam's 80; AWS's exam bank is a bit Cost-heavy vs. the official 20% Cost / 26% Resilient split; CompTIA Cloud+ has no exam questions tagged to the "DevOps Fundamentals" domain (10% of CV0-004) despite being touched on in the IaC module's prose.
 
@@ -141,7 +141,6 @@ Gotcha: any element toggled via the `hidden` attribute that also has its own CSS
 ## Open Items / Roadmap
 | Priority | Item |
 |---|---|
-| High | CompTIA A+: author new module(s) for the missing Networking (23% Core 1), Virtualization & Cloud (11% Core 1), and Security (28% Core 2 — biggest single domain on either exam) domains, plus matching exam questions |
 | Medium | PSM I: expand exam bank from 40 to closer to the real exam's 80 questions |
 | Medium | CompTIA Cloud+: tag/write exam questions for the "DevOps Fundamentals" domain (10% of CV0-004) |
 | Low | AWS: exam bank is Cost-heavy vs. official weights (Cost ~25% vs 20% target, Resilient ~23% vs 26% target) — rebalance a few questions |

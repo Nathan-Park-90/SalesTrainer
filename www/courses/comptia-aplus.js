@@ -17,7 +17,10 @@ var COURSE_COMPTIA_APLUS = {
       "Hardware": "Hardware Components",
       "Operating Systems": "Operating Systems & Software",
       "Software Troubleshooting": "Operating Systems & Software",
-      "Operational Procedures": "Operational Procedures"
+      "Operational Procedures": "Operational Procedures",
+      "Networking": "Networking Fundamentals for the Field Tech",
+      "Virtualization and Cloud": "Virtualization & The Cloud (Where Hardware Goes to Retire)",
+      "Security": "Security: The Domain That Decides If You Pass Core 2"
     },
     "version": "1.0.0",
     "category": "CompTIA"
@@ -313,6 +316,208 @@ var COURSE_COMPTIA_APLUS = {
           "idx": 1
         }
       ]
+    },
+    {
+      "title": "Networking Fundamentals for the Field Tech",
+      "topics": [
+        {
+          "title": "Ports, Protocols, and the Network Layer Techs Actually Touch",
+          "prose": "<p>Networking is 23% of Core 1 — the single biggest chunk of the exam after Hardware and Network Troubleshooting itself — and it's the domain most helpdesk techs try to skip because \"the network guys handle that.\" They don't, not when a user can't print, can't reach a shared drive, or can't VPN in from home, and you're the first call.</p>\n\n<p>Start with the ports. Every network service listens on a numbered door, and the exam expects you to know the doorman by number on sight: <strong>21</strong> FTP, <strong>22</strong> SSH, <strong>23</strong> Telnet, <strong>25</strong> SMTP, <strong>53</strong> DNS, <strong>80</strong> HTTP, <strong>110</strong> POP3, <strong>143</strong> IMAP, <strong>443</strong> HTTPS, <strong>445</strong> SMB (Windows file sharing), <strong>3389</strong> RDP. If a user can browse the web but can't reach a mapped drive, you're not looking at a DNS problem (53) — you're looking at port 445 blocked somewhere between them and the file server.</p>\n\n<p>IP addressing is the other half. IPv4 addresses are four octets (192.168.1.10), and a subnet mask tells a device which part of that address is the \"building\" (network) and which part is the \"apartment number\" (host) — a /24 mask (255.255.255.0) means the last octet is yours to hand out, giving you 254 usable host addresses. Private ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) never route on the public internet directly — that's what NAT on your SOHO router is for, translating your private IP to its one public IP before traffic leaves the building.</p>\n\n<p>Cabling still matters even in a wireless-first world: Cat5e tops out around 1 Gbps, Cat6 pushes 10 Gbps over shorter runs, Cat6a holds that 10 Gbps over the full 100-meter run. Fiber (single-mode for long-haul, multimode for shorter in-building runs) trades copper's distance and interference limits for cost and fragility. On the wireless side, know your standards by number, not just letter: 802.11ac (Wi-Fi 5) is 5 GHz only; 802.11ax (Wi-Fi 6/6E) adds the 6 GHz band, which is what the \"E\" in 6E actually means.</p>\n\n<div class=\"lesson-alert\" style=\"border-left-color: var(--accent-warning); background: rgba(245, 158, 11, 0.05);\"><strong>⚓ Anchor:</strong> Port numbers are apartment numbers in one big office building (the IP address). The building's front desk gets you in the door, but knock on the wrong apartment — port 80 instead of 443 — and nobody who can actually help you answers. A pfSense box doing port forwarding is nothing more than a doorman with a clipboard: \"package for apartment 443? Send it to the server in unit 10.0.0.5.\" Get the port wrong and it doesn't matter how right the address was.</div>\n\n<div class=\"lesson-alert\"><strong>Exam Tip (A+):</strong> Memorize the port list cold — the exam will describe a symptom (\"can reach the website but email won't send\") and expect you to identify the blocked port without it ever using the word \"port.\" Ports are tested by scenario, not by flashcard.</div>",
+          "tags": [
+            "comptia",
+            "a-plus",
+            "networking"
+          ],
+          "quiz": [
+            {
+              "q": "A user can reach internal file shares by IP address (\\\\10.0.0.5\\shared works) but not by hostname (\\\\FILESERVER\\shared fails). Which service is most likely unavailable?",
+              "opts": [
+                "HTTP (port 80)",
+                "DNS (port 53)",
+                "RDP (port 3389)",
+                "HTTPS (port 443)"
+              ],
+              "ans": 1,
+              "exp": "Name resolution — turning a hostname into an IP — is DNS's job on port 53. Direct-IP access working while hostname access fails is the classic DNS-down symptom."
+            },
+            {
+              "q": "Which of the following is a private, non-routable IPv4 address?",
+              "opts": [
+                "8.8.8.8",
+                "192.168.1.50",
+                "1.1.1.1",
+                "34.201.10.5"
+              ],
+              "ans": 1,
+              "exp": "192.168.0.0/16 is one of the three reserved private ranges (along with 10.0.0.0/8 and 172.16.0.0/12) — it never routes directly on the public internet."
+            },
+            {
+              "q": "A technician must run a cable the full 100-meter maximum length allowed by the standard while still supporting 10 Gbps. Which cable meets both requirements?",
+              "opts": [
+                "Cat5e",
+                "Cat6",
+                "Cat6a",
+                "Cat3"
+              ],
+              "ans": 2,
+              "exp": "Cat6 can hit 10 Gbps but only over shorter runs (~55m); Cat6a holds 10 Gbps across the full 100-meter maximum run length."
+            }
+          ]
+        }
+      ],
+      "related": [
+        {
+          "course": "comptia-aplus",
+          "idx": 2
+        },
+        {
+          "course": "comptia-aplus",
+          "idx": 1
+        }
+      ]
+    },
+    {
+      "title": "Virtualization & The Cloud (Where Hardware Goes to Retire)",
+      "topics": [
+        {
+          "title": "The Five Traits of “Actually Cloud” and the Three Ways to Rent It",
+          "prose": "<p>Every vendor calls everything \"cloud\" now, which makes the term nearly meaningless — except CompTIA (borrowing from NIST) defines it precisely with five characteristics, and the exam expects you to recognize all five by description, not by name. <strong>On-demand self-service</strong>: you provision a VM by clicking a button, not by filing a ticket and waiting three days for a human to rack a server. <strong>Broad network access</strong>: reachable from anywhere, any device, over standard internet protocols. <strong>Resource pooling</strong>: your workload shares a physical host with other tenants' workloads, invisibly. <strong>Rapid elasticity</strong>: capacity scales up and down automatically with demand, not by a person manually adding RAM. <strong>Measured service</strong>: you're metered and billed for exactly what you use, like a utility bill, not a flat fee for a box.</p>\n\n<p>Above those five traits sit three service models, and mixing them up is the single most common Virtualization/Cloud mistake on this exam. <strong>IaaS</strong> (Infrastructure as a Service) rents you the raw virtual hardware — VMs, storage, networking — and you install and manage the OS and everything above it yourself. <strong>PaaS</strong> (Platform as a Service) hands you a ready-to-deploy runtime — you push code, the platform handles the OS, patching, and scaling underneath it. <strong>SaaS</strong> (Software as a Service) is the finished application — you just log in and use it; you touch none of the infrastructure at all.</p>\n\n<p>Client-side virtualization is the same hypervisor concept scaled down to a technician's own workstation: running a Type 2 hypervisor like VirtualBox or VMware Workstation to spin up a disposable Windows VM for testing a sketchy installer, or to run a legacy application that refuses to work on the current OS, without touching the host machine's real configuration. It's a sandbox, not a production tool — when the VM gets messy, you delete it and start over, which is exactly the point.</p>\n\n<div class=\"lesson-alert\" style=\"border-left-color: var(--accent-warning); background: rgba(245, 158, 11, 0.05);\"><strong>⚓ Anchor:</strong> IaaS, PaaS, and SaaS are three ways to rent a kitchen. IaaS rents you an empty commercial kitchen — you bring your own pots, ingredients, and cook the food yourself. PaaS is a meal-kit service — the ingredients and recipe are handled, you just do the cooking. SaaS is a restaurant — you sit down, order, and eat; you never see the kitchen at all. Get handed a scenario on the exam and ask yourself: how much of the kitchen am I responsible for?</div>\n\n<div class=\"lesson-alert\"><strong>Exam Tip (A+):</strong> If a question describes deploying code to a platform that automatically handles the OS, patching, and runtime, that's PaaS — not IaaS. If it describes renting raw virtual machines you configure from the OS up yourself, that's IaaS. The exam tests recognition of the scenario, not the acronym.</div>",
+          "tags": [
+            "comptia",
+            "a-plus",
+            "virtualization",
+            "cloud"
+          ],
+          "quiz": [
+            {
+              "q": "A developer wants to deploy application code without managing the underlying operating system, patching, or server capacity. Which cloud service model best fits?",
+              "opts": [
+                "IaaS",
+                "PaaS",
+                "SaaS",
+                "DaaS"
+              ],
+              "ans": 1,
+              "exp": "PaaS hands over a ready-to-run platform — the provider manages the OS and runtime, the developer just deploys code."
+            },
+            {
+              "q": "Which cloud characteristic describes a system automatically adding server capacity during a traffic spike and removing it afterward without human action?",
+              "opts": [
+                "Measured service",
+                "Resource pooling",
+                "Rapid elasticity",
+                "Broad network access"
+              ],
+              "ans": 2,
+              "exp": "Rapid elasticity is capacity scaling up and down automatically with demand, with no manual provisioning step."
+            },
+            {
+              "q": "A technician wants to test an unfamiliar installer without risking the host machine's configuration. What is the BEST approach?",
+              "opts": [
+                "Install it directly and use System Restore afterward if needed",
+                "Create a client-side VM using a Type 2 hypervisor and test it there",
+                "Ask a coworker to test it on their machine first",
+                "Disable the host's antivirus and run it"
+              ],
+              "ans": 1,
+              "exp": "A disposable client-side VM (VirtualBox, VMware Workstation) isolates the test from the host entirely — delete the VM and the risk is gone."
+            }
+          ]
+        }
+      ],
+      "related": [
+        {
+          "course": "comptia-cloudplus",
+          "idx": 1
+        },
+        {
+          "course": "comptia-aplus",
+          "idx": 3
+        }
+      ]
+    },
+    {
+      "title": "Security: The Domain That Decides If You Pass Core 2",
+      "topics": [
+        {
+          "title": "Malware, Social Engineering, and the Human Attack Surface",
+          "prose": "<p>Security is 28% of Core 2 — tied with Operating Systems as the largest domain on either exam — because a technician who can build a flawless network but ships it with the admin password still set to \"admin\" has built nothing. Malware and social engineering are where most real-world breaches start, and CompTIA expects you to name each variant by its actual behavior, not just its reputation.</p>\n\n<p><strong>Viruses</strong> attach to a host file and need that file executed to spread. <strong>Worms</strong> need no host file and no user action at all — they self-replicate across a network on their own, which is why an unpatched, internet-facing machine can be compromised in minutes. <strong>Trojans</strong> disguise themselves as legitimate software; the payload only detonates once a user willingly installs it. <strong>Ransomware</strong> encrypts a victim's files and demands payment for the key. <strong>Keyloggers</strong> silently record every keystroke, harvesting credentials without ever touching a file the user would notice. <strong>Rootkits</strong> bury themselves at the OS or firmware level specifically to hide from the antivirus scanning above them — which is why a rootkit infection often can't be trusted to be fully removed without a full OS reinstall.</p>\n\n<p>Social engineering skips the malware entirely and attacks the person instead of the machine. <strong>Phishing</strong> is the mass-email version; <strong>spear phishing</strong> targets one specific person with researched, personalized bait; <strong>whaling</strong> targets an executive specifically. <strong>Shoulder surfing</strong> is someone reading your screen or PIN entry over your shoulder. <strong>Tailgating</strong> is following an authorized person through a badge-locked door without badging in yourself — the single most effective and most underrated physical attack there is, because it exploits politeness, not a technical flaw.</p>\n\n<div class=\"lesson-alert\" style=\"border-left-color: var(--accent-warning); background: rgba(245, 158, 11, 0.05);\"><strong>⚓ Anchor:</strong> Worms and viruses are the difference between a cough and an itch you have to scratch. A virus needs someone to \"scratch\" it — open the infected attachment — before it spreads. A worm just coughs on its own, no action required, which is why one unpatched machine on a flat network can take down the whole floor overnight while everyone's asleep. Segment your network — the way a pfSense VLAN keeps IoT devices off the main LAN — and a worm outbreak stays a head cold instead of the whole office catching pneumonia.</div>\n\n<div class=\"lesson-alert\"><strong>Exam Tip (A+):</strong> The exam loves describing an attack in plain English and expecting you to name the exact term — \"an email pretending to be your CEO asking for a wire transfer\" is whaling, not generic phishing. Match the specificity of the target to the specificity of the term.</div>",
+          "tags": [
+            "comptia",
+            "a-plus",
+            "security",
+            "malware"
+          ],
+          "quiz": [
+            {
+              "q": "Malware that self-replicates across a network without requiring any user action or host file is best classified as a:",
+              "opts": [
+                "Virus",
+                "Worm",
+                "Trojan",
+                "Rootkit"
+              ],
+              "ans": 1,
+              "exp": "Worms spread on their own across a network with no host file and no user action required — unlike a virus, which needs an infected file to be executed."
+            },
+            {
+              "q": "An attacker follows an employee through a badge-secured door without presenting their own credentials. This is an example of:",
+              "opts": [
+                "Shoulder surfing",
+                "Whaling",
+                "Tailgating",
+                "Spear phishing"
+              ],
+              "ans": 2,
+              "exp": "Tailgating is gaining physical access by following an authorized person through a secured door, exploiting politeness rather than a technical flaw."
+            }
+          ]
+        },
+        {
+          "title": "Hardening Windows, Mobile Devices, and the SOHO Network",
+          "prose": "<p>Knowing the threats is half the domain; the other half is locking things down before the threat shows up. On a Windows workstation that starts with <strong>BitLocker</strong> (full-disk encryption, so a stolen laptop's drive is unreadable without the recovery key), <strong>Windows Defender/antivirus</strong> kept current and actively scanning, the built-in <strong>firewall</strong> left on rather than \"fixed\" by disabling it, and <strong>UAC</strong> (User Account Control) prompting before anything runs with elevated privileges — the little permission popup users love to click through without reading, which exists specifically to stop malware from silently gaining admin rights.</p>\n\n<p>Mobile devices get their own checklist: a <strong>screen lock</strong> (PIN, pattern, or biometric) is the baseline, <strong>remote wipe</strong> is the insurance policy for when the device is lost or stolen rather than just locked, and <strong>full-device encryption</strong> (on by default on modern iOS/Android) protects the data at rest the same way BitLocker does on a laptop. None of it matters if the device stays in its factory-default state — always change default credentials on anything with a login screen, mobile or not.</p>\n\n<p>SOHO wireless routers ship configured for the vendor's convenience, not your security, and hardening one is a fixed checklist worth memorizing: change the default admin password immediately, enable <strong>WPA3</strong> (or WPA2 if the hardware can't do WPA3 — never WEP, never open), disable WPS (a well-known brute-force weak point), and consider disabling SSID broadcast and enabling MAC filtering as additional-but-not-primary layers — they slow down a casual snoop but won't stop anyone running real reconnaissance tools, so they're a supplement to WPA3, never a replacement for it.</p>\n\n<div class=\"lesson-alert\" style=\"border-left-color: var(--accent-warning); background: rgba(245, 158, 11, 0.05);\"><strong>⚓ Anchor:</strong> UAC is the \"are you sure?\" text message a bank sends before a big transfer — annoying, easy to approve without reading, and exactly the point where a scammer's whole plan falls apart if you actually stop and look. Malware relies on you clicking \"Yes\" on autopilot the same way a phishing victim approves a fraudulent transfer without reading it. The popup only works if you actually read it.</div>\n\n<div class=\"lesson-alert\"><strong>Exam Tip (A+):</strong> SSID hiding and MAC filtering show up as WRONG answers whenever a question asks for the BEST or PRIMARY security control — they're real but weak, easily defeated with basic wireless scanning tools. WPA3 (or WPA2) is always the correct primary answer; the others are supplements at best.</div>",
+          "tags": [
+            "comptia",
+            "a-plus",
+            "security",
+            "hardening"
+          ],
+          "quiz": [
+            {
+              "q": "Which Windows feature specifically prompts a user for confirmation before an application is allowed to run with administrative privileges?",
+              "opts": [
+                "BitLocker",
+                "Windows Defender",
+                "User Account Control (UAC)",
+                "Windows Firewall"
+              ],
+              "ans": 2,
+              "exp": "UAC is the permission prompt that requires explicit confirmation before a process can run with elevated (administrative) privileges."
+            },
+            {
+              "q": "Which of the following provides the STRONGEST primary security for a SOHO wireless network?",
+              "opts": [
+                "Disabling SSID broadcast",
+                "Enabling MAC filtering",
+                "WPA3 encryption",
+                "Reducing transmit power"
+              ],
+              "ans": 2,
+              "exp": "WPA3 (or WPA2 where WPA3 isn't supported) is real cryptographic security; SSID hiding, MAC filtering, and power reduction are weak supplements easily bypassed with basic tools."
+            }
+          ]
+        }
+      ],
+      "related": [
+        {
+          "course": "comptia-securityplus",
+          "idx": 0
+        },
+        {
+          "course": "comptia-aplus",
+          "idx": 4
+        }
+      ]
     }
   ],
   "flashcards": [
@@ -565,6 +770,90 @@ var COURSE_COMPTIA_APLUS = {
       "ans": 2,
       "exp": "Professionalism requires enforcing company policy while providing excellent customer service. Explaining the policy respectfully and offering an approved workaround is the correct procedure.",
       "domain": "Operational Procedures"
+    },
+    {
+      "q": "A help desk technician receives a call that a user's laptop can browse websites fine but cannot connect to the company VPN. Which port should the technician verify is not blocked by a firewall along the path, assuming an IPsec-based VPN?",
+      "opts": [
+        "Port 80",
+        "Port 443 only",
+        "UDP 500 / 4500 (IKE/NAT-T)",
+        "Port 25"
+      ],
+      "ans": 2,
+      "exp": "IPsec VPNs rely on IKE (UDP 500) and NAT-T (UDP 4500) for key exchange; blocking these prevents the tunnel from establishing even though general web traffic (80/443) works fine.",
+      "domain": "Networking"
+    },
+    {
+      "q": "A technician is configuring a SOHO router and wants to give a specific internal server a consistent, predictable internal address for port forwarding. What should be configured?",
+      "opts": [
+        "DHCP reservation",
+        "Dynamic DNS",
+        "Subnetting",
+        "NAT"
+      ],
+      "ans": 0,
+      "exp": "A DHCP reservation ties a specific device's MAC address to a fixed IP within the DHCP scope, so port forwarding rules pointed at that IP never break when the lease renews.",
+      "domain": "Networking"
+    },
+    {
+      "q": "A company wants to migrate its email hosting so it no longer manages any physical or virtual mail servers, and simply pays for user mailboxes. Which cloud model does this describe?",
+      "opts": [
+        "IaaS",
+        "PaaS",
+        "SaaS",
+        "Private cloud"
+      ],
+      "ans": 2,
+      "exp": "Consuming a finished application (hosted mailboxes) with zero infrastructure management is SaaS — the provider owns everything below the login screen.",
+      "domain": "Virtualization and Cloud"
+    },
+    {
+      "q": "Which characteristic of cloud computing means a customer is billed only for the exact compute and storage resources consumed, similar to a utility bill?",
+      "opts": [
+        "Resource pooling",
+        "Measured service",
+        "Rapid elasticity",
+        "On-demand self-service"
+      ],
+      "ans": 1,
+      "exp": "Measured service is the metering/billing characteristic — pay for what's actually used, not a flat fee.",
+      "domain": "Virtualization and Cloud"
+    },
+    {
+      "q": "An employee reports that files on a shared drive are suddenly all encrypted with a .locked extension, and a text file demands payment for the decryption key. This is an example of:",
+      "opts": [
+        "A rootkit",
+        "Ransomware",
+        "A keylogger",
+        "Spyware"
+      ],
+      "ans": 1,
+      "exp": "Encrypting a victim's files and demanding payment for the decryption key is the defining behavior of ransomware.",
+      "domain": "Security"
+    },
+    {
+      "q": "A technician finds that antivirus software cannot detect or remove a persistent infection that appears to operate below the operating system level. This behavior is most consistent with a:",
+      "opts": [
+        "Virus",
+        "Worm",
+        "Rootkit",
+        "Trojan"
+      ],
+      "ans": 2,
+      "exp": "Rootkits specifically embed at the OS or firmware level to hide from security software running above them, which is why standard AV scans often can't detect or fully remove them.",
+      "domain": "Security"
+    },
+    {
+      "q": "Which mobile device security feature allows an organization to erase all data on a lost or stolen phone?",
+      "opts": [
+        "Screen lock",
+        "Remote wipe",
+        "Full-device encryption",
+        "Biometric authentication"
+      ],
+      "ans": 1,
+      "exp": "Remote wipe erases the device's data remotely once it's confirmed lost or stolen — a screen lock and encryption protect data at rest but don't erase it.",
+      "domain": "Security"
     }
   ],
   "daily": [
