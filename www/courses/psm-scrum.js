@@ -1417,6 +1417,246 @@ var COURSE_PSM_SCRUM = {
       "ans": 0,
       "domain": "Theory",
       "explanation": "The Agile Manifesto values 'Responding to change over following a plan'."
+    },
+    {
+      "q": "A Scrum Team completes a Sprint but skips the Sprint Retrospective because 'the Sprint went well and there's nothing to improve.' Which pillar of empiricism does this violate?",
+      "opts": [
+        "Transparency",
+        "Inspection",
+        "Adaptation",
+        "Commitment"
+      ],
+      "ans": 2,
+      "domain": "Theory",
+      "explanation": "Adaptation is adjusting the process based on what inspection reveals. Skipping the Retrospective removes the team's only formal opportunity to adapt how it works — even a smooth Sprint has room for it, since 'nothing to improve' is itself a conclusion that requires inspection to reach."
+    },
+    {
+      "q": "During a Sprint, a Developer notices they are struggling to finish their work and, instead of hiding it, immediately raises it at the Daily Scrum so the team can re-plan. Which Scrum Value is being demonstrated?",
+      "opts": [
+        "Openness",
+        "Respect",
+        "Focus",
+        "Commitment"
+      ],
+      "ans": 0,
+      "domain": "Theory",
+      "explanation": "Openness is the Scrum Team and its stakeholders agreeing to be open about the work and the challenges. Surfacing a struggle immediately, rather than concealing it, is openness in action."
+    },
+    {
+      "q": "According to the Scrum Guide, what is Scrum?",
+      "opts": [
+        "A prescriptive methodology that defines every process, technique, and tool a team must use",
+        "A lightweight framework that helps people generate value through adaptive solutions for complex problems",
+        "A software development lifecycle owned and maintained by a single vendor",
+        "A project management certification body"
+      ],
+      "ans": 1,
+      "domain": "Theory",
+      "explanation": "The Scrum Guide explicitly defines Scrum as a lightweight framework, not a methodology or a complete product — it deliberately leaves room for teams to implement other practices, techniques, and methods within it."
+    },
+    {
+      "q": "The Product Owner is unreachable for two days during a Sprint, and the Developers have a question about which of two acceptable implementations best serves an item's intent. What should the Developers do?",
+      "opts": [
+        "Halt all work until the Product Owner responds",
+        "Cancel the Sprint",
+        "Use their best judgment based on the Product Backlog item's existing detail and continue, flagging the decision for the Product Owner later",
+        "Let the Scrum Master make the final call permanently"
+      ],
+      "ans": 2,
+      "domain": "Accountabilities",
+      "explanation": "The Product Owner remains accountable for the Product Backlog, but Developers are trusted to interpret existing detail and keep moving — that's what 'self-managing' means. A two-day gap isn't grounds to halt the Sprint or permanently hand the decision to someone else."
+    },
+    {
+      "q": "What does the 2020 Scrum Guide say about the size of the Developers?",
+      "opts": [
+        "Exactly 5 people, no exceptions",
+        "Usually 10 or fewer, small enough to remain nimble and large enough to complete significant work within a Sprint",
+        "As many as the Product Owner decides is necessary",
+        "There is no guidance on team size"
+      ],
+      "ans": 1,
+      "domain": "Accountabilities",
+      "explanation": "The Scrum Guide recommends Developer team size usually be 10 or fewer — small enough to stay nimble, large enough to get meaningful work done within a Sprint."
+    },
+    {
+      "q": "Which of the following is something the Scrum Master does specifically to serve the Product Owner?",
+      "opts": [
+        "Estimating Product Backlog items on the Product Owner's behalf",
+        "Helping find techniques for effective Product Goal definition and Product Backlog management",
+        "Making the final call on which items are prioritized",
+        "Attending the Daily Scrum as a required participant every day"
+      ],
+      "ans": 1,
+      "domain": "Accountabilities",
+      "explanation": "The Scrum Master serves the Product Owner by helping find techniques for effective Product Goal definition and Product Backlog management — not by estimating, prioritizing, or attending the Daily Scrum by default."
+    },
+    {
+      "q": "A Scrum Master notices the wider organization still runs annual budgeting cycles that conflict with the team's ability to adapt quickly. What is the Scrum Master's responsibility here?",
+      "opts": [
+        "Ignore it — organizational process is outside Scrum's scope",
+        "Lead the organization in adopting Scrum, helping employees and stakeholders understand and enact an empirical approach",
+        "Escalate to the Product Owner to resolve alone",
+        "Wait until a Developer raises it at a Retrospective"
+      ],
+      "ans": 1,
+      "domain": "Accountabilities",
+      "explanation": "Serving the organization is an explicit Scrum Master accountability — leading, training, and coaching the organization in its Scrum adoption, including working to remove barriers like conflicting processes."
+    },
+    {
+      "q": "What does it mean for the Developers to be 'self-managing,' per the 2020 Scrum Guide?",
+      "opts": [
+        "They choose who works on what, when, and how, within the Sprint",
+        "They report to a project manager who assigns daily tasks",
+        "The Scrum Master assigns work each morning at the Daily Scrum",
+        "The Product Owner decides how the work gets done"
+      ],
+      "ans": 0,
+      "domain": "Accountabilities",
+      "explanation": "Self-managing (the 2020 Guide's update from 'self-organizing') specifically means the Developers internally decide who does what, when, and how — no one outside the team, including the Scrum Master or Product Owner, assigns that work."
+    },
+    {
+      "q": "Who is required to attend the Daily Scrum?",
+      "opts": [
+        "The entire Scrum Team, including the Product Owner and Scrum Master, every day",
+        "Only the Developers; the Product Owner or Scrum Master attend only if they are actively working on Sprint Backlog items",
+        "Only the Scrum Master, who then reports status to the Developers",
+        "Whichever stakeholders are available that day"
+      ],
+      "ans": 1,
+      "domain": "Events",
+      "explanation": "The Daily Scrum is for the Developers. The Product Owner or Scrum Master participate only when they are actively working on items in the Sprint Backlog — otherwise they are not required attendees."
+    },
+    {
+      "q": "What is the timebox for the Daily Scrum, regardless of Sprint length?",
+      "opts": [
+        "15 minutes",
+        "30 minutes, matching the Sprint Review's minimum",
+        "1 hour per week of Sprint length",
+        "There is no fixed timebox — it ends when the team feels done"
+      ],
+      "ans": 0,
+      "domain": "Events",
+      "explanation": "The Daily Scrum is always timeboxed to 15 minutes, no matter how long the Sprint is — unlike Sprint Planning, Review, and Retrospective, which scale with Sprint length."
+    },
+    {
+      "q": "Sprint Planning addresses three topics. Which of the following is NOT one of them?",
+      "opts": [
+        "Why is this Sprint valuable?",
+        "What can be Done this Sprint?",
+        "How will the chosen work get done?",
+        "Who on the team will be promoted this quarter?"
+      ],
+      "ans": 3,
+      "domain": "Events",
+      "explanation": "Sprint Planning covers Why (the Sprint's value/Sprint Goal), What (which Product Backlog items), and How (the plan to deliver them) — team member promotions have nothing to do with the event."
+    },
+    {
+      "q": "During the Daily Scrum, the Developers realize the current plan will not achieve the Sprint Goal without changes. What should happen?",
+      "opts": [
+        "The Sprint is automatically cancelled",
+        "The Developers adjust the Sprint Backlog as necessary, re-planning the remaining work with the Product Owner as needed",
+        "Nothing — the Sprint Backlog is fixed once Sprint Planning ends",
+        "The Scrum Master rewrites the Sprint Backlog alone"
+      ],
+      "ans": 1,
+      "domain": "Events",
+      "explanation": "The Sprint Backlog is a highly visible, real-time picture of the work Developers plan to accomplish — it's expected to be updated throughout the Sprint as new information emerges, including at or because of the Daily Scrum."
+    },
+    {
+      "q": "A Scrum Team had a smooth Sprint with no major issues and considers skipping the Sprint Retrospective to save time. Is this acceptable per the Scrum Guide?",
+      "opts": [
+        "Yes, if the Product Owner approves skipping it",
+        "No — the Sprint Retrospective concludes the Sprint and must always be held",
+        "Yes, retrospectives are optional if the team is experienced",
+        "No, but only if the Sprint Goal was not met"
+      ],
+      "ans": 1,
+      "domain": "Events",
+      "explanation": "The Sprint Retrospective is a required event that concludes every Sprint — it's never optional, regardless of how smoothly the Sprint went, because inspecting and adapting the team's own process is an ongoing, not conditional, practice."
+    },
+    {
+      "q": "Once a Sprint has started, can its planned duration be shortened or lengthened?",
+      "opts": [
+        "Yes, at any time, by the Scrum Master",
+        "No — the Sprint's duration is fixed once it begins; only the Product Owner can end it early by cancelling it",
+        "Yes, if the Developers vote unanimously",
+        "Yes, but only by extending it, never shortening it"
+      ],
+      "ans": 1,
+      "domain": "Events",
+      "explanation": "A Sprint's length is fixed for its duration once it starts. The only way to end it early is Sprint cancellation, which only the Product Owner can invoke — there's no mechanism to simply shorten or extend an in-progress Sprint."
+    },
+    {
+      "q": "Can a new Sprint begin before the current one officially ends?",
+      "opts": [
+        "Yes, Sprints can overlap to save time",
+        "No — a new Sprint starts immediately upon the conclusion of the previous Sprint",
+        "Yes, if the Sprint Goal was already achieved early",
+        "Only during Sprint Review"
+      ],
+      "ans": 1,
+      "domain": "Events",
+      "explanation": "The Scrum Guide is explicit: a new Sprint starts immediately after the conclusion of the previous Sprint. There is no gap between Sprints and no overlap."
+    },
+    {
+      "q": "Each of Scrum's three artifacts has an associated commitment. Which pairing is correct?",
+      "opts": [
+        "Product Backlog → Definition of Done",
+        "Sprint Backlog → Sprint Goal",
+        "Increment → Product Goal",
+        "Sprint Backlog → Product Goal"
+      ],
+      "ans": 1,
+      "domain": "Artifacts",
+      "explanation": "The correct pairings are: Product Backlog → Product Goal, Sprint Backlog → Sprint Goal, Increment → Definition of Done. Sprint Backlog's commitment is the Sprint Goal."
+    },
+    {
+      "q": "Can more than one Increment be created within a single Sprint?",
+      "opts": [
+        "No, exactly one Increment is created per Sprint",
+        "Yes — multiple Increments can be created within a Sprint, and the sum is presented at Sprint Review",
+        "Only if the Sprint length exceeds two weeks",
+        "Increments are only created at the very end of the Sprint"
+      ],
+      "ans": 1,
+      "domain": "Artifacts",
+      "explanation": "Multiple Increments may be created within a Sprint as work is completed and verified against the Definition of Done — the cumulative work forms the current Increment, which is inspected at Sprint Review."
+    },
+    {
+      "q": "Who is responsible for Product Backlog refinement?",
+      "opts": [
+        "Only the Product Owner, working alone",
+        "A collaborative activity between the Product Owner and the Developers, done as an ongoing process rather than a dedicated formal event",
+        "The Scrum Master, as one of their core accountabilities",
+        "It happens automatically during Sprint Planning only"
+      ],
+      "ans": 1,
+      "domain": "Artifacts",
+      "explanation": "Refinement is the act of breaking down and further defining Product Backlog items into smaller, more precise items — it's an ongoing activity, collaborative between the Product Owner and Developers, and is explicitly NOT one of the formal Scrum events."
+    },
+    {
+      "q": "What must be true of an Increment before it can be considered part of a potentially releasable set of Increments?",
+      "opts": [
+        "It must be deployed to production immediately",
+        "It must meet the Definition of Done",
+        "It must be personally approved by the Scrum Master",
+        "It must include at least three Product Backlog items"
+      ],
+      "ans": 1,
+      "domain": "Artifacts",
+      "explanation": "An Increment is only usable, and only counts, once it meets the Definition of Done — the shared, formal description of what 'complete' means for the work, regardless of whether it's actually deployed."
+    },
+    {
+      "q": "A single product is being built by three Scrum Teams. How many Product Backlogs should exist?",
+      "opts": [
+        "Three — one per team, tracked independently",
+        "One — a single Product Backlog for the entire product, even when multiple teams work on it",
+        "One per feature area, regardless of team count",
+        "It depends on how the Product Owner wants to organize the work"
+      ],
+      "ans": 1,
+      "domain": "Artifacts",
+      "explanation": "There is only ever one Product Backlog per product, even when multiple Scrum Teams build it together — fragmenting it into per-team backlogs breaks the single, ordered source of truth the framework depends on."
     }
   ],
   "daily": [

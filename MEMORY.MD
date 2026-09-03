@@ -156,9 +156,7 @@ One Markdown transcript per module (47, one per `courses/*.js` module — regene
 ## Open Items / Roadmap
 | Priority | Item |
 |---|---|
-| Medium | PSM I: expand exam bank from 40 to closer to the real exam's 80 questions |
-| Medium | CompTIA Cloud+: tag/write exam questions for the "DevOps Fundamentals" domain (10% of CV0-004) |
-| Low | AWS: exam bank is Cost-heavy vs. official weights (Cost ~25% vs 20% target, Resilient ~23% vs 26% target) — rebalance a few questions |
+| Low | PSM I exam bank is 60 questions (expanded from 40 on 2026-09-03), still short of the real exam's 80 — expand further if it's still feeling thin in practice |
 | Low | CompTIA Security+ successor SY0-801 previews ~Oct 2026, GA ~Nov 2026 — re-audit Security+ content once its objectives publish (headline addition: AI/LLM security coverage) |
 | Phase 3 | Capacitor wrapper polish for iOS/Android App Store submission |
 | User action | NotebookLM audio: upload notebooklm_exports/*.md (one course/notebook at a time — no batch upload), use Deep Dive format |

@@ -27,7 +27,7 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       "topics": [
         {
           "title": "Infrastructure as Code (IaC) & Cloud Operations",
-          "prose": "<p>If you are still clicking around in a web UI to deploy servers in 2026, you aren't doing Cloud Engineering; you're doing Cloud Tourism. Enterprise cloud runs on <strong>Infrastructure as Code (IaC)</strong>. Tools like Terraform and AWS CloudFormation allow you to define your entire infrastructure—networks, VMs, databases, firewalls—as text files.</p>\n\n<div class=\"lesson-alert\" style=\"border-left-color: var(--accent-warning); background: rgba(245, 158, 11, 0.05);\"><strong>⚓ Anchor:</strong> Think of IaC as a recipe. If Mammoth Capital needs to stand up a disaster recovery site in Europe because our main trading floor in New York lost power, we don't start manually clicking buttons to build servers. We run a Terraform script, and 5 minutes later, an identical, fully-configured environment spins up in the EU region. It is repeatable, auditable, and immutable.</div>\n\n<p>Cloud+ is about understanding <strong>Deployment, Operations, and Troubleshooting</strong>. It's knowing the difference between elasticity (scaling automatically based on demand) and high availability (ensuring the system stays up when a node dies). It's managing costs so your CTO doesn't have a stroke when the AWS bill arrives, and it's securing the shared responsibility model.</p>\n\n<div class=\"lesson-alert\"><strong>Exam Tip (Cloud+):</strong> “Elasticity” and “scalability” are not the same word on this exam. Scalability is the system's theoretical capacity to grow. Elasticity is that growth happening automatically, in response to real-time demand, and shrinking back down when demand drops. If a scenario mentions “automatically” and “based on load,” the answer is elasticity.</div>",
+          "prose": "<p>If you are still clicking around in a web UI to deploy servers in 2026, you aren't doing Cloud Engineering; you're doing Cloud Tourism. Enterprise cloud runs on <strong>Infrastructure as Code (IaC)</strong>. Tools like Terraform and AWS CloudFormation allow you to define your entire infrastructure—networks, VMs, databases, firewalls—as text files.</p>\n\n<div class=\"lesson-alert\" style=\"border-left-color: var(--accent-warning); background: rgba(245, 158, 11, 0.05);\"><strong>⚓ Anchor:</strong> Think of IaC as a recipe. If Mammoth Capital needs to stand up a disaster recovery site in Europe because our main trading floor in New York lost power, we don't start manually clicking buttons to build servers. We run a Terraform script, and 5 minutes later, an identical, fully-configured environment spins up in the EU region. It is repeatable, auditable, and immutable.</div>\n\n<p>IaC only pays off once it's wired into a <strong>CI/CD pipeline</strong>. Continuous Integration means every change to the infrastructure code is automatically tested — a linter checks the Terraform syntax, a plan step shows exactly what would change — the moment it's pushed to version control. Continuous Deployment (or Delivery, if a human still approves the final step) takes a change that passes those checks and rolls it out automatically, the same way every time, instead of an engineer SSHing into a box at 2 AM to \"just fix it live.\" <strong>Version control (Git)</strong> underneath all of it isn't optional — it's the audit trail that answers \"who changed the security group and when\" after something breaks.</p>\n\n<p>Cloud+ is about understanding <strong>Deployment, Operations, and Troubleshooting</strong>. It's knowing the difference between elasticity (scaling automatically based on demand) and high availability (ensuring the system stays up when a node dies). It's managing costs so your CTO doesn't have a stroke when the AWS bill arrives, and it's securing the shared responsibility model.</p>\n\n<div class=\"lesson-alert\"><strong>Exam Tip (Cloud+):</strong> “Elasticity” and “scalability” are not the same word on this exam. Scalability is the system's theoretical capacity to grow. Elasticity is that growth happening automatically, in response to real-time demand, and shrinking back down when demand drops. If a scenario mentions “automatically” and “based on load,” the answer is elasticity.</div>",
           "tags": [
             "comptia",
             "cloud-plus",
@@ -576,6 +576,42 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       "ans": 1,
       "exp": "If a service is accessible from one IP but not another, the issue is almost always a network access control list (ACL) or security group rule that explicitly blocks or fails to allow the office IP.",
       "domain": "Troubleshooting"
+    },
+    {
+      "q": "A team wants every change to their Terraform configuration automatically validated (syntax checked, plan reviewed) the moment it's pushed to their repository, before any human manually applies it. This practice is best described as:",
+      "opts": [
+        "Continuous Deployment",
+        "Continuous Integration",
+        "Infrastructure as a Service",
+        "Configuration drift"
+      ],
+      "ans": 1,
+      "exp": "Continuous Integration is the automatic build/test/validation step that runs on every code change — Continuous Deployment is the separate step that automatically ships a change that passes CI.",
+      "domain": "DevOps Fundamentals"
+    },
+    {
+      "q": "After an outage, a team needs to determine exactly who changed a firewall rule in their IaC repository and when. Which practice makes this possible?",
+      "opts": [
+        "Elasticity",
+        "Version control",
+        "Load balancing",
+        "Data sanitization"
+      ],
+      "ans": 1,
+      "exp": "Version control (e.g. Git) tracks every change to the infrastructure code with an author and timestamp — the audit trail IaC's repeatability depends on.",
+      "domain": "DevOps Fundamentals"
+    },
+    {
+      "q": "A cloud engineer manually SSHes into a production server to apply an emergency configuration fix, bypassing the normal IaC pipeline. What problem does this most directly create?",
+      "opts": [
+        "Increased elasticity",
+        "Configuration drift between the live server and the IaC definition",
+        "Reduced measured service billing",
+        "Improved rapid elasticity"
+      ],
+      "ans": 1,
+      "exp": "Any manual, out-of-band change creates configuration drift — the running infrastructure no longer matches what's declared in code, so the next automated deployment can silently revert or conflict with the fix.",
+      "domain": "DevOps Fundamentals"
     }
   ],
   "daily": [

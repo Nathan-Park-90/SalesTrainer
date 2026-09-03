@@ -2569,6 +2569,54 @@ var COURSE_AWS = {
       "ans": 1,
       "exp": "AWS Cost Explorer allows you to visualize, understand, and manage your AWS costs and usage over time, and provides forecasting capabilities based on historical trends.",
       "domain": "Cost"
+    },
+    {
+      "q": "An application runs on EC2 instances in a single Availability Zone behind an Application Load Balancer. The Solutions Architect needs to eliminate the single point of failure with the LEAST operational overhead. What should they do?",
+      "opts": [
+        "Increase the instance size (scale up) in the existing AZ",
+        "Add EC2 instances to the target group in at least one additional Availability Zone",
+        "Take a manual AMI snapshot every hour",
+        "Switch the Load Balancer to a Network Load Balancer"
+      ],
+      "ans": 1,
+      "exp": "A single AZ is always a single point of failure, no matter how large the instances are. Spreading the target group's instances across multiple AZs is what actually removes the SPOF — resizing or changing load balancer type doesn't touch the underlying AZ risk.",
+      "domain": "Resilient"
+    },
+    {
+      "q": "A company's RDS database must survive the complete loss of its primary Availability Zone with an automatic failover and minimal data loss. Which RDS feature satisfies this requirement?",
+      "opts": [
+        "Read Replicas in the same AZ",
+        "Multi-AZ deployment",
+        "Manual daily snapshots",
+        "Increasing the instance's storage IOPS"
+      ],
+      "ans": 1,
+      "exp": "Multi-AZ deployments synchronously replicate to a standby in a different AZ and fail over automatically — Read Replicas are asynchronous and meant for read scaling, not automatic DR failover.",
+      "domain": "Resilient"
+    },
+    {
+      "q": "An Auto Scaling Group is configured with a minimum of 2, desired of 2, and maximum of 2 instances. During a traffic spike, users report slow response times, but no new instances launch. What is the MOST likely cause?",
+      "opts": [
+        "The health check grace period is too short",
+        "The maximum capacity equals the desired capacity, so the ASG cannot scale beyond 2 instances",
+        "The Load Balancer is not configured with sticky sessions",
+        "The instances are in different Availability Zones"
+      ],
+      "ans": 1,
+      "exp": "An Auto Scaling Group can never exceed its configured maximum — with max=desired=2, there is no room to scale out no matter how a scaling policy is configured. The maximum needs to be raised.",
+      "domain": "Resilient"
+    },
+    {
+      "q": "A company needs a Recovery Time Objective (RTO) of a few minutes and a Recovery Point Objective (RPO) of seconds for a critical database, with cost being a secondary concern. Which disaster recovery strategy should be used?",
+      "opts": [
+        "Backup and Restore",
+        "Pilot Light",
+        "Warm Standby",
+        "Multi-Site Active-Active"
+      ],
+      "ans": 3,
+      "exp": "Multi-Site Active-Active runs full production capacity in more than one Region simultaneously, giving near-zero RTO and RPO — the fastest (and most expensive) of the four standard AWS DR strategies. Pilot Light and Warm Standby trade some RTO/RPO for lower cost.",
+      "domain": "Resilient"
     }
   ],
   "arch": [
