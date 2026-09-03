@@ -5,14 +5,22 @@ var COURSE_COMPTIA_APLUS = {
   "meta": {
     "id": "comptia-aplus",
     "name": "CompTIA A+",
-    "subtitle": "Core 1 & Core 2",
+    "subtitle": "Core 1 (220-1201) & Core 2 (220-1202)",
     "icon": "💻",
     "color": "#f59e0b",
     "examKey": "aplus",
     "flashcardCat": "CompTIA A+",
     "dailyTrackKey": "aplus",
-    "domains": null,
-    "version": "1.0.0"
+    "domains": {
+      "Hardware and Network Troubleshooting": "Hardware & The Helpdesk Trenches",
+      "Mobile Devices": "Mobile Devices & Virtualization",
+      "Hardware": "Hardware Components",
+      "Operating Systems": "Operating Systems & Software",
+      "Software Troubleshooting": "Operating Systems & Software",
+      "Operational Procedures": "Operational Procedures"
+    },
+    "version": "1.0.0",
+    "category": "CompTIA"
   },
   "modules": [
     {

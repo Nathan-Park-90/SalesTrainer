@@ -12,7 +12,8 @@ var COURSE_SALES_ENGINEERING = {
     "flashcardCat": "Sales",
     "dailyTrackKey": null,
     "domains": null,
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "category": "Sales"
   },
   "modules": [
     {

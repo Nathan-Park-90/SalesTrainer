@@ -20,7 +20,8 @@ var COURSE_PSM_SCRUM = {
       "Events": "Scrum Events",
       "Artifacts": "Artifacts & Commitments"
     },
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "category": "Agile & Scrum"
   },
   "modules": [
     {

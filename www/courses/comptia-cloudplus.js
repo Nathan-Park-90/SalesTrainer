@@ -5,14 +5,21 @@ var COURSE_COMPTIA_CLOUDPLUS = {
   "meta": {
     "id": "comptia-cloudplus",
     "name": "CompTIA Cloud+",
-    "subtitle": "CV0-003",
+    "subtitle": "CV0-004",
     "icon": "☁️",
     "color": "#8b5cf6",
     "examKey": "cloudplus",
     "flashcardCat": "CompTIA Cloud+",
     "dailyTrackKey": "cloudplus",
-    "domains": null,
-    "version": "1.0.0"
+    "domains": {
+      "Cloud Architecture": "Cloud Architecture & Design",
+      "Deployment": "Infrastructure as Code (IaC) & Cloud Operations",
+      "Security": "Security & Compliance in the Cloud",
+      "Operations": "Operations, Support, and FinOps",
+      "Troubleshooting": "Troubleshooting Cloud Environments"
+    },
+    "version": "1.0.0",
+    "category": "CompTIA"
   },
   "modules": [
     {
@@ -424,7 +431,7 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 2,
       "exp": "Bridged networking allows the VM's virtual network interface to connect directly to the physical network, obtaining its own IP address from the local DHCP server.",
-      "domain": "Virtualization and Cloud Computing"
+      "domain": "Cloud Architecture"
     },
     {
       "q": "A company is designing a disaster recovery architecture in AWS. They want their secondary site to have a scaled-down version of a fully functional environment that can quickly scale up to handle production traffic if the primary site fails. Which DR strategy is this?",
@@ -448,7 +455,7 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 2,
       "exp": "Uptime Availability, expressed as a percentage (the 'nines'), is the standard metric used in SLAs to guarantee service reliability.",
-      "domain": "Operations and Support"
+      "domain": "Operations"
     },
     {
       "q": "A cloud engineer writes a YAML file defining the exact state of a Kubernetes cluster, including pods, services, and ingress rules. The engineer commits this file to a Git repository, which automatically triggers a pipeline to deploy it. What is this practice called?",
@@ -508,7 +515,7 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 2,
       "exp": "Billing alerts and budgets are fundamental tools of Cost Management (FinOps), ensuring cloud resources do not generate unexpected charges.",
-      "domain": "Operations and Support"
+      "domain": "Operations"
     },
     {
       "q": "A web application hosted in the cloud is experiencing high latency for users in Europe, while users in the US report excellent performance. The servers are located in the US East region. What is the BEST way to improve performance for European users without deploying a new server cluster in Europe?",
@@ -556,7 +563,7 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 1,
       "exp": "Automation (scripting a single task) and Orchestration (coordinating multiple automated tasks across a fleet) eliminate manual toil and ensure consistent configuration management.",
-      "domain": "Operations and Support"
+      "domain": "Operations"
     },
     {
       "q": "A user complains that they cannot access a cloud-hosted database from their office IP address, but they can access it when they connect via their home network. What is the MOST likely cause?",

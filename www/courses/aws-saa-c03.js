@@ -15,12 +15,13 @@ var COURSE_AWS = {
     "flashcardCat": "AWS",
     "dailyTrackKey": "aws",
     "domains": {
-      "Secure": "Module 9: Security, Identity, & Compliance",
-      "Resilient": "Module 2: High Availability & Scaling",
-      "Performance": "Module 6: Databases (RDS & DynamoDB)",
-      "Cost": "Module 13: Cost Optimization (The CFO's Architecture)"
+      "Secure": "Security, Identity, & Compliance",
+      "Resilient": "High Availability & Scaling",
+      "Performance": "Databases (RDS & DynamoDB)",
+      "Cost": "Cost Optimization (The CFO's Architecture)"
     },
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "category": "AWS"
   },
   "modules": [
     {

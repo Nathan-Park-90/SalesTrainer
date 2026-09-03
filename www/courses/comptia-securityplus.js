@@ -11,8 +11,15 @@ var COURSE_COMPTIA_SECURITYPLUS = {
     "examKey": "securityplus",
     "flashcardCat": "CompTIA Security+",
     "dailyTrackKey": "securityplus",
-    "domains": null,
-    "version": "1.0.0"
+    "domains": {
+      "General Security Concepts": "General Security Concepts (Cryptography & IAM)",
+      "Threats, Vulnerabilities, and Mitigations": "Threats, Vulnerabilities & The Cost of Downtime",
+      "Security Architecture": "The Perimeter is Dead (Zero Trust Architecture)",
+      "Security Operations": "Security Operations: Hunting in the Noise",
+      "Security Program Management and Oversight": "Program Management & Governance"
+    },
+    "version": "1.0.0",
+    "category": "CompTIA"
   },
   "modules": [
     {
@@ -820,7 +827,7 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "BPDU Guard disables a port if it receives a Bridge Protocol Data Unit (BPDU) from an unauthorized switch, protecting the Spanning Tree topology.",
-      "domain": "Network Security"
+      "domain": "Security Architecture"
     },
     {
       "q": "An organization wants to authenticate users connecting to the wireless network using their Active Directory credentials rather than a shared password. Which protocol should the WPA2-Enterprise network use to communicate with the authentication server?",
@@ -832,7 +839,7 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "RADIUS is the standard protocol used by wireless access points to forward authentication requests to a central server (like NPS or ISE) in a WPA2/3-Enterprise setup.",
-      "domain": "Network Security"
+      "domain": "Security Architecture"
     },
     {
       "q": "Which network security tool is placed inline on the network and actively drops packets that match the signature of a known SQL injection attack?",
@@ -844,7 +851,7 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "An Intrusion Prevention System (IPS) is inline and actively blocks threats. An Intrusion Detection System (IDS) only monitors and alerts.",
-      "domain": "Network Security"
+      "domain": "Security Operations"
     },
     {
       "q": "To prevent rogue DHCP servers from handing out incorrect IP addresses and gateways to clients, which switch feature must be implemented?",
@@ -856,7 +863,7 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "DHCP Snooping categorizes switch ports as trusted or untrusted. It drops DHCP Offer messages originating from untrusted ports (where end users sit).",
-      "domain": "Network Security"
+      "domain": "Security Architecture"
     },
     {
       "q": "An administrator configures a firewall rule to explicitly drop any inbound traffic that does not match a previously permitted connection. What principle is this?",
@@ -868,7 +875,7 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 2,
       "exp": "Implicit Deny is a firewall rule (usually invisible at the bottom of the ACL) that blocks all traffic that wasn't explicitly allowed by higher rules.",
-      "domain": "Network Security"
+      "domain": "General Security Concepts"
     },
     {
       "q": "An organization is disposing of old hard drives that contained highly sensitive financial data. They want to ensure the data is permanently destroyed and the drives can never be reused. Which method is BEST?",
@@ -880,7 +887,7 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 2,
       "exp": "Physical destruction (like shredding or incineration) is the only foolproof method to guarantee data cannot be recovered and the drive cannot be reused.",
-      "domain": "Security"
+      "domain": "Security Architecture"
     },
     {
       "q": "A user wants to securely authenticate to their workstation using a physical hardware token plugged into a USB port. Which protocol or standard is this device most likely using?",
@@ -892,7 +899,7 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "FIDO (Fast IDentity Online) U2F (Universal 2nd Factor) is an open authentication standard that enables hardware tokens (like YubiKeys) to securely authenticate users.",
-      "domain": "Security"
+      "domain": "General Security Concepts"
     },
     {
       "q": "During a security audit, it is discovered that a developer accidentally hardcoded an AWS IAM access key and secret key into a Python script and uploaded it to a public GitHub repository. What should the security team do FIRST?",
@@ -904,7 +911,7 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "The immediate priority is to invalidate the compromised credentials to prevent attackers from using them to access the AWS environment. The keys must be revoked or deleted in IAM immediately.",
-      "domain": "Security"
+      "domain": "Security Operations"
     },
     {
       "q": "An organization wants to authenticate its corporate Active Directory users to a third-party Cloud CRM application without forcing users to create a new password or storing the AD passwords in the cloud. Which protocol is BEST for this?",
@@ -916,7 +923,7 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "SAML is an XML-based open standard for exchanging authentication and authorization data between an identity provider (AD) and a service provider (the SaaS CRM), enabling Single Sign-On (SSO).",
-      "domain": "Security"
+      "domain": "General Security Concepts"
     },
     {
       "q": "To ensure that all cloud API calls (e.g., creating a user, deleting a VM) are logged for auditing and compliance purposes, which type of service must be enabled?",
@@ -928,7 +935,7 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "Audit logging services (like AWS CloudTrail) record who made an API call, when it was made, and what the action was, which is critical for security and compliance audits.",
-      "domain": "Security"
+      "domain": "Security Operations"
     }
   ],
   "daily": [

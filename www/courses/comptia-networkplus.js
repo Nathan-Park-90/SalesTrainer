@@ -5,14 +5,21 @@ var COURSE_COMPTIA_NETWORKPLUS = {
   "meta": {
     "id": "comptia-networkplus",
     "name": "CompTIA Network+",
-    "subtitle": "N10-008",
+    "subtitle": "N10-009",
     "icon": "🌐",
     "color": "#3b82f6",
     "examKey": "networkplus",
     "flashcardCat": "CompTIA Network+",
     "dailyTrackKey": "networkplus",
-    "domains": null,
-    "version": "1.0.0"
+    "domains": {
+      "Networking Concepts": "The OSI Model: Not Just Theory",
+      "Network Implementation": "Network Implementations: Routing & Switching",
+      "Network Operations": "Network Operations & Documentation",
+      "Network Security": "Network Security & Hardening",
+      "Network Troubleshooting": "Network Troubleshooting: Command Line Tools"
+    },
+    "version": "1.0.0",
+    "category": "CompTIA"
   },
   "modules": [
     {
@@ -424,7 +431,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "127.0.0.1 is the standard IPv4 loopback address. 169.254.x.x is APIPA, and 10.x.x.x/192.168.x.x are private IP ranges.",
-      "domain": "Networking Fundamentals"
+      "domain": "Networking Concepts"
     },
     {
       "q": "A network administrator needs to assign an IPv6 address to a router interface that will only be routable within the local site, not across the internet. Which IPv6 prefix should be used?",
@@ -436,7 +443,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 2,
       "exp": "FD00::/8 (Unique Local Address) is the IPv6 equivalent of a private IPv4 address. FE80::/10 is link-local (only on the local segment). 2000::/3 is global unicast, and FF00::/8 is multicast.",
-      "domain": "Networking Fundamentals"
+      "domain": "Networking Concepts"
     },
     {
       "q": "Which routing protocol uses the Shortest Path First (Dijkstra) algorithm and groups routers into areas to limit routing update traffic?",
@@ -448,7 +455,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 2,
       "exp": "OSPF (Open Shortest Path First) is a link-state routing protocol that uses Dijkstra's algorithm and hierarchical areas (like Area 0) to scale efficiently.",
-      "domain": "Networking Fundamentals"
+      "domain": "Networking Concepts"
     },
     {
       "q": "At which layer of the OSI model does a standard, unmanaged network switch operate?",
@@ -460,7 +467,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "A standard switch operates at Layer 2 (Data Link) and forwards frames based on MAC addresses.",
-      "domain": "Networking Fundamentals"
+      "domain": "Networking Concepts"
     },
     {
       "q": "A technician is mapping out the ports required for secure remote administration and file transfer. Which ports should be allowed through the firewall for SSH and SFTP?",
@@ -472,7 +479,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "Both SSH (Secure Shell) and SFTP (SSH File Transfer Protocol) operate over TCP Port 22.",
-      "domain": "Networking Fundamentals"
+      "domain": "Networking Concepts"
     },
     {
       "q": "Which Wi-Fi standard introduced MU-MIMO (Multi-User Multiple Input Multiple Output) and operates exclusively in the 5 GHz band?",
@@ -484,7 +491,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "802.11ac (Wi-Fi 5) operates only in the 5 GHz band and introduced downlink MU-MIMO.",
-      "domain": "Networking Fundamentals"
+      "domain": "Networking Concepts"
     },
     {
       "q": "A network engineer wants to logically separate the Accounting department's traffic from the HR department's traffic on the same physical switch. What technology should they implement?",
@@ -496,7 +503,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "Virtual LANs (VLANs) segment a physical switch into multiple logical networks at Layer 2, isolating broadcast domains.",
-      "domain": "Network Implementations"
+      "domain": "Network Implementation"
     },
     {
       "q": "When configuring a trunk link between two Cisco switches to carry multiple VLANs, which protocol is typically used to tag the frames?",
@@ -508,7 +515,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 0,
       "exp": "IEEE 802.1Q is the industry-standard networking protocol used to tag frames with their VLAN ID over trunk links.",
-      "domain": "Network Implementations"
+      "domain": "Network Implementation"
     },
     {
       "q": "A company is opening a new branch office and needs a cost-effective way to connect the branch network to the headquarters securely over the public internet. Which implementation is BEST?",
@@ -520,7 +527,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "A Site-to-Site VPN creates a secure, encrypted tunnel over the internet between two routers/firewalls, connecting the entire branch network to HQ cost-effectively.",
-      "domain": "Network Implementations"
+      "domain": "Network Implementation"
     },
     {
       "q": "To combine the bandwidth of three 1 Gbps switch ports into a single 3 Gbps logical link, which protocol should the network engineer use?",
@@ -532,7 +539,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "LACP (802.3ad) allows multiple physical links to be bundled together to form a single logical link for increased bandwidth and redundancy.",
-      "domain": "Network Implementations"
+      "domain": "Network Implementation"
     },
     {
       "q": "A technician is terminating a Cat6 cable and needs to ensure it follows the TIA/EIA-568B standard. Which wire color should be placed in pin 1?",
@@ -544,7 +551,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 2,
       "exp": "In the T568B standard, Pin 1 is White/Orange. In T568A, Pin 1 is White/Green.",
-      "domain": "Network Implementations"
+      "domain": "Network Implementation"
     },
     {
       "q": "A network administrator wants to monitor the bandwidth utilization and interface errors on a core router from a central dashboard. Which protocol is designed for this?",
@@ -724,7 +731,7 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 2,
       "exp": "Wi-Fi 6E extends the 802.11ax standard to include the 6 GHz frequency band, offering wider channels and less interference.",
-      "domain": "Networking"
+      "domain": "Networking Concepts"
     }
   ],
   "daily": [
