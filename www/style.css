@@ -1346,6 +1346,19 @@ body {
     margin: 0;
 }
 
+.intel-takeaway-label {
+    display: inline-block;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--accent-primary);
+    background: rgba(0, 242, 255, 0.08);
+    border-radius: 6px;
+    padding: 3px 8px;
+    margin-bottom: 8px;
+}
+
 .intel-flashcard {
     background: rgba(0,0,0,0.4);
     border: 1px solid rgba(0, 242, 255, 0.2);
@@ -1388,15 +1401,25 @@ body {
     }
 }
 
-/* Override lesson layout for 3 columns on large screens */
+/* Override lesson layout for 3 columns on large screens. The TOC and
+   intelligence sidebars stay fixed-width (they're not designed to stretch);
+   the reading column is the one that grows to fill whatever room the wider
+   .container below gives it, instead of being hard-capped at 750px and
+   leaving the rest of the page as empty side margin. */
 @media (min-width: 1200px) {
     .lesson-layout {
         display: grid !important;
-        grid-template-columns: 250px minmax(0, 750px) 300px;
+        grid-template-columns: 260px minmax(0, 1fr) 300px;
         gap: 40px;
         align-items: start;
-        justify-content: center;
     }
+}
+
+/* The Library's 3-column reading layout wants more room than the 1200px
+   .container default (sized for shorter, centered marketing sections) — give
+   it its own wider ceiling instead of floating in empty side margins. */
+.container:has(.lesson-layout) {
+    max-width: 1500px;
 }
 
 /* ================== LIBRARY COURSE SWITCHER ================== */

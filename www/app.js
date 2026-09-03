@@ -858,17 +858,35 @@ const app = {
         if (intel && window.innerWidth > 1200) {
             intel.style.display = 'block';
             
-            // 1. Extract heuristic/bottom line
+            // 1. Key Takeaway — the single most exam-relevant line from this
+            // topic, not just whatever callout happens to be first. Every
+            // lesson-alert div in the prose is either an anchor analogy
+            // (memorable, but not itself testable) or a Tip (Exam Tip / Pro
+            // Tip / Sales Tip — literally "what you need to know to pass"),
+            // so prefer a Tip and only fall back to the anchor if the topic
+            // has no tip at all. The old regex only matched a bare
+            // `class="lesson-alert"` with no other attributes, so it silently
+            // skipped every styled anchor div and just grabbed whichever
+            // plain div happened to match first — not a deliberate choice.
             let bottomLineHtml = '';
-            // Regex to find the first lesson-alert or blockquote
-            const alertMatch = rawProse.match(/<div class="lesson-alert">([\s\S]*?)<\/div>/);
-            if (alertMatch && alertMatch[1]) {
-                // Strip nested tags for a clean summary if desired, or just pass it through
-                const cleanAlert = alertMatch[1].replace(/<strong>|<\/strong>/g, '');
+            const alerts = [...rawProse.matchAll(/<div class="lesson-alert"[^>]*>([\s\S]*?)<\/div>/g)]
+                .map(m => m[1]);
+            const labeled = alerts.map(html => {
+                const labelMatch = html.match(/^<strong>([^<]+):<\/strong>\s*/);
+                return {
+                    label: labelMatch ? labelMatch[1].replace(/[⚓]/g, '').trim() : '',
+                    body: labelMatch ? html.slice(labelMatch[0].length) : html
+                };
+            });
+            const tip = labeled.find(a => /tip/i.test(a.label));
+            const takeaway = tip || labeled.find(a => !/anchor/i.test(a.label)) || labeled[0];
+
+            if (takeaway) {
                 bottomLineHtml = `
                     <div class="intel-widget">
-                        <h4>The Bottom Line</h4>
-                        <p>${cleanAlert}</p>
+                        <h4>Key Takeaway</h4>
+                        ${takeaway.label ? `<div class="intel-takeaway-label">${takeaway.label}</div>` : ''}
+                        <p>${takeaway.body}</p>
                     </div>
                 `;
             } else {
