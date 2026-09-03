@@ -591,10 +591,11 @@ const app = {
         // table to keep in sync when a new course pack is added.
         this.state.activeLibraryTab = tab;
 
-        // Update tab UI
-        document.querySelectorAll('.lib-tab').forEach(btn => btn.classList.remove('active'));
-        const activeBtn = document.querySelector(`.lib-tab[onclick*="${tab}"]`);
-        if (activeBtn) activeBtn.classList.add('active');
+        // Re-render the switcher so the trigger label/icon and the checked
+        // row both reflect the new selection, and close the picker panel.
+        this.renderLibraryTabs();
+        const panel = document.getElementById('course-menu-panel');
+        if (panel) panel.hidden = true;
 
         // Find the first module for this course by course id, not array position —
         // a hardcoded index silently breaks if course sizes or load order ever change.
@@ -608,19 +609,79 @@ const app = {
         this.renderLessonContent(firstModIdx, 0);
     },
 
-    // Build the Library's subject tab bar from every loaded course pack — so dropping
-    // in a new courses/*.js file (with a <script> tag) is the only step needed to add
-    // a subject; no HTML or app.js changes required.
+    // Build the Library's course switcher from every loaded course pack — so
+    // dropping in a new courses/*.js file (with a <script> tag) is the only
+    // step needed to add a subject; no HTML or app.js changes required.
+    //
+    // A flat row of tabs (the original design) reads fine for 3-4 courses but
+    // becomes an unreadable wall the moment the catalog grows — 7 already
+    // crushed it, and this is meant to scale to 100+. So instead this renders
+    // a single compact trigger ("Now Viewing: <course>") that opens a
+    // searchable panel grouped by each course's meta.category — the page
+    // never grows past one control no matter how many courses exist.
     renderLibraryTabs() {
         const container = document.getElementById('library-tabs');
         if (!container || !DATA._courseMeta) return;
 
-        container.innerHTML = DATA._courseMeta.map((meta, i) => `
-            <button class="lib-tab ${i === 0 ? 'active' : ''}" style="--tab-color:${meta.color || '#00f2ff'};" onclick="app.setLibraryTab('${meta.id}')">
-                <span class="tab-icon">${meta.icon || '📖'}</span>
-                <span class="tab-text">${meta.name}</span>
-            </button>
+        const groups = {};
+        DATA._courseMeta.forEach(meta => {
+            const cat = meta.category || 'Other';
+            (groups[cat] = groups[cat] || []).push(meta);
+        });
+
+        const active = DATA._courseMeta.find(m => m.id === this.state.activeLibraryTab) || DATA._courseMeta[0];
+
+        const rows = Object.keys(groups).sort().map(cat => `
+            <div class="course-menu-group" data-group>
+                <div class="course-menu-group-label">${cat}</div>
+                ${groups[cat].map(meta => `
+                    <button class="course-menu-row ${meta.id === active.id ? 'active' : ''}" data-search="${(meta.name + ' ' + (meta.subtitle || '')).toLowerCase()}" style="--tab-color:${meta.color || '#00f2ff'};" onclick="app.setLibraryTab('${meta.id}')">
+                        <span class="course-menu-icon">${meta.icon || '📖'}</span>
+                        <span class="course-menu-name">${meta.name}</span>
+                        ${meta.subtitle ? `<span class="course-menu-sub">${meta.subtitle}</span>` : ''}
+                        ${meta.id === active.id ? '<span class="course-menu-check">&#10003;</span>' : ''}
+                    </button>
+                `).join('')}
+            </div>
         `).join('');
+
+        container.innerHTML = `
+            <button class="course-menu-trigger" style="--tab-color:${active.color || '#00f2ff'};" onclick="app.toggleCourseMenu(event)">
+                <span class="course-menu-trigger-icon">${active.icon || '📖'}</span>
+                <span class="course-menu-trigger-text"><span class="course-menu-trigger-label">Now Viewing</span>${active.name}</span>
+                <span class="course-menu-caret">&#9662;</span>
+            </button>
+            <div class="course-menu-panel" id="course-menu-panel" hidden>
+                <input type="text" class="course-menu-search" id="course-menu-search" placeholder="Search courses..." oninput="app.filterCourseMenu(this.value)">
+                <div class="course-menu-list">${rows}</div>
+            </div>
+        `;
+    },
+
+    toggleCourseMenu(e) {
+        if (e) e.stopPropagation();
+        const panel = document.getElementById('course-menu-panel');
+        if (!panel) return;
+        const opening = panel.hidden;
+        panel.hidden = !opening;
+        if (opening) {
+            const search = document.getElementById('course-menu-search');
+            if (search) { search.value = ''; this.filterCourseMenu(''); search.focus(); }
+            document.addEventListener('click', (ev) => {
+                if (!panel.contains(ev.target) && !ev.target.closest('.course-menu-trigger')) { panel.hidden = true; }
+            }, { once: true });
+        }
+    },
+
+    filterCourseMenu(query) {
+        const q = query.trim().toLowerCase();
+        document.querySelectorAll('#course-menu-panel .course-menu-row').forEach(row => {
+            row.hidden = q.length > 0 && !row.dataset.search.includes(q);
+        });
+        document.querySelectorAll('#course-menu-panel [data-group]').forEach(group => {
+            const anyVisible = [...group.querySelectorAll('.course-menu-row')].some(r => !r.hidden);
+            group.hidden = !anyVisible;
+        });
     },
 
     renderLessonTOC() {

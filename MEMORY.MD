@@ -1,5 +1,5 @@
 ## MAMMOTH ACADEMY — Memory Log
-Last updated: 2026-09-02
+Last updated: 2026-09-03
 
 ---
 
@@ -15,79 +15,95 @@ Last updated: 2026-09-02
 ---
 
 ## File Structure
+`www/` is the live app — it's the Capacitor `webDir` (see `capacitor.config.json`), so it's what actually ships. There is **no root-level duplicate anymore** (there used to be a stale pre-rebrand copy of the whole app sitting at the project root alongside ~150 one-off scratch scripts; both were removed).
+
 ```
-MammothAcademy/             ← root folder
-├── index.html              ← Homepage: hero, progress stats, zone grid, badge modal
-├── library.html            ← Library: 24-module course library (AWS/Sales/Scrum tabs)
-├── gym.html                ← Gym: flashcards + arch lab + sales scenarios
-├── arena.html              ← Arena: AWS exam + PSM exam + tiered practice
-├── daily.html              ← Daily Flash: AWS track (days 1-13) + Scrum track (days 14-20)
-├── sprint.html             ← Sprint/War Room: Kanban + sprint challenges
-├── data.js                 ← ALL content (single source of truth)
-├── app.js                  ← Core learning engine
-├── scrum.js                ← Kanban board logic
-├── style.css               ← Global styles + all enhancement CSS
-├── achievements.js         ← 12-badge achievement system, toast, badge wall
-├── memory.md               ← This file
-├── assets/
-│   └── mammoth-logo.png    ← Mammoth Capital logo (69kb, from mammothcapital.site)
-├── fonts/                  ← Offline font stack
-│   ├── mammoth-fonts.css
-│   ├── outfit-400.woff2 / outfit-600.woff2 / outfit-700.woff2 / outfit-800.woff2
-│   └── jetbrains-mono-400.woff2 / jetbrains-mono-600.woff2 / jetbrains-mono-700.woff2
-└── notebooklm_exports/     ← 24 .md files for NotebookLM audio generation
+MammothAcademy/
+├── android/                 ← Capacitor native Android project
+├── www/                     ← THE LIVE APP — everything below is under here
+│   ├── index.html           ← Homepage: hero, dynamic Certification Tracks grid, zone cards, badge modal
+│   ├── library.html         ← Library: course switcher (searchable dropdown) + module TOC + lesson canvas
+│   ├── gym.html              ← Gym: flashcards + arch lab + sales scenarios
+│   ├── arena.html            ← Arena: per-cert exam simulators
+│   ├── daily.html            ← Daily Flash: short daily lessons, one track per course pack
+│   ├── sprint.html           ← Sprint/War Room: Kanban + Scrum sprint challenges
+│   ├── path.html             ← Smart Path: cross-track progress dashboard, built from DATA._courseMeta
+│   ├── courses/              ← One file per certification/course pack (see below) — THE content source of truth
+│   ├── course-loader.js      ← Auto-discovers every COURSE_* global and merges them into window.DATA
+│   ├── app.js                ← Core learning engine (library rendering, lessons, quizzes, exams)
+│   ├── scrum.js               ← Kanban board logic (sprint.html only)
+│   ├── achievements.js        ← 12-badge achievement system, toast, badge wall
+│   ├── pwa.js                 ← Service worker registration
+│   ├── sw.js                  ← Service worker
+│   ├── style.css              ← Global styles + all enhancement CSS
+│   ├── manifest.json           ← PWA manifest
+│   ├── assets/, fonts/         ← Logo/icons, offline font stack (mammoth-fonts.css + woff2s)
+├── notebooklm_exports/       ← 24 .md files for NotebookLM audio generation
+└── MEMORY.MD                 ← This file
 ```
+
+**There is no `data.js` anymore.** Content used to live in one giant `data.js`; it's now fully modular — every course is its own file under `www/courses/`, auto-merged at runtime by `course-loader.js`. Adding a new course requires zero changes to app.js/HTML: drop a new `courses/<id>.js` file defining a `COURSE_<NAME>` global with the shape below, and add one `<script src="courses/<id>.js">` tag (before `course-loader.js`) to each HTML page.
 
 ---
 
-## DATA Structure (data.js)
-- `DATA.flashcards[]`     — 89 cards. Fields: id, cat, front, back, analogy, domain
-- `DATA.exam_aws[]`       — 96 questions. Fields: q, opts[], ans, exp, domain
-  - Domain balance: Secure 28% / Performance 26% / Resilient 25% / Cost 21%
-- `DATA.exam_psm[]`       — 40 questions
-- `DATA.arch[]`           — 5 scenarios (Level 1–4 + Final Boss). Fields: title, desc, zones, palette, dm, wm
-- `DATA.sales[]`          — 10 scenarios. Fields: id, persona, scenario, opts[{text,ok,fb}]
-  - Personas: CTO-Logistics, CTO-Azure, VP Ops-FinTech, Multi-Stakeholder-Healthcare,
-    CFO-SaaS, CTO-Startup, VP Infra-Enterprise, CISO-FinServ, Dir IT-Healthcare, VP Eng-PostReorg
-- `DATA.course[]`         — 24 modules (0–12 AWS, 13–17 Sales, 18–23 Scrum)
-  - Fields: title, icon, topics[{title, prose, quiz[]}], related[], track
-- `DATA.daily_lessons[]`  — 20 lessons
-  - AWS track: days 1–13 (track field absent or 'aws')
-  - Scrum track: days 14–20 (track='scrum')
-  - Fields: day, concept, domain, icon, color, tagline, slides[], quiz[]
+## Course Pack Shape (`www/courses/*.js`)
+Each file defines `var COURSE_<NAME> = { meta, modules, flashcards, exam, daily, arch, sales }`.
+
+- `meta`: `{ id, name, subtitle, icon, color, category, examKey, examName?, passThreshold?, examDurationMinutes?, flashcardCat, dailyTrackKey, domains, version }`
+  - `id` — stable course id, used everywhere as the join key (never array position)
+  - `category` — grouping label for the Library's course-switcher dropdown (e.g. "AWS", "CompTIA", "Agile & Scrum", "Sales")
+  - `domains` — maps each official exam domain name to the exact module `title` that best covers it, used by Smart Path's "review your weakest domain" deep link. **Keep this in sync with real module titles and the exam's `domain` tags** — both silently no-op if they drift (see Known Bugs Fixed below).
+- `modules[]`: `{ title, topics[{title, prose, tags[], quiz[]}], related[] }`
+  - **No "Module N:" prefix in `title`** — numbering is rendered dynamically (`Module <localIdx+1>`) by app.js from each module's position in its own course, never hardcoded in content.
+  - `related`: array of `{ course: <courseId>, idx: <that module's position within its own course> }` — NOT a raw index into the merged course list. Can point to a different course.
+- `exam[].domain` must exactly match one of the keys in `meta.domains` (or the official exam's real domain name) — a typo'd or invented domain name silently breaks Smart Path's weak-domain detection for every question tagged with it.
+
+**Course-loader identity fields** (set automatically, never store these in the course file itself): `mod.courseId`, `mod.localIdx` (module's 0-based position within its own course — the stable id used for progress storage, display numbering, and related-links), `flashcard.id` (prefixed with the course id to stay globally unique).
+
+---
+
+## Current Course Catalog (as of 2026-09-03)
+| Course | id | Exam code | Modules |
+|---|---|---|---|
+| AWS Solutions Architect | `aws-saa-c03` | SAA-C03 (current) | 13 |
+| Sales Engineering | `sales-engineering` | — (career track, no exam) | 5 |
+| Professional Scrum Master | `psm-scrum` | PSM I, 2020 Scrum Guide (current) | 6 (last 2 are supplementary CSM content, outside PSM I's own scope) |
+| CompTIA Security+ | `comptia-securityplus` | SY0-701 (current; successor SY0-801 previews ~Oct 2026) | 5 |
+| CompTIA Network+ | `comptia-networkplus` | **N10-009** (relabeled 2026-09-03 — N10-008 is retired) | 5 |
+| CompTIA A+ | `comptia-aplus` | **Core 1 (220-1201) & Core 2 (220-1202)** (relabeled 2026-09-03 — 1101/1102 retired Sep 2025) | 5 |
+| CompTIA Cloud+ | `comptia-cloudplus` | **CV0-004** (relabeled 2026-09-03 — CV0-003 retired) | 5 |
+
+**Known content gap — CompTIA A+**: no module or exam coverage yet for the "Networking" domain (23% of Core 1), "Virtualization and Cloud" (11% of Core 1), or "Security" (28% of Core 2 — the single largest domain on either exam). The 5 existing modules cover Hardware/Troubleshooting, OS, Hardware Components, Mobile Devices, and Operational Procedures only. This needs new module authorship, not a data fix.
+
+**Lower-priority gaps**: PSM I's exam bank is 40 questions vs. the real exam's 80; AWS's exam bank is a bit Cost-heavy vs. the official 20% Cost / 26% Resilient split; CompTIA Cloud+ has no exam questions tagged to the "DevOps Fundamentals" domain (10% of CV0-004) despite being touched on in the IaC module's prose.
+
+---
+
+## Library Navigation
+The course switcher on `library.html` is a single compact trigger ("Now Viewing: <course>") that opens a searchable panel grouped by `meta.category` (`app.renderLibraryTabs()` / `app.toggleCourseMenu()` / `app.filterCourseMenu()` in app.js). This replaced first a flat tab row, then a wrapping-chip row — both broke down as the catalog grew past ~4 courses. The dropdown scales to any number of courses with zero layout growth; **do not revert to a tab/chip row** as more courses are added.
+
+Gotcha: any element toggled via the `hidden` attribute that also has its own CSS `display` rule needs an explicit `.selector[hidden] { display: none; }` override — an author stylesheet's `display` rule has equal specificity to (and wins the cascade tie against) the browser's built-in `[hidden]{display:none}` UA rule, so the element renders open/visible by default without it. Hit this twice building the course-menu panel and its rows.
 
 ---
 
 ## localStorage Keys
 | Key | Type | Description |
 |---|---|---|
-| st_highscore | int | Best exam score (out of 65) |
-| st_failed_qs | array | Wrong question texts for spaced repetition |
+| st_highscore_<examKey> | int | Best score for that exam, per course (e.g. `st_highscore_aws`) |
 | st_streak | int | Daily study streak |
 | st_last_daily | string | Date of last daily completion |
-| st_daily_day | int | Current AWS daily day (1–13) |
-| st_daily_day_aws | int | Current day in AWS track |
-| st_daily_day_scrum | int | Current day in Scrum track |
-| st_fc_mastered | array | Card IDs marked as mastered |
-| st_arch_completed | int | Architecture scenarios completed |
-| st_badges | array | Earned badge IDs |
-| st_quiz_M_T | 'done' | Mini-quiz completion for module M, topic T |
-| st_completed | array | Completed module IDs |
+| st_daily_day_<trackKey> | int | Current day in that course's daily track |
+| st_fc_mastered | array | Flashcard ids marked mastered (ids are `<courseId>_<originalId>`, globally unique) |
+| st_badges | array | Earned badge ids |
+| st_quiz_<courseId>_<localIdx>_<topicIdx> | 'done' | Mini-quiz completion, keyed by stable per-course module identity (NOT the module's position in the merged course list — that shifts if script load order or any course's size ever changes) |
 
 ---
 
-## Features Built (Session History)
-1. **Library mini-quiz** — 72 questions (24 × 3), active recall after every lesson, tracks completion
-2. **Flashcard mastery** — Got It / Still Learning buttons, progress bar, persisted in localStorage
-3. **Progress dashboard** — Homepage stats bar: streak, best score, mastery %, achievements
-4. **Exam timer** — 130-min AWS / 60-min PSM countdown, amber at 20min, red at 5min, auto-submit
-5. **Sales Scenarios ×10** — 10 distinct personas with per-option feedback
-6. **Achievements** — 12 badges, toast notifications, badge wall modal (click Achievements on homepage)
-7. **Scrum Daily Flash** — 7 lessons days 14–20, AWS/Scrum toggle on daily.html
-8. **Cross-module links** — Every module links to 2+ related modules
-9. **NotebookLM exports** — 24 .md files in notebooklm_exports/ for audio teacher generation
-10. **Full rebrand** — SalesTrainer → Mammoth Academy. MC palette, Outfit+JBMono fonts, logo, footer
-11. **CompTIA Pack (v1)** — Modularized `comptia-certifications.js` covering A+, Network+, Security+, and Cloud+ with Mammoth tone (Proxmox/pfSense/MSTR analogies).
+## Known Bugs Fixed (2026-09-03 session)
+- **Accidental data loss**: every `.js`/`.py` file at root and in `www/` had been truncated to 0 bytes by some earlier process. Recovered from git HEAD; root-level duplicate app + ~150 scratch scripts removed entirely afterward (they predated the `www/` migration and were never the live app).
+- **Global module numbering**: every course used to share one continuous "Module N" counter across the whole catalog (AWS 1–13, Sales silently continuing as 14–18, Scrum with no numbering at all, each CompTIA cert crammed into a single module 20–23). Fixed: numbering is now computed per-course from `localIdx`, never stored in title text.
+- **`related` links and quiz-progress keys used raw position in the merged `DATA.course` array** — worked only by coincidence because script load order never changed; one course reorder away from silently scrambling saved progress and cross-links. Re-keyed to `courseId + localIdx`.
+- **CompTIA A+ meta.domains** and Security+ 10/42 exam questions were tagged with non-canonical or stale domain names (e.g. `"Network Security"` instead of one of SY0-701's real 5 domain names) — broke Smart Path's weak-domain detection silently. Retagged to the official domain taxonomy for each cert.
 
 ---
 
@@ -99,18 +115,18 @@ MammothAcademy/             ← root folder
 | overachiever | 🏆 | Overachiever | Scored 85%+ |
 | streak_3 | 🔥 | On Fire | 3-day streak |
 | streak_7 | 💎 | Consistent | 7-day streak |
-| flash_master | ⚡ | Flash Master | Completed all 13 daily lessons |
+| flash_master | ⚡ | Flash Master | Completed all daily lessons in a track |
 | card_sharp | 🃏 | Card Sharp | 30+ flashcards mastered |
 | ace | 🎯 | The Ace | 60+ flashcards mastered |
 | arch_initiate | 🏗️ | Arch Initiate | 1 architecture scenario done |
-| arch_master | 🌐 | Cloud Architect | All 5 architecture scenarios |
+| arch_master | 🌐 | Cloud Architect | All architecture scenarios done |
 | quiz_complete | 📝 | Active Learner | 1 library mini-quiz done |
 | scholar | 📚 | Scholar | 10+ library mini-quizzes done |
 
 ---
 
 ## Technical Notes
-- Platform: 100% offline, local HTML/JS/CSS. No CDN, no internet required
+- Platform: 100% offline, local HTML/JS/CSS. No CDN, no internet required. `www/` is the Capacitor webDir — that's what ships to Android, not the project root.
 - PowerShell: use semicolons not `&&` for chaining commands
 - Node scripts: write to file then run — avoid backtick template literals in `node -e "..."`
 - `app.init()` must NOT be called on index.html (causes stale DOM injection from renderScenarios etc.)
@@ -118,15 +134,17 @@ MammothAcademy/             ← root folder
 - sprint.html uses scrum.js for Kanban board logic only
 - daily.html is self-contained with its own `daily{}` object
 - arena.html patches `app.startExam` to also start the timer
+- When testing locally, watch for browser caching of `www/*.js`/`*.css` across reloads on the same dev-server port — a plain reload can silently serve a stale script even after the file on disk changed. Bumping the local server's port forces a clean fetch.
 
 ---
 
 ## Open Items / Roadmap
 | Priority | Item |
 |---|---|
-| Phase 2 | CompTIA: Build 90-question exam pool for `arena.html` hitting exact domain weights (Sec+ Ops 28%, etc.) |
-| Phase 2 | CompTIA: Add pfSense/Zero-Trust Architecture Scenarios to `gym.html` |
-| Low | Cost domain at 21% vs 24% target — add ~3 more cost questions |
-| Phase 3 | Course modularization to /courses/*.json files (for future subjects like Azure) |
-| Phase 3 | Capacitor wrapper for iOS/Android App Store submission |
+| High | CompTIA A+: author new module(s) for the missing Networking (23% Core 1), Virtualization & Cloud (11% Core 1), and Security (28% Core 2 — biggest single domain on either exam) domains, plus matching exam questions |
+| Medium | PSM I: expand exam bank from 40 to closer to the real exam's 80 questions |
+| Medium | CompTIA Cloud+: tag/write exam questions for the "DevOps Fundamentals" domain (10% of CV0-004) |
+| Low | AWS: exam bank is Cost-heavy vs. official weights (Cost ~25% vs 20% target, Resilient ~23% vs 26% target) — rebalance a few questions |
+| Low | CompTIA Security+ successor SY0-801 previews ~Oct 2026, GA ~Nov 2026 — re-audit Security+ content once its objectives publish (headline addition: AI/LLM security coverage) |
+| Phase 3 | Capacitor wrapper polish for iOS/Android App Store submission |
 | User action | NotebookLM audio: upload notebooklm_exports/*.md, use Deep Dive format with Mammoth Capital focus prompt |
