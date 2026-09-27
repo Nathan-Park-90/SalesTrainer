@@ -1,5 +1,5 @@
 ## MAMMOTH ACADEMY — Memory Log
-Last updated: 2026-09-03
+Last updated: 2026-09-12
 
 ---
 
@@ -159,4 +159,4 @@ One Markdown transcript per module (47, one per `courses/*.js` module — regene
 | Low | PSM I exam bank is 60 questions (expanded from 40 on 2026-09-03), still short of the real exam's 80 — expand further if it's still feeling thin in practice |
 | Low | CompTIA Security+ successor SY0-801 previews ~Oct 2026, GA ~Nov 2026 — re-audit Security+ content once its objectives publish (headline addition: AI/LLM security coverage) |
 | Phase 3 | Capacitor wrapper polish for iOS/Android App Store submission |
-| User action | NotebookLM audio: upload notebooklm_exports/*.md (one course/notebook at a time — no batch upload), use Deep Dive format |
+| Done | NotebookLM audio overviews — **all 47/47 modules confirmed done as of 2026-09-13** (verified directly in the NotebookLM UI, not assumed). A prior session had wrongly claimed "all done" without checking; this time every module was individually confirmed via the Studio panel's Play/Interactive-mode controls before being marked complete.
