@@ -1,0 +1,633 @@
+{
+ "course": "comptia-cloudplus",
+ "name": "CompTIA Cloud+",
+ "exam": "CV0-004",
+ "passThreshold": null,
+ "domains": {
+  "Cloud Architecture": "Cloud Architecture & Design",
+  "Deployment": "Infrastructure as Code (IaC) & Cloud Operations",
+  "Security": "Security & Compliance in the Cloud",
+  "Operations": "Operations, Support, and FinOps",
+  "Troubleshooting": "Troubleshooting Cloud Environments"
+ },
+ "built": "2026-09-28T07:36:04.112Z",
+ "items": [
+  {
+   "id": "comptia-cloudplus:mc:8274e7ba10",
+   "kind": "mc",
+   "source": "exam",
+   "q": "Your trading firm deploys a new Terraform script that provisions 50 identical web servers to handle market open traffic, then terminates 40 of them an hour later. Which cloud characteristic does this best demonstrate?",
+   "opts": [
+    "High Availability",
+    "Rapid Elasticity",
+    "Resource Pooling",
+    "Measured Service"
+   ],
+   "ans": 1,
+   "exp": "Rapid Elasticity allows cloud environments to automatically provision (scale out) and de-provision (scale in) resources based on dynamic workload demands.",
+   "domain": "Deployment",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:1fc5c7ec8a",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A technician is setting up a new virtual machine in Proxmox. To ensure the VM can communicate directly with other devices on the physical network as if it were a physical host, which networking mode should be configured?",
+   "opts": [
+    "NAT (Network Address Translation)",
+    "Host-Only",
+    "Bridged",
+    "Internal"
+   ],
+   "ans": 2,
+   "exp": "Bridged networking allows the VM's virtual network interface to connect directly to the physical network, obtaining its own IP address from the local DHCP server.",
+   "domain": "Cloud Architecture",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:6d7600c023",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A company is designing a disaster recovery architecture in AWS. They want their secondary site to have a scaled-down version of a fully functional environment that can quickly scale up to handle production traffic if the primary site fails. Which DR strategy is this?",
+   "opts": [
+    "Backup and Restore",
+    "Pilot Light",
+    "Warm Standby",
+    "Multi-Site Active/Active"
+   ],
+   "ans": 2,
+   "exp": "Warm Standby means a scaled-down version of a fully functional environment is always running in the secondary location. (Pilot Light only keeps core services like DBs running, while web servers are completely off).",
+   "domain": "Cloud Architecture",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:1a17dee86f",
+   "kind": "mc",
+   "source": "exam",
+   "q": "Which metric is used by cloud providers in a Service Level Agreement (SLA) to guarantee the percentage of time a service will be operational and accessible?",
+   "opts": [
+    "RTO",
+    "RPO",
+    "Uptime Availability (e.g., 99.99%)",
+    "MTTR"
+   ],
+   "ans": 2,
+   "exp": "Uptime Availability, expressed as a percentage (the 'nines'), is the standard metric used in SLAs to guarantee service reliability.",
+   "domain": "Operations",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:0bf36bc5f7",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A cloud engineer writes a YAML file defining the exact state of a Kubernetes cluster, including pods, services, and ingress rules. The engineer commits this file to a Git repository, which automatically triggers a pipeline to deploy it. What is this practice called?",
+   "opts": [
+    "Continuous Integration (CI)",
+    "GitOps / Infrastructure as Code (IaC)",
+    "Serverless Computing",
+    "Microservices Architecture"
+   ],
+   "ans": 1,
+   "exp": "GitOps uses Git repositories as the single source of truth to deliver infrastructure as code. Declarative files (like YAML) define the desired state, and automated tools deploy it.",
+   "domain": "Deployment",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:3a9d649f1c",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A cloud administrator notices that a web application running on an auto-scaling group of EC2 instances is frequently crashing due to Out of Memory (OOM) errors during peak hours. The instances are t3.micro. What is the BEST long-term solution?",
+   "opts": [
+    "Vertically scale the instances (e.g., upgrade to t3.medium or large)",
+    "Horizontally scale by adding more t3.micro instances",
+    "Reboot the instances every hour",
+    "Implement a CDN"
+   ],
+   "ans": 0,
+   "exp": "If an individual application process requires more memory than a single instance can provide (causing OOM errors), horizontal scaling won't fix it—each new instance will just crash. The instance type must be vertically scaled to provide more RAM.",
+   "domain": "Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:ed9a1760a2",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A SaaS provider hosts data for multiple distinct enterprise clients within the same underlying database structure. What concept ensures that Client A cannot query or view Client B's data?",
+   "opts": [
+    "Data at rest encryption",
+    "Multitenancy and Logical Isolation",
+    "Physical Air-gapping",
+    "Hardware Security Modules"
+   ],
+   "ans": 1,
+   "exp": "Multitenancy allows multiple customers (tenants) to share the same physical resources, while logical isolation (enforced via software/database design) ensures their data remains strictly separated.",
+   "domain": "Cloud Architecture",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:fd641c414b",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A company is migrating its on-premises virtual machines to the cloud by copying the VM images exactly as they are and running them on cloud compute instances without modifying the OS or application architecture. What migration strategy is this?",
+   "opts": [
+    "Re-platforming",
+    "Re-architecting",
+    "Lift-and-Shift (Re-hosting)",
+    "Repurchasing"
+   ],
+   "ans": 2,
+   "exp": "Lift-and-Shift (Re-hosting) involves migrating applications exactly as they are, without modifying their architecture or code, to quickly move them to the cloud.",
+   "domain": "Deployment",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:0dc2cdfd3c",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A cloud engineer configures a billing alert that triggers an email if the monthly cloud spend exceeds $1,000. Which operational practice does this support?",
+   "opts": [
+    "Patch Management",
+    "Capacity Planning",
+    "Cost Management / FinOps",
+    "Disaster Recovery"
+   ],
+   "ans": 2,
+   "exp": "Billing alerts and budgets are fundamental tools of Cost Management (FinOps), ensuring cloud resources do not generate unexpected charges.",
+   "domain": "Operations",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:41a64f0e55",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A web application hosted in the cloud is experiencing high latency for users in Europe, while users in the US report excellent performance. The servers are located in the US East region. What is the BEST way to improve performance for European users without deploying a new server cluster in Europe?",
+   "opts": [
+    "Upgrade the US servers' CPU",
+    "Implement a Content Delivery Network (CDN)",
+    "Increase the database storage IOPS",
+    "Configure a Site-to-Site VPN"
+   ],
+   "ans": 1,
+   "exp": "A CDN caches static assets (images, CSS, JS) at edge locations globally. European users will download these assets from a local European edge node, drastically reducing latency without requiring new application servers.",
+   "domain": "Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:5878d599ca",
+   "kind": "mc",
+   "source": "exam",
+   "q": "Which cloud service model provides the consumer with the ability to deploy onto the cloud infrastructure consumer-created or acquired applications created using programming languages, libraries, services, and tools supported by the provider?",
+   "opts": [
+    "IaaS (Infrastructure as a Service)",
+    "PaaS (Platform as a Service)",
+    "SaaS (Software as a Service)",
+    "BaaS (Backup as a Service)"
+   ],
+   "ans": 1,
+   "exp": "In Platform as a Service (PaaS), the provider manages the underlying infrastructure (servers, network, OS), while the consumer manages the deployed applications and data (e.g., AWS Elastic Beanstalk or Heroku).",
+   "domain": "Cloud Architecture",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:5a508c076e",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A company requires a highly available block storage volume to attach to an active database server. The volume must survive an instance reboot. Which type of storage should they provision?",
+   "opts": [
+    "Object Storage (e.g., Amazon S3)",
+    "Ephemeral/Instance Store",
+    "Persistent Block Storage (e.g., Amazon EBS)",
+    "File Storage (e.g., Amazon EFS)"
+   ],
+   "ans": 2,
+   "exp": "Persistent block storage behaves like a physical hard drive attached to a server. It retains data independently of the compute instance's lifecycle (unlike ephemeral storage).",
+   "domain": "Deployment",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:f69cbaf14d",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A cloud engineer needs to apply an OS security patch to a fleet of 100 Linux VMs. Rather than logging into each machine individually, they use a configuration management tool to deploy the patch simultaneously. What is this practice called?",
+   "opts": [
+    "Blue/Green Deployment",
+    "Automation and Orchestration",
+    "Auto-scaling",
+    "Continuous Delivery"
+   ],
+   "ans": 1,
+   "exp": "Automation (scripting a single task) and Orchestration (coordinating multiple automated tasks across a fleet) eliminate manual toil and ensure consistent configuration management.",
+   "domain": "Operations",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:4e04809b19",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A user complains that they cannot access a cloud-hosted database from their office IP address, but they can access it when they connect via their home network. What is the MOST likely cause?",
+   "opts": [
+    "The database is offline",
+    "The office IP address is blocked by the cloud provider's Security Group / Firewall rules",
+    "The user's home network is compromised",
+    "The database ran out of storage space"
+   ],
+   "ans": 1,
+   "exp": "If a service is accessible from one IP but not another, the issue is almost always a network access control list (ACL) or security group rule that explicitly blocks or fails to allow the office IP.",
+   "domain": "Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:aa53d30741",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A team wants every change to their Terraform configuration automatically validated (syntax checked, plan reviewed) the moment it's pushed to their repository, before any human manually applies it. This practice is best described as:",
+   "opts": [
+    "Continuous Deployment",
+    "Continuous Integration",
+    "Infrastructure as a Service",
+    "Configuration drift"
+   ],
+   "ans": 1,
+   "exp": "Continuous Integration is the automatic build/test/validation step that runs on every code change — Continuous Deployment is the separate step that automatically ships a change that passes CI.",
+   "domain": "DevOps Fundamentals",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:cbe4d122ca",
+   "kind": "mc",
+   "source": "exam",
+   "q": "After an outage, a team needs to determine exactly who changed a firewall rule in their IaC repository and when. Which practice makes this possible?",
+   "opts": [
+    "Elasticity",
+    "Version control",
+    "Load balancing",
+    "Data sanitization"
+   ],
+   "ans": 1,
+   "exp": "Version control (e.g. Git) tracks every change to the infrastructure code with an author and timestamp — the audit trail IaC's repeatability depends on.",
+   "domain": "DevOps Fundamentals",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:dbff721d25",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A cloud engineer manually SSHes into a production server to apply an emergency configuration fix, bypassing the normal IaC pipeline. What problem does this most directly create?",
+   "opts": [
+    "Increased elasticity",
+    "Configuration drift between the live server and the IaC definition",
+    "Reduced measured service billing",
+    "Improved rapid elasticity"
+   ],
+   "ans": 1,
+   "exp": "Any manual, out-of-band change creates configuration drift — the running infrastructure no longer matches what's declared in code, so the next automated deployment can silently revert or conflict with the fix.",
+   "domain": "DevOps Fundamentals",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:mc:8c7089b31f",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which cloud computing benefit allows a retail website to automatically add more web servers during a massive Black Friday traffic spike, and remove them when traffic subsides?",
+   "opts": [
+    "High Availability",
+    "Rapid Elasticity",
+    "Disaster Recovery",
+    "Resource Pooling"
+   ],
+   "ans": 1,
+   "exp": "Rapid elasticity is the ability to automatically scale resources outward or inward dynamically based on real-time demand, ensuring performance without overpaying for idle resources.",
+   "domain": "",
+   "module": "Module 1: Infrastructure as Code (IaC) & Cloud Operations",
+   "topic": "Infrastructure as Code (IaC) & Cloud Operations"
+  },
+  {
+   "id": "comptia-cloudplus:mc:2c18c110f9",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What is the primary advantage of using Infrastructure as Code (IaC)?",
+   "opts": [
+    "It eliminates the need for cloud security controls",
+    "It allows for consistent, repeatable, and version-controlled infrastructure deployments",
+    "It encrypts all data stored in the cloud automatically",
+    "It replaces the need for software developers"
+   ],
+   "ans": 1,
+   "exp": "IaC allows administrators to define infrastructure using code, which can be stored in version control (like Git). This ensures deployments are perfectly identical every time, eliminating human error.",
+   "domain": "",
+   "module": "Module 1: Infrastructure as Code (IaC) & Cloud Operations",
+   "topic": "Infrastructure as Code (IaC) & Cloud Operations"
+  },
+  {
+   "id": "comptia-cloudplus:mc:6a16d917f5",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "In an Infrastructure as a Service (IaaS) model, which of the following is the customer responsible for securing?",
+   "opts": [
+    "The physical data center facilities",
+    "The physical server hardware",
+    "The virtualization hypervisor",
+    "The guest operating system and applications"
+   ],
+   "ans": 3,
+   "exp": "Under the Shared Responsibility Model for IaaS, the cloud provider secures the underlying physical infrastructure and hypervisor, while the customer is responsible for patching and securing the guest OS, applications, and data.",
+   "domain": "",
+   "module": "Module 1: Infrastructure as Code (IaC) & Cloud Operations",
+   "topic": "Infrastructure as Code (IaC) & Cloud Operations"
+  },
+  {
+   "id": "comptia-cloudplus:mc:92b1a94653",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What is the purpose of spanning a cloud deployment across multiple Availability Zones (AZs)?",
+   "opts": [
+    "To decrease latency for users",
+    "To increase fault tolerance and high availability",
+    "To reduce monthly billing costs",
+    "To comply with data sovereignty laws"
+   ],
+   "ans": 1,
+   "exp": "AZs are physically isolated data centers within a region. Deploying across them ensures that if one data center fails, the application stays online via the other AZ.",
+   "domain": "",
+   "module": "Module 2: Cloud Architecture & Design",
+   "topic": "Cloud Architecture & Design"
+  },
+  {
+   "id": "comptia-cloudplus:mc:112ad9e653",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which database type is best suited for unstructured data and massive horizontal scalability in the cloud?",
+   "opts": [
+    "Relational Database (SQL)",
+    "NoSQL Database",
+    "In-Memory Cache",
+    "Data Warehouse"
+   ],
+   "ans": 1,
+   "exp": "NoSQL databases (like DynamoDB or MongoDB) are designed for unstructured data and scale horizontally much easier than traditional SQL databases.",
+   "domain": "",
+   "module": "Module 2: Cloud Architecture & Design",
+   "topic": "Cloud Architecture & Design"
+  },
+  {
+   "id": "comptia-cloudplus:mc:ae57ffcded",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What architecture pattern uses small, independent services communicating over APIs rather than a single massive codebase?",
+   "opts": [
+    "Monolithic",
+    "Microservices",
+    "Client-Server",
+    "Mainframe"
+   ],
+   "ans": 1,
+   "exp": "Microservices break an application into modular, independently deployable services, which is ideal for cloud agility and scaling.",
+   "domain": "",
+   "module": "Module 2: Cloud Architecture & Design",
+   "topic": "Cloud Architecture & Design"
+  },
+  {
+   "id": "comptia-cloudplus:mc:81c52b513f",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Under the Shared Responsibility Model for SaaS, what is the customer responsible for?",
+   "opts": [
+    "Physical data center security",
+    "OS patching",
+    "Data and user access management",
+    "Network infrastructure"
+   ],
+   "ans": 2,
+   "exp": "In SaaS (Software as a Service), the provider manages almost everything. The customer is only responsible for managing their data and who has access to it (IAM).",
+   "domain": "",
+   "module": "Module 3: Security & Compliance in the Cloud",
+   "topic": "Security & Compliance in the Cloud"
+  },
+  {
+   "id": "comptia-cloudplus:mc:e369094ee1",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which tool acts as an intermediary between users and cloud services to enforce corporate security policies?",
+   "opts": [
+    "CASB",
+    "WAF",
+    "Hypervisor",
+    "Load Balancer"
+   ],
+   "ans": 0,
+   "exp": "A Cloud Access Security Broker (CASB) enforces security policies (like DLP and IAM) across multiple cloud platforms.",
+   "domain": "",
+   "module": "Module 3: Security & Compliance in the Cloud",
+   "topic": "Security & Compliance in the Cloud"
+  },
+  {
+   "id": "comptia-cloudplus:mc:2563953f60",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "To comply with data residency regulations, a European company must ensure its data never leaves the EU. How is this enforced in the cloud?",
+   "opts": [
+    "By using strong encryption",
+    "By selecting only European Regions for deployment",
+    "By using a VPN",
+    "By deploying on Edge locations"
+   ],
+   "ans": 1,
+   "exp": "Cloud providers guarantee that data stored in a specific Region (e.g., eu-central-1) will not be moved out of that region without explicit customer action.",
+   "domain": "",
+   "module": "Module 3: Security & Compliance in the Cloud",
+   "topic": "Security & Compliance in the Cloud"
+  },
+  {
+   "id": "comptia-cloudplus:mc:a388844b07",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What is the primary difference between CapEx and OpEx in cloud computing?",
+   "opts": [
+    "CapEx is pay-as-you-go; OpEx is upfront investment",
+    "CapEx is upfront hardware investment; OpEx is pay-as-you-go monthly billing",
+    "CapEx applies to SaaS; OpEx applies to IaaS",
+    "There is no difference"
+   ],
+   "ans": 1,
+   "exp": "Capital Expenditure (CapEx) involves buying physical servers upfront. Operational Expenditure (OpEx) is renting cloud resources and paying monthly based on consumption.",
+   "domain": "",
+   "module": "Module 4: Operations, Support, and FinOps",
+   "topic": "Operations, Support, and FinOps"
+  },
+  {
+   "id": "comptia-cloudplus:mc:8df8ef7186",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "A company wants to guarantee compute capacity for a database server that will run 24/7 for the next 3 years while receiving a massive billing discount. What should they purchase?",
+   "opts": [
+    "On-Demand Instances",
+    "Spot Instances",
+    "Reserved Instances",
+    "Dedicated Hosts"
+   ],
+   "ans": 2,
+   "exp": "Reserved Instances (or Savings Plans) provide massive discounts (up to 72%) in exchange for a 1- or 3-year commitment to continuous usage.",
+   "domain": "",
+   "module": "Module 4: Operations, Support, and FinOps",
+   "topic": "Operations, Support, and FinOps"
+  },
+  {
+   "id": "comptia-cloudplus:mc:accd092197",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which process involves updating the operating system on running cloud instances to fix security vulnerabilities without causing downtime?",
+   "opts": [
+    "Rolling updates / Patch management",
+    "Lift-and-shift",
+    "Right-sizing",
+    "Auto-scaling"
+   ],
+   "ans": 0,
+   "exp": "A rolling update patches instances one by one (or in batches) behind a load balancer, ensuring zero downtime for the overall application.",
+   "domain": "",
+   "module": "Module 4: Operations, Support, and FinOps",
+   "topic": "Operations, Support, and FinOps"
+  },
+  {
+   "id": "comptia-cloudplus:mc:ebe27cdab4",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "A newly deployed EC2 instance in a public subnet cannot be reached from the internet via SSH. What is the MOST likely cause?",
+   "opts": [
+    "The hypervisor crashed",
+    "The Security Group does not allow inbound port 22",
+    "The CPU is overutilized",
+    "The disk is full"
+   ],
+   "ans": 1,
+   "exp": "If an instance is running but unreachable over a specific port, the Security Group (cloud firewall) or Network ACL is almost certainly blocking the traffic.",
+   "domain": "",
+   "module": "Module 5: Troubleshooting Cloud Environments",
+   "topic": "Troubleshooting Cloud Environments"
+  },
+  {
+   "id": "comptia-cloudplus:mc:fa9e7f5231",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "An application is experiencing latency spikes when querying a cloud-managed database. Monitoring shows the database's Read IOPS are maxed out, but CPU usage is low. What is the BEST solution?",
+   "opts": [
+    "Upgrade the CPU",
+    "Add a Read Replica or scale the storage IOPS",
+    "Reboot the database",
+    "Implement a WAF"
+   ],
+   "ans": 1,
+   "exp": "If IOPS (disk read/write speed) is the bottleneck, you must provision faster storage or offload read traffic to a Read Replica.",
+   "domain": "",
+   "module": "Module 5: Troubleshooting Cloud Environments",
+   "topic": "Troubleshooting Cloud Environments"
+  },
+  {
+   "id": "comptia-cloudplus:mc:10ec8b48d4",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "An administrator cannot delete an S3 bucket, receiving an 'Access Denied' error, even though they have full Administrator privileges. What is the likely cause?",
+   "opts": [
+    "The bucket is not empty",
+    "The bucket policy explicitly denies deletion",
+    "The internet connection dropped",
+    "The AWS console is down"
+   ],
+   "ans": 1,
+   "exp": "In AWS, an explicit DENY in a bucket policy overrides any ALLOW permissions granted by IAM policies, even for an Administrator.",
+   "domain": "",
+   "module": "Module 5: Troubleshooting Cloud Environments",
+   "topic": "Troubleshooting Cloud Environments"
+  },
+  {
+   "id": "comptia-cloudplus:fc:7d32725f46",
+   "kind": "flash",
+   "q": "Infrastructure as Code (IaC)",
+   "back": "The process of managing and provisioning computer data centers through machine-readable definition files, rather than physical hardware configuration or interactive configuration tools.",
+   "analogy": "Instead of manually building a house brick-by-brick (clicking in a UI), you feed a blueprint into a 3D printer and the house builds itself.",
+   "domain": "Deployment",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:fc:a925d56231",
+   "kind": "flash",
+   "q": "IaaS vs PaaS vs SaaS",
+   "back": "IaaS: You manage OS/Data (AWS EC2). PaaS: You manage App/Data (Heroku). SaaS: You only manage Data (Salesforce).",
+   "analogy": "IaaS is leasing a car. PaaS is taking a taxi. SaaS is riding a bus.",
+   "domain": "Architecture",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:fc:69363db9d7",
+   "kind": "flash",
+   "q": "Availability Zones (AZs)",
+   "back": "Distinct, physically isolated data centers within a Cloud Region, connected by low-latency links for high availability.",
+   "analogy": "Keeping your backup generator in a separate building so one fire doesn't destroy both.",
+   "domain": "Architecture",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:fc:5864ec2429",
+   "kind": "flash",
+   "q": "Rapid Elasticity",
+   "back": "The ability to automatically scale cloud resources out/in based on demand (Auto-Scaling).",
+   "analogy": "A restaurant that automatically spawns new tables and waiters when a busload of tourists arrives.",
+   "domain": "Architecture",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:fc:96d18ac03e",
+   "kind": "flash",
+   "q": "Lift and Shift (Re-hosting)",
+   "back": "Migrating an application to the cloud exactly as it is, without redesigning its architecture.",
+   "analogy": "Picking up your entire physical desk and moving it to a new office building without reorganizing the drawers.",
+   "domain": "Deployment",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:fc:c4333c47e2",
+   "kind": "flash",
+   "q": "Shared Responsibility Model",
+   "back": "The provider secures the cloud (hardware, hypervisor). The customer secures what is IN the cloud (data, OS, IAM).",
+   "analogy": "The landlord secures the apartment building doors. You are responsible for locking your own apartment door.",
+   "domain": "Security",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:fc:0e05187e2d",
+   "kind": "flash",
+   "q": "CloudTrail / Audit Logging",
+   "back": "Services that record API calls, tracking exactly who made a change, when, and from what IP address.",
+   "analogy": "The security camera footage showing exactly who unlocked the server room door at 2:00 AM.",
+   "domain": "Security",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:fc:bcdd9a8afe",
+   "kind": "flash",
+   "q": "CapEx vs OpEx",
+   "back": "CapEx (Capital Expenditure) is upfront hardware cost. OpEx (Operational Expenditure) is pay-as-you-go cloud billing.",
+   "analogy": "CapEx is buying a house with cash. OpEx is renting an apartment month-to-month.",
+   "domain": "Operations",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:fc:0547c31fdc",
+   "kind": "flash",
+   "q": "Reserved Instances / Savings Plans",
+   "back": "Committing to a specific amount of compute usage for 1 or 3 years in exchange for massive billing discounts.",
+   "analogy": "Signing a 3-year lease to get your rent cut in half, instead of paying premium daily rates.",
+   "domain": "Operations",
+   "module": ""
+  },
+  {
+   "id": "comptia-cloudplus:fc:31e4c5fac0",
+   "kind": "flash",
+   "q": "Security Groups vs NACLs",
+   "back": "Security Groups act as stateful firewalls at the Instance/VM level. NACLs act as stateless firewalls at the Subnet level.",
+   "analogy": "NACLs are the guard at the neighborhood gate. Security Groups are the locks on your specific front door.",
+   "domain": "Troubleshooting",
+   "module": ""
+  }
+ ]
+}

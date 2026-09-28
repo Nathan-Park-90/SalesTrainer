@@ -1,5 +1,5 @@
 ## MAMMOTH ACADEMY — Memory Log
-Last updated: 2026-09-12
+Last updated: 2026-09-28
 
 ---
 
@@ -160,3 +160,36 @@ One Markdown transcript per module (47, one per `courses/*.js` module — regene
 | Low | CompTIA Security+ successor SY0-801 previews ~Oct 2026, GA ~Nov 2026 — re-audit Security+ content once its objectives publish (headline addition: AI/LLM security coverage) |
 | Phase 3 | Capacitor wrapper polish for iOS/Android App Store submission |
 | Done | NotebookLM audio overviews — **all 47/47 modules confirmed done as of 2026-09-13** (verified directly in the NotebookLM UI, not assumed). A prior session had wrongly claimed "all done" without checking; this time every module was individually confirmed via the Studio panel's Play/Interactive-mode controls before being marked complete.
+
+---
+
+## Study coach: Jake drills Nathan in Discord (Sep 28, 2026)
+**Why:** Nathan built all of this but wasn't opening the app. Motivation fix = bring the questions to him via Jake
+(FamilyOS on Nathan's home server), not more features inside the app. Decisions (Nathan): **one track at a time: AWS SAA-C03**;
+**daily round at 20:00**; **study streak shown on the family kiosk** so the kids can cheer him on.
+- `www/courses/build-study-bank.js` exports every course to `study_bank/<course-id>.json` (MC exam + lesson-quiz
+  questions, flashcards; ids = hash of the question text). **Rebuild + copy to the study coach whenever
+  course content changes:** `node www/courses/build-study-bank.js` then
+  (the copy command is in Nathan's private notes: MammothCapitalSite CLAUDE.md, "Mammoth Academy operations").
+- FamilyOS `study_coach.py` (Leitner spaced repetition in family_rag.sqlite `study_cards`/`study_answers`, streak =
+  days with >= 5 answers) + `discord_micromanager.py` (`study_loop`: 20:00 round, 20:40 one nudge if skipped, 00:05
+  kiosk refresh; reactions answer; commands **quiz me** / **study stats** / **stop studying**). Switch track with
+  env `STUDY_TRACK` (e.g. `comptia-securityplus`) in FamilyOS `.env`, then restart the bot.
+- Kiosk tile via ParkFamilySite `api/kiosk.php` action `study` (token-only). Jake's briefing mentions the streak.
+
+## Audit of the two Sep 28 plan docs
+- `MammothAcademy_Audit_and_Action_Plan.md`: inventory accurate; diagnosis fair; but in-app fun can't fix "not
+  opening the app", "XP for trying" rewards busywork (weight XP to correct answers on due/hard cards), and there was
+  no single goal/date across 7 tracks. XP/levels/juice/rival = phase 2, and it must sync across devices.
+- `MammothAcademy_Discord_Integration_Gameplan.md`: right idea, built (see above) with fixes: FamilyOS can't read
+  the desktop folder (JSON export instead), Jake runs Qwen3.8-27B not 8B, a fixed daily slot instead of random
+  heartbeat ambushes (ping limits), multiple-choice reactions instead of LLM-graded free text, and the XP sync
+  needs a real host.
+- **Progress is per-browser localStorage**, so phone/PC progress differ; cross-device sync is the prerequisite for
+  the XP layer. `Code/CompTIAplus/` is an exact copy of this repo (same git HEAD) - ask Nathan before touching it.
+
+## Next (not built yet)
+- "Hey Jake, quiz me" by voice (kiosk / voice page) using the same bank + study_coach.
+- Phase 2 in-app: XP/levels from correct answers (incl. Discord/voice), sounds/confetti, rival, cross-device sync
+  (needs the academy's hosting details from Nathan).
+- Set a target exam date for AWS SAA-C03 and put it on the family calendar.

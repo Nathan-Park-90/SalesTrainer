@@ -1,0 +1,866 @@
+{
+ "course": "comptia-aplus",
+ "name": "CompTIA A+",
+ "exam": "Core 1 (220-1201) & Core 2 (220-1202)",
+ "passThreshold": null,
+ "domains": {
+  "Hardware and Network Troubleshooting": "Hardware & The Helpdesk Trenches",
+  "Mobile Devices": "Mobile Devices & Virtualization",
+  "Hardware": "Hardware Components",
+  "Operating Systems": "Operating Systems & Software",
+  "Software Troubleshooting": "Operating Systems & Software",
+  "Operational Procedures": "Operational Procedures",
+  "Networking": "Networking Fundamentals for the Field Tech",
+  "Virtualization and Cloud": "Virtualization & The Cloud (Where Hardware Goes to Retire)",
+  "Security": "Security: The Domain That Decides If You Pass Core 2"
+ },
+ "built": "2026-09-28T07:36:04.111Z",
+ "items": [
+  {
+   "id": "comptia-aplus:mc:254cf6747c",
+   "kind": "mc",
+   "source": "exam",
+   "q": "An analyst notices that log entries from the primary database server have stopped arriving at the SIEM. Upon investigation, the server's hard drive is completely full. Which CompTIA troubleshooting step should the analyst perform next?",
+   "opts": [
+    "Establish a plan of action to resolve the problem",
+    "Establish a theory of probable cause",
+    "Document findings, actions, and outcomes",
+    "Verify full system functionality"
+   ],
+   "ans": 0,
+   "exp": "The problem has been identified (logs stopped) and the probable cause has been established (hard drive is full). The next step in the methodology is to establish a plan of action to resolve it (e.g., clearing space or expanding the volume).",
+   "domain": "Hardware and Network Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:f20ce59760",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A user spills coffee on their laptop keyboard. The laptop immediately powers off and emits a burning smell. What should the technician do FIRST?",
+   "opts": [
+    "Remove the battery and disconnect the AC adapter",
+    "Open the laptop casing to inspect the motherboard",
+    "Use compressed air to dry the keyboard",
+    "Document the incident for insurance"
+   ],
+   "ans": 0,
+   "exp": "Safety and preventing further electrical damage is the first priority. Disconnect all power sources immediately before assessing internal damage.",
+   "domain": "Hardware and Network Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:a0f774876b",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A company requires a display technology for a conference room that provides the truest blacks, highest contrast ratios, and does not require a backlight. Which technology fits this description?",
+   "opts": [
+    "TN LCD",
+    "IPS LCD",
+    "OLED",
+    "Mini-LED"
+   ],
+   "ans": 2,
+   "exp": "OLED (Organic Light Emitting Diode) displays do not use a backlight. Each pixel generates its own light and can turn off completely, providing true blacks and infinite contrast.",
+   "domain": "Mobile Devices",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:66064d3729",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A server requires RAM that can detect and correct single-bit memory errors on the fly to prevent system crashes. What type of RAM should be installed?",
+   "opts": [
+    "Non-parity",
+    "ECC",
+    "SODIMM",
+    "VRAM"
+   ],
+   "ans": 1,
+   "exp": "ECC (Error-Correcting Code) RAM detects and corrects common kinds of internal data corruption, making it critical for enterprise servers.",
+   "domain": "Hardware",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:dc675cac56",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A Windows 11 machine is stuck in a reboot loop and crashes with a Blue Screen of Death (BSOD) immediately after the boot logo. Which built-in tool is BEST for recovering the OS without losing user data?",
+   "opts": [
+    "Disk Management",
+    "Windows Recovery Environment (WinRE)",
+    "Task Manager",
+    "Regedit"
+   ],
+   "ans": 1,
+   "exp": "WinRE (Windows Recovery Environment) provides tools like Startup Repair, System Restore, and Safe Mode to troubleshoot boot failures without destroying data.",
+   "domain": "Operating Systems",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:b91b930e63",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A user's Android phone is experiencing severe battery drain, high data usage, and pop-up ads appearing even when the browser is closed. What is the MOST likely cause?",
+   "opts": [
+    "A failing lithium-ion battery",
+    "A compromised Wi-Fi network",
+    "Malware or adware infection",
+    "Outdated OS firmware"
+   ],
+   "ans": 2,
+   "exp": "Sudden battery drain, unexplained data spikes, and system-wide pop-ups are textbook symptoms of a malware or adware infection on a mobile device.",
+   "domain": "Software Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:97773f3b5b",
+   "kind": "mc",
+   "source": "exam",
+   "q": "Before making significant changes to the Windows Registry to fix a corrupt application, what should a technician do to ensure they can revert if something goes wrong?",
+   "opts": [
+    "Create a System Restore point or export the Registry",
+    "Run the System File Checker (sfc /scannow)",
+    "Reboot into Safe Mode",
+    "Update the application's drivers"
+   ],
+   "ans": 0,
+   "exp": "Always create a backup (like a System Restore point or a direct Registry export) before editing the Registry, as an incorrect change can render the OS unbootable.",
+   "domain": "Operational Procedures",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:06b37ca09a",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A desktop computer intermittently shuts down without warning, especially when the user is playing graphics-intensive games or rendering video. The fans are very loud before it crashes. What is the MOST likely culprit?",
+   "opts": [
+    "Failing hard drive",
+    "Corrupted display drivers",
+    "Thermal shutdown due to overheating",
+    "Bad RAM modules"
+   ],
+   "ans": 2,
+   "exp": "Intensive tasks generate significant heat. If the cooling system (fans/heatsinks) is inadequate or clogged with dust, the CPU/GPU will overheat and trigger a thermal shutdown to prevent permanent damage.",
+   "domain": "Hardware and Network Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:5e69786427",
+   "kind": "mc",
+   "source": "exam",
+   "q": "Which Windows command-line utility is used to verify the integrity of all protected system files and replace incorrect, corrupted, changed, or damaged versions?",
+   "opts": [
+    "chkdsk",
+    "diskpart",
+    "sfc",
+    "gpupdate"
+   ],
+   "ans": 2,
+   "exp": "SFC (System File Checker) scans the integrity of all protected system files and replaces incorrect versions with correct Microsoft versions.",
+   "domain": "Operating Systems",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:9bf478555e",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A technician needs to connect a legacy printer to a modern PC. The printer has a large, 25-pin D-sub connector. What type of port is this?",
+   "opts": [
+    "VGA",
+    "Serial (RS-232)",
+    "Parallel (LPT)",
+    "SCSI"
+   ],
+   "ans": 2,
+   "exp": "Legacy printers typically used Parallel ports (LPT), which physically featured a 25-pin D-subminiature (DB-25) female connector on the PC.",
+   "domain": "Hardware",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:b2d6282d32",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A user brings a company-owned smartphone to the helpdesk. They forgot the passcode, and after 10 failed attempts, the phone automatically wiped all its data. What enterprise security feature caused this?",
+   "opts": [
+    "Geofencing",
+    "Mobile Device Management (MDM) policy",
+    "Remote wipe",
+    "Biometric failure lock"
+   ],
+   "ans": 1,
+   "exp": "Mobile Device Management (MDM) platforms allow administrators to enforce security policies on mobile devices, such as automatically wiping data after a specific number of failed login attempts to prevent brute-force attacks.",
+   "domain": "Mobile Devices",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:473de3ef06",
+   "kind": "mc",
+   "source": "exam",
+   "q": "When handling a ticket for a VIP user, the technician realizes the requested software is not approved for company use. According to best practices in operational procedures, what should the technician do?",
+   "opts": [
+    "Install it anyway because it's a VIP",
+    "Refuse the installation and close the ticket immediately",
+    "Politely inform the user of the policy and suggest approved alternatives",
+    "Tell the user to buy a personal laptop for the software"
+   ],
+   "ans": 2,
+   "exp": "Professionalism requires enforcing company policy while providing excellent customer service. Explaining the policy respectfully and offering an approved workaround is the correct procedure.",
+   "domain": "Operational Procedures",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:cffa8f1cd8",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A help desk technician receives a call that a user's laptop can browse websites fine but cannot connect to the company VPN. Which port should the technician verify is not blocked by a firewall along the path, assuming an IPsec-based VPN?",
+   "opts": [
+    "Port 80",
+    "Port 443 only",
+    "UDP 500 / 4500 (IKE/NAT-T)",
+    "Port 25"
+   ],
+   "ans": 2,
+   "exp": "IPsec VPNs rely on IKE (UDP 500) and NAT-T (UDP 4500) for key exchange; blocking these prevents the tunnel from establishing even though general web traffic (80/443) works fine.",
+   "domain": "Networking",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:ac347ee2ab",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A technician is configuring a SOHO router and wants to give a specific internal server a consistent, predictable internal address for port forwarding. What should be configured?",
+   "opts": [
+    "DHCP reservation",
+    "Dynamic DNS",
+    "Subnetting",
+    "NAT"
+   ],
+   "ans": 0,
+   "exp": "A DHCP reservation ties a specific device's MAC address to a fixed IP within the DHCP scope, so port forwarding rules pointed at that IP never break when the lease renews.",
+   "domain": "Networking",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:4299d10afc",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A company wants to migrate its email hosting so it no longer manages any physical or virtual mail servers, and simply pays for user mailboxes. Which cloud model does this describe?",
+   "opts": [
+    "IaaS",
+    "PaaS",
+    "SaaS",
+    "Private cloud"
+   ],
+   "ans": 2,
+   "exp": "Consuming a finished application (hosted mailboxes) with zero infrastructure management is SaaS — the provider owns everything below the login screen.",
+   "domain": "Virtualization and Cloud",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:81aec6d11f",
+   "kind": "mc",
+   "source": "exam",
+   "q": "Which characteristic of cloud computing means a customer is billed only for the exact compute and storage resources consumed, similar to a utility bill?",
+   "opts": [
+    "Resource pooling",
+    "Measured service",
+    "Rapid elasticity",
+    "On-demand self-service"
+   ],
+   "ans": 1,
+   "exp": "Measured service is the metering/billing characteristic — pay for what's actually used, not a flat fee.",
+   "domain": "Virtualization and Cloud",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:e02d16f2b8",
+   "kind": "mc",
+   "source": "exam",
+   "q": "An employee reports that files on a shared drive are suddenly all encrypted with a .locked extension, and a text file demands payment for the decryption key. This is an example of:",
+   "opts": [
+    "A rootkit",
+    "Ransomware",
+    "A keylogger",
+    "Spyware"
+   ],
+   "ans": 1,
+   "exp": "Encrypting a victim's files and demanding payment for the decryption key is the defining behavior of ransomware.",
+   "domain": "Security",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:2e6304a775",
+   "kind": "mc",
+   "source": "exam",
+   "q": "A technician finds that antivirus software cannot detect or remove a persistent infection that appears to operate below the operating system level. This behavior is most consistent with a:",
+   "opts": [
+    "Virus",
+    "Worm",
+    "Rootkit",
+    "Trojan"
+   ],
+   "ans": 2,
+   "exp": "Rootkits specifically embed at the OS or firmware level to hide from security software running above them, which is why standard AV scans often can't detect or fully remove them.",
+   "domain": "Security",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:03ea2b3411",
+   "kind": "mc",
+   "source": "exam",
+   "q": "Which mobile device security feature allows an organization to erase all data on a lost or stolen phone?",
+   "opts": [
+    "Screen lock",
+    "Remote wipe",
+    "Full-device encryption",
+    "Biometric authentication"
+   ],
+   "ans": 1,
+   "exp": "Remote wipe erases the device's data remotely once it's confirmed lost or stolen — a screen lock and encryption protect data at rest but don't erase it.",
+   "domain": "Security",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:mc:6558e29aa3",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "According to the CompTIA troubleshooting methodology, what should an IT technician do immediately after identifying the problem?",
+   "opts": [
+    "Establish a plan of action",
+    "Verify full system functionality",
+    "Document findings and outcomes",
+    "Establish a theory of probable cause"
+   ],
+   "ans": 3,
+   "exp": "After identifying the problem, the next step is to establish a theory of probable cause before making any changes to the system.",
+   "domain": "",
+   "module": "Module 1: Hardware & The Helpdesk Trenches",
+   "topic": "Hardware & The Helpdesk Trenches"
+  },
+  {
+   "id": "comptia-aplus:mc:2ea0d52cbb",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "A user complains that their laptop battery only lasts 30 minutes off the charger. What is the most likely probable cause?",
+   "opts": [
+    "The laptop's AC adapter is supplying too much voltage",
+    "The battery has reached the end of its chemical lifecycle and cannot hold a charge",
+    "The laptop needs a BIOS update",
+    "The hard drive is spinning too fast"
+   ],
+   "ans": 1,
+   "exp": "Lithium-ion batteries degrade over time. A drastically reduced battery life usually indicates a chemically depleted battery that needs replacement.",
+   "domain": "",
+   "module": "Module 1: Hardware & The Helpdesk Trenches",
+   "topic": "Hardware & The Helpdesk Trenches"
+  },
+  {
+   "id": "comptia-aplus:mc:6e4c794743",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What is the final step in the CompTIA troubleshooting methodology?",
+   "opts": [
+    "Verify system functionality",
+    "Implement the solution",
+    "Document findings, actions, and outcomes",
+    "Perform a root cause analysis"
+   ],
+   "ans": 2,
+   "exp": "Documentation is the crucial final step. It ensures that if the issue happens again, there is a record of how it was resolved, adding to the organization's knowledge base.",
+   "domain": "",
+   "module": "Module 1: Hardware & The Helpdesk Trenches",
+   "topic": "Hardware & The Helpdesk Trenches"
+  },
+  {
+   "id": "comptia-aplus:mc:5ed057585c",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which Windows tool is used to manage hard drives, initialize disks, and format partitions?",
+   "opts": [
+    "Device Manager",
+    "Task Manager",
+    "Disk Management",
+    "System Configuration"
+   ],
+   "ans": 2,
+   "exp": "Disk Management (diskmgmt.msc) is the GUI tool for managing disks and volumes.",
+   "domain": "",
+   "module": "Module 2: Operating Systems & Software",
+   "topic": "Operating Systems & Software"
+  },
+  {
+   "id": "comptia-aplus:mc:3c8f40e5ef",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What is the Linux command to change file permissions?",
+   "opts": [
+    "chown",
+    "chmod",
+    "grep",
+    "sudo"
+   ],
+   "ans": 1,
+   "exp": "chmod (change mode) is used to change the access permissions of file system objects.",
+   "domain": "",
+   "module": "Module 2: Operating Systems & Software",
+   "topic": "Operating Systems & Software"
+  },
+  {
+   "id": "comptia-aplus:mc:d90daf6f67",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "In Windows, which utility allows you to configure programs to run automatically at startup?",
+   "opts": [
+    "Task Manager",
+    "Event Viewer",
+    "Performance Monitor",
+    "Component Services"
+   ],
+   "ans": 0,
+   "exp": "In modern Windows (10/11), startup programs are managed via the Startup tab in Task Manager.",
+   "domain": "",
+   "module": "Module 2: Operating Systems & Software",
+   "topic": "Operating Systems & Software"
+  },
+  {
+   "id": "comptia-aplus:mc:2afc74c491",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which motherboard component is responsible for maintaining the system time when the computer is turned off?",
+   "opts": [
+    "CPU",
+    "CMOS Battery",
+    "Northbridge",
+    "Southbridge"
+   ],
+   "ans": 1,
+   "exp": "The CMOS battery (usually a CR2032) provides constant power to the RTC (Real Time Clock).",
+   "domain": "",
+   "module": "Module 3: Hardware Components",
+   "topic": "Hardware Components"
+  },
+  {
+   "id": "comptia-aplus:mc:0fc10ad760",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What type of storage uses non-volatile flash memory and connects directly to the PCIe bus via the M.2 slot for maximum speed?",
+   "opts": [
+    "SATA HDD",
+    "SATA SSD",
+    "NVMe SSD",
+    "USB Flash Drive"
+   ],
+   "ans": 2,
+   "exp": "NVMe (Non-Volatile Memory Express) SSDs use the PCIe bus for vastly superior read/write speeds compared to SATA.",
+   "domain": "",
+   "module": "Module 3: Hardware Components",
+   "topic": "Hardware Components"
+  },
+  {
+   "id": "comptia-aplus:mc:08999e51f4",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which display technology requires a backlight because its pixels do not emit their own light?",
+   "opts": [
+    "OLED",
+    "Plasma",
+    "LCD",
+    "CRT"
+   ],
+   "ans": 2,
+   "exp": "LCD (Liquid Crystal Display) requires an LED or CCFL backlight to illuminate the pixels.",
+   "domain": "",
+   "module": "Module 3: Hardware Components",
+   "topic": "Hardware Components"
+  },
+  {
+   "id": "comptia-aplus:mc:bc58192c9b",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which of the following is a Type 1 hypervisor?",
+   "opts": [
+    "VMware Workstation",
+    "Oracle VirtualBox",
+    "Microsoft Hyper-V (Server)",
+    "Parallels Desktop"
+   ],
+   "ans": 2,
+   "exp": "Hyper-V (when installed as a role on Windows Server) acts as a Type 1 (bare-metal) hypervisor. The others run on top of a host OS (Type 2).",
+   "domain": "",
+   "module": "Module 4: Mobile Devices & Virtualization",
+   "topic": "Mobile Devices & Virtualization"
+  },
+  {
+   "id": "comptia-aplus:mc:516a9a2e4a",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What protocol is primarily used by Apple devices to stream audio and video to an Apple TV?",
+   "opts": [
+    "Miracast",
+    "Chromecast",
+    "AirPlay",
+    "DLNA"
+   ],
+   "ans": 2,
+   "exp": "AirPlay is Apple's proprietary protocol for wireless streaming between devices.",
+   "domain": "",
+   "module": "Module 4: Mobile Devices & Virtualization",
+   "topic": "Mobile Devices & Virtualization"
+  },
+  {
+   "id": "comptia-aplus:mc:2a9892b4f2",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "A user complains their phone battery is swollen and pushing the screen out. What is the immediate action?",
+   "opts": [
+    "Squeeze the screen back into place",
+    "Puncture the battery to relieve pressure",
+    "Power down the device and place it in a fire-safe container",
+    "Plug it in to drain the battery safely"
+   ],
+   "ans": 2,
+   "exp": "A swollen lithium-ion battery is a severe fire hazard. Do not puncture or charge it; isolate it in a fireproof container immediately.",
+   "domain": "",
+   "module": "Module 4: Mobile Devices & Virtualization",
+   "topic": "Mobile Devices & Virtualization"
+  },
+  {
+   "id": "comptia-aplus:mc:4bc7a0348d",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What is the best way to protect internal PC components from ESD when working on a carpeted floor?",
+   "opts": [
+    "Wear rubber gloves",
+    "Use an anti-static wrist strap attached to the unpainted metal chassis",
+    "Keep the computer plugged into the wall",
+    "Work very quickly"
+   ],
+   "ans": 1,
+   "exp": "An anti-static wrist strap safely grounds you to the computer chassis, equalizing electrical potential and preventing static discharge.",
+   "domain": "",
+   "module": "Module 5: Operational Procedures",
+   "topic": "Operational Procedures"
+  },
+  {
+   "id": "comptia-aplus:mc:b79cd77192",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "A user is irate because their PC crashed and they lost an hour of work. What is the best response?",
+   "opts": [
+    "Tell them they should have saved their work",
+    "Actively listen, apologize for the frustration, and begin troubleshooting",
+    "Transfer them to a manager",
+    "Ignore the emotion and ask for the error code"
+   ],
+   "ans": 1,
+   "exp": "Active listening and empathy defuse tense situations, which is a core soft skill in IT support.",
+   "domain": "",
+   "module": "Module 5: Operational Procedures",
+   "topic": "Operational Procedures"
+  },
+  {
+   "id": "comptia-aplus:mc:14170de30f",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What document provides detailed instructions on how to handle, store, and dispose of hazardous chemicals like printer toner?",
+   "opts": [
+    "SLA",
+    "AUP",
+    "MSDS / SDS",
+    "EULA"
+   ],
+   "ans": 2,
+   "exp": "A Safety Data Sheet (SDS), formerly MSDS, outlines the handling, hazards, and disposal procedures for chemicals.",
+   "domain": "",
+   "module": "Module 5: Operational Procedures",
+   "topic": "Operational Procedures"
+  },
+  {
+   "id": "comptia-aplus:mc:1006d7c3d5",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "A user can reach internal file shares by IP address (\\\\10.0.0.5\\shared works) but not by hostname (\\\\FILESERVER\\shared fails). Which service is most likely unavailable?",
+   "opts": [
+    "HTTP (port 80)",
+    "DNS (port 53)",
+    "RDP (port 3389)",
+    "HTTPS (port 443)"
+   ],
+   "ans": 1,
+   "exp": "Name resolution — turning a hostname into an IP — is DNS's job on port 53. Direct-IP access working while hostname access fails is the classic DNS-down symptom.",
+   "domain": "",
+   "module": "Module 6: Networking Fundamentals for the Field Tech",
+   "topic": "Ports, Protocols, and the Network Layer Techs Actually Touch"
+  },
+  {
+   "id": "comptia-aplus:mc:6870a2039f",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which of the following is a private, non-routable IPv4 address?",
+   "opts": [
+    "8.8.8.8",
+    "192.168.1.50",
+    "1.1.1.1",
+    "34.201.10.5"
+   ],
+   "ans": 1,
+   "exp": "192.168.0.0/16 is one of the three reserved private ranges (along with 10.0.0.0/8 and 172.16.0.0/12) — it never routes directly on the public internet.",
+   "domain": "",
+   "module": "Module 6: Networking Fundamentals for the Field Tech",
+   "topic": "Ports, Protocols, and the Network Layer Techs Actually Touch"
+  },
+  {
+   "id": "comptia-aplus:mc:a189007173",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "A technician must run a cable the full 100-meter maximum length allowed by the standard while still supporting 10 Gbps. Which cable meets both requirements?",
+   "opts": [
+    "Cat5e",
+    "Cat6",
+    "Cat6a",
+    "Cat3"
+   ],
+   "ans": 2,
+   "exp": "Cat6 can hit 10 Gbps but only over shorter runs (~55m); Cat6a holds 10 Gbps across the full 100-meter maximum run length.",
+   "domain": "",
+   "module": "Module 6: Networking Fundamentals for the Field Tech",
+   "topic": "Ports, Protocols, and the Network Layer Techs Actually Touch"
+  },
+  {
+   "id": "comptia-aplus:mc:f6ebdca5e9",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "A developer wants to deploy application code without managing the underlying operating system, patching, or server capacity. Which cloud service model best fits?",
+   "opts": [
+    "IaaS",
+    "PaaS",
+    "SaaS",
+    "DaaS"
+   ],
+   "ans": 1,
+   "exp": "PaaS hands over a ready-to-run platform — the provider manages the OS and runtime, the developer just deploys code.",
+   "domain": "",
+   "module": "Module 7: Virtualization & The Cloud (Where Hardware Goes to Retire)",
+   "topic": "The Five Traits of “Actually Cloud” and the Three Ways to Rent It"
+  },
+  {
+   "id": "comptia-aplus:mc:a3aa2370d1",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which cloud characteristic describes a system automatically adding server capacity during a traffic spike and removing it afterward without human action?",
+   "opts": [
+    "Measured service",
+    "Resource pooling",
+    "Rapid elasticity",
+    "Broad network access"
+   ],
+   "ans": 2,
+   "exp": "Rapid elasticity is capacity scaling up and down automatically with demand, with no manual provisioning step.",
+   "domain": "",
+   "module": "Module 7: Virtualization & The Cloud (Where Hardware Goes to Retire)",
+   "topic": "The Five Traits of “Actually Cloud” and the Three Ways to Rent It"
+  },
+  {
+   "id": "comptia-aplus:mc:03d7696967",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "A technician wants to test an unfamiliar installer without risking the host machine's configuration. What is the BEST approach?",
+   "opts": [
+    "Install it directly and use System Restore afterward if needed",
+    "Create a client-side VM using a Type 2 hypervisor and test it there",
+    "Ask a coworker to test it on their machine first",
+    "Disable the host's antivirus and run it"
+   ],
+   "ans": 1,
+   "exp": "A disposable client-side VM (VirtualBox, VMware Workstation) isolates the test from the host entirely — delete the VM and the risk is gone.",
+   "domain": "",
+   "module": "Module 7: Virtualization & The Cloud (Where Hardware Goes to Retire)",
+   "topic": "The Five Traits of “Actually Cloud” and the Three Ways to Rent It"
+  },
+  {
+   "id": "comptia-aplus:mc:b2de11832f",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Malware that self-replicates across a network without requiring any user action or host file is best classified as a:",
+   "opts": [
+    "Virus",
+    "Worm",
+    "Trojan",
+    "Rootkit"
+   ],
+   "ans": 1,
+   "exp": "Worms spread on their own across a network with no host file and no user action required — unlike a virus, which needs an infected file to be executed.",
+   "domain": "",
+   "module": "Module 8: Security: The Domain That Decides If You Pass Core 2",
+   "topic": "Malware, Social Engineering, and the Human Attack Surface"
+  },
+  {
+   "id": "comptia-aplus:mc:6a08c0c844",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "An attacker follows an employee through a badge-secured door without presenting their own credentials. This is an example of:",
+   "opts": [
+    "Shoulder surfing",
+    "Whaling",
+    "Tailgating",
+    "Spear phishing"
+   ],
+   "ans": 2,
+   "exp": "Tailgating is gaining physical access by following an authorized person through a secured door, exploiting politeness rather than a technical flaw.",
+   "domain": "",
+   "module": "Module 8: Security: The Domain That Decides If You Pass Core 2",
+   "topic": "Malware, Social Engineering, and the Human Attack Surface"
+  },
+  {
+   "id": "comptia-aplus:mc:2e2d08d64e",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which Windows feature specifically prompts a user for confirmation before an application is allowed to run with administrative privileges?",
+   "opts": [
+    "BitLocker",
+    "Windows Defender",
+    "User Account Control (UAC)",
+    "Windows Firewall"
+   ],
+   "ans": 2,
+   "exp": "UAC is the permission prompt that requires explicit confirmation before a process can run with elevated (administrative) privileges.",
+   "domain": "",
+   "module": "Module 8: Security: The Domain That Decides If You Pass Core 2",
+   "topic": "Hardening Windows, Mobile Devices, and the SOHO Network"
+  },
+  {
+   "id": "comptia-aplus:mc:0b9c1cb4d0",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which of the following provides the STRONGEST primary security for a SOHO wireless network?",
+   "opts": [
+    "Disabling SSID broadcast",
+    "Enabling MAC filtering",
+    "WPA3 encryption",
+    "Reducing transmit power"
+   ],
+   "ans": 2,
+   "exp": "WPA3 (or WPA2 where WPA3 isn't supported) is real cryptographic security; SSID hiding, MAC filtering, and power reduction are weak supplements easily bypassed with basic tools.",
+   "domain": "",
+   "module": "Module 8: Security: The Domain That Decides If You Pass Core 2",
+   "topic": "Hardening Windows, Mobile Devices, and the SOHO Network"
+  },
+  {
+   "id": "comptia-aplus:fc:fb976abce3",
+   "kind": "flash",
+   "q": "APIPA (169.254.x.x)",
+   "back": "Automatic Private IP Addressing. Assigned by Windows when the client cannot reach a DHCP server.",
+   "analogy": "The network equivalent of talking to yourself because nobody else is answering.",
+   "domain": "Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:dbee80f0f0",
+   "kind": "flash",
+   "q": "ping vs tracert",
+   "back": "Ping tests basic reachability. Tracert/Traceroute shows the exact path of hops to the destination and where latency occurs.",
+   "analogy": "Ping is asking 'Are you there?'. Tracert is asking 'Which exact roads did you take to get there and where was the traffic?'.",
+   "domain": "Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:32df75b0b5",
+   "kind": "flash",
+   "q": "ECC RAM",
+   "back": "Error-Correcting Code RAM. Detects and corrects single-bit errors in memory on the fly. Used in servers.",
+   "analogy": "A proofreader checking every single letter of a document as it's being typed to prevent a crash.",
+   "domain": "Hardware",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:320f758912",
+   "kind": "flash",
+   "q": "NVMe (Non-Volatile Memory Express)",
+   "back": "Storage protocol that uses the high-speed PCIe bus instead of SATA, providing massively faster read/write speeds.",
+   "analogy": "Upgrading from a two-lane dirt road (SATA) to a 16-lane superhighway (PCIe) for your data.",
+   "domain": "Hardware",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:cd1a5c0f6e",
+   "kind": "flash",
+   "q": "OLED vs LCD",
+   "back": "OLED pixels emit their own light (true blacks, no backlight). LCD requires an LED/CCFL backlight to shine through the pixels.",
+   "analogy": "OLED is a stadium screen made of individual lightbulbs. LCD is a stained glass window with the sun shining behind it.",
+   "domain": "Hardware",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:68a5308515",
+   "kind": "flash",
+   "q": "SFC (System File Checker)",
+   "back": "Windows CLI tool (sfc /scannow) that scans and replaces corrupted or missing protected system files.",
+   "analogy": "An auto-mechanic that scans the engine and automatically replaces any broken spark plugs with factory originals.",
+   "domain": "OS",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:0702b80ee4",
+   "kind": "flash",
+   "q": "chkdsk (Check Disk)",
+   "back": "Scans the file system and hard drive for logical errors and bad sectors, and attempts to fix them.",
+   "analogy": "A street sweeper fixing potholes on the hard drive.",
+   "domain": "OS",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:9821934c86",
+   "kind": "flash",
+   "q": "MDM (Mobile Device Management)",
+   "back": "Enterprise software used to enforce security policies, wipe data, and push apps to employee mobile devices.",
+   "analogy": "A remote control for the IT department to securely manage every phone in the company.",
+   "domain": "Mobile",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:cc9dfb2d5a",
+   "kind": "flash",
+   "q": "CompTIA Troubleshooting Step 1",
+   "back": "Identify the problem. Gather information from the user, identify changes, and review logs.",
+   "analogy": "A doctor taking a patient's history and asking 'where does it hurt?' before ordering an MRI.",
+   "domain": "Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:e9eb80e74d",
+   "kind": "flash",
+   "q": "CompTIA Troubleshooting Step 2",
+   "back": "Establish a theory of probable cause. Use Occam's razor (start with the obvious).",
+   "analogy": "The doctor diagnosing that a headache is probably just dehydration, not a brain tumor.",
+   "domain": "Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:f1d4a19aea",
+   "kind": "flash",
+   "q": "BSOD (Blue Screen of Death)",
+   "back": "A fatal system error in Windows, usually caused by bad hardware (RAM/HDD) or corrupted device drivers.",
+   "analogy": "The OS pulling the emergency brake to prevent the hardware from destroying itself.",
+   "domain": "Troubleshooting",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:a842ce67ef",
+   "kind": "flash",
+   "q": "ESD (Electrostatic Discharge)",
+   "back": "The sudden flow of electricity between two electrically charged objects. Prevented by anti-static wrist straps.",
+   "analogy": "A lightning strike for microchips. You won't feel it, but it will instantly fry a CPU.",
+   "domain": "Procedures",
+   "module": ""
+  },
+  {
+   "id": "comptia-aplus:fc:31e4c5fac0",
+   "kind": "flash",
+   "q": "Security Groups vs NACLs",
+   "back": "Security Groups act as stateful firewalls at the Instance/VM level. NACLs act as stateless firewalls at the Subnet level.",
+   "analogy": "NACLs are the guard at the neighborhood gate. Security Groups are the locks on your specific front door.",
+   "domain": "Troubleshooting",
+   "module": ""
+  }
+ ]
+}

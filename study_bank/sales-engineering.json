@@ -1,0 +1,400 @@
+{
+ "course": "sales-engineering",
+ "name": "Sales Engineering",
+ "exam": "Enterprise Sales & Objection Handling",
+ "passThreshold": null,
+ "domains": {},
+ "built": "2026-09-28T07:36:04.119Z",
+ "items": [
+  {
+   "id": "sales-engineering:mc:d83bde3a40",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "In B2B enterprise sales, what is the primary purpose of the 'Discovery' phase?",
+   "opts": [
+    "To pitch the product's features",
+    "To uncover the prospect's business pains and goals",
+    "To negotiate pricing and terms",
+    "To demonstrate the software"
+   ],
+   "ans": 1,
+   "exp": "Discovery is entirely about the prospect. It's the process of uncovering their specific business challenges, goals, and current state to determine if and how your solution can help.",
+   "domain": "",
+   "module": "Module 1: Enterprise Sales Tech Stack",
+   "topic": "Salesforce is your Ledger"
+  },
+  {
+   "id": "sales-engineering:mc:3f7ecf411c",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which acronym represents a common framework for qualifying a sales lead?",
+   "opts": [
+    "BANT",
+    "SWOT",
+    "SMART",
+    "AIDA"
+   ],
+   "ans": 0,
+   "exp": "BANT stands for Budget, Authority, Need, and Timeline. It's a classic framework used to determine if a prospect is a qualified buyer.",
+   "domain": "",
+   "module": "Module 1: Enterprise Sales Tech Stack",
+   "topic": "Salesforce is your Ledger"
+  },
+  {
+   "id": "sales-engineering:mc:4aaf474864",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "When a prospect says 'Tell me about your product', the best response from an enterprise seller is:",
+   "opts": [
+    "Give a 5-minute pitch of all features",
+    "Ask a clarifying question to understand their specific context first",
+    "Immediately schedule a demo",
+    "Send them a whitepaper"
+   ],
+   "ans": 1,
+   "exp": "Always seek to understand before pitching. Asking a clarifying question ensures you tailor your response to their specific problems rather than giving a generic, irrelevant feature dump.",
+   "domain": "",
+   "module": "Module 1: Enterprise Sales Tech Stack",
+   "topic": "Salesforce is your Ledger"
+  },
+  {
+   "id": "sales-engineering:mc:c78964b5a5",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "During discovery, a prospect mentions 'Our reporting is too slow'. What is the most effective follow-up question?",
+   "opts": [
+    "We have real-time reporting, want to see it?",
+    "How much does it cost you?",
+    "Can you give me an example of how that slowness impacts the business?",
+    "Who else cares about this?"
+   ],
+   "ans": 2,
+   "exp": "This is a probing question that moves from a surface-level technical problem to the actual business impact, which is crucial for building a strong business case.",
+   "domain": "",
+   "module": "Module 2: Zero Trust & Security Posture",
+   "topic": "Pitching Zero Trust"
+  },
+  {
+   "id": "sales-engineering:mc:1249f4e538",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "In the MEDDPICC qualification framework, what does the 'E' stand for?",
+   "opts": [
+    "Economic Buyer",
+    "Enterprise Readiness",
+    "Executive Sponsor",
+    "Evaluation Process"
+   ],
+   "ans": 0,
+   "exp": "The Economic Buyer is the person with the ultimate authority to spend the money and sign off on the project.",
+   "domain": "",
+   "module": "Module 2: Zero Trust & Security Posture",
+   "topic": "Pitching Zero Trust"
+  },
+  {
+   "id": "sales-engineering:mc:6bff6dc6e8",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which of the following is a 'Closed-Ended' question?",
+   "opts": [
+    "How does your team currently handle deployments?",
+    "What are the biggest challenges with your current setup?",
+    "Are you the final decision maker for this project?",
+    "Can you walk me through your evaluation criteria?"
+   ],
+   "ans": 2,
+   "exp": "Closed-ended questions can be answered with a simple 'yes' or 'no'. While sometimes necessary, open-ended questions (A, B, D) are generally better for discovery.",
+   "domain": "",
+   "module": "Module 2: Zero Trust & Security Posture",
+   "topic": "Pitching Zero Trust"
+  },
+  {
+   "id": "sales-engineering:mc:8aaeab2515",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "When a prospect raises an objection like 'Your price is too high', what is the recommended first step?",
+   "opts": [
+    "Immediately offer a 20% discount",
+    "Argue that your value is higher than the price",
+    "Acknowledge and clarify the objection to understand the root cause",
+    "Tell them their current solution is actually more expensive"
+   ],
+   "ans": 2,
+   "exp": "Always acknowledge and clarify first. A price objection might actually mean 'I don't have budget', 'I don't see the value', or 'My boss will never approve this'. You must uncover the root cause before responding.",
+   "domain": "",
+   "module": "Module 3: Handling the Hostile CTO",
+   "topic": "The 'Build vs Buy' Trap"
+  },
+  {
+   "id": "sales-engineering:mc:d6e54d24bf",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "The 'Feel, Felt, Found' technique is used to:",
+   "opts": [
+    "Empathize with the prospect and pivot to a positive outcome",
+    "Calculate the exact ROI of the solution",
+    "Map the organizational hierarchy of the prospect",
+    "Force a decision on the spot"
+   ],
+   "ans": 0,
+   "exp": "It's a classic empathy-building technique: 'I understand how you FEEL. Other clients FELT the same way initially. But what they FOUND was...'",
+   "domain": "",
+   "module": "Module 3: Handling the Hostile CTO",
+   "topic": "The 'Build vs Buy' Trap"
+  },
+  {
+   "id": "sales-engineering:mc:4ec0d16c7a",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "If a prospect says 'We are going to build this in-house', the strongest counter-argument usually focuses on:",
+   "opts": [
+    "Your superior UI design",
+    "The hidden costs of maintenance and the opportunity cost of their engineers' time",
+    "The programming language you use",
+    "Your 24/7 support SLA"
+   ],
+   "ans": 1,
+   "exp": "The 'build vs buy' debate almost always comes down to the total cost of ownership (TCO) and opportunity cost. Engineers should be building core business value, not undifferentiated infrastructure.",
+   "domain": "",
+   "module": "Module 3: Handling the Hostile CTO",
+   "topic": "The 'Build vs Buy' Trap"
+  },
+  {
+   "id": "sales-engineering:mc:fbab994166",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "When a prospect asks 'How are you better than Competitor X?', what is the most strategic approach?",
+   "opts": [
+    "List all the features Competitor X lacks",
+    "Trash talk the competitor's customer support",
+    "Focus on the unique value your solution provides that aligns with the prospect's specific priorities discovered earlier",
+    "Say you are exactly the same but cheaper"
+   ],
+   "ans": 2,
+   "exp": "Feature bashing is weak. The best approach is to reframe the conversation around the unique value you provide that solves the specific problems you identified during discovery.",
+   "domain": "",
+   "module": "Module 4: The Art of the Demo",
+   "topic": "Discovery First, Always"
+  },
+  {
+   "id": "sales-engineering:mc:2fff581482",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What is a 'Trap Question' in competitive selling?",
+   "opts": [
+    "A question you ask the prospect that highlights a competitor's weakness, framing it as a crucial requirement",
+    "A trick question to test if the prospect is lying",
+    "A question about budget disguised as a technical question",
+    "A legal question about contract terms"
+   ],
+   "ans": 0,
+   "exp": "A trap question is designed to make the prospect value a feature or capability that you have and the competitor lacks, without explicitly bashing the competitor.",
+   "domain": "",
+   "module": "Module 4: The Art of the Demo",
+   "topic": "Discovery First, Always"
+  },
+  {
+   "id": "sales-engineering:mc:71bed745dd",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "If a competitor is significantly cheaper, how should you defend your price?",
+   "opts": [
+    "Match their price immediately to win the deal",
+    "Justify the price by demonstrating a higher Total Cost of Ownership (TCO) or superior ROI for your solution",
+    "Offer free training to compensate",
+    "Tell the prospect they get what they pay for"
+   ],
+   "ans": 1,
+   "exp": "Value selling is about proving ROI. If you cost 2x more but generate 10x more value or save 5x more money over time, your solution is actually 'cheaper' in terms of ROI.",
+   "domain": "",
+   "module": "Module 4: The Art of the Demo",
+   "topic": "Discovery First, Always"
+  },
+  {
+   "id": "sales-engineering:mc:1f54147d02",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "What does the term 'Mutual Action Plan' (MAP) refer to?",
+   "opts": [
+    "A legal contract governing the partnership",
+    "A shared document outlining all steps, responsibilities, and timelines required to go live by a specific date",
+    "A marketing agreement for joint press releases",
+    "A discount schedule based on volume"
+   ],
+   "ans": 1,
+   "exp": "A MAP (or Close Plan) is a collaborative document that aligns the buyer and seller on exactly what needs to happen to achieve the customer's desired go-live date.",
+   "domain": "",
+   "module": "Module 5: SE Career Portfolio Guidance",
+   "topic": "The SE Mindset Shift"
+  },
+  {
+   "id": "sales-engineering:mc:3d706e1e6b",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "In negotiation, what does it mean to 'Give to Get'?",
+   "opts": [
+    "Give a discount to get the signature today",
+    "Never make a concession without asking for something of equal or greater value in return",
+    "Give free services to get a case study",
+    "Give up on the deal to get your time back"
+   ],
+   "ans": 1,
+   "exp": "This is a fundamental rule of negotiation. If you give a 10% discount, you must ask for something in return, like a multi-year commitment, payment upfront, or a case study.",
+   "domain": "",
+   "module": "Module 5: SE Career Portfolio Guidance",
+   "topic": "The SE Mindset Shift"
+  },
+  {
+   "id": "sales-engineering:mc:7129824000",
+   "kind": "mc",
+   "source": "lesson",
+   "q": "Which of the following is considered a 'Closing Question'?",
+   "opts": [
+    "What is your timeline?",
+    "Who else needs to review this?",
+    "Are there any other questions I can answer?",
+    "If we can agree on these terms today, are you ready to sign the contract?"
+   ],
+   "ans": 3,
+   "exp": "A closing question explicitly asks for the business or a firm commitment to move forward based on agreed-upon conditions.",
+   "domain": "",
+   "module": "Module 5: SE Career Portfolio Guidance",
+   "topic": "The SE Mindset Shift"
+  },
+  {
+   "id": "sales-engineering:fc:d26c3a1c72",
+   "kind": "flash",
+   "q": "Sales Scenario 6: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:a9ede6945f",
+   "kind": "flash",
+   "q": "Sales Scenario 7: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:2a9ad8781f",
+   "kind": "flash",
+   "q": "Sales Scenario 8: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:5476fdf99f",
+   "kind": "flash",
+   "q": "Sales Scenario 9: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:02b20bb204",
+   "kind": "flash",
+   "q": "Sales Scenario 10: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:f37ef1bcb6",
+   "kind": "flash",
+   "q": "Sales Scenario 11: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:06b351fcdb",
+   "kind": "flash",
+   "q": "Sales Scenario 12: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:821a132d4b",
+   "kind": "flash",
+   "q": "Sales Scenario 13: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:2e33527225",
+   "kind": "flash",
+   "q": "Sales Scenario 14: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:beda1355a6",
+   "kind": "flash",
+   "q": "Sales Scenario 15: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:99e4a52eae",
+   "kind": "flash",
+   "q": "Sales Scenario 16: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:f38104c789",
+   "kind": "flash",
+   "q": "Sales Scenario 17: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:a03158fcd6",
+   "kind": "flash",
+   "q": "Sales Scenario 18: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:36d7d7ad5e",
+   "kind": "flash",
+   "q": "Sales Scenario 19: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  },
+  {
+   "id": "sales-engineering:fc:23d238a16e",
+   "kind": "flash",
+   "q": "Sales Scenario 20: You are pitching to a CFO and they say your price is 20% higher than the competitor. What is your immediate response?",
+   "back": "You do not offer a discount. You pivot to Total Cost of Ownership (TCO). \"Our upfront cost is higher, but the competitor requires 2 full-time engineers to maintain their on-prem agent. That's $300k/year hidden cost.\"",
+   "analogy": "Trading: Don't just look at the premium on the option, look at the implied volatility and the underlying risk.",
+   "domain": "",
+   "module": ""
+  }
+ ]
+}
