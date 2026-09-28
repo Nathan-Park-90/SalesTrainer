@@ -9,7 +9,7 @@
  * get whatever was last cached. Bump CACHE_NAME on any app-shell file list
  * change so old caches get cleaned up on the next visit.
  */
-const CACHE_NAME = 'mammoth-academy-v1';
+const CACHE_NAME = 'mammoth-academy-v2';   // v2: Sep 28, 2026 deploy (Sep 3 content fixes)
 
 const APP_SHELL = [
   'index.html',
