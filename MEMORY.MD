@@ -193,3 +193,16 @@ One Markdown transcript per module (47, one per `courses/*.js` module — regene
 - Phase 2 in-app: XP/levels from correct answers (incl. Discord/voice), sounds/confetti, rival, cross-device sync
   (needs the academy's hosting details from Nathan).
 - Set a target exam date for AWS SAA-C03 and put it on the family calendar.
+
+## Hosting (Sep 29, 2026)
+- **New home: `academy.mammothcapital.site`**, served from Nathan's home server. `www/` is copied to
+  the server and served by the portfolio's web server; see `Desktop\Code\MammothCapitalSite\CLAUDE.md`
+  + `nginx/portfolio.conf`. **Re-copy `www/` after every app change:**
+  (deploy command: private notes, "Mammoth Academy operations")
+  (bump `CACHE_NAME` in `sw.js` so installed copies update).
+- The subdomain goes live once the Cloudflare wildcard route `*.mammothcapital.site` exists. Until then the old host
+  **learncenter.online** (on a *second* Hostinger account/plan that Nathan manages) still serves the app. That domain
+  (GoDaddy) **expires Nov 23, 2026**: move everything before then and let it lapse.
+- Case study: `https://mammothcapital.site/academy`.
+- Git: this repo's remote is `SalesTrainer` and it's **4 commits ahead and unpushed**. `Code/CompTIAplus` is another
+  clone of the same repo that has diverged (2 commits). Ask Nathan which is canonical before pushing either.
