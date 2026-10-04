@@ -8,7 +8,7 @@ To defeat inertia and "lazy downtime" by bringing the study material directly to
 ## 🏗️ Phase 1: The Content Bridge
 First, FamilyOS needs to be able to read the Mammoth Academy course material.
 *   **The Script:** We will build a new Python module in `FamilyOS/` (e.g., `mammoth_bridge.py`).
-*   **The Data:** This script will securely access `C:\Users\Nate\Desktop\Code\MammothAcademy\www\courses\` (since both reside on your local network/machine).
+*   **The Data:** This script will securely access `C:\Users\Nate\Desktop\Code\Mammoth\MammothAcademy\www\courses\` (since both reside on your local network/machine).
 *   **The Parser:** It will parse the raw JavaScript course files (`aws-saa-c03.js`, etc.) and extract the flashcards and exam questions into a format the LLM can easily read.
 
 ## 🤖 Phase 2: The Discord Ambush (Modifying FamilyOS)

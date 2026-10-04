@@ -186,7 +186,7 @@ One Markdown transcript per module (47, one per `courses/*.js` module — regene
   heartbeat ambushes (ping limits), multiple-choice reactions instead of LLM-graded free text, and the XP sync
   needs a real host.
 - **Progress is per-browser localStorage**, so phone/PC progress differ; cross-device sync is the prerequisite for
-  the XP layer. `Code/CompTIAplus/` is an exact copy of this repo (same git HEAD) - ask Nathan before touching it.
+  the XP layer. `Code/Mammoth/CompTIAplus/` is an exact copy of this repo (same git HEAD) - ask Nathan before touching it.
 
 ## Next (not built yet)
 - "Hey Jake, quiz me" by voice (kiosk / voice page) using the same bank + study_coach.
@@ -196,7 +196,7 @@ One Markdown transcript per module (47, one per `courses/*.js` module — regene
 
 ## Hosting (Sep 29, 2026)
 - **New home: `academy.mammothcapital.site`**, served from Nathan's home server. `www/` is copied to
-  the server and served by the portfolio's web server; see `Desktop\Code\MammothCapitalSite\CLAUDE.md`
+  the server and served by the portfolio's web server; see `Desktop\Code\Mammoth\MammothCapitalSite\CLAUDE.md`
   + `nginx/portfolio.conf`. **Re-copy `www/` after every app change:**
   (deploy command: private notes, "Mammoth Academy operations")
   (bump `CACHE_NAME` in `sw.js` so installed copies update).
@@ -204,5 +204,5 @@ One Markdown transcript per module (47, one per `courses/*.js` module — regene
   **learncenter.online** (on a *second* Hostinger account/plan that Nathan manages) still serves the app. That domain
   (GoDaddy) **expires Nov 23, 2026**: move everything before then and let it lapse.
 - Case study: `https://mammothcapital.site/academy`.
-- Git: this repo's remote is `SalesTrainer` and it's **4 commits ahead and unpushed**. `Code/CompTIAplus` is another
+- Git: this repo's remote is `SalesTrainer` and it's **4 commits ahead and unpushed**. `Code/Mammoth/CompTIAplus` is another
   clone of the same repo that has diverged (2 commits). Ask Nathan which is canonical before pushing either.
