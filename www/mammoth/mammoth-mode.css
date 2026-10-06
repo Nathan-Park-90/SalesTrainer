@@ -1,0 +1,133 @@
+/* Mammoth mode: the hidden retro theme (see mammoth-mode.js). Everything here applies only with html[data-mammoth].
+   Same palette and type as Fortkeep's Mammoth theme:
+     navy #1D2B53 · deep #0F1733 · edge #2B3C70 · field #5A6FB5 · cream #FFF1E8 · mute #A9B1D3
+     orange #FFA300 · yellow #FFEC27 · blue #29ADFF · red #FF004D · green #00E436 · plum #7E2553
+   Type: Atkinson for reading, Pixelify for buttons and numbers, Silkscreen only for short labels (it gets hard to read
+   past two or three words). Keep small text at 11px or more. Source of truth: MammothCapitalSite/site/mammoth/. */
+@font-face{font-family:MM Atkinson;src:url(fonts/atkinson.woff2) format('woff2');font-weight:200 800;font-display:swap}
+@font-face{font-family:MM Pixelify;src:url(fonts/pixelify.woff2) format('woff2');font-weight:400 700;font-display:swap}
+@font-face{font-family:MM Silkscreen;src:url(fonts/silkscreen.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:MM Silkscreen;src:url(fonts/silkscreen-bold.woff2) format('woff2');font-weight:700;font-display:swap}
+
+/* ---------- always on: the toast and the settings switch */
+#mm-toast{position:fixed;left:50%;bottom:24px;z-index:2147483647;transform:translate(-50%,160%);transition:transform .25s steps(4);
+  background:#0F1733;color:#FFF1E8;border:3px solid #000;box-shadow:4px 4px 0 #000,inset 0 0 0 2px #FFA300;padding:12px 18px;
+  font:400 14px/1.4 'MM Atkinson',system-ui,sans-serif;text-align:center;max-width:calc(100vw - 32px);pointer-events:none}
+#mm-toast.show{transform:translate(-50%,0)}
+#mm-toast b{display:block;font:700 14px 'MM Silkscreen',monospace;color:#FFEC27;letter-spacing:.04em}
+#mm-toast span{display:block;font-size:13px;color:#A9B1D3;margin-top:2px}
+[data-mammoth-setting][hidden]{display:none!important}
+.mm-switch:not([class*=" "]){font:700 13px system-ui,sans-serif;padding:7px 12px;border:1px solid currentColor;border-radius:8px;background:transparent;color:inherit;cursor:pointer}
+@media (prefers-reduced-motion:reduce){#mm-toast{transition:none}}
+
+/* ---------- the base layer: every site */
+html[data-mammoth]{color-scheme:dark;
+  --mm-navy:#1D2B53;--mm-deep:#0F1733;--mm-edge:#2B3C70;--mm-field:#5A6FB5;--mm-ink:#FFF1E8;--mm-mute:#A9B1D3;
+  --mm-orange:#FFA300;--mm-yellow:#FFEC27;--mm-blue:#29ADFF;--mm-red:#FF004D;--mm-green:#00E436;--mm-plum:#7E2553;
+  --mm-read:'MM Atkinson',system-ui,sans-serif;--mm-pixel:'MM Pixelify',monospace;--mm-label:'MM Silkscreen',monospace;
+  --mm-shadow:4px 4px 0 #000;background:#1D2B53}
+html[data-mammoth] body{background:#1D2B53 linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/100% 4px!important;
+  color:#FFF1E8;font-family:var(--mm-read)!important}
+html[data-mammoth] :is(h1,h2,h3,h4){font-family:var(--mm-read)!important;font-weight:800!important;letter-spacing:0!important}
+html[data-mammoth] :is(button,.btn,.button,input[type=submit],input[type=button],[role=button]){font-family:var(--mm-pixel)!important;letter-spacing:.02em}
+html[data-mammoth] :is(code,pre,kbd,samp,.mono){font-family:var(--mm-pixel)!important}
+html[data-mammoth] *:not(.mm-keep-round){border-radius:0!important}
+html[data-mammoth] :is(input:not([type=checkbox],[type=radio],[type=range],[type=color],[type=submit],[type=button]),textarea,select){background:#0F1733!important;color:#FFF1E8!important;border:3px solid #5A6FB5!important}
+html[data-mammoth] :is(input,textarea)::placeholder{color:#8794C4!important}
+html[data-mammoth] :focus-visible{outline:3px solid #FFEC27!important;outline-offset:2px}
+html[data-mammoth] ::selection{background:#FFA300;color:#1D2B53}
+html[data-mammoth] input[type=checkbox],html[data-mammoth] input[type=radio]{accent-color:#FFA300}
+html[data-mammoth] .mm-switch.active,html[data-mammoth] .mm-switch[aria-pressed=true]{color:#FFEC27}
+
+/* shared pieces the per-site blocks reuse */
+html[data-mammoth] .mm-card{background:#0F1733!important;border:3px solid #000!important;box-shadow:4px 4px 0 #000,inset 0 0 0 2px #2B3C70!important}
+
+/* ---------- Tailwind dark surfaces (Oracle, Kempo and others built with Tailwind) */
+html[data-mammoth] :is(.bg-slate-950,.bg-gray-950,.bg-zinc-950,.bg-black,.bg-oracle-bg){background-color:#1D2B53!important}
+html[data-mammoth] :is(.bg-slate-900,.bg-gray-900,.bg-zinc-900,.bg-neutral-900){background-color:#0F1733!important}
+html[data-mammoth] :is(.bg-slate-900\/50,.bg-slate-900\/60,.bg-slate-900\/80,.bg-slate-950\/80,.bg-slate-950\/90){background-color:rgba(15,23,51,.85)!important}
+html[data-mammoth] :is(.bg-slate-800,.bg-gray-800,.bg-zinc-800){background-color:#16224A!important}
+html[data-mammoth] :is(.bg-slate-800\/40,.bg-slate-800\/50,.bg-slate-800\/60){background-color:rgba(43,60,112,.55)!important}
+html[data-mammoth] :is(.bg-slate-700,.bg-gray-700){background-color:#2B3C70!important}
+html[data-mammoth] :is(.border-slate-800,.border-slate-900,.border-gray-800,.border-zinc-800,[class*="border-slate-800\/"],[class*="border-white\/"]){border-color:#2B3C70!important}
+html[data-mammoth] :is(.text-slate-400,.text-gray-400,.text-zinc-400){color:#A9B1D3!important}
+html[data-mammoth] :is(.text-slate-500,.text-gray-500,.text-zinc-500,.text-slate-600,.text-gray-600){color:#8794C4!important}
+html[data-mammoth] :is(.text-cyan-400,.text-cyan-300){color:#29ADFF!important}
+html[data-mammoth] :is(.text-amber-400,.text-amber-500,.text-yellow-400){color:#FFEC27!important}
+
+/* ---------- portfolio: mammothcapital.site (its four themes are CSS variables; Mammoth replaces them) */
+html[data-mammoth][data-mm-site=portfolio]{--bg:#1D2B53;--surface:#0F1733;--surface2:#16224A;--border:#2B3C70;--text:#FFF1E8;--muted:#A9B1D3;
+  --accent:#FFA300;--accent-h:#FFEC27;--accent2:#29ADFF;--danger:#FF004D;--up:#00E436;--down:#FF004D;--pill-bg:rgba(255,163,0,.14);
+  --pill-border:#FFA300;--card-bg:#0F1733;--card-border:#000;--nav-bg:#0F1733}
+html[data-mammoth][data-mm-site=portfolio] .nav{border-bottom:4px solid #000!important;backdrop-filter:none!important}
+html[data-mammoth][data-mm-site=portfolio] .noise{display:none}
+html[data-mammoth][data-mm-site=portfolio] :is(.bento-card,.project-card,.contact-card,.cs-kpi,.mini-card,.dir-item,.flagship,.lane,.quote,.diagram-wrap,.resume-doc){
+  border:3px solid #000!important;box-shadow:4px 4px 0 #000,inset 0 0 0 2px #2B3C70!important}
+html[data-mammoth][data-mm-site=portfolio] .btn{border:3px solid #000!important;box-shadow:4px 4px 0 #000;font-size:15px}
+html[data-mammoth][data-mm-site=portfolio] .btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #000}
+html[data-mammoth][data-mm-site=portfolio] .btn-primary{background:#FFA300!important;color:#1D2B53!important}
+html[data-mammoth][data-mm-site=portfolio] .btn-ghost{background:#0F1733!important;color:#FFF1E8!important}
+html[data-mammoth][data-mm-site=portfolio] .hero-name{text-shadow:4px 4px 0 #7E2553}
+html[data-mammoth][data-mm-site=portfolio] :is(.stat-num,.big-num,.cs-kpi b){font-family:var(--mm-pixel)!important;color:#FFEC27!important}
+html[data-mammoth][data-mm-site=portfolio] :is(.section-label,.hero-tag,.stat-label,.card-tag,.pill,.project-tag,.contact-label,.theme-label,.crumb){
+  font-family:var(--mm-label)!important;font-size:11px!important;letter-spacing:.04em!important}
+html[data-mammoth][data-mm-site=portfolio] :is(.ticker,.hero-sub,.mono){font-family:var(--mm-pixel)!important}
+html[data-mammoth][data-mm-site=portfolio] .theme-btn.mm-switch{color:#FFEC27}
+html[data-mammoth][data-mm-site=portfolio] .theme-btn.active:not(.mm-switch){background:transparent!important;border-color:var(--border)!important;color:var(--muted)!important}
+
+/* ---------- Papa Park's: papaparks.mammothcapital.site (warm paper menu card → navy arcade menu) */
+html[data-mammoth][data-mm-site=papaparks]{--ink:#FFF1E8;--ink-soft:#A9B1D3;--ink-faint:#8794C4;--paper:#1D2B53;--card:#0F1733;--white:#0F1733;
+  --ember:#FFA300;--ember-dark:#FFA300;--mustard:#FFEC27;--mustard-soft:rgba(255,236,39,.14);--sage:#00E436;--line:#2B3C70;--good:#00E436;
+  --display:'MM Atkinson',system-ui,sans-serif;--body:'MM Atkinson',system-ui,sans-serif;--grain:none}
+html[data-mammoth][data-mm-site=papaparks] .top{background:#0F1733!important;border-bottom:4px solid #000!important;backdrop-filter:none!important}
+/* blocks painted with the dark ink (cream in Mammoth mode) go deep navy instead */
+html[data-mammoth][data-mm-site=papaparks] :is(.tally,.tag.new,.top .btn.small,.band[style*="--ink"]){background:#0F1733!important;color:#FFF1E8!important}
+html[data-mammoth][data-mm-site=papaparks] .band[style*="--ink"] p{color:#A9B1D3!important}
+html[data-mammoth][data-mm-site=papaparks] .band:not([style*="--ink"]),html[data-mammoth][data-mm-site=papaparks] .band:not([style*="--ink"]) :is(p,h2,.eyebrow){color:#1D2B53!important;opacity:1!important}
+html[data-mammoth][data-mm-site=papaparks] .empty{background:rgba(15,23,51,.7)!important;border:3px dashed #5A6FB5!important}
+html[data-mammoth][data-mm-site=papaparks] .empty p{color:#A9B1D3!important}
+html[data-mammoth][data-mm-site=papaparks] .tag{background:rgba(255,236,39,.14);color:#FFEC27}
+html[data-mammoth][data-mm-site=papaparks] .tag.spicy{background:rgba(255,0,77,.18);color:#FF7A9C}
+html[data-mammoth][data-mm-site=papaparks] .tag.vegetarian{background:rgba(0,228,54,.14);color:#00E436}
+html[data-mammoth][data-mm-site=papaparks] .live.on{color:#00E436}html[data-mammoth][data-mm-site=papaparks] .live.on i{background:#00E436}
+html[data-mammoth][data-mm-site=papaparks] :is(.status,.menucard,.quote,.thanks,.tally,.band,.facts div){border:3px solid #000!important;box-shadow:4px 4px 0 #000,inset 0 0 0 2px #2B3C70!important}
+html[data-mammoth][data-mm-site=papaparks] .btn{border:3px solid #000!important;box-shadow:4px 4px 0 #000!important}
+html[data-mammoth][data-mm-site=papaparks] .btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #000!important}
+html[data-mammoth][data-mm-site=papaparks] .btn.primary{color:#1D2B53!important}
+html[data-mammoth][data-mm-site=papaparks] .band .btn.primary{background:#1D2B53!important;color:#FFEC27!important}
+html[data-mammoth][data-mm-site=papaparks] .badge{color:#1D2B53}
+html[data-mammoth][data-mm-site=papaparks] .eyebrow{font-family:var(--mm-label)!important;font-size:11px!important;letter-spacing:.04em!important}
+
+/* ---------- Mammoth Academy: academy.mammothcapital.site */
+html[data-mammoth][data-mm-site=academy]{--bg-base:#1D2B53;--bg-card:#0F1733;--bg-card-hover:#16224A;--text-main:#FFF1E8;--text-muted:#A9B1D3;
+  --accent-primary:#FFA300;--accent-secondary:#29ADFF;--accent-success:#00E436;--accent-warning:#FFEC27;--accent-danger:#FF004D;
+  --font-heading:'MM Atkinson',system-ui,sans-serif;--font-mono:'MM Pixelify',monospace;--font-ui:'MM Atkinson',system-ui,sans-serif;
+  --glass-bg:#0F1733;--glass-border:#2B3C70;--shadow-soft:4px 4px 0 #000;--shadow-glow:4px 4px 0 #000}
+
+/* ---------- OmniData: omnidata.mammothcapital.site (neon terminal → arcade) */
+html[data-mammoth][data-mm-site=omnidata]{--bg-color:#1D2B53;--bg-scanline:rgba(255,255,255,.035);--panel-bg:#0F1733;--panel-border:#2B3C70;
+  --panel-border-bright:#FFA300;--text-main:#FFF1E8;--text-muted:#A9B1D3;--neon-bull:#00E436;--neon-bull-glow:transparent;--neon-bear:#FF004D;
+  --neon-bear-glow:transparent;--neon-neutral:#FFEC27;--neon-neutral-glow:transparent;--neon-info:#29ADFF;--neon-info-glow:transparent;
+  --neon-mammoth:#FFA300;--neon-mammoth-glow:transparent}
+html[data-mammoth][data-mm-site=omnidata] body::after{display:none}
+
+/* ---------- Pulse: pulse.mammothcapital.site (Tailwind with fixed hex colours) */
+html[data-mammoth][data-mm-site=pulse] :is(.bg-\[\#020408\],.bg-\[\#05070a\],.bg-\[\#0b0e14\],.bg-\[\#0b0c10\]){background-color:#1D2B53!important}
+html[data-mammoth][data-mm-site=pulse] :is([class*="bg-\[\#0b0e14\]\/"],[class*="bg-\[\#0b0c10\]\/"],.bg-\[\#161b22\]){background-color:#0F1733!important}
+html[data-mammoth][data-mm-site=pulse] [class*="bg-\[\#161b22\]\/"]{background-color:rgba(43,60,112,.45)!important}
+html[data-mammoth][data-mm-site=pulse] .bg-\[\#ff8c00\]{background-color:#FFA300!important}
+html[data-mammoth][data-mm-site=pulse] .text-\[\#ff8c00\]{color:#FFA300!important}
+
+/* ---------- Kempo: kempo.mammothcapital.site (gold on midnight → yellow on navy) */
+html[data-mammoth][data-mm-site=kempo] .bg-\[\#050a14\]{background-color:#1D2B53!important}
+html[data-mammoth][data-mm-site=kempo] .glass{background:#0F1733!important;backdrop-filter:none!important;border:3px solid #000!important;box-shadow:4px 4px 0 #000,inset 0 0 0 2px #2B3C70}
+
+/* ---------- Park Family OS (tailnet only; Tailwind zinc surfaces) */
+html[data-mammoth][data-mm-site=family] :is(.bg-\[\#09090b\],.bg-zinc-950,[class*="bg-\[\#09090b\]\/"],[class*="bg-zinc-950\/"]){background-color:#1D2B53!important}
+html[data-mammoth][data-mm-site=family] :is(.bg-\[\#18181b\],.bg-\[\#1f1f22\],.bg-zinc-900,[class*="bg-\[\#18181b\]\/"],[class*="bg-\[\#1f1f22\]\/"],[class*="bg-zinc-900\/"]){background-color:#0F1733!important;background-image:none!important}
+html[data-mammoth][data-mm-site=family] :is(.bg-zinc-800,.bg-\[\#27272a\],[class*="bg-zinc-800\/"]){background-color:#16224A!important}
+html[data-mammoth][data-mm-site=family] :is(.bg-zinc-700,[class*="bg-zinc-700\/"]){background-color:#2B3C70!important}
+html[data-mammoth][data-mm-site=family] :is([class*="border-white\/"],.border-zinc-800,.border-zinc-700,.border-\[\#27272a\]){border-color:#2B3C70!important}
+html[data-mammoth][data-mm-site=family] :is(.text-zinc-400,.text-zinc-500){color:#A9B1D3!important}
+html[data-mammoth][data-mm-site=family] .backdrop-blur-xl{backdrop-filter:none!important}
+html[data-mammoth][data-mm-site=family] input.bg-transparent{background:transparent!important;border:0!important;border-bottom:2px dotted #2B3C70!important}
