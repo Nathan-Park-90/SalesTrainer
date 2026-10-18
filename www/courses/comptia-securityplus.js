@@ -477,7 +477,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "While AV or MFA might have stopped the initial compromise, the lack of network segmentation (a flat network) is the architectural failure that allowed the malware to spread laterally without friction.",
-      "domain": "Security Architecture"
+      "domain": "Security Architecture",
+      "whyWrong": [
+        "",
+        "Multi-Factor Authentication protects initial user login, not peer-to-peer lateral movement over SMB after a workstation on a flat subnet is already compromised.",
+        "Outdated antivirus signatures are an endpoint control failure on individual hosts, not the network architecture flaw that permitted unrestricted east-west SMB traffic.",
+        "Insufficient switch bandwidth would slow network throughput, not allow ransomware to propagate freely between workstations."
+      ]
     },
     {
       "q": "A company requires employees to insert a smart card and scan their fingerprint to enter the server room. Which authentication factors are being used?",
@@ -489,7 +495,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 2,
       "exp": "A smart card is a physical token ('Something you have'), and a fingerprint is a biometric identifier ('Something you are').",
-      "domain": "General Security Concepts"
+      "domain": "General Security Concepts",
+      "whyWrong": [
+        "Something you know refers to a password or PIN, which is not required here; a smart card is a physical possession factor ('something you have').",
+        "While a smart card is 'something you have,' a fingerprint is a biometric trait ('something you are'), not a knowledge factor ('something you know').",
+        "",
+        "Somewhere you are refers to geolocation or IP/GPS location checks, whereas a smart card is a physical possession factor ('something you have')."
+      ]
     },
     {
       "q": "A Chief Information Security Officer (CISO) is defining the access control model for a new HR application. The requirement states that access must be granted based on the user's department, clearance level, and the time of day. Which of the following access control models is the BEST fit?",
@@ -501,7 +513,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 3,
       "exp": "ABAC grants access based on a combination of attributes, such as user role, time of day, location, and device status. RBAC only looks at the user's role.",
-      "domain": "General Security Concepts"
+      "domain": "General Security Concepts",
+      "whyWrong": [
+        "Role-Based Access Control (RBAC) assigns permissions strictly by job role or group membership and cannot evaluate dynamic context like time of day.",
+        "Discretionary Access Control (DAC) lets each resource owner decide who gets access (like standard file permissions), rather than enforcing multi-attribute policies.",
+        "Mandatory Access Control (MAC) enforces rigid clearance labels (like Top Secret) set by a central authority, without evaluating dynamic environmental attributes like time of day.",
+        ""
+      ]
     },
     {
       "q": "Which cryptographic concept ensures that a sender cannot later deny having sent a specific message?",
@@ -513,7 +531,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 2,
       "exp": "Non-repudiation (often achieved via digital signatures) proves that a specific user sent a message and prevents them from denying it later.",
-      "domain": "General Security Concepts"
+      "domain": "General Security Concepts",
+      "whyWrong": [
+        "Confidentiality ensures unauthorized parties cannot read data (via encryption), without proving who sent the message.",
+        "Integrity proves that a message was not altered in transit (via hashing), but a plain hash alone does not bind the message to a specific sender's identity.",
+        "",
+        "Obfuscation makes code or data harder for humans to read and reverse-engineer, offering no cryptographic proof of origin."
+      ]
     },
     {
       "q": "An organization wants to securely exchange encryption keys over an untrusted network (the internet) without physically sending the keys. Which algorithm is BEST suited for this task?",
@@ -525,7 +549,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 2,
       "exp": "Diffie-Hellman is a key exchange protocol specifically designed to allow two parties to establish a shared secret key over an insecure channel.",
-      "domain": "General Security Concepts"
+      "domain": "General Security Concepts",
+      "whyWrong": [
+        "AES-256 is a symmetric block cipher that requires both parties to already share the secret key; it cannot establish that key over an untrusted channel by itself.",
+        "While RSA can encrypt a key transport payload, Diffie-Hellman is the dedicated key-agreement algorithm designed for two parties to derive a shared secret without ever transmitting the key.",
+        "",
+        "SHA-256 is a one-way cryptographic hashing algorithm used for integrity verification, not key exchange or encryption."
+      ]
     },
     {
       "q": "A security analyst notices a spike in CPU usage on several web servers. Upon investigation, they discover unauthorized cryptocurrency mining software running on the servers. What type of attack has occurred?",
@@ -537,7 +567,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "Cryptojacking involves unauthorized use of a victim's computing resources to mine cryptocurrency.",
-      "domain": "Threats, Vulnerabilities, and Mitigations"
+      "domain": "Threats, Vulnerabilities, and Mitigations",
+      "whyWrong": [
+        "Ransomware encrypts files and demands extortion payment to restore access, rather than silently hijacking CPU cycles to mine cryptocurrency.",
+        "",
+        "A logic bomb is dormant malicious code that detonates only when a specific trigger condition (like a date or user deletion) occurs.",
+        "A rootkit is stealth malware that hides processes and files at the OS kernel or firmware level, not the act of mining cryptocurrency on stolen compute."
+      ]
     },
     {
       "q": "A user receives an email that appears to be from their bank, stating their account has been compromised and providing a link to 'reset their password.' The link directs the user to a fake website. What type of attack is this?",
@@ -549,7 +585,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "Phishing is a broad social engineering attack via email designed to trick users into providing credentials or sensitive info. Spear phishing targets specific individuals, while whaling targets executives.",
-      "domain": "Threats, Vulnerabilities, and Mitigations"
+      "domain": "Threats, Vulnerabilities, and Mitigations",
+      "whyWrong": [
+        "",
+        "Spear phishing uses researched, personalized details targeting a specific individual or group, whereas a generic fake bank alert is standard mass phishing.",
+        "Whaling is a targeted spear-phishing attack aimed specifically at C-level executives or senior leadership.",
+        "Vishing (voice phishing) is conducted over phone calls or voicemail rather than via email links."
+      ]
     },
     {
       "q": "An attacker intercepts communication between a client and a web server, downgrades the encryption protocol to an older, vulnerable version, and captures the plaintext data. What type of attack is this?",
@@ -561,7 +603,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "An on-path (formerly Man-in-the-Middle) attack occurs when an attacker intercepts and alters communication between two parties, such as forcing a protocol downgrade.",
-      "domain": "Threats, Vulnerabilities, and Mitigations"
+      "domain": "Threats, Vulnerabilities, and Mitigations",
+      "whyWrong": [
+        "",
+        "A replay attack passively captures a valid authentication token or packet and retransmits it later without actively negotiating a protocol downgrade between the two endpoints.",
+        "Pass-the-Hash reuses a stolen NTLM/LM password hash to authenticate laterally on a network without cracking the plaintext password.",
+        "Cross-Site Scripting (XSS) injects malicious client-side scripts into web pages viewed by other users, rather than intercepting and downgrading network transport encryption."
+      ]
     },
     {
       "q": "A threat actor inserts malicious code into an open-source library that is widely used by many enterprise applications. When organizations update the library, their systems become compromised. What type of attack is this?",
@@ -573,7 +621,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "A supply chain attack targets the software development lifecycle, compromising a vendor or dependency to infect all downstream users.",
-      "domain": "Threats, Vulnerabilities, and Mitigations"
+      "domain": "Threats, Vulnerabilities, and Mitigations",
+      "whyWrong": [
+        "A watering hole attack compromises a third-party website that target victims frequently visit in their browsers, rather than poisoning an upstream software dependency.",
+        "",
+        "A zero-day attack exploits a previously unknown vulnerability that has no vendor patch, rather than trojanizing a trusted software library update.",
+        "Cross-Site Request Forgery (CSRF) tricks a victim's authenticated browser into submitting an unwanted web request, not compromising an upstream code package."
+      ]
     },
     {
       "q": "Which of the following is the BEST mitigation against Pass-the-Hash (PtH) attacks in a Windows environment?",
@@ -585,7 +639,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "Pass-the-Hash exploits NTLM hashes. Disabling NTLM in favor of Kerberos (and utilizing features like Windows Defender Credential Guard) mitigates PtH.",
-      "domain": "Threats, Vulnerabilities, and Mitigations"
+      "domain": "Threats, Vulnerabilities, and Mitigations",
+      "whyWrong": [
+        "WPA3 secures wireless Layer 2 authentication and encryption against offline dictionary attacks, which does not stop NTLM hash reuse inside a Windows domain.",
+        "",
+        "A host-based firewall can restrict lateral SMB/RPC ports, but it does not fix the underlying vulnerability of NTLM accepting raw password hashes without salted tickets.",
+        "Pass-the-Hash uses built-in Windows authentication protocols and living-off-the-land tools that often bypass traditional signature-based antivirus."
+      ]
     },
     {
       "q": "A security assessment reveals that an application accepts user input without validation, allowing an attacker to execute arbitrary SQL commands on the backend database. What is the BEST remediation for this vulnerability?",
@@ -597,7 +657,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "While a WAF can block some attacks, the best and most fundamental remediation for SQL injection is using parameterized queries in the application code.",
-      "domain": "Threats, Vulnerabilities, and Mitigations"
+      "domain": "Threats, Vulnerabilities, and Mitigations",
+      "whyWrong": [
+        "A WAF provides a helpful defense-in-depth filter at the perimeter, but attackers can sometimes bypass WAF rules; parameterized queries fix the SQL injection flaw in the code itself.",
+        "",
+        "Encrypting the database at rest protects against physical disk theft, but the database engine transparently decrypts data for any SQL query executed by the application.",
+        "Multi-Factor Authentication strengthens user login, but an authenticated user (or a public login form itself) can still submit SQL injection payloads if queries aren't parameterized."
+      ]
     },
     {
       "q": "An attacker targets a company's DNS server and alters the records so that users trying to access the company's intranet are redirected to a malicious server. What is this attack called?",
@@ -609,7 +675,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "DNS Poisoning (or DNS Spoofing) corrupts the DNS cache to redirect traffic to a malicious IP address.",
-      "domain": "Threats, Vulnerabilities, and Mitigations"
+      "domain": "Threats, Vulnerabilities, and Mitigations",
+      "whyWrong": [
+        "",
+        "ARP spoofing sends forged Layer 2 ARP replies on a local subnet to map an IP to the attacker's MAC address, without modifying records on a DNS server.",
+        "Domain hijacking steals control of a public domain's registration at the registrar level, rather than corrupting records on an internal DNS server.",
+        "MAC flooding overwhelms a network switch's CAM table with fake source MAC addresses so the switch fails open like a hub."
+      ]
     },
     {
       "q": "An organization wants to allow third-party developers to access specific backend APIs without exposing the internal network or the raw API endpoints. Which architectural component should they deploy?",
@@ -621,7 +693,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 2,
       "exp": "An API Gateway sits between clients and services, providing API routing, rate limiting, authentication, and security without exposing the internal architecture.",
-      "domain": "Security Architecture"
+      "domain": "Security Architecture",
+      "whyWrong": [
+        "A generic reverse proxy forwards HTTP requests to backend servers, but lacks dedicated API management features like per-developer API keys, quota throttling, and schema validation.",
+        "A VPN grants network-level access to the internal subnet, which directly violates the requirement to keep the internal network unexposed to third-party developers.",
+        "",
+        "An IPS inspects network packets for known exploit signatures, rather than acting as a managed front door for authenticating, routing, and rate-limiting API calls."
+      ]
     },
     {
       "q": "Which of the following concepts describes a network architecture where micro-segmentation is used to enforce strict access controls between individual workloads in a data center?",
@@ -633,7 +711,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "Micro-segmentation is a core component of Zero Trust Architecture, ensuring that workloads can only communicate with authorized entities, even if they are on the same subnet.",
-      "domain": "Security Architecture"
+      "domain": "Security Architecture",
+      "whyWrong": [
+        "Software-Defined Networking (SDN) separates the network control plane from the forwarding plane; while SDN can help implement policies, the security model itself is Zero Trust.",
+        "",
+        "Defense in Depth layers multiple security controls (firewalls, EDR, MFA) across an enterprise, whereas enforcing granular workload-to-workload verification inside the data center defines Zero Trust.",
+        "Perimeter security ('castle-and-moat') trusts traffic once it passes the edge firewall, the exact opposite of workload micro-segmentation."
+      ]
     },
     {
       "q": "To ensure high availability of a critical web application, a company deploys three identical web servers behind a network appliance that distributes incoming traffic equally among them. What is this appliance?",
@@ -645,7 +729,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "A Load Balancer distributes incoming network traffic across multiple servers to ensure no single server becomes overwhelmed, providing high availability.",
-      "domain": "Security Architecture"
+      "domain": "Security Architecture",
+      "whyWrong": [
+        "",
+        "A Next-Generation Firewall (NGFW) performs deep packet inspection and application-aware filtering, not equal distribution of traffic across a server farm for high availability.",
+        "A Web Application Firewall (WAF) inspects HTTP traffic for Layer 7 attacks like SQLi and XSS, rather than balancing load across backend servers.",
+        "A VPN concentrator terminates multiple encrypted remote-access or site-to-site VPN tunnels, not public web traffic distribution."
+      ]
     },
     {
       "q": "A company is migrating to the cloud and wants to ensure that its encryption keys are managed in a dedicated, tamper-resistant hardware appliance rather than in software. Which cloud service should they use?",
@@ -657,7 +747,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "A Hardware Security Module (HSM) is a physical, tamper-resistant device used to securely generate, store, and manage cryptographic keys.",
-      "domain": "Security Architecture"
+      "domain": "Security Architecture",
+      "whyWrong": [
+        "",
+        "A Trusted Platform Module (TPM) is a crypto-processor chip soldered onto an endpoint's motherboard (used for local boot integrity and BitLocker), not a dedicated cloud key appliance.",
+        "A standard cloud Key Management Service (KMS) manages keys via multi-tenant software abstractions rather than giving the customer a dedicated hardware appliance.",
+        "A Cloud Access Security Broker (CASB) enforces visibility, DLP, and access policies between users and SaaS/cloud apps, not hardware cryptographic key storage."
+      ]
     },
     {
       "q": "Which of the following is the BEST reason to deploy a honeypot on a corporate network?",
@@ -669,7 +765,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "Honeypots are decoy systems designed to lure attackers. The primary purpose is to monitor them, study their tactics, and gather threat intelligence without risking production assets.",
-      "domain": "Security Architecture"
+      "domain": "Security Architecture",
+      "whyWrong": [
+        "A honeypot only interacts with attackers or worms that actively probe it; it does not quarantine or stop automated malware spreading across production hosts.",
+        "",
+        "Production traffic and attacks aimed at real servers still hit those servers unless redirected; a honeypot sits on unused IP space to observe intruders who probe it.",
+        "While observations from a honeypot can inform firewall rules, its core purpose is intelligence gathering and deception rather than acting as an inline blocker."
+      ]
     },
     {
       "q": "A security analyst is reviewing SIEM logs and notices a workstation communicating with a known malicious IP address over port 443. What is the analyst's FIRST step in the incident response process?",
@@ -680,8 +782,14 @@ var COURSE_COMPTIA_SECURITYPLUS = {
         "Block the IP address on the perimeter firewall"
       ],
       "ans": 2,
-      "exp": "Before taking disruptive actions like isolating a machine or blocking IPs (Containment), the analyst must first Identify and verify the alert to ensure it isn't a false positive.",
-      "domain": "Security Operations"
+      "exp": "Before taking disruptive actions like isolating a machine or blocking IPs (Containment), the analyst must first analyze and verify the alert to ensure it isn't a false positive.",
+      "domain": "Security Operations",
+      "whyWrong": [
+        "Reimaging the workstation belongs to Eradication/Recovery and would destroy forensic evidence before confirming whether an incident even occurred.",
+        "Isolating the workstation is a Containment action taken only after Analysis confirms the SIEM alert is a true positive.",
+        "",
+        "Blocking the IP at the firewall is a Containment measure that comes after validating the alert during the Analysis step."
+      ]
     },
     {
       "q": "During a forensic investigation, an analyst creates a bit-by-bit copy of a compromised hard drive and calculates the SHA-256 hash of both the original drive and the copy. Why is this step performed?",
@@ -693,7 +801,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 2,
       "exp": "Hashing the original drive and the forensic image proves data integrity—verifying that the forensic copy is an exact, unaltered replica of the original evidence.",
-      "domain": "Security Operations"
+      "domain": "Security Operations",
+      "whyWrong": [
+        "SHA-256 is a one-way cryptographic hash function, not an encryption algorithm; it produces a fixed-length digest and does not encrypt the drive image.",
+        "Chain of custody is a documented paper/digital log tracking every person who handled the evidence when and why, whereas matching SHA-256 hashes prove the bits themselves didn't change.",
+        "",
+        "Calculating a SHA-256 digest does not compress or alter the size of the forensic image."
+      ]
     },
     {
       "q": "Which of the following vulnerability scanning concepts involves the scanner logging into the target system with administrative credentials to check for missing patches and misconfigurations?",
@@ -705,7 +819,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "A credentialed scan uses valid authentication credentials to log into the system, providing a deep, accurate assessment of vulnerabilities, missing patches, and registry keys.",
-      "domain": "Security Operations"
+      "domain": "Security Operations",
+      "whyWrong": [
+        "A non-credentialed scan only probes externally visible network ports and banners without logging into the host to inspect local patches or registry settings.",
+        "",
+        "Passive scanning sniffers monitor live network traffic without sending active probes or authenticating to target hosts.",
+        "Penetration testing actively exploits vulnerabilities to demonstrate real-world impact, rather than running an authenticated configuration and patch audit."
+      ]
     },
     {
       "q": "A company requires all privileged accounts to use a system where passwords are automatically rotated every 12 hours and checked out only when needed. What type of solution is this?",
@@ -717,7 +837,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "Privileged Access Management (PAM) solutions vault privileged credentials, enforce checkout processes, and automatically rotate passwords to secure administrative accounts.",
-      "domain": "Security Operations"
+      "domain": "Security Operations",
+      "whyWrong": [
+        "An Identity Provider (IdP) authenticates standard user identities and issues federation tokens (like SAML/OIDC), rather than vaulting and rotating temporary admin passwords.",
+        "",
+        "Single Sign-On (SSO) lets users log in once to access multiple applications, which is the opposite of checking out time-bound, auto-rotating privileged credentials.",
+        "Data Loss Prevention (DLP) inspects storage and network channels to stop sensitive data exfiltration, not administrative password checkout and rotation."
+      ]
     },
     {
       "q": "Which tool would a security analyst use to actively capture and analyze network packets traversing the network in real-time to diagnose a malicious payload?",
@@ -729,7 +855,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "Wireshark is a widely used protocol analyzer (packet sniffer) that captures and inspects network traffic in real-time.",
-      "domain": "Security Operations"
+      "domain": "Security Operations",
+      "whyWrong": [
+        "Nmap is an active network discovery and port-scanning tool used to enumerate open ports and OS fingerprints, not a full-packet protocol analyzer.",
+        "",
+        "Metasploit is an offensive exploitation framework used during penetration testing to deliver payloads, not to capture and dissect network traffic.",
+        "Nessus is an automated vulnerability scanner that checks hosts for known CVEs and misconfigurations, rather than capturing real-time packet captures."
+      ]
     },
     {
       "q": "An organization wants to automatically detect and block known malicious payloads entering the network. Which solution should they deploy at the perimeter?",
@@ -741,7 +873,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "An IPS sits inline on the network and actively blocks malicious traffic. An IDS only detects and alerts.",
-      "domain": "Security Operations"
+      "domain": "Security Operations",
+      "whyWrong": [
+        "An Intrusion Detection System (IDS) passively monitors mirrored traffic and generates alerts, but cannot block malicious packets inline.",
+        "",
+        "Data Loss Prevention (DLP) focuses on stopping sensitive internal data (like SSNs or credit cards) from leaving the organization, not blocking inbound exploit payloads.",
+        "Endpoint Detection and Response (EDR) runs as an agent on individual hosts (workstations/servers) rather than sitting inline at the network perimeter."
+      ]
     },
     {
       "q": "A user's laptop is stolen. The IT department uses a remote management tool to send a command that securely deletes all data on the hard drive. What is this action called?",
@@ -753,7 +891,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "A remote wipe sends a command to a lost or stolen device to securely erase its contents, protecting sensitive data.",
-      "domain": "Security Operations"
+      "domain": "Security Operations",
+      "whyWrong": [
+        "",
+        "Full disk encryption (like BitLocker) scrambles data at rest so it cannot be read without the key, but it is configured ahead of time and does not delete data remotely.",
+        "Geofencing defines a virtual geographic boundary that triggers alerts or policy changes when a device crosses it, rather than erasing the drive itself.",
+        "An MDM lockdown locks the screen or disables device functions remotely while keeping the data intact on the drive in case the laptop is recovered."
+      ]
     },
     {
       "q": "Which phase of the Incident Response lifecycle involves analyzing what went wrong, what went right, and how to improve procedures for the next incident?",
@@ -765,7 +909,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 3,
       "exp": "Lessons Learned is the final phase of incident response, focusing on the post-mortem analysis and process improvement.",
-      "domain": "Security Operations"
+      "domain": "Security Operations",
+      "whyWrong": [
+        "Preparation happens before an incident occurs—training staff, writing playbooks, and deploying monitoring tools.",
+        "Containment focuses on isolating affected systems during an active incident to stop the threat from spreading laterally.",
+        "Eradication removes the root cause (such as wiping malware and patching the exploited vulnerability) before restoring systems.",
+        ""
+      ]
     },
     {
       "q": "A security operations center (SOC) implements a script that automatically isolates a host from the network if the EDR detects ransomware behavior. What concept does this represent?",
@@ -777,7 +927,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "SOAR platforms automate security workflows and incident response actions, such as automatically isolating a compromised host based on specific triggers.",
-      "domain": "Security Operations"
+      "domain": "Security Operations",
+      "whyWrong": [
+        "Continuous Integration is a DevOps practice that automatically builds and tests code commits, not an automated SOC incident response workflow.",
+        "",
+        "Threat hunting is a proactive, human-driven search through logs and telemetry for hidden adversaries that evaded automated alerts.",
+        "Vulnerability management is the ongoing cycle of scanning for, prioritizing, and patching software flaws before they are exploited."
+      ]
     },
     {
       "q": "A company decides not to purchase earthquake insurance for its datacenter because the datacenter is located in an area with no history of seismic activity, making the risk negligible. Which risk management strategy is this?",
@@ -789,7 +945,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "Risk acceptance means acknowledging the risk but deciding not to take further action to mitigate or transfer it because the cost of mitigation outweighs the potential loss.",
-      "domain": "Security Program Management and Oversight"
+      "domain": "Security Program Management and Oversight",
+      "whyWrong": [
+        "",
+        "Risk transference shifts the financial burden of a loss to a third party—which is what buying the earthquake insurance policy would have been.",
+        "Risk avoidance eliminates the activity or exposure entirely (such as shutting down an unsafe service), rather than operating without insurance because the risk is low.",
+        "Risk mitigation implements technical or physical controls (like seismic rack bracing) to reduce the likelihood or impact of the risk."
+      ]
     },
     {
       "q": "Which document formally outlines the responsibilities, expected behavior, and acceptable use of corporate IT assets for all employees?",
@@ -801,19 +963,31 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "An Acceptable Use Policy (AUP) is a document that employees must sign, dictating what they can and cannot do on corporate devices and networks.",
-      "domain": "Security Program Management and Oversight"
+      "domain": "Security Program Management and Oversight",
+      "whyWrong": [
+        "A Service Level Agreement (SLA) is a contract between a service provider and customer defining uptime and response-time guarantees, not employee behavior rules.",
+        "",
+        "A Non-Disclosure Agreement (NDA) is a legal contract prohibiting the sharing of confidential information, rather than governing daily use of corporate IT systems.",
+        "A Business Impact Analysis (BIA) evaluates the operational and financial consequences of disruptions to critical business processes."
+      ]
     },
     {
-      "q": "During disaster recovery planning, the business determines that the critical database cannot be down for more than 4 hours without causing catastrophic financial loss. What does this 4-hour metric represent?",
+      "q": "During disaster recovery planning, the business sets a target that the critical database must be restored within 4 hours of an outage. What does this 4-hour target represent?",
       "opts": [
         "Recovery Point Objective (RPO)",
-        "Maximum Tolerable Downtime (MTD)",
+        "Mean Time Between Failures (MTBF)",
         "Recovery Time Objective (RTO)",
         "Mean Time to Repair (MTTR)"
       ],
       "ans": 2,
       "exp": "The Recovery Time Objective (RTO) is the maximum acceptable amount of time a system can be down after a disaster before it severely impacts the business.",
-      "domain": "Security Program Management and Oversight"
+      "domain": "Security Program Management and Oversight",
+      "whyWrong": [
+        "Recovery Point Objective (RPO) measures the maximum age of data that can be lost (how often backups must run), not how long the system can remain offline.",
+        "MTBF is a reliability metric for how long a component runs between failures; it says nothing about how quickly the database must be restored.",
+        "",
+        "Mean Time to Repair (MTTR) is an operational maintenance metric tracking the average time technicians take to fix a broken component, not a disaster recovery target."
+      ]
     },
     {
       "q": "An organization implements a policy requiring that two separate administrators must authenticate before any changes are made to the core firewall configuration. What principle is being enforced?",
@@ -825,7 +999,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 2,
       "exp": "Dual Control (often related to Separation of Duties) requires two distinct individuals to authorize an action, preventing a single rogue admin from compromising the system.",
-      "domain": "Security Program Management and Oversight"
+      "domain": "Security Program Management and Oversight",
+      "whyWrong": [
+        "Least privilege restricts each user to only the minimum permissions needed for their job, without requiring a second person to co-approve an action.",
+        "Separation of duties splits distinct phases of a workflow across different roles (e.g., one writes code, another deploys it), whereas requiring two admins to authorize the exact same action simultaneously is dual control.",
+        "",
+        "Mandatory Access Control (MAC) is an OS/data access model based on security clearance labels, not a two-person administrative approval rule."
+      ]
     },
     {
       "q": "A healthcare provider must ensure that its data handling practices meet the legal requirements of HIPAA. This is an example of adhering to:",
@@ -837,7 +1017,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "HIPAA is a federal law. Adhering to laws and legal requirements mandated by the government is known as regulatory compliance.",
-      "domain": "Security Program Management and Oversight"
+      "domain": "Security Program Management and Oversight",
+      "whyWrong": [
+        "Industry frameworks (like NIST CSF or CIS Benchmarks) are voluntary best-practice guidelines unless mandated by contract, whereas HIPAA is a binding federal statute.",
+        "",
+        "Internal policies are organization-specific rules set by management, whereas HIPAA is an external government regulation enforced by law.",
+        "A risk assessment is the analytical process of identifying threats and vulnerabilities, not the legal obligation to obey healthcare privacy statutes."
+      ]
     },
     {
       "q": "Which process determines the potential financial and operational impact of various disasters on specific business units, helping to prioritize recovery efforts?",
@@ -849,7 +1035,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "A Business Impact Analysis (BIA) identifies critical business functions and the potential impacts (financial, operational) if those functions are disrupted.",
-      "domain": "Security Program Management and Oversight"
+      "domain": "Security Program Management and Oversight",
+      "whyWrong": [
+        "",
+        "A vulnerability scan probes technical systems for unpatched CVEs and misconfigurations without evaluating business-unit financial impact or recovery priorities.",
+        "A penetration test simulates an active cyberattack to test security controls, not a business-level assessment of downtime costs across departments.",
+        "A tabletop exercise is a discussion-based walkthrough where stakeholders practice an existing incident or DR plan, rather than the analysis that establishes recovery metrics."
+      ]
     },
     {
       "q": "A network engineer wants to prevent unauthorized switches from being connected to the corporate network and causing a spanning tree loop. Which feature should be enabled on the access ports?",
@@ -861,7 +1053,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "BPDU Guard disables a port if it receives a Bridge Protocol Data Unit (BPDU) from an unauthorized switch, protecting the Spanning Tree topology.",
-      "domain": "Security Architecture"
+      "domain": "Security Architecture",
+      "whyWrong": [
+        "",
+        "Port security limits the number or specific list of MAC addresses allowed on a switch port, but it does not specifically block Spanning Tree BPDUs.",
+        "DHCP Snooping blocks rogue DHCP server offers on untrusted ports, which does not stop an unauthorized switch from participating in Spanning Tree.",
+        "Dynamic ARP Inspection (DAI) validates ARP packets against the DHCP binding table to prevent ARP spoofing, not Layer 2 switching loops."
+      ]
     },
     {
       "q": "An organization wants to authenticate users connecting to the wireless network using their Active Directory credentials rather than a shared password. Which protocol should the WPA2-Enterprise network use to communicate with the authentication server?",
@@ -873,7 +1071,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "RADIUS is the standard protocol used by wireless access points to forward authentication requests to a central server (like NPS or ISE) in a WPA2/3-Enterprise setup.",
-      "domain": "Security Architecture"
+      "domain": "Security Architecture",
+      "whyWrong": [
+        "",
+        "TACACS+ is designed for network device administration (CLI login and command authorization), whereas 802.1X wireless access points require RADIUS.",
+        "Kerberos handles ticket-based authentication inside a Windows domain, but wireless access points use RADIUS to pass 802.1X/EAP authentication to the AAA server.",
+        "LDAP queries directory trees like Active Directory; while the RADIUS server may query AD via LDAP at the backend, the access point communicates with the AAA server via RADIUS."
+      ]
     },
     {
       "q": "Which network security tool is placed inline on the network and actively drops packets that match the signature of a known SQL injection attack?",
@@ -885,7 +1089,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "An Intrusion Prevention System (IPS) is inline and actively blocks threats. An Intrusion Detection System (IDS) only monitors and alerts.",
-      "domain": "Security Operations"
+      "domain": "Security Operations",
+      "whyWrong": [
+        "An Intrusion Detection System (IDS) sits out-of-band on a mirrored port to alert on suspicious traffic; it cannot drop packets inline.",
+        "",
+        "A Syslog server collects and stores event logs sent from network devices without inspecting or blocking live network traffic.",
+        "A packet sniffer passively captures network frames for analysis and troubleshooting, offering no inline packet-dropping capability."
+      ]
     },
     {
       "q": "To prevent rogue DHCP servers from handing out incorrect IP addresses and gateways to clients, which switch feature must be implemented?",
@@ -897,10 +1107,16 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "DHCP Snooping categorizes switch ports as trusted or untrusted. It drops DHCP Offer messages originating from untrusted ports (where end users sit).",
-      "domain": "Security Architecture"
+      "domain": "Security Architecture",
+      "whyWrong": [
+        "",
+        "ARP Inspection validates IP-to-MAC ARP replies using the DHCP Snooping database, but it does not filter out rogue DHCP Offer packets themselves.",
+        "Port security restricts MAC addresses on a port, which will not stop a single authorized laptop from running a rogue DHCP server process.",
+        "VLAN tagging (802.1Q) marks frames traversing trunk links and does not block rogue DHCP responses inside a VLAN."
+      ]
     },
     {
-      "q": "An administrator configures a firewall rule to explicitly drop any inbound traffic that does not match a previously permitted connection. What principle is this?",
+      "q": "A firewall has three allow rules (TCP 80, TCP 443 and TCP 5432) and no rule that blocks anything, yet inbound traffic on every other port is still dropped. What principle is this?",
       "opts": [
         "Stateful inspection",
         "Stateless inspection",
@@ -909,7 +1125,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 2,
       "exp": "Implicit Deny is a firewall rule (usually invisible at the bottom of the ACL) that blocks all traffic that wasn't explicitly allowed by higher rules.",
-      "domain": "General Security Concepts"
+      "domain": "General Security Concepts",
+      "whyWrong": [
+        "Stateful inspection tracks connections in a state table so return traffic is allowed; it does not explain why unmatched new traffic is dropped by default.",
+        "Stateless inspection filters each packet against static header rules; it is a filtering method, not the default-deny behavior that drops whatever no rule allows.",
+        "",
+        "Zero Trust is a comprehensive security architecture requiring continuous verification of every user and device, not a single default-drop firewall rule."
+      ]
     },
     {
       "q": "An organization is disposing of old hard drives that contained highly sensitive financial data. They want to ensure the data is permanently destroyed and the drives can never be reused. Which method is BEST?",
@@ -921,7 +1143,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 2,
       "exp": "Physical destruction (like shredding or incineration) is the only foolproof method to guarantee data cannot be recovered and the drive cannot be reused.",
-      "domain": "Security Architecture"
+      "domain": "Security Architecture",
+      "whyWrong": [
+        "Standard formatting only resets filesystem file-table pointers, leaving the underlying sectors easily recoverable with basic forensic tools and the drive reusable.",
+        "Degaussing destroys magnetic domains on traditional spinning HDDs, but it has no effect on SSD flash memory and does not physically shred the media.",
+        "",
+        "Low-level formatting (zero-filling) overwrites sectors so the drive CAN be reused, violating the requirement that the drives never be reused."
+      ]
     },
     {
       "q": "A user wants to securely authenticate to their workstation using a physical hardware token plugged into a USB port. Which protocol or standard is this device most likely using?",
@@ -933,7 +1161,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "FIDO (Fast IDentity Online) U2F (Universal 2nd Factor) is an open authentication standard that enables hardware tokens (like YubiKeys) to securely authenticate users.",
-      "domain": "General Security Concepts"
+      "domain": "General Security Concepts",
+      "whyWrong": [
+        "",
+        "RADIUS is a network AAA protocol used between NAS devices (like APs or VPN gateways) and a central authentication server, not a USB hardware token standard.",
+        "TACACS+ is a remote AAA protocol used for administrative access to network routers and switches, not local USB security key authentication.",
+        "LDAP is a directory access protocol used to query user objects in Active Directory, not a cryptographic protocol for USB hardware tokens."
+      ]
     },
     {
       "q": "During a security audit, it is discovered that a developer accidentally hardcoded an AWS IAM access key and secret key into a Python script and uploaded it to a public GitHub repository. What should the security team do FIRST?",
@@ -945,7 +1179,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "The immediate priority is to invalidate the compromised credentials to prevent attackers from using them to access the AWS environment. The keys must be revoked or deleted in IAM immediately.",
-      "domain": "Security Operations"
+      "domain": "Security Operations",
+      "whyWrong": [
+        "Deleting the GitHub repository does not invalidate the leaked keys—automated bots scrape public commits in seconds and will still use the active IAM credentials.",
+        "",
+        "HR disciplinary action does nothing to stop an attacker who already scraped the live IAM keys from accessing the AWS account right now.",
+        "Changing the AWS root account password does not revoke or disable the specific IAM user's access key ID and secret access key that were leaked."
+      ]
     },
     {
       "q": "An organization wants to authenticate its corporate Active Directory users to a third-party Cloud CRM application without forcing users to create a new password or storing the AD passwords in the cloud. Which protocol is BEST for this?",
@@ -957,7 +1197,13 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 0,
       "exp": "SAML is an XML-based open standard for exchanging authentication and authorization data between an identity provider (AD) and a service provider (the SaaS CRM), enabling Single Sign-On (SSO).",
-      "domain": "General Security Concepts"
+      "domain": "General Security Concepts",
+      "whyWrong": [
+        "",
+        "RADIUS is designed for network access authentication (VPNs and 802.1X Wi-Fi), not browser-based federated Single Sign-On to third-party SaaS web applications.",
+        "IPsec encrypts Layer 3 network packets for VPN tunnels; it is not an identity federation protocol for web applications.",
+        "EAP-TLS uses client and server certificates for 802.1X port/wireless authentication, not federated web SSO between Active Directory and a cloud CRM."
+      ]
     },
     {
       "q": "To ensure that all cloud API calls (e.g., creating a user, deleting a VM) are logged for auditing and compliance purposes, which type of service must be enabled?",
@@ -969,7 +1215,82 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       ],
       "ans": 1,
       "exp": "Audit logging services (like AWS CloudTrail) record who made an API call, when it was made, and what the action was, which is critical for security and compliance audits.",
-      "domain": "Security Operations"
+      "domain": "Security Operations",
+      "whyWrong": [
+        "Performance monitoring services (like Amazon CloudWatch Metrics) track CPU, memory, and disk utilization rather than recording who made control-plane API calls.",
+        "",
+        "A Web Application Firewall (WAF) inspects and filters HTTP requests aimed at web applications, not cloud control-plane API actions like creating IAM users.",
+        "A vulnerability scanner probes instances or container images for missing patches and CVEs; it does not maintain an audit log of cloud API activity."
+      ]
+    },
+    {
+      "q": "A penetration tester discovers that a legacy web application constructs database queries by concatenating raw user input from a login form, and also reflects unescaped search terms directly back into the HTML response page. Which two remediation controls must the development team implement in the application code to fix BOTH vulnerabilities at their root cause? (Choose TWO.)",
+      "opts": [
+        "Parameterized queries (prepared statements)",
+        "Context-aware output encoding and input sanitization",
+        "Deploying a network-layer Intrusion Detection System (IDS) on a SPAN port",
+        "Enabling full-disk encryption (FDE) on the backend database server",
+        "Replacing the TLS 1.2 certificate on the load balancer with TLS 1.3"
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Threats, Vulnerabilities, and Mitigations",
+      "exp": "Concatenating raw input into SQL statements creates a SQL Injection (SQLi) vulnerability, which is remediated at the code level by using parameterized queries (prepared statements). Reflecting unescaped input into HTML responses creates a Reflected Cross-Site Scripting (XSS) vulnerability, which requires input sanitization and context-aware HTML output encoding.",
+      "whyWrong": [
+        "",
+        "",
+        "A passive IDS on a SPAN port only alerts on suspicious traffic after the fact and does not fix vulnerable application code or block attacks.",
+        "Full-disk encryption protects physical drives if stolen powered off, but the running database engine still executes injected SQL queries normally.",
+        "TLS 1.3 encrypts traffic in transit against on-path eavesdropping, which simply delivers the attacker's SQLi and XSS payloads over an encrypted channel."
+      ]
+    },
+    {
+      "q": "A SOC analyst confirms that a finance workstation is actively encrypting files on a mapped network share and beaconing to an external command-and-control (C2) IP address. The incident response lead orders immediate containment while preserving the contents of the workstation's volatile RAM for malware forensics. Which actions should the analyst take right now? (Choose TWO.)",
+      "opts": [
+        "Isolate the workstation's network interface via the EDR agent or switch port",
+        "Block the external C2 IP address at the perimeter firewall",
+        "Immediately pull the workstation's power cord to stop the encryption process",
+        "Format and reimage the workstation from a golden image before capturing memory",
+        "Publish the post-incident Lessons Learned report to executive leadership"
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Security Operations",
+      "exp": "Isolating the host at the network/EDR layer stops lateral movement and network-share encryption while keeping the system powered on so volatile RAM remains intact for forensic acquisition. Blocking the C2 IP at the perimeter firewall severs external command-and-control communication for both this host and any other potentially affected endpoints.",
+      "whyWrong": [
+        "",
+        "",
+        "Pulling the power cord immediately destroys all volatile memory (RAM), violating the explicit requirement to preserve RAM for forensic capture.",
+        "Reimaging belongs to the Eradication/Recovery phases and would overwrite both RAM and disk evidence before forensics can occur.",
+        "Lessons Learned is the final post-mortem phase after recovery is complete, not an immediate containment step during an active incident."
+      ]
+    },
+    {
+      "q": "A defense contractor must send a sensitive contract over email so that ONLY the intended recipient can read the body of the message, AND the recipient can mathematically verify both that the sender's identity is authentic and that the document was not altered in transit. Under a Public Key Infrastructure (PKI) model, which two cryptographic operations must the sender perform before transmitting the message? (Choose TWO.)",
+      "opts": [
+        "Encrypt the message (or its symmetric session key) using the recipient's public key",
+        "Hash the message and sign the hash using the sender's private key",
+        "Encrypt the message using the sender's private key so only the recipient can decrypt it",
+        "Sign the message hash using the recipient's public key",
+        "Hash the message with SHA-256 alone without using any asymmetric keys"
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "General Security Concepts",
+      "exp": "To guarantee confidentiality in PKI, the sender encrypts the message (or the symmetric key wrapping it) with the recipient's public key so only the recipient's private key can decrypt it. To provide integrity and non-repudiation, the sender generates a cryptographic hash of the message and signs it with the sender's own private key, which the recipient verifies using the sender's public key.",
+      "whyWrong": [
+        "",
+        "",
+        "Anyone who possesses the sender's public key can decrypt data encrypted with the sender's private key, so that provides a digital signature, not confidentiality.",
+        "A digital signature must be created with the sender's private key; using the recipient's public key cannot prove who sent the message.",
+        "An unkeyed SHA-256 hash without a digital signature can be recalculated by an on-path attacker who modifies the message and replaces the hash."
+      ]
     }
   ],
   "daily": [

@@ -835,7 +835,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 0,
       "exp": "The problem has been identified (logs stopped) and the probable cause has been established (hard drive is full). The next step in the methodology is to establish a plan of action to resolve it (e.g., clearing space or expanding the volume).",
-      "domain": "Hardware and Network Troubleshooting"
+      "domain": "Hardware and Network Troubleshooting",
+      "whyWrong": [
+        "",
+        "Establishing a theory of probable cause comes before confirming the root cause; here the analyst has already investigated and confirmed the drive is full.",
+        "Documenting findings, actions, and outcomes is the final (sixth) step of the CompTIA troubleshooting methodology, performed only after the fix is verified.",
+        "Verifying full system functionality happens after the remediation plan has been implemented, not before the full disk has been addressed."
+      ]
     },
     {
       "q": "A user spills coffee on their laptop keyboard. The laptop immediately powers off and emits a burning smell. What should the technician do FIRST?",
@@ -847,7 +853,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 0,
       "exp": "Safety and preventing further electrical damage is the first priority. Disconnect all power sources immediately before assessing internal damage.",
-      "domain": "Hardware and Network Troubleshooting"
+      "domain": "Hardware and Network Troubleshooting",
+      "whyWrong": [
+        "",
+        "Opening the chassis while the AC adapter or internal battery is still connected risks further short-circuit damage and shock.",
+        "Blowing compressed air across liquid while power is still attached can push conductive moisture deeper under motherboard components.",
+        "Documentation is done after immediate electrical and safety hazards have been neutralized by removing all power sources."
+      ]
     },
     {
       "q": "A company requires a display technology for a conference room that provides the truest blacks, highest contrast ratios, and does not require a backlight. Which technology fits this description?",
@@ -859,7 +871,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 2,
       "exp": "OLED (Organic Light Emitting Diode) displays do not use a backlight. Each pixel generates its own light and can turn off completely, providing true blacks and infinite contrast.",
-      "domain": "Mobile Devices"
+      "domain": "Mobile Devices",
+      "whyWrong": [
+        "TN (Twisted Nematic) LCD panels rely on a constant backlight and have the poorest viewing angles and contrast ratios of modern panel types.",
+        "IPS (In-Plane Switching) LCDs offer accurate color and wide viewing angles, but they still require a backlight that causes light bleed on dark scenes.",
+        "",
+        "Mini-LED uses thousands of tiny LEDs for local dimming zones, but it is still a backlight behind an LCD panel rather than self-emissive pixels."
+      ]
     },
     {
       "q": "A server requires RAM that can detect and correct single-bit memory errors on the fly to prevent system crashes. What type of RAM should be installed?",
@@ -871,7 +889,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 1,
       "exp": "ECC (Error-Correcting Code) RAM detects and corrects common kinds of internal data corruption, making it critical for enterprise servers.",
-      "domain": "Hardware"
+      "domain": "Hardware",
+      "whyWrong": [
+        "Non-parity consumer RAM lacks extra error-checking bits, so it can neither detect nor correct single-bit memory corruption.",
+        "",
+        "SODIMM (Small Outline DIMM) describes the compact physical form factor used in laptops and mini-PCs, not error-correcting logic.",
+        "VRAM (Video RAM, such as GDDR6) is dedicated high-bandwidth memory soldered onto a graphics card for rendering frames, not system server memory."
+      ]
     },
     {
       "q": "A Windows 11 machine is stuck in a reboot loop and crashes with a Blue Screen of Death (BSOD) immediately after the boot logo. Which built-in tool is BEST for recovering the OS without losing user data?",
@@ -883,7 +907,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 1,
       "exp": "WinRE (Windows Recovery Environment) provides tools like Startup Repair, System Restore, and Safe Mode to troubleshoot boot failures without destroying data.",
-      "domain": "Operating Systems"
+      "domain": "Operating Systems",
+      "whyWrong": [
+        "Disk Management is a graphical snap-in inside a running Windows desktop for partitioning drives; it cannot be launched when Windows fails to boot.",
+        "",
+        "Task Manager monitors and terminates running processes inside an active Windows session, which is inaccessible during a boot-time BSOD loop.",
+        "Regedit edits the Windows Registry from a running desktop (or manually loaded hive) and does not provide automated Startup Repair or System Restore."
+      ]
     },
     {
       "q": "A user's Android phone is experiencing severe battery drain, high data usage, and pop-up ads appearing even when the browser is closed. What is the MOST likely cause?",
@@ -895,7 +925,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 2,
       "exp": "Sudden battery drain, unexplained data spikes, and system-wide pop-ups are textbook symptoms of a malware or adware infection on a mobile device.",
-      "domain": "Software Troubleshooting"
+      "domain": "Software Troubleshooting",
+      "whyWrong": [
+        "An aging lithium-ion battery explains rapid discharge, but hardware battery wear never generates cellular data spikes or pop-up ads.",
+        "A compromised Wi-Fi network can intercept unencrypted traffic, but it does not inject system-wide pop-ups onto the phone when the browser is closed.",
+        "",
+        "Outdated OS firmware may have unpatched bugs, but it does not suddenly spawn background ad pop-ups and runaway data usage on its own."
+      ]
     },
     {
       "q": "Before making significant changes to the Windows Registry to fix a corrupt application, what should a technician do to ensure they can revert if something goes wrong?",
@@ -907,7 +943,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 0,
       "exp": "Always create a backup (like a System Restore point or a direct Registry export) before editing the Registry, as an incorrect change can render the OS unbootable.",
-      "domain": "Operational Procedures"
+      "domain": "Operational Procedures",
+      "whyWrong": [
+        "",
+        "sfc /scannow repairs corrupted Microsoft system files, but it does not back up custom Registry keys or undo manual Registry edits.",
+        "Booting into Safe Mode loads minimal drivers and services, which does not back up the Registry or provide a way to roll back a bad edit.",
+        "Updating device drivers replaces hardware driver files rather than backing up the Registry hives before manual editing."
+      ]
     },
     {
       "q": "A desktop computer intermittently shuts down without warning, especially when the user is playing graphics-intensive games or rendering video. The fans are very loud before it crashes. What is the MOST likely culprit?",
@@ -919,7 +961,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 2,
       "exp": "Intensive tasks generate significant heat. If the cooling system (fans/heatsinks) is inadequate or clogged with dust, the CPU/GPU will overheat and trigger a thermal shutdown to prevent permanent damage.",
-      "domain": "Hardware and Network Troubleshooting"
+      "domain": "Hardware and Network Troubleshooting",
+      "whyWrong": [
+        "A failing hard drive causes slow file reads, clicking noises, or OS freezes, not sudden power-offs preceded by maximum fan spin during heavy GPU/CPU loads.",
+        "Corrupted display drivers typically trigger a driver reset or a BSOD error code rather than an abrupt hardware power cut under thermal load.",
+        "",
+        "Bad RAM modules cause random BSODs (like MEMORY_MANAGEMENT) at any workload level rather than predictable thermal cutoffs when fans ramp up."
+      ]
     },
     {
       "q": "Which Windows command-line utility is used to verify the integrity of all protected system files and replace incorrect, corrupted, changed, or damaged versions?",
@@ -931,7 +979,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 2,
       "exp": "SFC (System File Checker) scans the integrity of all protected system files and replaces incorrect versions with correct Microsoft versions.",
-      "domain": "Operating Systems"
+      "domain": "Operating Systems",
+      "whyWrong": [
+        "chkdsk scans the disk volume for filesystem metadata errors and bad physical sectors; it does not validate protected Windows OS binaries against Microsoft's component store.",
+        "diskpart is a command-line disk partitioning utility used to create, format, or delete volumes, not to repair corrupted Windows system files.",
+        "",
+        "gpupdate refreshes Active Directory and local Group Policy settings on the machine without scanning or repairing OS system files."
+      ]
     },
     {
       "q": "A technician needs to connect a legacy printer to a modern PC. The printer has a large, 25-pin D-sub connector. What type of port is this?",
@@ -943,7 +997,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 2,
       "exp": "Legacy printers typically used Parallel ports (LPT), which physically featured a 25-pin D-subminiature (DB-25) female connector on the PC.",
-      "domain": "Hardware"
+      "domain": "Hardware",
+      "whyWrong": [
+        "VGA uses a 15-pin 3-row D-sub (DE-15) connector to carry analog video to a monitor, not a 25-pin printer interface.",
+        "RS-232 serial ports on PCs typically use a 9-pin male D-sub (DE-9) connector for COM devices rather than the 25-pin female LPT printer port.",
+        "",
+        "External SCSI connectors use high-density 50-pin or 68-pin interfaces for legacy storage arrays and scanners, not a standard 25-pin LPT printer port."
+      ]
     },
     {
       "q": "A user brings a company-owned smartphone to the helpdesk. They forgot the passcode, and after 10 failed attempts, the phone automatically wiped all its data. What enterprise security feature caused this?",
@@ -955,7 +1015,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 1,
       "exp": "Mobile Device Management (MDM) platforms allow administrators to enforce security policies on mobile devices, such as automatically wiping data after a specific number of failed login attempts to prevent brute-force attacks.",
-      "domain": "Mobile Devices"
+      "domain": "Mobile Devices",
+      "whyWrong": [
+        "Geofencing triggers policy actions based on the device's physical GPS location, not the number of failed passcode attempts.",
+        "",
+        "A remote wipe is manually initiated over the network by an administrator when a device is reported lost or stolen, rather than triggering locally on the 10th bad PIN.",
+        "Failed biometric attempts (fingerprint/face) simply fall back to requiring the device passcode; they do not factory-reset the phone."
+      ]
     },
     {
       "q": "When handling a ticket for a VIP user, the technician realizes the requested software is not approved for company use. According to best practices in operational procedures, what should the technician do?",
@@ -967,7 +1033,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 2,
       "exp": "Professionalism requires enforcing company policy while providing excellent customer service. Explaining the policy respectfully and offering an approved workaround is the correct procedure.",
-      "domain": "Operational Procedures"
+      "domain": "Operational Procedures",
+      "whyWrong": [
+        "Bypassing software approval policies for a VIP introduces unvetted security and licensing risks and violates change/security governance.",
+        "Abruptly closing the ticket without explaining the policy or offering approved options is poor customer service that leaves the user's business need unresolved.",
+        "",
+        "Telling an employee to buy personal hardware to bypass corporate controls encourages Shadow IT and violates acceptable use standards."
+      ]
     },
     {
       "q": "A help desk technician receives a call that a user's laptop can browse websites fine but cannot connect to the company VPN. Which port should the technician verify is not blocked by a firewall along the path, assuming an IPsec-based VPN?",
@@ -979,7 +1051,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 2,
       "exp": "IPsec VPNs rely on IKE (UDP 500) and NAT-T (UDP 4500) for key exchange; blocking these prevents the tunnel from establishing even though general web traffic (80/443) works fine.",
-      "domain": "Networking"
+      "domain": "Networking",
+      "whyWrong": [
+        "Port 80 is used for unencrypted HTTP web browsing, which is already working and is not used by IPsec VPN tunnels.",
+        "Port 443 is used by HTTPS and SSL/TLS VPNs, whereas an IPsec VPN requires UDP ports 500 (IKE) and 4500 (NAT-T) to negotiate security associations.",
+        "",
+        "Port 25 is used by Simple Mail Transfer Protocol (SMTP) for routing email between mail servers, not IPsec VPN establishment."
+      ]
     },
     {
       "q": "A technician is configuring a SOHO router and wants to give a specific internal server a consistent, predictable internal address for port forwarding. What should be configured?",
@@ -991,7 +1069,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 0,
       "exp": "A DHCP reservation ties a specific device's MAC address to a fixed IP within the DHCP scope, so port forwarding rules pointed at that IP never break when the lease renews.",
-      "domain": "Networking"
+      "domain": "Networking",
+      "whyWrong": [
+        "",
+        "Dynamic DNS (DDNS) maps a changing public WAN IP address to a hostname; it does not lock a local server's private LAN IP address.",
+        "Subnetting divides a network into smaller IP ranges, which does not stop the DHCP server from assigning a different IP within the subnet when a lease expires.",
+        "NAT translates between private LAN IPs and the router's public WAN IP, but it relies on the internal server keeping a fixed private IP via DHCP reservation or static assignment."
+      ]
     },
     {
       "q": "A company wants to migrate its email hosting so it no longer manages any physical or virtual mail servers, and simply pays for user mailboxes. Which cloud model does this describe?",
@@ -1003,7 +1087,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 2,
       "exp": "Consuming a finished application (hosted mailboxes) with zero infrastructure management is SaaS — the provider owns everything below the login screen.",
-      "domain": "Virtualization and Cloud"
+      "domain": "Virtualization and Cloud",
+      "whyWrong": [
+        "IaaS rents raw virtual machines and storage, meaning the company would still have to install, patch, and administer the mail server OS and software itself.",
+        "PaaS provides a managed runtime for custom-built applications, whereas turnkey hosted email mailboxes are a finished SaaS product.",
+        "",
+        "A private cloud is single-tenant infrastructure dedicated to one organization, which still requires managing mail server infrastructure unless consumed as SaaS."
+      ]
     },
     {
       "q": "Which characteristic of cloud computing means a customer is billed only for the exact compute and storage resources consumed, similar to a utility bill?",
@@ -1015,7 +1105,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 1,
       "exp": "Measured service is the metering/billing characteristic — pay for what's actually used, not a flat fee.",
-      "domain": "Virtualization and Cloud"
+      "domain": "Virtualization and Cloud",
+      "whyWrong": [
+        "Resource pooling means the provider serves multiple customers from shared physical hardware, not how individual usage is metered and billed.",
+        "",
+        "Rapid elasticity is the automatic scaling of capacity out and in based on demand, whereas measured service is the metering that bills you only for what ran.",
+        "On-demand self-service allows users to provision cloud resources immediately without human interaction from the provider, rather than describing pay-per-use metering."
+      ]
     },
     {
       "q": "An employee reports that files on a shared drive are suddenly all encrypted with a .locked extension, and a text file demands payment for the decryption key. This is an example of:",
@@ -1027,7 +1123,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 1,
       "exp": "Encrypting a victim's files and demanding payment for the decryption key is the defining behavior of ransomware.",
-      "domain": "Security"
+      "domain": "Security",
+      "whyWrong": [
+        "A rootkit hides malicious processes at the kernel or firmware level to evade detection; it does not encrypt user files and post a ransom note.",
+        "",
+        "A keylogger covertly records keystrokes to steal passwords and sensitive text without encrypting files or demanding extortion payments.",
+        "Spyware silently monitors user activity and harvests data in the background, whereas ransomware overtly locks files and demands payment."
+      ]
     },
     {
       "q": "A technician finds that antivirus software cannot detect or remove a persistent infection that appears to operate below the operating system level. This behavior is most consistent with a:",
@@ -1039,7 +1141,13 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 2,
       "exp": "Rootkits specifically embed at the OS or firmware level to hide from security software running above them, which is why standard AV scans often can't detect or fully remove them.",
-      "domain": "Security"
+      "domain": "Security",
+      "whyWrong": [
+        "A standard virus attaches to user-space executable files or documents and does not hook the OS kernel or firmware to hide from antivirus tools.",
+        "A worm self-replicates across network shares or vulnerabilities to spread rapidly, rather than embedding below the OS kernel to cloak itself.",
+        "",
+        "A Trojan disguises itself as a legitimate program to trick the user into running it, which does not by itself grant kernel-level stealth below the OS."
+      ]
     },
     {
       "q": "Which mobile device security feature allows an organization to erase all data on a lost or stolen phone?",
@@ -1051,7 +1159,59 @@ var COURSE_COMPTIA_APLUS = {
       ],
       "ans": 1,
       "exp": "Remote wipe erases the device's data remotely once it's confirmed lost or stolen — a screen lock and encryption protect data at rest but don't erase it.",
-      "domain": "Security"
+      "domain": "Security",
+      "whyWrong": [
+        "A screen lock requires a PIN, pattern, or passcode to unlock the UI, but it does not erase the data stored on the lost device.",
+        "",
+        "Full-device encryption scrambles stored data so it cannot be read without the key, but the encrypted data remains on the phone rather than being erased.",
+        "Biometric authentication verifies a fingerprint or face scan at login; it does not remotely purge data after a device is lost."
+      ]
+    },
+    {
+      "q": "A field technician is configuring an email client on a user's laptop to connect to the company's mail server over TLS encryption. The user must be able to both synchronize folders on the mail server across multiple devices and send outgoing messages. Which default TCP ports must be open through the local firewall for this configuration? (Choose TWO.)",
+      "opts": [
+        "TCP 993 (IMAPS)",
+        "TCP 587 (SMTP with STARTTLS)",
+        "TCP 110 (POP3)",
+        "TCP 3389 (RDP)",
+        "TCP 445 (SMB)"
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Networking",
+      "exp": "IMAPS (TCP port 993) keeps messages and folders synchronized on the mail server across multiple devices over implicit TLS, and authenticated SMTP submission (TCP port 587) handles sending outgoing email with TLS encryption.",
+      "whyWrong": [
+        "",
+        "",
+        "TCP port 110 is unencrypted POP3, which downloads mail to a single device rather than synchronizing server-side folders over TLS.",
+        "TCP port 3389 is used by Windows Remote Desktop Protocol (RDP) for remote GUI sessions, not email delivery.",
+        "TCP port 445 is used by Server Message Block (SMB) for Windows file and printer sharing, not email synchronization."
+      ]
+    },
+    {
+      "q": "A technician is hardening a Windows 11 Pro laptop for a traveling finance executive. The security policy requires that all data on the internal NVMe SSD remain unreadable if the drive is physically removed by a thief, and that an explicit administrator prompt appear whenever any process attempts to run with elevated privileges. Which built-in Windows features must the technician enable or verify? (Choose TWO.)",
+      "opts": [
+        "BitLocker",
+        "User Account Control (UAC)",
+        "Windows Defender Firewall",
+        "System Restore",
+        "Remote Desktop (RDP)"
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Security",
+      "exp": "BitLocker provides full-disk encryption (typically backed by the system's TPM) so a physically removed drive cannot be read without the decryption key. User Account Control (UAC) enforces a confirmation or credential prompt before any process is allowed to elevate to administrative privileges.",
+      "whyWrong": [
+        "",
+        "",
+        "Windows Defender Firewall filters inbound and outbound network traffic; it neither encrypts the SSD at rest nor prompts on local privilege elevation.",
+        "System Restore saves snapshots of system files and registry settings for rollback, providing no disk encryption or privilege-elevation protection.",
+        "Remote Desktop allows remote network logins over TCP 3389, which increases attack surface rather than encrypting the disk or gating privilege elevation."
+      ]
     }
   ],
   "daily": [

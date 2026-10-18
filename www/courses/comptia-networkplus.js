@@ -453,7 +453,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 2,
       "exp": "Because you can reach the local gateway, Layer 1 and 2 are functioning. The failure to route traffic beyond the local subnet to an external IP indicates a Layer 3 (Network) routing issue at the gateway/firewall.",
-      "domain": "Network Troubleshooting"
+      "domain": "Network Troubleshooting",
+      "whyWrong": [
+        "Layer 1 covers physical cabling and signaling; since the workstation can ping 192.168.1.1, the physical link is up and working.",
+        "Layer 2 handles local MAC switching and ARP; reaching the default gateway on the local subnet proves Layer 2 frame delivery is intact.",
+        "",
+        "Layer 7 involves application protocols like HTTP or DNS, whereas pinging 8.8.8.8 uses ICMP at Layer 3 without touching Layer 7."
+      ]
     },
     {
       "q": "Which of the following IPv4 addresses is a valid loopback address used for local testing?",
@@ -465,7 +471,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "127.0.0.1 is the standard IPv4 loopback address. 169.254.x.x is APIPA, and 10.x.x.x/192.168.x.x are private IP ranges.",
-      "domain": "Networking Concepts"
+      "domain": "Networking Concepts",
+      "whyWrong": [
+        "192.168.1.1 is an RFC 1918 Class C private address commonly assigned to a SOHO default gateway, not the local host's TCP/IP loopback interface.",
+        "",
+        "169.254.0.0/16 is the APIPA link-local range automatically self-assigned when a DHCP server cannot be reached, not a loopback address.",
+        "10.0.0.0/8 is an RFC 1918 Class A private address range used for internal LAN routing, whereas 127.0.0.0/8 is reserved for loopback testing."
+      ]
     },
     {
       "q": "A network administrator needs to assign an IPv6 address to a router interface that will only be routable within the local site, not across the internet. Which IPv6 prefix should be used?",
@@ -477,7 +489,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 2,
       "exp": "FD00::/8 (Unique Local Address) is the IPv6 equivalent of a private IPv4 address. FE80::/10 is link-local (only on the local segment). 2000::/3 is global unicast, and FF00::/8 is multicast.",
-      "domain": "Networking Concepts"
+      "domain": "Networking Concepts",
+      "whyWrong": [
+        "2000::/3 is the Global Unicast Address (GUA) range, which IS publicly routable across the internet rather than restricted to the local site.",
+        "FE80::/10 is a Link-Local address that routers never forward beyond a single local broadcast segment, so it cannot route across subnets within the site.",
+        "",
+        "FF00::/8 is the IPv6 multicast address range used for one-to-many group traffic, not a unicast address assigned to a router interface for site-internal routing."
+      ]
     },
     {
       "q": "Which routing protocol uses the Shortest Path First (Dijkstra) algorithm and groups routers into areas to limit routing update traffic?",
@@ -489,7 +507,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 2,
       "exp": "OSPF (Open Shortest Path First) is a link-state routing protocol that uses Dijkstra's algorithm and hierarchical areas (like Area 0) to scale efficiently.",
-      "domain": "Networking Concepts"
+      "domain": "Networking Concepts",
+      "whyWrong": [
+        "RIPv2 is a distance-vector protocol that uses hop count (max 15 hops) via the Bellman-Ford algorithm, not Dijkstra's link-state algorithm or hierarchical areas.",
+        "BGP is a path-vector exterior gateway protocol that routes between Autonomous Systems across the internet using AS-path attributes, not internal OSPF areas.",
+        "",
+        "EIGRP is an advanced distance-vector protocol that uses the DUAL algorithm and composite metrics rather than Dijkstra's Shortest Path First tree."
+      ]
     },
     {
       "q": "At which layer of the OSI model does a standard, unmanaged network switch operate?",
@@ -501,7 +525,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "A standard switch operates at Layer 2 (Data Link) and forwards frames based on MAC addresses.",
-      "domain": "Networking Concepts"
+      "domain": "Networking Concepts",
+      "whyWrong": [
+        "Layer 1 devices (like hubs and repeaters) blindly regenerate electrical bits out all ports without reading MAC addresses, whereas an unmanaged switch learns MAC tables at Layer 2.",
+        "",
+        "Layer 3 requires routing packets by IP address; only routers or managed Layer 3 switches inspect IP headers, not a standard unmanaged switch.",
+        "Layer 4 tracks TCP/UDP port numbers and sessions, which is handled by end hosts, stateful firewalls, or load balancers rather than an unmanaged switch."
+      ]
     },
     {
       "q": "A technician is mapping out the ports required for secure remote administration and file transfer. Which ports should be allowed through the firewall for SSH and SFTP?",
@@ -513,7 +543,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "Both SSH (Secure Shell) and SFTP (SSH File Transfer Protocol) operate over TCP Port 22.",
-      "domain": "Networking Concepts"
+      "domain": "Networking Concepts",
+      "whyWrong": [
+        "Port 21 is used by legacy FTP (and FTPS control), whereas SFTP is an extension of SSH that tunnels file transfers entirely over TCP port 22.",
+        "",
+        "Port 23 is unencrypted Telnet, which sends credentials in cleartext and should be disabled, not opened alongside SSH/SFTP on port 22.",
+        "Port 443 is used for HTTPS web traffic; neither SSH nor SFTP requires port 443 because both protocols run over TCP port 22."
+      ]
     },
     {
       "q": "Which Wi-Fi standard introduced MU-MIMO (Multi-User Multiple Input Multiple Output) and operates exclusively in the 5 GHz band?",
@@ -525,7 +561,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "802.11ac (Wi-Fi 5) operates only in the 5 GHz band and introduced downlink MU-MIMO.",
-      "domain": "Networking Concepts"
+      "domain": "Networking Concepts",
+      "whyWrong": [
+        "802.11n (Wi-Fi 4) operates in both the 2.4 GHz and 5 GHz bands and introduced single-user MIMO, not MU-MIMO.",
+        "",
+        "802.11ax (Wi-Fi 6) operates across both 2.4 GHz and 5 GHz rather than exclusively in 5 GHz, and expanded MU-MIMO to uplink rather than introducing it.",
+        "802.11g is a legacy 54 Mbps standard that operates exclusively in the 2.4 GHz band without MIMO support."
+      ]
     },
     {
       "q": "A network engineer wants to logically separate the Accounting department's traffic from the HR department's traffic on the same physical switch. What technology should they implement?",
@@ -537,7 +579,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "Virtual LANs (VLANs) segment a physical switch into multiple logical networks at Layer 2, isolating broadcast domains.",
-      "domain": "Network Implementation"
+      "domain": "Network Implementation",
+      "whyWrong": [
+        "Subnetting divides IP address ranges at Layer 3, but without VLANs on the physical switch, both subnets would still share the same Layer 2 broadcast domain.",
+        "",
+        "A VPN encrypts traffic across an untrusted network like the internet; it is not used to segment ports on an internal physical switch.",
+        "Spanning Tree Protocol prevents Layer 2 switching loops across redundant switch links; it does not partition switch ports into separate departmental broadcast domains."
+      ]
     },
     {
       "q": "When configuring a trunk link between two Cisco switches to carry multiple VLANs, which protocol is typically used to tag the frames?",
@@ -549,7 +597,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 0,
       "exp": "IEEE 802.1Q is the industry-standard networking protocol used to tag frames with their VLAN ID over trunk links.",
-      "domain": "Network Implementation"
+      "domain": "Network Implementation",
+      "whyWrong": [
+        "",
+        "IEEE 802.1X is a port-based network access control (NAC) authentication standard, a classic look-alike trap for 802.1Q VLAN tagging.",
+        "Spanning Tree Protocol (802.1D/802.1w) blocks redundant switch paths to prevent Layer 2 loops; it does not insert VLAN ID tags into Ethernet frames.",
+        "LACP (802.3ad) bundles multiple physical ports into a single aggregated link (port channel), rather than tagging frames with VLAN identifiers."
+      ]
     },
     {
       "q": "A company is opening a new branch office and needs a cost-effective way to connect the branch network to the headquarters securely over the public internet. Which implementation is BEST?",
@@ -561,7 +615,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "A Site-to-Site VPN creates a secure, encrypted tunnel over the internet between two routers/firewalls, connecting the entire branch network to HQ cost-effectively.",
-      "domain": "Network Implementation"
+      "domain": "Network Implementation",
+      "whyWrong": [
+        "An MPLS circuit provides dedicated private connectivity through a carrier rather than tunneling over the public internet, making it far more expensive than a VPN.",
+        "",
+        "A Client-to-Site (remote access) VPN requires VPN software on each individual user's laptop rather than connecting the entire branch LAN to HQ at the router level.",
+        "SD-WAN dynamically steers traffic across multiple WAN transports (MPLS, LTE, broadband), whereas a simple encrypted tunnel between two offices over the internet is a Site-to-Site VPN."
+      ]
     },
     {
       "q": "To combine the bandwidth of three 1 Gbps switch ports into a single 3 Gbps logical link, which protocol should the network engineer use?",
@@ -573,7 +633,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "LACP (802.3ad) allows multiple physical links to be bundled together to form a single logical link for increased bandwidth and redundancy.",
-      "domain": "Network Implementation"
+      "domain": "Network Implementation",
+      "whyWrong": [
+        "Without link aggregation, STP treats three parallel cables between switches as a loop hazard and blocks two of them, leaving you with 1 Gbps instead of 3 Gbps.",
+        "",
+        "BGP is a Layer 3 exterior gateway routing protocol used between Autonomous Systems on the internet, not a Layer 2 port-bundling protocol.",
+        "VTP is a Cisco-proprietary protocol that synchronizes VLAN database names across switches; it does not aggregate physical switch ports."
+      ]
     },
     {
       "q": "A technician is terminating a Cat6 cable and needs to ensure it follows the TIA/EIA-568B standard. Which wire color should be placed in pin 1?",
@@ -585,7 +651,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 2,
       "exp": "In the T568B standard, Pin 1 is White/Orange. In T568A, Pin 1 is White/Green.",
-      "domain": "Network Implementation"
+      "domain": "Network Implementation",
+      "whyWrong": [
+        "White/Green is placed in Pin 1 for the T568A standard (and Pin 3 in T568B), making it the classic exam mix-up when terminating T568B.",
+        "Solid Green belongs in Pin 6 in T568B (and Pin 2 in T568A); Pin 1 always uses a white-striped wire in both standards.",
+        "",
+        "Solid Orange goes in Pin 2 of a T568B connector, immediately after White/Orange on Pin 1."
+      ]
     },
     {
       "q": "A network administrator wants to monitor the bandwidth utilization and interface errors on a core router from a central dashboard. Which protocol is designed for this?",
@@ -597,7 +669,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "Simple Network Management Protocol (SNMP) is used to collect metrics (like bandwidth and CPU usage) and configure network devices centrally.",
-      "domain": "Network Operations"
+      "domain": "Network Operations",
+      "whyWrong": [
+        "Syslog pushes timestamped event and error text messages when state changes occur, rather than polling structured interface counters like bandwidth utilization.",
+        "",
+        "Simple Mail Transfer Protocol (port 25) is used to send email messages between mail servers, not to poll performance metrics from routers.",
+        "ICMP is used by tools like ping and traceroute to test reachability and report delivery errors, not to query interface bandwidth and error counters."
+      ]
     },
     {
       "q": "Which type of documentation provides a visual representation of how devices are physically connected, including port numbers and cable types?",
@@ -609,7 +687,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "A physical network diagram shows the actual hardware, cabling, and physical layout of the network. A logical diagram shows IP addresses, subnets, and routing.",
-      "domain": "Network Operations"
+      "domain": "Network Operations",
+      "whyWrong": [
+        "A logical network diagram maps Layer 3 IP subnets, VLAN IDs, and routing flows rather than physical rack locations, patch panel ports, and cable types.",
+        "",
+        "An SOP is a step-by-step written instruction document for performing a repeatable operational task, not a visual diagram of hardware cabling.",
+        "An asset register is a tabular inventory tracking serial numbers, purchase dates, and owners of equipment, without illustrating how ports and cables are interconnected."
+      ]
     },
     {
       "q": "The network team is planning to update the firmware on the core distribution switches. To minimize disruption, they plan to do this at 2:00 AM on a Sunday. What process are they following?",
@@ -621,7 +705,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "Change management is the formal process of planning, reviewing, testing, and scheduling changes (like firmware updates during a maintenance window) to minimize risk.",
-      "domain": "Network Operations"
+      "domain": "Network Operations",
+      "whyWrong": [
+        "Incident response reacts to an active security breach or unplanned outage, whereas scheduling a planned firmware upgrade in a maintenance window is change management.",
+        "",
+        "Disaster recovery restores critical IT infrastructure after a catastrophic outage, not during a routine, pre-scheduled firmware maintenance window.",
+        "Business continuity keeps essential business operations functioning during an unplanned disruption, rather than governing planned Sunday-morning switch updates."
+      ]
     },
     {
       "q": "Which metric describes the average amount of time a network device operates before it experiences a hardware failure?",
@@ -633,7 +723,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "Mean Time Between Failures (MTBF) measures reliability—the average time a device runs before breaking down.",
-      "domain": "Network Operations"
+      "domain": "Network Operations",
+      "whyWrong": [
+        "Mean Time to Repair (MTTR) measures how long it takes to fix or replace a failed device after it breaks, not how long a repairable device runs between failures.",
+        "",
+        "Recovery Point Objective (RPO) defines the maximum tolerable data loss measured in time (backup frequency), not hardware longevity.",
+        "Recovery Time Objective (RTO) is the maximum acceptable downtime to restore a service after an outage, not a hardware reliability metric."
+      ]
     },
     {
       "q": "A network engineer wants to prevent unauthorized switches from being connected to the corporate network and causing a spanning tree loop. Which feature should be enabled on the access ports?",
@@ -645,7 +741,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 0,
       "exp": "BPDU Guard disables a port if it receives a Bridge Protocol Data Unit (BPDU) from an unauthorized switch, protecting the Spanning Tree topology.",
-      "domain": "Network Security"
+      "domain": "Network Security",
+      "whyWrong": [
+        "",
+        "Port security restricts access based on the number or list of MAC addresses on a port, but it does not specifically watch for Spanning Tree BPDUs to stop STP topology changes.",
+        "DHCP Snooping blocks rogue DHCP Offer/Ack messages on untrusted ports; it does not inspect Layer 2 Spanning Tree frames from an unauthorized switch.",
+        "Dynamic ARP Inspection (DAI) validates ARP packets against the DHCP Snooping binding table to prevent ARP poisoning, not rogue switch loops."
+      ]
     },
     {
       "q": "An organization wants to authenticate users connecting to the wireless network using their Active Directory credentials rather than a shared password. Which protocol should the WPA2-Enterprise network use to communicate with the authentication server?",
@@ -657,7 +759,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 0,
       "exp": "RADIUS is the standard protocol used by wireless access points to forward authentication requests to a central server (like NPS or ISE) in a WPA2/3-Enterprise setup.",
-      "domain": "Network Security"
+      "domain": "Network Security",
+      "whyWrong": [
+        "",
+        "TACACS+ is designed for administrative device access (like SSH into routers) with full command authorization, whereas 802.1X/WPA2-Enterprise wireless access points require RADIUS.",
+        "Kerberos uses tickets for Windows domain authentication, but wireless access points acting as 802.1X authenticators speak RADIUS to the AAA server, not raw Kerberos.",
+        "LDAP queries directory services like Active Directory; the RADIUS server may query AD via LDAP in the background, but the access point itself talks to the AAA server using RADIUS."
+      ]
     },
     {
       "q": "Which network security tool is placed inline on the network and actively drops packets that match the signature of a known SQL injection attack?",
@@ -669,7 +777,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "An Intrusion Prevention System (IPS) is inline and actively blocks threats. An Intrusion Detection System (IDS) only monitors and alerts.",
-      "domain": "Network Security"
+      "domain": "Network Security",
+      "whyWrong": [
+        "An Intrusion Detection System (IDS) sits out-of-band on a SPAN/TAP port to monitor traffic copies and raise alerts; it cannot actively drop malicious inline packets.",
+        "",
+        "A Syslog server passively collects and stores log messages sent from network devices; it does not sit inline or inspect and block live network packets.",
+        "A packet sniffer (like Wireshark or tcpdump) captures network frames for human analysis and troubleshooting, without blocking malicious traffic."
+      ]
     },
     {
       "q": "To prevent rogue DHCP servers from handing out incorrect IP addresses and gateways to clients, which switch feature must be implemented?",
@@ -681,10 +795,16 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 0,
       "exp": "DHCP Snooping categorizes switch ports as trusted or untrusted. It drops DHCP Offer messages originating from untrusted ports (where end users sit).",
-      "domain": "Network Security"
+      "domain": "Network Security",
+      "whyWrong": [
+        "",
+        "Dynamic ARP Inspection blocks spoofed IP-to-MAC ARP replies using the DHCP Snooping binding table, but it does not block the rogue DHCP Offer packets themselves.",
+        "Port security limits how many or which MAC addresses can use a switch port; a rogue DHCP server running on a single allowed MAC address will pass right through it.",
+        "VLAN tagging (802.1Q) labels frames on trunk links to separate broadcast domains, which does not stop a rogue device inside a VLAN from answering DHCP requests."
+      ]
     },
     {
-      "q": "An administrator configures a firewall rule to explicitly drop any inbound traffic that does not match a previously permitted connection. What principle is this?",
+      "q": "A firewall has three allow rules (TCP 80, TCP 443 and TCP 5432) and no rule that blocks anything, yet inbound traffic on every other port is still dropped. What principle is this?",
       "opts": [
         "Stateful inspection",
         "Stateless inspection",
@@ -693,7 +813,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 2,
       "exp": "Implicit Deny is a firewall rule (usually invisible at the bottom of the ACL) that blocks all traffic that wasn't explicitly allowed by higher rules.",
-      "domain": "Network Security"
+      "domain": "Network Security",
+      "whyWrong": [
+        "Stateful inspection tracks connections in a state table so return traffic is allowed; it does not explain why unmatched new traffic is dropped by default.",
+        "Stateless inspection filters each packet against static header rules; it is a filtering method, not the default-deny behavior that drops whatever no rule allows.",
+        "",
+        "Zero Trust is a holistic security architecture requiring continuous verification of every user and device, not a single default-drop firewall rule."
+      ]
     },
     {
       "q": "A user's workstation has the IP address 169.254.12.45. They cannot reach the internet or local servers, but the link light on their NIC is solid green. What is the MOST likely cause?",
@@ -705,7 +831,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "169.254.x.x is an APIPA (Automatic Private IP Addressing) address. The OS assigns this to itself when it asks for an IP via DHCP and receives no response. Since the link light is on, the physical connection (cable) is fine.",
-      "domain": "Network Troubleshooting"
+      "domain": "Network Troubleshooting",
+      "whyWrong": [
+        "A DNS failure prevents resolving domain names to IPs, but it does not cause the OS to fall back to a 169.254.x.x APIPA address during IP configuration.",
+        "",
+        "A wrong default gateway prevents routing outside the local subnet, but the host would still have its valid IP address rather than a 169.254.x.x APIPA address.",
+        "An unplugged Ethernet cable would cause a link-down state with no solid green link light on the NIC."
+      ]
     },
     {
       "q": "An engineer replaces a failed 10G SFP+ module with a new one. The link comes up, but the interface shows a massive number of CRC errors and dropped frames. The cable is a 200-meter multimode fiber run. What is the MOST likely issue?",
@@ -717,7 +849,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 3,
       "exp": "CRC errors and dropped frames on a fiber link, assuming the link is actually up, usually point to dirty fiber ends, a bad bend radius, or attenuation causing signal degradation. Reversed Tx/Rx would result in the link not coming up at all.",
-      "domain": "Network Troubleshooting"
+      "domain": "Network Troubleshooting",
+      "whyWrong": [
+        "If the transmit (Tx) and receive (Rx) fiber strands were reversed, neither transceiver would see light on its Rx port and the link would not come up at all.",
+        "If the two SFP+ ports were set to mismatched speeds without compatible negotiation, the link would remain down rather than passing corrupted frames with CRC errors.",
+        "Fiber optic 10G SFP+ connections use separate Tx and Rx strands and operate exclusively at full duplex, so half/full duplex mismatches do not occur.",
+        ""
+      ]
     },
     {
       "q": "Users report they can reach websites by typing IP addresses (e.g., 8.8.8.8) into their browser, but not by typing domain names (e.g., google.com). Which protocol is failing?",
@@ -729,7 +867,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "DNS (Domain Name System) resolves human-readable domain names to IP addresses. If IP addresses work but domains don't, DNS is the point of failure.",
-      "domain": "Network Troubleshooting"
+      "domain": "Network Troubleshooting",
+      "whyWrong": [
+        "If DHCP were failing, the workstations would lack valid IP configurations and could not reach external IP addresses like 8.8.8.8 either.",
+        "",
+        "Reaching websites by IP address in the browser proves HTTP/HTTPS transport is working; only the name-to-IP lookup before the HTTP request is failing.",
+        "ARP resolves the local default gateway's MAC address; if ARP were failing, no traffic could leave the local subnet even when using raw IP addresses."
+      ]
     },
     {
       "q": "A network technician suspects that a router is dropping packets due to congestion. Which command-line tool will trace the path the packets take and report latency/loss at each hop?",
@@ -741,7 +885,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 2,
       "exp": "tracert (Windows) or traceroute (Linux/Cisco) shows the route packets take to a destination, displaying latency and timeouts for every router (hop) along the way.",
-      "domain": "Network Troubleshooting"
+      "domain": "Network Troubleshooting",
+      "whyWrong": [
+        "ping only measures end-to-end reachability and round-trip time to the final destination without revealing which intermediate router hop is introducing latency or packet loss.",
+        "ipconfig displays the local host's IP address, subnet mask, and default gateway; it does not send probe packets across the network path.",
+        "",
+        "netstat lists active TCP/UDP sockets and local routing tables on the host rather than testing per-hop latency along a remote path."
+      ]
     },
     {
       "q": "Two newly configured switches are connected via a trunk link. Switch A has native VLAN 1, and Switch B has native VLAN 99. What issue will occur?",
@@ -753,7 +903,13 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 1,
       "exp": "A native VLAN mismatch occurs when the two ends of a trunk link are configured with different native VLANs. This causes untagged frames to leak into the wrong VLAN, breaking connectivity and generating CDP/LLDP error logs.",
-      "domain": "Network Troubleshooting"
+      "domain": "Network Troubleshooting",
+      "whyWrong": [
+        "A routing loop is a Layer 3 issue where routers circulate packets endlessly due to inconsistent routing tables, not a Layer 2 trunk tagging discrepancy.",
+        "",
+        "While CDP/LLDP and STP may log native VLAN inconsistency warnings, the specific configuration error between VLAN 1 and VLAN 99 on the trunk is a Native VLAN mismatch.",
+        "A duplex mismatch occurs when one port is set to full duplex and the other to half duplex, causing late collisions rather than untagged frames crossing VLANs."
+      ]
     },
     {
       "q": "Which wireless standard operates simultaneously on the 2.4 GHz, 5 GHz, and 6 GHz bands to drastically increase throughput and reduce latency?",
@@ -765,7 +921,82 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       ],
       "ans": 2,
       "exp": "Wi-Fi 6E extends the 802.11ax standard to include the 6 GHz frequency band, offering wider channels and less interference.",
-      "domain": "Networking Concepts"
+      "domain": "Networking Concepts",
+      "whyWrong": [
+        "Wi-Fi 5 (802.11ac) operates only in the 5 GHz band and does not support 2.4 GHz or 6 GHz.",
+        "Standard Wi-Fi 6 (802.11ax) operates on 2.4 GHz and 5 GHz only; the 6 GHz spectrum was added specifically in the Wi-Fi 6E extension.",
+        "",
+        "Wi-Fi 4 (802.11n) is an older standard supporting only 2.4 GHz and 5 GHz, with no 6 GHz capability."
+      ]
+    },
+    {
+      "q": "A network engineer is connecting a new distribution switch to a core switch using two 10 Gbps fiber links. The connection must carry traffic for VLANs 10, 20, and 30 simultaneously while combining both physical links into a single 20 Gbps logical channel with active negotiation. Which protocols must the engineer configure on the switch interfaces? (Choose TWO.)",
+      "opts": [
+        "IEEE 802.1Q",
+        "IEEE 802.3ad (LACP)",
+        "IEEE 802.1X",
+        "IEEE 802.1D (STP)",
+        "IEEE 802.3af (PoE)"
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Network Implementation",
+      "exp": "IEEE 802.1Q is the standard trunking protocol that tags Ethernet frames so multiple VLANs (10, 20, and 30) can traverse the same link. IEEE 802.3ad (Link Aggregation Control Protocol / LACP) dynamically negotiates and bundles the two 10 Gbps physical interfaces into a single 20 Gbps logical port channel.",
+      "whyWrong": [
+        "",
+        "",
+        "IEEE 802.1X provides port-based network access control (NAC) authentication for clients, not VLAN trunking or link aggregation.",
+        "IEEE 802.1D (Spanning Tree Protocol) prevents Layer 2 loops by blocking redundant links rather than combining them into a 20 Gbps logical channel.",
+        "IEEE 802.3af delivers Power over Ethernet (up to 15.4W) over copper twisted-pair cabling, which does not apply to fiber links or link aggregation."
+      ]
+    },
+    {
+      "q": "After a penetration test, the security team reports that an attacker plugged a laptop into a conference room wall jack, handed out fake default gateway addresses to nearby clients, and also poisoned the ARP caches of existing hosts on the subnet to intercept traffic. Which two switch features must be enabled together on the access switch to block BOTH attack vectors? (Choose TWO.)",
+      "opts": [
+        "DHCP Snooping",
+        "Dynamic ARP Inspection (DAI)",
+        "BPDU Guard",
+        "802.1Q VLAN Trunking",
+        "Spanning Tree Root Guard"
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Network Security",
+      "exp": "DHCP Snooping blocks unauthorized DHCP Offer and ACK messages coming from untrusted access ports (stopping the rogue DHCP server) and builds a trusted IP-to-MAC binding table. Dynamic ARP Inspection (DAI) uses that binding table to validate ARP responses and drop spoofed ARP packets (stopping the ARP poisoning attack).",
+      "whyWrong": [
+        "",
+        "",
+        "BPDU Guard disables an access port if it receives Spanning Tree BPDUs from an unauthorized switch, which does not stop a laptop from sending rogue DHCP or ARP packets.",
+        "802.1Q VLAN Trunking tags frames across inter-switch trunk links; enabling trunking on a conference room jack would actually increase the risk of VLAN hopping.",
+        "Root Guard prevents an unauthorized switch from becoming the STP Root Bridge, which does not inspect or block rogue DHCP offers or spoofed ARP replies."
+      ]
+    },
+    {
+      "q": "A network technician is troubleshooting a Windows workstation that cannot load an internal HTTPS web portal at https://portal.corp.local. The technician can ping the portal server's IP address (10.20.30.15), but wants to verify from the Windows command line whether the hostname resolves to 10.20.30.15 and whether the workstation currently has an established TCP session to port 443 on that IP. Which two built-in commands should the technician run? (Choose TWO.)",
+      "opts": [
+        "nslookup portal.corp.local",
+        "netstat -an",
+        "ipconfig /flushdns",
+        "arp -a",
+        "tracert -d 10.20.30.15"
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Network Troubleshooting",
+      "exp": "nslookup portal.corp.local queries the configured DNS server to verify whether the FQDN resolves to the expected IP address (10.20.30.15). netstat -an lists all active TCP and UDP connections and listening ports in numeric form, confirming whether a TCP session to 10.20.30.15:443 is established.",
+      "whyWrong": [
+        "",
+        "",
+        "ipconfig /flushdns clears the local DNS resolver cache without displaying what IP address portal.corp.local resolves to or showing active TCP connections.",
+        "arp -a displays the local Layer 2 IP-to-MAC address cache for the local subnet, not DNS name resolution or Layer 4 TCP port 443 session states.",
+        "tracert -d 10.20.30.15 traces Layer 3 ICMP hops to the IP with DNS resolution disabled (-d), neither testing the hostname lookup nor checking TCP port 443 sockets."
+      ]
     }
   ],
   "daily": [

@@ -459,7 +459,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 1,
       "exp": "Rapid Elasticity allows cloud environments to automatically provision (scale out) and de-provision (scale in) resources based on dynamic workload demands.",
-      "domain": "Deployment"
+      "domain": "Deployment",
+      "whyWrong": [
+        "High availability keeps a service online when underlying components fail through redundancy and failover, rather than scaling capacity out and in for scheduled traffic spikes.",
+        "",
+        "Resource pooling means the cloud provider shares physical hardware among multiple tenants, not dynamically adding and removing a single tenant's instances as load changes.",
+        "Measured service meters resource consumption for pay-as-you-go billing; it describes how usage is tracked and charged rather than the act of scaling servers out and in."
+      ]
     },
     {
       "q": "A technician is setting up a new virtual machine in Proxmox. To ensure the VM can communicate directly with other devices on the physical network as if it were a physical host, which networking mode should be configured?",
@@ -471,7 +477,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 2,
       "exp": "Bridged networking allows the VM's virtual network interface to connect directly to the physical network, obtaining its own IP address from the local DHCP server.",
-      "domain": "Cloud Architecture"
+      "domain": "Cloud Architecture",
+      "whyWrong": [
+        "NAT places the VM on a private virtual subnet behind the hypervisor's IP address, preventing other physical LAN hosts from directly initiating connections to the VM as a peer.",
+        "Host-only networking restricts communication to the hypervisor host and other local VMs on that host, isolating the VM from the external physical LAN entirely.",
+        "",
+        "Internal networking creates an isolated virtual switch shared only among VMs on the same hypervisor, with no connection to the host OS or the physical network."
+      ]
     },
     {
       "q": "A company is designing a disaster recovery architecture in AWS. They want their secondary site to have a scaled-down version of a fully functional environment that can quickly scale up to handle production traffic if the primary site fails. Which DR strategy is this?",
@@ -483,7 +495,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 2,
       "exp": "Warm Standby means a scaled-down version of a fully functional environment is always running in the secondary location. (Pilot Light only keeps core services like DBs running, while web servers are completely off).",
-      "domain": "Cloud Architecture"
+      "domain": "Cloud Architecture",
+      "whyWrong": [
+        "Backup and Restore stores data snapshots offline with no compute environment running in the DR site, requiring every server to be provisioned from scratch after a failure.",
+        "Pilot Light only runs the minimal core (such as database replication) while keeping application and web servers turned off until failover, rather than running a full scaled-down stack.",
+        "",
+        "Multi-Site Active/Active runs a full-scale production environment in both sites simultaneously serving live traffic, rather than keeping the secondary site scaled down until failover."
+      ]
     },
     {
       "q": "Which metric is used by cloud providers in a Service Level Agreement (SLA) to guarantee the percentage of time a service will be operational and accessible?",
@@ -495,7 +513,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 2,
       "exp": "Uptime Availability, expressed as a percentage (the 'nines'), is the standard metric used in SLAs to guarantee service reliability.",
-      "domain": "Operations"
+      "domain": "Operations",
+      "whyWrong": [
+        "Recovery Time Objective (RTO) defines the maximum acceptable downtime after an outage occurs, not the contractual percentage of time the service stays operational.",
+        "Recovery Point Objective (RPO) measures the maximum age of data that can be lost during an outage (dictating backup frequency), not service uptime.",
+        "",
+        "Mean Time to Repair (MTTR) tracks the average time needed to fix a failed component and restore service, rather than the overall percentage of operational uptime."
+      ]
     },
     {
       "q": "A cloud engineer writes a YAML file defining the exact state of a Kubernetes cluster, including pods, services, and ingress rules. The engineer commits this file to a Git repository, which automatically triggers a pipeline to deploy it. What is this practice called?",
@@ -507,7 +531,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 1,
       "exp": "GitOps uses Git repositories as the single source of truth to deliver infrastructure as code. Declarative files (like YAML) define the desired state, and automated tools deploy it.",
-      "domain": "Deployment"
+      "domain": "Deployment",
+      "whyWrong": [
+        "Continuous Integration focuses on automatically building and testing code commits when merged, whereas using Git as the declarative source of truth to deploy cluster state is GitOps/IaC.",
+        "",
+        "Serverless computing runs event-driven functions (FaaS) without managing clusters or nodes, whereas this scenario explicitly manages Kubernetes infrastructure via declarative code.",
+        "Microservices architecture describes structuring an application as loosely coupled services, not the practice of managing and deploying cluster state from a Git repository."
+      ]
     },
     {
       "q": "A cloud administrator notices that a web application running on an auto-scaling group of EC2 instances is frequently crashing due to Out of Memory (OOM) errors during peak hours. The instances are t3.micro. What is the BEST long-term solution?",
@@ -519,7 +549,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 0,
       "exp": "If an individual application process requires more memory than a single instance can provide (causing OOM errors), horizontal scaling won't fix it—each new instance will just crash. The instance type must be vertically scaled to provide more RAM.",
-      "domain": "Troubleshooting"
+      "domain": "Troubleshooting",
+      "whyWrong": [
+        "",
+        "Horizontal scaling adds more instances, but each t3.micro still has only 1 GB of RAM; if a single worker process exceeds that memory limit, new t3.micro nodes will crash with OOM too.",
+        "Scheduled reboots drop active user sessions and only temporarily clear memory without giving the application the RAM capacity it needs to survive peak loads.",
+        "A Content Delivery Network offloads static asset delivery to edge caches, which does not increase the RAM available to the backend application processes running on t3.micro instances."
+      ]
     },
     {
       "q": "A SaaS provider hosts data for multiple distinct enterprise clients within the same underlying database structure. What concept ensures that Client A cannot query or view Client B's data?",
@@ -531,7 +567,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 1,
       "exp": "Multitenancy allows multiple customers (tenants) to share the same physical resources, while logical isolation (enforced via software/database design) ensures their data remains strictly separated.",
-      "domain": "Cloud Architecture"
+      "domain": "Cloud Architecture",
+      "whyWrong": [
+        "Encryption at rest protects storage media if a disk is stolen, but because the shared database engine decrypts data for queries, it alone does not stop Tenant A from querying Tenant B's rows.",
+        "",
+        "Physical air-gapping separates systems onto completely disconnected hardware networks, which contradicts the scenario where all clients share the same underlying database structure.",
+        "Hardware Security Modules (HSMs) safeguard cryptographic keys in tamper-resistant hardware; they do not enforce tenant-level access boundaries inside a shared database schema."
+      ]
     },
     {
       "q": "A company is migrating its on-premises virtual machines to the cloud by copying the VM images exactly as they are and running them on cloud compute instances without modifying the OS or application architecture. What migration strategy is this?",
@@ -543,7 +585,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 2,
       "exp": "Lift-and-Shift (Re-hosting) involves migrating applications exactly as they are, without modifying their architecture or code, to quickly move them to the cloud.",
-      "domain": "Deployment"
+      "domain": "Deployment",
+      "whyWrong": [
+        "Re-platforming ('lift, tinker, and shift') makes targeted cloud optimizations—like moving a self-managed DB to managed RDS—whereas copying VMs untouched is re-hosting.",
+        "Re-architecting modifies and redesigns the application codebase (such as breaking a monolith into cloud-native microservices), which this unchanged VM migration explicitly avoids.",
+        "",
+        "Repurchasing ('drop and shop') retires the existing application altogether and replaces it with a commercial SaaS product rather than migrating the original VMs."
+      ]
     },
     {
       "q": "A cloud engineer configures a billing alert that triggers an email if the monthly cloud spend exceeds $1,000. Which operational practice does this support?",
@@ -555,7 +603,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 2,
       "exp": "Billing alerts and budgets are fundamental tools of Cost Management (FinOps), ensuring cloud resources do not generate unexpected charges.",
-      "domain": "Operations"
+      "domain": "Operations",
+      "whyWrong": [
+        "Patch management rolls out OS and software updates to remediate vulnerabilities, which has nothing to do with monitoring monthly cloud expenditure thresholds.",
+        "Capacity planning forecasts future compute, storage, and bandwidth needs to meet performance demand, whereas a spend threshold alert tracks financial budget consumption.",
+        "",
+        "Disaster recovery restores operations after a major outage or region failure, not when monthly cloud charges cross a dollar threshold."
+      ]
     },
     {
       "q": "A web application hosted in the cloud is experiencing high latency for users in Europe, while users in the US report excellent performance. The servers are located in the US East region. What is the BEST way to improve performance for European users without deploying a new server cluster in Europe?",
@@ -567,7 +621,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 1,
       "exp": "A CDN caches static assets (images, CSS, JS) at edge locations globally. European users will download these assets from a local European edge node, drastically reducing latency without requiring new application servers.",
-      "domain": "Troubleshooting"
+      "domain": "Troubleshooting",
+      "whyWrong": [
+        "US users already have fast performance, proving US server CPU is not the bottleneck; upgrading CPU cannot shorten the transatlantic network round-trip time for European users.",
+        "",
+        "Database IOPS affects disk read/write throughput in US East for all users alike; it does not reduce the geographic latency between European browsers and the US origin.",
+        "A Site-to-Site VPN encrypts traffic between two fixed private networks (and adds encryption overhead); it does not cache content closer to public internet users in Europe."
+      ]
     },
     {
       "q": "Which cloud service model provides the consumer with the ability to deploy onto the cloud infrastructure consumer-created or acquired applications created using programming languages, libraries, services, and tools supported by the provider?",
@@ -579,7 +639,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 1,
       "exp": "In Platform as a Service (PaaS), the provider manages the underlying infrastructure (servers, network, OS), while the consumer manages the deployed applications and data (e.g., AWS Elastic Beanstalk or Heroku).",
-      "domain": "Cloud Architecture"
+      "domain": "Cloud Architecture",
+      "whyWrong": [
+        "IaaS rents raw virtual compute, storage, and networking where the customer must install and manage the OS and runtime themselves, rather than deploying directly onto a provider-managed runtime.",
+        "",
+        "SaaS delivers a finished, provider-built application (like webmail or CRM) to end users, rather than a managed platform for deploying consumer-created application code.",
+        "Backup as a Service provides managed cloud data backup and recovery, not an application runtime and development platform for running custom code."
+      ]
     },
     {
       "q": "A company requires a highly available block storage volume to attach to an active database server. The volume must survive an instance reboot. Which type of storage should they provision?",
@@ -591,7 +657,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 2,
       "exp": "Persistent block storage behaves like a physical hard drive attached to a server. It retains data independently of the compute instance's lifecycle (unlike ephemeral storage).",
-      "domain": "Deployment"
+      "domain": "Deployment",
+      "whyWrong": [
+        "Object storage manages whole objects over HTTP APIs rather than fixed-size blocks; it cannot be mounted as a raw block volume for an active relational database's data files.",
+        "Ephemeral instance store provides temporary block storage tied to the physical host that is wiped whenever the instance is stopped or fails, making it unsafe for persistent databases.",
+        "",
+        "File storage exposes shared folders over network protocols like NFS/SMB with higher latency than block storage, whereas databases require low-latency raw block volumes."
+      ]
     },
     {
       "q": "A cloud engineer needs to apply an OS security patch to a fleet of 100 Linux VMs. Rather than logging into each machine individually, they use a configuration management tool to deploy the patch simultaneously. What is this practice called?",
@@ -603,7 +675,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 1,
       "exp": "Automation (scripting a single task) and Orchestration (coordinating multiple automated tasks across a fleet) eliminate manual toil and ensure consistent configuration management.",
-      "domain": "Operations"
+      "domain": "Operations",
+      "whyWrong": [
+        "Blue/Green deployment switches live traffic from an old environment ('Blue') to a newly provisioned parallel environment ('Green'), rather than patching 100 existing VMs in place.",
+        "",
+        "Auto-scaling dynamically adjusts the number of running instances based on load metrics; it does not push OS security patches across an existing server fleet.",
+        "Continuous Delivery automates building, testing, and preparing application code releases for production, rather than executing fleet-wide OS configuration and patch tasks."
+      ]
     },
     {
       "q": "A user complains that they cannot access a cloud-hosted database from their office IP address, but they can access it when they connect via their home network. What is the MOST likely cause?",
@@ -615,7 +693,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 1,
       "exp": "If a service is accessible from one IP but not another, the issue is almost always a network access control list (ACL) or security group rule that explicitly blocks or fails to allow the office IP.",
-      "domain": "Troubleshooting"
+      "domain": "Troubleshooting",
+      "whyWrong": [
+        "If the database instance were offline, connections from the user's home network would fail too, not just connections from the office IP.",
+        "",
+        "A compromised home network would not explain why the database works from home while failing from the corporate office network.",
+        "An out-of-storage condition is a server-side failure that impacts all clients regardless of source IP, so home connections would also fail."
+      ]
     },
     {
       "q": "A team wants every change to their Terraform configuration automatically validated (syntax checked, plan reviewed) the moment it's pushed to their repository, before any human manually applies it. This practice is best described as:",
@@ -627,7 +711,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 1,
       "exp": "Continuous Integration is the automatic build/test/validation step that runs on every code change — Continuous Deployment is the separate step that automatically ships a change that passes CI.",
-      "domain": "DevOps Fundamentals"
+      "domain": "DevOps Fundamentals",
+      "whyWrong": [
+        "Continuous Deployment automatically applies every passing change directly to production without waiting for a human approval gate, whereas this team stops at automated validation.",
+        "",
+        "IaaS is the cloud service model of renting virtualized compute and networking, not the pipeline practice of automatically linting and validating code commits.",
+        "Configuration drift is the failure state where live infrastructure diverges from the IaC repository due to manual edits, not an automated validation workflow."
+      ]
     },
     {
       "q": "After an outage, a team needs to determine exactly who changed a firewall rule in their IaC repository and when. Which practice makes this possible?",
@@ -639,7 +729,13 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 1,
       "exp": "Version control (e.g. Git) tracks every change to the infrastructure code with an author and timestamp — the audit trail IaC's repeatability depends on.",
-      "domain": "DevOps Fundamentals"
+      "domain": "DevOps Fundamentals",
+      "whyWrong": [
+        "Elasticity automatically scales compute capacity out and in with traffic demand; it does not track code authorship or commit history in an IaC repository.",
+        "",
+        "Load balancing distributes incoming network requests across healthy backend instances; it has no record of who committed changes to infrastructure code.",
+        "Data sanitization permanently erases sensitive data from storage media before disposal or reuse, which is unrelated to auditing code repository changes."
+      ]
     },
     {
       "q": "A cloud engineer manually SSHes into a production server to apply an emergency configuration fix, bypassing the normal IaC pipeline. What problem does this most directly create?",
@@ -651,7 +747,59 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       ],
       "ans": 1,
       "exp": "Any manual, out-of-band change creates configuration drift — the running infrastructure no longer matches what's declared in code, so the next automated deployment can silently revert or conflict with the fix.",
-      "domain": "DevOps Fundamentals"
+      "domain": "DevOps Fundamentals",
+      "whyWrong": [
+        "Manual SSH changes on a single server do not configure auto-scaling policies or make the environment more elastic; if anything, manual edits break template consistency.",
+        "",
+        "Editing a configuration file over SSH does not reduce the instance's metered compute or storage consumption billed by the cloud provider.",
+        "Rapid elasticity relies on new instances booting cleanly from templates or IaC; out-of-band manual fixes aren't captured in code and will be lost when new nodes scale out."
+      ]
+    },
+    {
+      "q": "A healthcare company is migrating a stateful relational database and a stateless web tier to a public cloud Region. Their SLA requires that both tiers survive the complete failure of an entire physical data center within the Region without manual intervention, while minimizing inter-region data transfer costs. Which architectural components MUST be included in the design? (Choose TWO.)",
+      "opts": [
+        "An Auto Scaling group of web instances behind a load balancer spanning at least two Availability Zones",
+        "A Multi-AZ relational database deployment with synchronous replication to a standby instance in a second Availability Zone",
+        "Active-active multi-region database replication across two geographic continents",
+        "A single-AZ cluster placement group configured for low-latency high-performance computing (HPC)",
+        "Cold backups archived daily to deep glacier object storage as the sole failover mechanism"
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Cloud Architecture",
+      "exp": "An Availability Zone (AZ) represents one or more physically isolated data centers within a single Region. Spanning the stateless web Auto Scaling group across multiple AZs behind a load balancer and configuring a Multi-AZ database with synchronous standby replication ensures both tiers automatically survive an entire AZ (data center) outage while keeping traffic inside the same Region to avoid cross-region transfer fees.",
+      "whyWrong": [
+        "",
+        "",
+        "Multi-region replication incurs significant cross-region data transfer charges and is unnecessary when the requirement is surviving a single data center (AZ) failure within one Region.",
+        "A cluster placement group packs instances into a single Availability Zone for low latency, creating a single point of failure if that data center goes offline.",
+        "Cold archive backups take hours to restore and require manual recovery steps, violating the requirement for automatic failover without manual intervention."
+      ]
+    },
+    {
+      "q": "A cloud administrator deploys a new Linux web server in a private VPC subnet behind an internet-facing Application Load Balancer (ALB) in a public subnet. External users can reach the ALB, which returns HTTP 504 Gateway Timeout errors, and the web server also fails when trying to download OS patches from external repositories. Which configuration changes are required to resolve BOTH issues? (Choose TWO.)",
+      "opts": [
+        "Update the web server's Security Group to allow inbound HTTP/HTTPS traffic from the ALB's Security Group",
+        "Provision a NAT Gateway in the public subnet and route the private subnet's 0.0.0.0/0 traffic through it",
+        "Assign a public IPv4 address directly to the web server while leaving it on the private route table",
+        "Replace the Application Load Balancer with a public DNS A record pointing directly to the web server's private IP",
+        "Enable VPC Peering between the public and private subnets within the same VPC"
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Troubleshooting",
+      "exp": "An HTTP 504 Gateway Timeout from the ALB indicates the load balancer cannot establish a connection to the target web server, which happens when the target's Security Group blocks inbound traffic from the ALB. Additionally, instances in a private subnet have no direct internet route and require a NAT Gateway in a public subnet (with a default route in the private route table) to initiate outbound connections for OS patching.",
+      "whyWrong": [
+        "",
+        "",
+        "A public IP address has no effect if the subnet's route table lacks a route to an Internet Gateway, and exposing the backend server publicly violates the private-subnet design.",
+        "Private RFC 1918 IP addresses are not routable over the public internet, so external users cannot reach a DNS record pointing to a private IP.",
+        "VPC Peering connects two separate VPCs; subnets within the same VPC already route to each other locally without peering."
+      ]
     }
   ],
   "daily": [

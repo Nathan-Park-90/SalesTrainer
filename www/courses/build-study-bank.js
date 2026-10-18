@@ -22,9 +22,11 @@ for (const key of Object.keys(ctx).filter(k => k.startsWith('COURSE_'))) {
     const c = ctx[key];
     const id = c.meta.id;
     const items = [];
-    (c.exam || []).forEach(q => items.push({
+    // Multi-response ("Choose TWO") questions are skipped: the coach grades one reaction against a single ans.
+    // PSM questions carry `explanation` instead of `exp`.
+    (c.exam || []).filter(q => !Array.isArray(q.ans)).forEach(q => items.push({
         id: `${id}:mc:${hash(q.q)}`, kind: 'mc', source: 'exam', q: q.q, opts: q.opts, ans: q.ans,
-        exp: q.exp || '', domain: q.domain || '', module: '',
+        exp: q.exp || q.explanation || '', domain: q.domain || '', module: '',
     }));
     (c.modules || []).forEach((m, mi) => (m.topics || []).forEach(t => (t.quiz || []).forEach(q => items.push({
         id: `${id}:mc:${hash(q.q)}`, kind: 'mc', source: 'lesson', q: q.q, opts: q.opts, ans: q.ans,
