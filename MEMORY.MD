@@ -1,5 +1,5 @@
 ## MAMMOTH ACADEMY — Memory Log
-Last updated: 2026-09-28
+Last updated: 2026-10-18
 
 ---
 
@@ -56,6 +56,9 @@ Each file defines `var COURSE_<NAME> = { meta, modules, flashcards, exam, daily,
 - `modules[]`: `{ title, topics[{title, prose, tags[], quiz[]}], related[] }`
   - **No "Module N:" prefix in `title`** — numbering is rendered dynamically (`Module <localIdx+1>`) by app.js from each module's position in its own course, never hardcoded in content.
   - `related`: array of `{ course: <courseId>, idx: <that module's position within its own course> }` — NOT a raw index into the merged course list. Can point to a different course.
+- `meta.examFormat` (Oct 18, 2026): `{ questions, passLabel, blueprint: [{domain, label, weight}], modes?: [{id, name, passThreshold, passLabel, questions, minutes, blueprint, parts?}] }`. `blueprint[].domain` must match the bank's `q.domain` tags; the Arena samples by these weights. A+ uses `modes` (core1 / core2 / combined; combined has `parts` so it passes only if BOTH cores clear their own bar). Written by a script, not by hand; Cloud+ uses the CV0-004 six-domain blueprint (incl. DevOps Fundamentals 10%), NOT the CV0-003 one.
+- `exam[]` items: `{ q, opts, ans, domain, exp (PSM: explanation), whyWrong }`. `ans` is a number, or an **array for multi-response** ("(Choose TWO.)"; graded all-or-nothing). `whyWrong` is aligned with `opts`, `""` at correct indices (shown as "Trap:" lines in the results autopsy). Every one of the 272 questions has it.
+- `daily[]` lessons: exactly 3 slides `{title, body (strong/em only), anchor}` + 5 quiz Qs. One lesson per module for CompTIA and Sales (Sales track key `sales`).
 - `exam[].domain` must exactly match one of the keys in `meta.domains` (or the official exam's real domain name) — a typo'd or invented domain name silently breaks Smart Path's weak-domain detection for every question tagged with it.
 
 **Course-loader identity fields** (set automatically, never store these in the course file itself): `mod.courseId`, `mod.localIdx` (module's 0-based position within its own course — the stable id used for progress storage, display numbering, and related-links), `flashcard.id` (prefixed with the course id to stay globally unique).
@@ -89,7 +92,11 @@ Gotcha: any element toggled via the `hidden` attribute that also has its own CSS
 ## localStorage Keys
 | Key | Type | Description |
 |---|---|---|
-| st_highscore_<examKey> | int | Best score for that exam, per course (e.g. `st_highscore_aws`) |
+| st_highscore_<examKey> | int | Best raw score on a FULL-length run (read by Home/Smart Path as score / min(bank, 65)); single-core A+ runs don't write it |
+| st_highscore_pct_<examKey> | float string | Best percentage from any run/mode (Oct 18); Home and Smart Path prefer it. Written on a first attempt even at 0% |
+| st_exam_practice | '1'/'0' | Arena Practice mode toggle (instant feedback) vs. real exam rules |
+| st_failed_qs | array | Question texts missed in the Arena (drawn first next time) |
+| st_domain_perf_<examKey> | object | Cumulative per-domain correct/total from the Arena, feeds Smart Path's weakest domain |
 | st_streak | int | Daily study streak |
 | st_last_daily | string | Date of last daily completion |
 | st_daily_day_<trackKey> | int | Current day in that course's daily track |
@@ -206,3 +213,14 @@ One Markdown transcript per module (47, one per `courses/*.js` module — regene
 - Case study: `https://mammothcapital.site/academy`.
 - Git: this repo's remote is `SalesTrainer` and it's **4 commits ahead and unpushed**. `Code/Mammoth/CompTIAplus` is another
   clone of the same repo that has diverged (2 commits). Ask Nathan which is canonical before pushing either.
+
+## Session Oct 18, 2026 (Claude Code): parity fixes, Arena exam mode, real Daily Flash content
+Live at academy.mammothcapital.site, service worker v5.
+- **Footer**: Ko-fi tip link (`ko-fi.com/nathan_park`) on every page. Mammoth-mode kit re-synced from MammothCapitalSite.
+- **Library**: `?course=` with a missing/stale `&title=` now opens that course's Module 1 (used to silently show AWS); unknown course ids fall back to the first course. Bigger "Now Viewing" trigger with a track count and up to 10 one-tap icon badges (capped on purpose, see Library Navigation).
+- **Home**: Library card lists every loaded track (generated); Arena card counts exams from data; stats bar always visible with a cold-start "New here? ... Daily Flash" banner when all four stats are zero.
+- **Smart Path**: weak domains with no mapped module link to the next unfinished module instead of "undefined"; Cloud+ maps DevOps Fundamentals; Best Exam Score shows % with the pass bar. (The outside report said Cloud+ was missing from Path: it wasn't.)
+- **Arena** (app.js exam simulator, CSS in arena.html): testing-center mode (no feedback until submit), flag for review, collapsible question grid, review screen, sticky timer under the navbar that auto-submits (the old inline timer was wiped on every render and crashed on expiry), keyboard (1-9/A-E, F, arrows), leave-page warning, optional Practice mode. Results: verdict vs pass mark, per-official-domain bars, filterable per-question autopsy with Trap lines. Tests: scratch Playwright suites (arena/audit/daily flow), all green.
+- **Content** (drafted by agy on Gemini 4 Argon, every answer key reviewed by Claude): 28 Daily Flash lessons (Sales 5, A+ 8, Net+ 5, Sec+ 5, Cloud+ 5) replacing CompTIA placeholders that rendered "undefined"; Scrum lesson anchors were authoring notes and are now real takeaways; `whyWrong` on all 252 old questions + 20 new multi-response questions. Corrections made in review: SY0-701 IR steps (Detection/Analysis, not Identification), an ambiguous implicit-deny question (Net+/Sec+), an MTD-vs-RTO question, KMS FIPS wording, PSM Scrum-Team size and Daily Scrum wording.
+- **Study bank** (Jake): multi-response questions are excluded (the coach grades one reaction); PSM explanations were blank in the export (field is `explanation`) and are fixed.
+- Banks are still thin vs. real exams (A+ Core 2 has 9 questions; Cloud+ has no Security-domain questions, so the sampler fills those slots from other domains).

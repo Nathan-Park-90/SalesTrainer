@@ -9,7 +9,7 @@
   "Performance": "Databases (RDS & DynamoDB)",
   "Cost": "Cost Optimization (The CFO's Architecture)"
  },
- "built": "2026-09-28T07:36:04.106Z",
+ "built": "2026-10-18T21:04:27.387Z",
  "items": [
   {
    "id": "aws-saa-c03:mc:7c8e77bfb6",
@@ -567,7 +567,7 @@
     "AWS Certificate Manager"
    ],
    "ans": 1,
-   "exp": "AWS CloudHSM provides dedicated hardware security modules. KMS is multi-tenant and only FIPS 140-2 Level 2 compliant. CloudHSM gives you full control of the keys.",
+   "exp": "AWS CloudHSM gives you dedicated, single-tenant HSMs in your VPC that only you control. AWS KMS also runs on FIPS-validated HSMs, but they are multi-tenant and managed by AWS, so it cannot satisfy an isolated single-tenant requirement.",
    "domain": "Secure",
    "module": ""
   },

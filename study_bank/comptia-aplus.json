@@ -1,8 +1,8 @@
 {
  "course": "comptia-aplus",
  "name": "CompTIA A+",
- "exam": "Core 1 (220-1201) & Core 2 (220-1202)",
- "passThreshold": null,
+ "exam": "CompTIA A+",
+ "passThreshold": 0.77,
  "domains": {
   "Hardware and Network Troubleshooting": "Hardware & The Helpdesk Trenches",
   "Mobile Devices": "Mobile Devices & Virtualization",
@@ -14,7 +14,7 @@
   "Virtualization and Cloud": "Virtualization & The Cloud (Where Hardware Goes to Retire)",
   "Security": "Security: The Domain That Decides If You Pass Core 2"
  },
- "built": "2026-09-28T07:36:04.111Z",
+ "built": "2026-10-18T21:04:27.391Z",
  "items": [
   {
    "id": "comptia-aplus:mc:254cf6747c",

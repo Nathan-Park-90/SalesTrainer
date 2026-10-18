@@ -1,8 +1,8 @@
 {
  "course": "comptia-networkplus",
  "name": "CompTIA Network+",
- "exam": "N10-009",
- "passThreshold": null,
+ "exam": "CompTIA Network+ N10-009",
+ "passThreshold": 0.8,
  "domains": {
   "Networking Concepts": "The OSI Model: Not Just Theory",
   "Network Implementation": "Network Implementations: Routing & Switching",
@@ -10,7 +10,7 @@
   "Network Security": "Network Security & Hardening",
   "Network Troubleshooting": "Network Troubleshooting: Command Line Tools"
  },
- "built": "2026-09-28T07:36:04.114Z",
+ "built": "2026-10-18T21:04:27.392Z",
  "items": [
   {
    "id": "comptia-networkplus:mc:10b3ae2fc4",
@@ -333,10 +333,10 @@
    "module": ""
   },
   {
-   "id": "comptia-networkplus:mc:24eb59ce9a",
+   "id": "comptia-networkplus:mc:a92e7c1dfe",
    "kind": "mc",
    "source": "exam",
-   "q": "An administrator configures a firewall rule to explicitly drop any inbound traffic that does not match a previously permitted connection. What principle is this?",
+   "q": "A firewall has three allow rules (TCP 80, TCP 443 and TCP 5432) and no rule that blocks anything, yet inbound traffic on every other port is still dropped. What principle is this?",
    "opts": [
     "Stateful inspection",
     "Stateless inspection",

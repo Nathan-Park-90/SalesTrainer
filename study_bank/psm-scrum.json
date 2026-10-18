@@ -9,7 +9,7 @@
   "Events": "Scrum Events",
   "Artifacts": "Artifacts & Commitments"
  },
- "built": "2026-09-28T07:36:04.117Z",
+ "built": "2026-10-18T21:04:27.394Z",
  "items": [
   {
    "id": "psm-scrum:mc:66579b99c7",
@@ -23,7 +23,7 @@
     "Any member of the Scrum Team."
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "Only the Product Owner has the authority to cancel the Sprint, although they may do so under influence from the stakeholders, the Developers, or the Scrum Master.",
    "domain": "Events",
    "module": ""
   },
@@ -39,7 +39,7 @@
     "Until all developers agree on the plan"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "Sprint Planning is timeboxed to a maximum of eight hours for a one-month Sprint. For shorter Sprints, the event is usually shorter.",
    "domain": "Events",
    "module": ""
   },
@@ -55,7 +55,7 @@
     "Increment"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The three artifacts are the Product Backlog, Sprint Backlog, and Increment. The Sprint Goal is a *commitment* contained within the Sprint Backlog, not a standalone artifact.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -71,7 +71,7 @@
     "The Developers, because they do the work."
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "If the Definition of Done for an increment is part of the standards of the organization, all Scrum Teams must follow it as a minimum. If it is not an organizational standard, the Scrum Team must create a Definition of Done appropriate for the product.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -87,7 +87,7 @@
     "It returns to the Product Backlog."
    ],
    "ans": 3,
-   "exp": "",
+   "exp": "If a Product Backlog item does not meet the Definition of Done, it cannot be released or even presented at the Sprint Review. It returns to the Product Backlog for future consideration.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -103,7 +103,7 @@
     "Complete the work but don't mention it in the Daily Scrum to avoid distracting the team."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "Those wanting to change the Product Backlog can do so only by trying to convince the Product Owner. The Product Owner is accountable for maximizing the value of the product.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -119,7 +119,7 @@
     "There is no difference; they are two names for the same event."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Sprint Review is to inspect the outcome of the Sprint (the Increment) and determine future adaptations. The Sprint Retrospective is to plan ways to increase quality and effectiveness (process).",
    "domain": "Events",
    "module": ""
   },
@@ -135,7 +135,7 @@
     "As many as the teams need to ensure fast decision making."
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "One Product, One Product Backlog, One Product Owner. This remains true regardless of the number of Scrum Teams working on the product.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -151,7 +151,7 @@
     "Respect"
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "Openness: The Scrum Team and its stakeholders agree to be open about all the work and the challenges with performing the work.",
    "domain": "Theory",
    "module": ""
   },
@@ -167,7 +167,7 @@
     "The Developers"
    ],
    "ans": 3,
-   "exp": "",
+   "exp": "The Developers are always accountable for creating a plan for the Sprint, the Sprint Backlog. How they turn Product Backlog items into an Increment of value is solely up to them.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -183,7 +183,7 @@
     "To make sure every team member answers the three questions."
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "The Daily Scrum is an event for the Developers. The Scrum Master ensures it takes place, but attends as a participant only if they are actively working on items in the Sprint Backlog.",
    "domain": "Events",
    "module": ""
   },
@@ -199,7 +199,7 @@
     "The Scrum Masters define it."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "If there are multiple Scrum Teams working together on a product, they must mutually define and comply with the same Definition of Done.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -215,7 +215,7 @@
     "It is finalized before the first Sprint."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Product Backlog is never complete. The earliest development of it lays out the initially known and best-understood requirements, but it evolves as the product and the environment in which it will be used evolves.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -231,7 +231,7 @@
     "The Project Manager"
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "The Developers are always accountable for creating a plan for the Sprint (Sprint Backlog), instilling quality, and adapting their plan each day toward the Sprint Goal.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -247,7 +247,7 @@
     "As long as it takes to show all the work"
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "The Sprint Review is timeboxed to a maximum of four hours for a one-month Sprint. For shorter Sprints, the event is usually shorter.",
    "domain": "Events",
    "module": ""
   },
@@ -263,7 +263,7 @@
     "A new Sprint Goal."
    ],
    "ans": 0,
-   "exp": "",
+   "exp": "The Sprint Review includes a discussion of what to do next, so the Product Backlog may also be adjusted to meet new opportunities. The result of the Sprint Review is a revised Product Backlog.",
    "domain": "Events",
    "module": ""
   },
@@ -277,7 +277,7 @@
     "False"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "False. The Product Owner may delegate the work of managing the Product Backlog, but they remain accountable. The Scrum Master cannot arbitrarily take over this accountability.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -293,7 +293,7 @@
     "A Sprint can never be cancelled."
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "A Sprint could be cancelled if the Sprint Goal becomes obsolete. Only the Product Owner has the authority to cancel the Sprint.",
    "domain": "Events",
    "module": ""
   },
@@ -309,7 +309,7 @@
     "Story points and velocity"
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "Scrum employs an iterative, incremental approach to optimize predictability and to control risk. It is founded on empiricism and lean thinking.",
    "domain": "Theory",
    "module": ""
   },
@@ -325,7 +325,7 @@
     "They speak multiple languages."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "Cross-functional teams have all competencies needed to accomplish the work without depending on others not part of the team.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -341,15 +341,15 @@
     "Cancel the Sprint."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "If the Developers determine they have too much or too little work, they may renegotiate the selected Product Backlog items with the Product Owner.",
    "domain": "Events",
    "module": ""
   },
   {
-   "id": "psm-scrum:mc:7ec107750b",
+   "id": "psm-scrum:mc:c0d6089dee",
    "kind": "mc",
    "source": "exam",
-   "q": "What is the primary way a Scrum Master keeps a Developers working at its highest level of productivity?",
+   "q": "What is the primary way a Scrum Master keeps the Developers working at its highest level of productivity?",
    "opts": [
     "By ensuring the meetings start and end at the proper time.",
     "By facilitating Developer decisions and removing impediments.",
@@ -357,7 +357,7 @@
     "By managing the team's velocity."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Scrum Master serves the Scrum Team in several ways, including causing the removal of impediments to the Scrum Team's progress and coaching the team members in self-management and cross-functionality.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -373,7 +373,7 @@
     "The Project Manager"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Product Owner is accountable for maximizing the value of the product, which includes representing the desires of the stakeholders to the Scrum Team.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -389,7 +389,7 @@
     "It is a fixed commitment that cannot change."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Sprint Backlog is a plan by and for the Developers. It is a highly visible, real-time picture of the work that the Developers plan to accomplish during the Sprint in order to achieve the Sprint Goal.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -405,7 +405,7 @@
     "By the end of the first Sprint."
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "If it is not an organizational standard, the Scrum Team must create a Definition of Done appropriate for the product before any Increment can be considered Done.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -419,7 +419,7 @@
     "False"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "False. This was a rule in the 2017 Scrum Guide, but it was removed in the 2020 Scrum Guide to make the framework less prescriptive. It is a good practice, but not mandatory.",
    "domain": "Events",
    "module": ""
   },
@@ -435,7 +435,7 @@
     "To update the burn-down chart."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The heart of Scrum is a Sprint, a timebox of one month or less during which a \"Done\", useable, and potentially releasable product Increment is created.",
    "domain": "Events",
    "module": ""
   },
@@ -451,7 +451,7 @@
     "The Scrum Team (or the Organization)"
    ],
    "ans": 3,
-   "exp": "",
+   "exp": "If the Definition of Done for an increment is part of the standards of the organization, all Scrum Teams must follow it. If it is not an organizational standard, the Scrum Team must create a Definition of Done appropriate for the product.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -467,7 +467,7 @@
     "Estimating the effort of Product Backlog items."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Scrum Master serves the Product Owner by helping find techniques for effective Product Goal definition and Product Backlog management, and helping the Scrum Team understand the need for clear and concise Product Backlog items.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -483,7 +483,7 @@
     "Whenever the team feels they need to improve."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Sprint Retrospective concludes the Sprint. It is held after the Sprint Review and prior to the next Sprint Planning.",
    "domain": "Events",
    "module": ""
   },
@@ -499,7 +499,7 @@
     "Tell the Product Owner to remove the items."
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "The Scrum Master is a coach and facilitator. They help the team self-manage to solve their own problems, such as skill gaps.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -515,7 +515,7 @@
     "It must only happen during Sprint Planning."
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "The 2017 Guide suggested 10%, but the 2020 Guide removed this. Refinement is an ongoing activity to add details, such as a description, order, and size. The Scrum Team decides how and when refinement is done.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -531,7 +531,7 @@
     "Openness"
    ],
    "ans": 3,
-   "exp": "",
+   "exp": "Openness. The Scrum Team and its stakeholders agree to be open about all the work and the challenges with performing the work.",
    "domain": "Theory",
    "module": ""
   },
@@ -547,7 +547,7 @@
     "There is no maximum"
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "Sprints are fixed length events of one month or less to create consistency.",
    "domain": "Events",
    "module": ""
   },
@@ -563,7 +563,7 @@
     "Management"
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "The Sprint Backlog is a plan by and for the Developers. Only the Developers can change its contents during a Sprint as they learn more about the work needed to achieve the Sprint Goal.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -579,7 +579,7 @@
     "One per feature"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "If there are multiple Scrum Teams working together on a product, they must mutually define and comply with the same Definition of Done.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -595,7 +595,7 @@
     "The whole Scrum Team"
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "The Developers who will be doing the work are responsible for the sizing. The Product Owner may influence the Developers by helping them understand and select trade-offs.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -611,7 +611,7 @@
     "Sprint Retrospective"
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "The purpose of the Sprint Review is to inspect the outcome of the Sprint and determine future adaptations. The Scrum Team presents the results of their work to key stakeholders.",
    "domain": "Events",
    "module": ""
   },
@@ -627,7 +627,7 @@
     "Management has no role in Scrum."
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "Management supports the Scrum Team by providing resources, strategic direction, and helping remove organizational impediments.",
    "domain": "Theory",
    "module": ""
   },
@@ -643,7 +643,7 @@
     "Responding to change over individuals and interactions."
    ],
    "ans": 0,
-   "exp": "",
+   "exp": "The Agile Manifesto values 'Responding to change over following a plan'.",
    "domain": "Theory",
    "module": ""
   },
@@ -659,7 +659,7 @@
     "Commitment"
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "Adaptation is adjusting the process based on what inspection reveals. Skipping the Retrospective removes the team's only formal opportunity to adapt how it works — even a smooth Sprint has room for it, since 'nothing to improve' is itself a conclusion that requires inspection to reach.",
    "domain": "Theory",
    "module": ""
   },
@@ -675,7 +675,7 @@
     "Commitment"
    ],
    "ans": 0,
-   "exp": "",
+   "exp": "Openness is the Scrum Team and its stakeholders agreeing to be open about the work and the challenges. Surfacing a struggle immediately, rather than concealing it, is openness in action.",
    "domain": "Theory",
    "module": ""
   },
@@ -691,7 +691,7 @@
     "A project management certification body"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Scrum Guide explicitly defines Scrum as a lightweight framework, not a methodology or a complete product — it deliberately leaves room for teams to implement other practices, techniques, and methods within it.",
    "domain": "Theory",
    "module": ""
   },
@@ -707,15 +707,15 @@
     "Let the Scrum Master make the final call permanently"
    ],
    "ans": 2,
-   "exp": "",
+   "exp": "The Product Owner remains accountable for the Product Backlog, but Developers are trusted to interpret existing detail and keep moving — that's what 'self-managing' means. A two-day gap isn't grounds to halt the Sprint or permanently hand the decision to someone else.",
    "domain": "Accountabilities",
    "module": ""
   },
   {
-   "id": "psm-scrum:mc:b501f4f202",
+   "id": "psm-scrum:mc:6d9cd45fcb",
    "kind": "mc",
    "source": "exam",
-   "q": "What does the 2020 Scrum Guide say about the size of the Developers?",
+   "q": "What does the 2020 Scrum Guide say about the size of a Scrum Team?",
    "opts": [
     "Exactly 5 people, no exceptions",
     "Usually 10 or fewer, small enough to remain nimble and large enough to complete significant work within a Sprint",
@@ -723,7 +723,7 @@
     "There is no guidance on team size"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Scrum Guide says the Scrum Team is typically 10 or fewer people: small enough to remain nimble and large enough to complete significant work within a Sprint.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -739,7 +739,7 @@
     "Attending the Daily Scrum as a required participant every day"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Scrum Master serves the Product Owner by helping find techniques for effective Product Goal definition and Product Backlog management — not by estimating, prioritizing, or attending the Daily Scrum by default.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -755,7 +755,7 @@
     "Wait until a Developer raises it at a Retrospective"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "Serving the organization is an explicit Scrum Master accountability — leading, training, and coaching the organization in its Scrum adoption, including working to remove barriers like conflicting processes.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -771,7 +771,7 @@
     "The Product Owner decides how the work gets done"
    ],
    "ans": 0,
-   "exp": "",
+   "exp": "Self-managing (the 2020 Guide's update from 'self-organizing') specifically means the Developers internally decide who does what, when, and how — no one outside the team, including the Scrum Master or Product Owner, assigns that work.",
    "domain": "Accountabilities",
    "module": ""
   },
@@ -787,7 +787,7 @@
     "Whichever stakeholders are available that day"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Daily Scrum is for the Developers. The Product Owner or Scrum Master participate only when they are actively working on items in the Sprint Backlog — otherwise they are not required attendees.",
    "domain": "Events",
    "module": ""
   },
@@ -803,7 +803,7 @@
     "There is no fixed timebox — it ends when the team feels done"
    ],
    "ans": 0,
-   "exp": "",
+   "exp": "The Daily Scrum is always timeboxed to 15 minutes, no matter how long the Sprint is — unlike Sprint Planning, Review, and Retrospective, which scale with Sprint length.",
    "domain": "Events",
    "module": ""
   },
@@ -819,7 +819,7 @@
     "Who on the team will be promoted this quarter?"
    ],
    "ans": 3,
-   "exp": "",
+   "exp": "Sprint Planning covers Why (the Sprint's value/Sprint Goal), What (which Product Backlog items), and How (the plan to deliver them) — team member promotions have nothing to do with the event.",
    "domain": "Events",
    "module": ""
   },
@@ -835,7 +835,7 @@
     "The Scrum Master rewrites the Sprint Backlog alone"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Sprint Backlog is a highly visible, real-time picture of the work Developers plan to accomplish — it's expected to be updated throughout the Sprint as new information emerges, including at or because of the Daily Scrum.",
    "domain": "Events",
    "module": ""
   },
@@ -851,7 +851,7 @@
     "No, but only if the Sprint Goal was not met"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Sprint Retrospective is a required event that concludes every Sprint — it's never optional, regardless of how smoothly the Sprint went, because inspecting and adapting the team's own process is an ongoing, not conditional, practice.",
    "domain": "Events",
    "module": ""
   },
@@ -867,7 +867,7 @@
     "Yes, but only by extending it, never shortening it"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "A Sprint's length is fixed for its duration once it starts. The only way to end it early is Sprint cancellation, which only the Product Owner can invoke — there's no mechanism to simply shorten or extend an in-progress Sprint.",
    "domain": "Events",
    "module": ""
   },
@@ -883,7 +883,7 @@
     "Only during Sprint Review"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The Scrum Guide is explicit: a new Sprint starts immediately after the conclusion of the previous Sprint. There is no gap between Sprints and no overlap.",
    "domain": "Events",
    "module": ""
   },
@@ -899,7 +899,7 @@
     "Sprint Backlog → Product Goal"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "The correct pairings are: Product Backlog → Product Goal, Sprint Backlog → Sprint Goal, Increment → Definition of Done. Sprint Backlog's commitment is the Sprint Goal.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -915,7 +915,7 @@
     "Increments are only created at the very end of the Sprint"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "Multiple Increments may be created within a Sprint as work is completed and verified against the Definition of Done — the cumulative work forms the current Increment, which is inspected at Sprint Review.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -931,7 +931,7 @@
     "It happens automatically during Sprint Planning only"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "Refinement is the act of breaking down and further defining Product Backlog items into smaller, more precise items — it's an ongoing activity, collaborative between the Product Owner and Developers, and is explicitly NOT one of the formal Scrum events.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -947,7 +947,7 @@
     "It must include at least three Product Backlog items"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "An Increment is only usable, and only counts, once it meets the Definition of Done — the shared, formal description of what 'complete' means for the work, regardless of whether it's actually deployed.",
    "domain": "Artifacts",
    "module": ""
   },
@@ -963,7 +963,7 @@
     "It depends on how the Product Owner wants to organize the work"
    ],
    "ans": 1,
-   "exp": "",
+   "exp": "There is only ever one Product Backlog per product, even when multiple Scrum Teams build it together — fragmenting it into per-team backlogs breaks the single, ordered source of truth the framework depends on.",
    "domain": "Artifacts",
    "module": ""
   },

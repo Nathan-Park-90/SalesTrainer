@@ -1610,7 +1610,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Secure",
-      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks."
+      "exp": "AWS Shield Advanced provides unmetered DDoS protection and is crucial for high-frequency trading firms where latency is money. WAF is for Layer 7, but Shield handles the massive volumetric attacks.",
+      "whyWrong": [
+        "",
+        "AWS WAF filters Layer 7 HTTP/HTTPS web exploits like SQL injection and XSS, rather than absorbing massive volumetric L3/L4 DDoS floods.",
+        "Amazon CloudFront caches HTTP/HTTPS edge content and helps absorb edge traffic, but AWS Shield Advanced is the dedicated managed DDoS protection service with DRT and volumetric mitigation.",
+        "Amazon Route 53 is a managed DNS service that resolves domain names to IPs; it does not sit inline to scrub volumetric DDoS traffic targeting your compute tier."
+      ]
     },
     {
       "q": "A company wants to store data for 5 years for regulatory compliance. The data is rarely accessed but must be retrieved within 12 hours if requested. What is the most cost-effective storage solution?",
@@ -1622,7 +1628,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Cost",
-      "exp": "S3 Glacier Deep Archive is the lowest cost storage class and supports retrieval times within 12 hours, perfectly matching the compliance and cost requirements."
+      "exp": "S3 Glacier Deep Archive is the lowest cost storage class and supports retrieval times within 12 hours, perfectly matching the compliance and cost requirements.",
+      "whyWrong": [
+        "S3 Standard is designed for frequently accessed hot data and costs roughly 20x more per GB than Glacier Deep Archive.",
+        "",
+        "S3 Intelligent-Tiering charges a monthly monitoring fee and is meant for unpredictable access patterns, whereas this compliance data has a known rare-access profile.",
+        "EBS Cold HDD (sc1) is block storage that must remain attached to an EC2 instance in a single AZ, making it far more expensive and less durable than S3 archival tiers."
+      ]
     },
     {
       "q": "You are designing an application that requires a relational database. The workload has unpredictable, highly variable spikes in traffic throughout the day. Which database option provides the most seamless scaling without over-provisioning?",
@@ -1634,7 +1646,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Performance",
-      "exp": "Amazon Aurora Serverless automatically scales database capacity up or down based on your application's needs, ideal for unpredictable workloads."
+      "exp": "Amazon Aurora Serverless automatically scales database capacity up or down based on your application's needs, ideal for unpredictable workloads.",
+      "whyWrong": [
+        "Standard Amazon RDS for MySQL uses fixed instance sizes that require manual or downtime-inducing vertical scaling to handle sudden compute spikes.",
+        "Amazon DynamoDB scales seamlessly for spiky traffic, but it is a NoSQL key-value/document database and does not satisfy the relational database requirement.",
+        "",
+        "Amazon Redshift is a petabyte-scale OLAP data warehouse for analytics, not a transactional relational database for variable application traffic."
+      ]
     },
     {
       "q": "An application runs on EC2 instances behind an ALB. You need to ensure that the application can survive an Availability Zone failure. How should you architect the EC2 instances?",
@@ -1646,7 +1664,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Resilient",
-      "exp": "Deploying instances across at least two Availability Zones ensures high availability and resilience if one AZ goes down."
+      "exp": "Deploying instances across at least two Availability Zones ensures high availability and resilience if one AZ goes down.",
+      "whyWrong": [
+        "An Auto Scaling Group restricted to a single AZ still fails completely if that AZ loses power or connectivity.",
+        "",
+        "A single EC2 instance with an Elastic IP has no redundancy at all and fails if either the instance or its AZ goes down.",
+        "Multi-Region deployment is overkill for surviving a single AZ outage, and a single ALB cannot span multiple AWS Regions."
+      ]
     },
     {
       "q": "Your security team mandates that all EBS volumes must be encrypted at rest using a key managed by the company, not by AWS. Which service enables this?",
@@ -1658,7 +1682,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Secure",
-      "exp": "Customer Managed Keys (CMKs) in AWS KMS allow you to control the lifecycle and rotation of the keys used to encrypt your EBS volumes."
+      "exp": "Customer Managed Keys (CMKs) in AWS KMS allow you to control the lifecycle and rotation of the keys used to encrypt your EBS volumes.",
+      "whyWrong": [
+        "AWS CloudHSM provides dedicated single-tenant hardware appliances, which adds unnecessary cost and operational overhead when native EBS encryption integrates directly with KMS CMKs.",
+        "",
+        "AWS Secrets Manager stores and rotates credentials like database passwords and API keys; it does not provide encryption keys for EBS volumes.",
+        "AWS Managed Keys (such as aws/ebs) are rotated and controlled by AWS, failing the requirement for company-managed key lifecycle and policy control."
+      ]
     },
     {
       "q": "Mammoth Capital's quant team wants to run a Monte Carlo simulation overnight. They need 5,000 EC2 instances for exactly 4 hours. The job can be interrupted and resumed if needed, but the CFO will literally faint if this costs more than $200. What's the play?",
@@ -1670,7 +1700,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Cost",
-      "exp": "Spot Instances offer up to a 90% discount compared to On-Demand. Since the Monte Carlo simulation is fault-tolerant and can be interrupted, Spot is the only way to keep the CFO conscious."
+      "exp": "Spot Instances offer up to a 90% discount compared to On-Demand. Since the Monte Carlo simulation is fault-tolerant and can be interrupted, Spot is the only way to keep the CFO conscious.",
+      "whyWrong": [
+        "Reserved Instances require a 1- or 3-year commitment, meaning you would pay for 5,000 instances 24/7 all year just to run a 4-hour overnight job.",
+        "",
+        "On-Demand Instances charge full list price with no discount, blowing past the budget when Spot offers up to 90% off for interruptible batch jobs.",
+        "AWS Lambda has a 15-minute execution limit and chaining functions for heavy 4-hour HPC compute is an anti-pattern compared to EC2 Spot."
+      ]
     },
     {
       "q": "You are explaining AWS Networking to a Junior Dev. 'Think of it like our Proxmox homelab,' you say. 'The VPC is the datacenter. The Subnet is the VLAN. What is the AWS equivalent of our pfSense router that allows our private VMs to reach the internet for updates without exposing them to inbound traffic?'",
@@ -1682,7 +1718,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Secure",
-      "exp": "A NAT Gateway (Network Address Translation) sits in a public subnet and allows instances in a private subnet to initiate outbound IPv4 traffic to the internet, but prevents the internet from initiating a connection back. It is exactly like your pfSense outbound NAT rule."
+      "exp": "A NAT Gateway (Network Address Translation) sits in a public subnet and allows instances in a private subnet to initiate outbound IPv4 traffic to the internet, but prevents the internet from initiating a connection back. It is exactly like your pfSense outbound NAT rule.",
+      "whyWrong": [
+        "An Internet Gateway provides two-way internet connectivity for public subnets with public IPs, rather than one-way outbound NAT for private subnets.",
+        "",
+        "An Egress-Only Internet Gateway provides outbound-only internet access exclusively for IPv6 traffic, whereas NAT Gateway handles IPv4.",
+        "AWS Transit Gateway is a hub-and-spoke router for connecting multiple VPCs and on-premises networks, not a NAT device for outbound internet access."
+      ]
     },
     {
       "q": "The Mammoth Capital trading dashboard is crashing. The backend RDS PostgreSQL database is hitting 100% CPU because 500 analysts are running complex read-heavy reports at the same time. The active trading engine (which writes to the DB) is starving. What is the fastest architectural fix?",
@@ -1694,7 +1736,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Performance",
-      "exp": "An RDS Read Replica offloads read traffic from the primary database. By pointing the analysts' heavy reports to the Read Replica, the primary database's CPU drops, allowing the trading engine to write without latency."
+      "exp": "An RDS Read Replica offloads read traffic from the primary database. By pointing the analysts' heavy reports to the Read Replica, the primary database's CPU drops, allowing the trading engine to write without latency.",
+      "whyWrong": [
+        "Migrating to DynamoDB requires rewriting relational SQL queries into a NoSQL data model, which is impossible as an immediate fix and unfit for complex ad-hoc reporting.",
+        "Vertical scaling requires a database reboot (downtime) and still leaves analytical read queries competing with transactional writes on the same instance.",
+        "",
+        "ElastiCache accelerates repeated identical key-value lookups, but requires application code changes and does little for complex ad-hoc SQL reports."
+      ]
     },
     {
       "q": "Your web application stores user session state on the local disk of its EC2 instances. During a traffic spike, the Auto Scaling Group adds 3 new instances. Suddenly, users are getting randomly logged out when they click links. Why?",
@@ -1706,7 +1754,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Resilient",
-      "exp": "If session state is stored locally, the load balancer must route the user back to the exact same instance every time (Sticky Sessions). The better, stateless architectural fix is to store sessions in ElastiCache (Redis) or DynamoDB so any instance can serve any user."
+      "exp": "If session state is stored locally, the load balancer must route the user back to the exact same instance every time (Sticky Sessions). The better, stateless architectural fix is to store sessions in ElastiCache (Redis) or DynamoDB so any instance can serve any user.",
+      "whyWrong": [
+        "",
+        "During a traffic spike the Auto Scaling Group is scaling out (launching instances), not terminating existing instances.",
+        "Cross-AZ routing is normal behind an ALB; users are logged out because their session file lives on a single instance's local disk, not because of the AZ boundary.",
+        "The new instances cannot see the session state at all because it sits on each original instance's local EBS volume, not because of KMS decryption permissions."
+      ]
     },
     {
       "q": "The Head of Security at Mammoth Capital drops a requirement on your desk: 'I need to know exactly who deleted the production S3 bucket, from what IP address, and at what time.' Which AWS service answers this question?",
@@ -1718,7 +1772,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Secure",
-      "exp": "AWS CloudTrail records all API calls made in your account (who, what, when, where). CloudWatch is for metrics/logs. Config is for state changes. CloudTrail is the auditor's best friend."
+      "exp": "AWS CloudTrail records all API calls made in your account (who, what, when, where). CloudWatch is for metrics/logs. Config is for state changes. CloudTrail is the auditor's best friend.",
+      "whyWrong": [
+        "Amazon CloudWatch monitors operational performance metrics and application logs, not account-level API audit trails of who called DeleteBucket.",
+        "AWS Config tracks resource configuration state over time (what changed), but relies on CloudTrail to identify the IAM principal and source IP that made the API call.",
+        "",
+        "Amazon GuardDuty is a threat detection service that flags suspicious behavior using ML, not a raw audit log for querying specific API calls."
+      ]
     },
     {
       "q": "You are building a decoupled order processing system. The web tier places trade orders into a queue, and a worker tier processes them. The order must be processed EXACTLY ONCE, and strictly IN THE ORDER it was received. What service do you use?",
@@ -1730,7 +1790,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Resilient",
-      "exp": "SQS FIFO (First-In-First-Out) queues guarantee strictly ordered delivery and exactly-once processing, which is critical for financial transactions where processing out of order could cause massive losses."
+      "exp": "SQS FIFO (First-In-First-Out) queues guarantee strictly ordered delivery and exactly-once processing, which is critical for financial transactions where processing out of order could cause massive losses.",
+      "whyWrong": [
+        "SQS Standard Queues provide best-effort ordering and at-least-once delivery, meaning orders could be processed out of sequence or duplicated.",
+        "",
+        "Amazon SNS is a push-based pub/sub notification service, not a pull-based work queue for worker tiers.",
+        "Kinesis Data Streams is built for high-throughput real-time data streaming per shard, not point-to-point work queue processing with built-in deduplication."
+      ]
     },
     {
       "q": "Your company has a massive 50TB on-premises NAS full of video archives. They want to move it to AWS. Uploading it over the corporate 100Mbps internet connection will take roughly 46 days. What is the AWS-native solution?",
@@ -1742,7 +1808,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Performance",
-      "exp": "AWS Snowball is a physical device AWS ships to your datacenter. You plug it in, load the 50TB at local LAN speeds, and ship it back to AWS where they plug it directly into S3. It bypasses the internet bottleneck entirely."
+      "exp": "AWS Snowball is a physical device AWS ships to your datacenter. You plug it in, load the 50TB at local LAN speeds, and ship it back to AWS where they plug it directly into S3. It bypasses the internet bottleneck entirely.",
+      "whyWrong": [
+        "Provisioning a new physical AWS Direct Connect circuit takes weeks to months and is overly expensive for a one-time 50TB offline transfer.",
+        "AWS Storage Gateway is a hybrid storage appliance that still transfers data over your existing 100Mbps network link.",
+        "",
+        "AWS DataSync accelerates online transfers, but it is still bound by the physical limits of your 100Mbps internet connection."
+      ]
     },
     {
       "q": "A developer accidentally hardcoded their AWS Access Key and Secret Key into a Python script and pushed it to a public GitHub repository. Within 5 minutes, bitcoin miners are spinning up 100 expensive EC2 instances in your account. What is the FIRST step you must take?",
@@ -1754,7 +1826,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Secure",
-      "exp": "You must immediately kill the compromised credential in IAM (deactivate/delete the access key). Stopping the instances first is useless because the attacker's automated script will just spin them right back up using the active key."
+      "exp": "You must immediately kill the compromised credential in IAM (deactivate/delete the access key). Stopping the instances first is useless because the attacker's automated script will just spin them right back up using the active key.",
+      "whyWrong": [
+        "Attackers scrape public GitHub repos in seconds; deleting the repo does not revoke the leaked key that bots already copied.",
+        "If you stop or terminate the EC2 instances before revoking the IAM access key, the attacker's automation will immediately launch more instances.",
+        "",
+        "A leaked IAM user access key is independent of the AWS root user password; changing the root password will not invalidate the compromised key."
+      ]
     },
     {
       "q": "Which AWS service is conceptually identical to running a Docker container on your Synology NAS, but without having to manage the underlying server OS or cluster capacity?",
@@ -1766,7 +1844,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Performance",
-      "exp": "AWS Fargate is the serverless compute engine for containers. You just package your Docker container and say 'Run this', and AWS handles the underlying infrastructure. No EC2 instances to patch or manage."
+      "exp": "AWS Fargate is the serverless compute engine for containers. You just package your Docker container and say 'Run this', and AWS handles the underlying infrastructure. No EC2 instances to patch or manage.",
+      "whyWrong": [
+        "ECS with the EC2 launch type still requires you to provision, patch, and scale the underlying EC2 container instances.",
+        "",
+        "AWS Elastic Beanstalk is a PaaS orchestrator that still provisions EC2 instances in your account rather than running serverless containers directly.",
+        "AWS Lambda is event-driven Function-as-a-Service (with a 15-minute timeout), not a general-purpose serverless container engine for long-running Docker services."
+      ]
     },
     {
       "q": "You have a fleet of 50 EC2 instances. You want them to automatically download and install the latest security patches every Tuesday at 3 AM. What service orchestrates this?",
@@ -1778,7 +1862,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Secure",
-      "exp": "AWS Systems Manager (SSM) Patch Manager automates the process of patching managed instances with both security related and other types of updates across your entire fleet."
+      "exp": "AWS Systems Manager (SSM) Patch Manager automates the process of patching managed instances with both security related and other types of updates across your entire fleet.",
+      "whyWrong": [
+        "",
+        "AWS CodeDeploy automates application code deployments, not operating system security patching and patch baselines.",
+        "AWS Auto Scaling adjusts the number of EC2 instances based on load, rather than patching existing instances in place.",
+        "Amazon EventBridge is a serverless event bus and scheduler; it can trigger actions on a schedule, but cannot scan and apply OS patches itself."
+      ]
     },
     {
       "q": "Mammoth Capital's architecture uses Amazon API Gateway triggering AWS Lambda. Traffic is usually 10 requests per second, but during a market crash, it spikes to 10,000 requests per second instantly. What happens?",
@@ -1790,7 +1880,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Performance",
-      "exp": "Both API Gateway and Lambda are fully managed serverless services that automatically and instantly scale to accommodate massive traffic spikes without any manual provisioning."
+      "exp": "Both API Gateway and Lambda are fully managed serverless services that automatically and instantly scale to accommodate massive traffic spikes without any manual provisioning.",
+      "whyWrong": [
+        "Amazon API Gateway is a fully managed serverless service that scales automatically to handle traffic spikes without manual pre-warming.",
+        "",
+        "API Gateway invokes Lambda synchronously by default and does not automatically insert an SQS queue unless you explicitly architect one.",
+        "Serverless requests to API Gateway and Lambda never fail over to EC2 Auto Scaling Groups unless explicitly configured to do so."
+      ]
     },
     {
       "q": "You are hosting a static website for a marketing campaign. You want the absolute lowest latency for users globally, and the files are just HTML, CSS, and images. What is the optimal architecture?",
@@ -1802,7 +1898,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Performance",
-      "exp": "While S3 can host a static website, putting Amazon CloudFront (a CDN) in front of S3 caches the files at edge locations worldwide, drastically reducing latency for global users."
+      "exp": "While S3 can host a static website, putting Amazon CloudFront (a CDN) in front of S3 caches the files at edge locations worldwide, drastically reducing latency for global users.",
+      "whyWrong": [
+        "Running EC2 instances and an ALB in a single region wastes money on idle compute and still subjects distant global users to cross-continent latency.",
+        "An S3 bucket alone serves files from a single AWS Region, whereas adding CloudFront caches those static assets at edge locations worldwide.",
+        "",
+        "AWS Elastic Beanstalk provisions regional compute infrastructure for dynamic apps, which is unnecessary and slower globally than S3 plus CloudFront."
+      ]
     },
     {
       "q": "Mammoth Capital's algo-trading platform requires static IP addresses across multiple AWS Regions for whitelisting by ultra-paranoid exchange partners. Traffic must be routed to the closest healthy endpoint to minimize latency. Which service combination provides this?",
@@ -1814,7 +1916,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Performance",
-      "exp": "Global Accelerator provides two static Anycast IPs and routes traffic over the AWS global network to optimal endpoints. Route 53 doesn't give you static IPs globally, just like your ISP won't give your homelab a static IP without a hefty fee."
+      "exp": "Global Accelerator provides two static Anycast IPs and routes traffic over the AWS global network to optimal endpoints. Route 53 doesn't give you static IPs globally, just like your ISP won't give your homelab a static IP without a hefty fee.",
+      "whyWrong": [
+        "Route 53 returns different regional Elastic IPs per region and relies on client DNS caching, whereas Global Accelerator provides two fixed global Anycast IPs.",
+        "",
+        "Amazon CloudFront uses dynamically changing edge IP ranges rather than two dedicated static Anycast IPs for strict firewall whitelisting.",
+        "AWS Transit Gateway routes private traffic between VPCs and on-premises networks, not external partner traffic to public static Anycast IPs."
+      ]
     },
     {
       "q": "The quants at Mammoth left PII inside their high-frequency trading logs stored in S3, risking massive fines. Which service can automatically discover, classify, and protect this sensitive data?",
@@ -1826,7 +1934,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Secure",
-      "exp": "Amazon Macie uses machine learning to find PII in S3. It's like having a dedicated auditor for your storage, whereas your homelab is probably full of hardcoded passwords in cleartext."
+      "exp": "Amazon Macie uses machine learning to find PII in S3. It's like having a dedicated auditor for your storage, whereas your homelab is probably full of hardcoded passwords in cleartext.",
+      "whyWrong": [
+        "",
+        "AWS CloudTrail logs AWS API activity; it does not inspect the contents of S3 objects to detect PII.",
+        "AWS Config evaluates resource configuration compliance (such as whether a bucket is encrypted), not whether objects inside S3 contain PII.",
+        "Amazon GuardDuty detects malicious account and network activity, not sensitive data or PII stored inside S3 buckets."
+      ]
     },
     {
       "q": "Mammoth's on-premises NAS is full of legacy market data. They want to migrate 50 TB to Amazon FSx for Windows File Server quickly over their Direct Connect link. What's the best tool?",
@@ -1838,7 +1952,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Performance",
-      "exp": "AWS DataSync is purpose-built to automate and accelerate data transfers between on-prem storage and AWS services like FSx. Storage Gateway is for hybrid access, not one-time high-speed migrations."
+      "exp": "AWS DataSync is purpose-built to automate and accelerate data transfers between on-prem storage and AWS services like FSx. Storage Gateway is for hybrid access, not one-time high-speed migrations.",
+      "whyWrong": [
+        "AWS Storage Gateway provides ongoing hybrid cloud storage access, not an automated, high-speed bulk migration tool for FSx.",
+        "",
+        "AWS Transfer Family provides managed SFTP/FTPS/FTP endpoints for file exchange into S3 or EFS, not automated SMB migrations into FSx for Windows.",
+        "AWS Snowball Edge is a physical offline appliance used when network bandwidth is insufficient, whereas Mammoth already has a high-speed Direct Connect link."
+      ]
     },
     {
       "q": "A junior admin deployed a Bitcoin miner in the dev environment. Mammoth wants to ensure that NO member account in their AWS Organization can launch EC2 instances outside of us-east-1. How?",
@@ -1850,7 +1970,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Secure",
-      "exp": "SCPs apply guardrails across an entire Organization or OU. They trump local IAM policies. Think of it as putting a hardware lock on the rack your homelab sits in."
+      "exp": "SCPs apply guardrails across an entire Organization or OU. They trump local IAM policies. Think of it as putting a hardware lock on the rack your homelab sits in.",
+      "whyWrong": [
+        "IAM Permission Boundaries must be attached to individual IAM entities inside each account and do not restrict the member account's root user like an SCP does.",
+        "",
+        "AWS Config Rules are detective controls that flag non-compliant resources after launch, rather than preventively blocking EC2 launches in unauthorized regions.",
+        "SSM State Manager maintains OS-level configurations on running instances; it cannot block IAM principals from launching instances in other regions."
+      ]
     },
     {
       "q": "Mammoth Capital wants to standardize their serverless deployments using a framework that provides shorthand syntax to express functions, APIs, and databases. What should they use?",
@@ -1862,7 +1988,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Resilient",
-      "exp": "AWS SAM is an open-source framework for building serverless apps. It expands into CloudFormation during deployment, saving you from writing thousands of lines of boilerplate JSON."
+      "exp": "AWS SAM is an open-source framework for building serverless apps. It expands into CloudFormation during deployment, saving you from writing thousands of lines of boilerplate JSON.",
+      "whyWrong": [
+        "AWS Elastic Beanstalk is a PaaS for deploying web applications on EC2, not a declarative shorthand IaC framework for serverless resources.",
+        "Standard AWS CloudFormation requires verbose template definitions, whereas AWS SAM extends CloudFormation specifically with concise serverless shorthand syntax.",
+        "",
+        "AWS App Runner is a managed container hosting service, not an infrastructure-as-code framework for Lambda, API Gateway, and DynamoDB."
+      ]
     },
     {
       "q": "The auditors demand proof that Mammoth's EC2 security groups haven't allowed SSH from 0.0.0.0/0 at any point in the last year. Which service provides this historical configuration data?",
@@ -1874,7 +2006,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Secure",
-      "exp": "AWS Config records configuration changes to resources over time. CloudTrail tracks API calls, but Config gives you the actual state changes. It's version control for your infrastructure."
+      "exp": "AWS Config records configuration changes to resources over time. CloudTrail tracks API calls, but Config gives you the actual state changes. It's version control for your infrastructure.",
+      "whyWrong": [
+        "AWS CloudTrail logs raw API calls, making it difficult to reconstruct a continuous timeline of resource state compliance compared to AWS Config.",
+        "Amazon Inspector scans workloads for point-in-time software vulnerabilities and network exposure, not a year-long configuration compliance timeline.",
+        "",
+        "AWS Systems Manager manages inside-the-instance OS operations and patching, not historical VPC security group configuration states."
+      ]
     },
     {
       "q": "Mammoth is deploying an internally developed Kubernetes app. They want AWS to manage the Kubernetes control plane so they don't have to deal with etcd backups and master node failures. Which service?",
@@ -1886,7 +2024,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Resilient",
-      "exp": "Amazon EKS provides a managed Kubernetes control plane. Running your own Kubernetes cluster is like managing a 10-node Proxmox cluster at home—fun until it breaks at 3 AM."
+      "exp": "Amazon EKS provides a managed Kubernetes control plane. Running your own Kubernetes cluster is like managing a 10-node Proxmox cluster at home—fun until it breaks at 3 AM.",
+      "whyWrong": [
+        "Amazon ECS is AWS's proprietary container orchestrator and does not run the Kubernetes control plane or native Kubernetes APIs.",
+        "",
+        "AWS Fargate is a serverless compute engine for running containers, whereas Amazon EKS is the service that provides the managed Kubernetes control plane.",
+        "AWS Elastic Beanstalk is a PaaS for web apps, not a managed Kubernetes control plane service."
+      ]
     },
     {
       "q": "Mammoth has an on-prem tape library they want to replace with cloud storage, but their legacy backup software only speaks iSCSI VTL. What's the solution?",
@@ -1898,7 +2042,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Cost",
-      "exp": "Tape Gateway provides a virtual tape library (VTL) interface to legacy backup apps, storing data in S3 and Glacier. It tricks your old software into thinking it's writing to physical tapes."
+      "exp": "Tape Gateway provides a virtual tape library (VTL) interface to legacy backup apps, storing data in S3 and Glacier. It tricks your old software into thinking it's writing to physical tapes.",
+      "whyWrong": [
+        "",
+        "Volume Gateway presents iSCSI block storage volumes (as cached or stored disks), not an iSCSI Virtual Tape Library (VTL) with virtual media changers.",
+        "AWS DataSync migrates files and objects between storage systems and does not emulate an iSCSI VTL interface for backup software.",
+        "Amazon S3 File Gateway exposes S3 buckets as NFS or SMB network file shares, not as an iSCSI Virtual Tape Library."
+      ]
     },
     {
       "q": "Mammoth wants to securely access a third-party SaaS provider's services hosted on AWS without exposing traffic to the public internet or using a VPN. How?",
@@ -1910,7 +2060,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Secure",
-      "exp": "AWS PrivateLink allows you to connect to services across VPCs and AWS accounts using ENIs within your VPC, keeping traffic on the AWS backbone. VPC Peering is too broad for just one service."
+      "exp": "AWS PrivateLink allows you to connect to services across VPCs and AWS accounts using ENIs within your VPC, keeping traffic on the AWS backbone. VPC Peering is too broad for just one service.",
+      "whyWrong": [
+        "VPC Peering exposes the entire network CIDR between VPCs and fails if CIDR blocks overlap, whereas PrivateLink exposes only the specific SaaS endpoint unidirectionally.",
+        "",
+        "AWS Transit Gateway connects full VPC networks like a router hub, which is inappropriate for consuming a single third-party SaaS endpoint privately.",
+        "A NAT Gateway sends outbound traffic over the public internet rather than keeping SaaS traffic on the private AWS network."
+      ]
     },
     {
       "q": "A rogue algorithm at Mammoth started making millions of API calls, hitting rate limits. They need a service to decouple the trading signals from the processing backend using a publish/subscribe model. What fits?",
@@ -1922,7 +2078,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Resilient",
-      "exp": "Amazon SNS is a fully managed pub/sub messaging service. SQS is a queue (point-to-point). SNS lets multiple subscribers react to the same signal instantly."
+      "exp": "Amazon SNS is a fully managed pub/sub messaging service. SQS is a queue (point-to-point). SNS lets multiple subscribers react to the same signal instantly.",
+      "whyWrong": [
+        "Amazon SQS is a pull-based point-to-point message queue, not a push-based publish/subscribe service.",
+        "",
+        "AWS Step Functions orchestrates stateful workflows via state machines, rather than providing high-throughput pub/sub message fanout.",
+        "Amazon MQ is a managed message broker for legacy protocols (ActiveMQ/RabbitMQ), adding unnecessary broker management when cloud-native SNS handles pub/sub."
+      ]
     },
     {
       "q": "Mammoth's new risk analysis app needs to run a complex workflow that orchestrates Lambda functions, ECS tasks, and manual approvals. Which service should manage the state?",
@@ -1934,7 +2096,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Resilient",
-      "exp": "AWS Step Functions provides state machines to orchestrate multiple services into workflows. It handles retries, branching, and state, unlike a janky bash script in your homelab."
+      "exp": "AWS Step Functions provides state machines to orchestrate multiple services into workflows. It handles retries, branching, and state, unlike a janky bash script in your homelab.",
+      "whyWrong": [
+        "",
+        "AWS Lambda runs individual stateless functions (capped at 15 minutes) and should not sit idle waiting on manual approvals or orchestrating multi-service state.",
+        "Amazon SQS is a simple message queue that passes messages between components; it cannot manage workflow state, branching logic, or task orchestration.",
+        "AWS Systems Manager automates infrastructure ops and OS maintenance, not application workflow orchestration across Lambda and ECS."
+      ]
     },
     {
       "q": "Mammoth needs to share a central Transit Gateway created in their networking account with 50 other AWS accounts in their Organization. Which service enables this?",
@@ -1946,7 +2114,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Resilient",
-      "exp": "AWS RAM allows you to share resources like Transit Gateways, Subnets, and License Configurations across AWS accounts. It saves you from deploying a TGW in every account."
+      "exp": "AWS RAM allows you to share resources like Transit Gateways, Subnets, and License Configurations across AWS accounts. It saves you from deploying a TGW in every account.",
+      "whyWrong": [
+        "",
+        "AWS Directory Service provides managed Active Directory for user identity and authentication, not cross-account sharing of network infrastructure.",
+        "Transit Gateway Peering links two separate Transit Gateways across regions or accounts, rather than sharing a single central Transit Gateway with member accounts.",
+        "VPC Peering creates point-to-point links between two VPCs and does not share a Transit Gateway across an AWS Organization."
+      ]
     },
     {
       "q": "The CFO is furious about EC2 licensing costs for their proprietary Windows apps. They need a service to track and manage software licenses across AWS and on-prem environments.",
@@ -1958,7 +2132,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Cost",
-      "exp": "AWS License Manager tracks software licenses to prevent compliance violations and overages. It's like having a bouncer for your expensive enterprise software."
+      "exp": "AWS License Manager tracks software licenses to prevent compliance violations and overages. It's like having a bouncer for your expensive enterprise software.",
+      "whyWrong": [
+        "SSM Inventory collects metadata about installed software on instances, but cannot enforce hard licensing rules or block non-compliant EC2 launches like License Manager.",
+        "",
+        "AWS Config tracks AWS resource configuration changes, not hybrid software license entitlements and core/socket usage limits.",
+        "AWS Trusted Advisor provides high-level best-practice checks, not enterprise software license tracking across AWS and on-premises servers."
+      ]
     },
     {
       "q": "Mammoth is under a massive DDoS attack. They want proactive event management and a dedicated response team. Which service and tier do they need?",
@@ -1970,7 +2150,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Secure",
-      "exp": "AWS Shield Advanced provides 24/7 access to the DDoS Response Team (DRT) and protects against large-scale attacks. Shield Standard is just basic protection."
+      "exp": "AWS Shield Advanced provides 24/7 access to the DDoS Response Team (DRT) and protects against large-scale attacks. Shield Standard is just basic protection.",
+      "whyWrong": [
+        "There is no AWS service tier called 'AWS WAF Pro'; WAF rules are often managed alongside Shield Advanced during L7 attacks.",
+        "",
+        "AWS Shield Standard provides free automatic L3/L4 protection, but does not include 24/7 access to the AWS Shield Response Team (SRT/DRT) or proactive engagement.",
+        "Amazon GuardDuty is a detective threat-intelligence service that alerts on suspicious logs, not a DDoS mitigation service with a response team."
+      ]
     },
     {
       "q": "Mammoth needs to query huge parquets files stored in S3 using standard SQL without provisioning any database servers. What's the tool?",
@@ -1982,7 +2168,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Performance",
-      "exp": "Amazon Athena is a serverless interactive query service that analyzes data in S3 using standard SQL. Redshift requires clusters, whereas Athena is pay-per-query."
+      "exp": "Amazon Athena is a serverless interactive query service that analyzes data in S3 using standard SQL. Redshift requires clusters, whereas Athena is pay-per-query.",
+      "whyWrong": [
+        "Standard Amazon Redshift requires provisioning a data warehouse cluster and loading data (unless using Redshift Spectrum alongside a cluster), whereas Athena is purely serverless.",
+        "",
+        "Amazon EMR provisions and manages Hadoop/Spark clusters for big data processing, violating the zero-server requirement for simple SQL queries on S3.",
+        "Amazon RDS is a provisioned relational database engine for OLTP workloads and cannot directly query Parquet files sitting in S3."
+      ]
     },
     {
       "q": "Mammoth's developers keep hardcoding database credentials in their code. Which service can dynamically rotate these credentials automatically?",
@@ -1994,7 +2186,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Secure",
-      "exp": "AWS Secrets Manager natively supports automatic password rotation for RDS and other databases via Lambda. Parameter Store requires you to write the rotation logic yourself."
+      "exp": "AWS Secrets Manager natively supports automatic password rotation for RDS and other databases via Lambda. Parameter Store requires you to write the rotation logic yourself.",
+      "whyWrong": [
+        "SSM Parameter Store can store encrypted secrets, but it does not provide built-in, out-of-the-box automatic credential rotation for RDS databases.",
+        "AWS KMS manages cryptographic keys used to encrypt secrets, but does not store or rotate database credentials itself.",
+        "",
+        "AWS IAM manages permissions and roles for AWS principals, not rotating stored database usernames and passwords."
+      ]
     },
     {
       "q": "Mammoth wants to detect if any of their EC2 instances have known software vulnerabilities or unintended network exposure. What service performs these assessments?",
@@ -2006,7 +2204,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Secure",
-      "exp": "Amazon Inspector automatically assesses applications for exposure, vulnerabilities, and deviations from best practices. GuardDuty is for threat detection (log analysis)."
+      "exp": "Amazon Inspector automatically assesses applications for exposure, vulnerabilities, and deviations from best practices. GuardDuty is for threat detection (log analysis).",
+      "whyWrong": [
+        "Amazon GuardDuty analyzes CloudTrail, DNS, and VPC Flow Logs for active threat behavior, rather than scanning EC2 packages for CVE vulnerabilities.",
+        "Amazon Macie scans S3 buckets for sensitive PII data, not EC2 instances for OS vulnerabilities or open network ports.",
+        "",
+        "AWS Shield protects against DDoS attacks at the network perimeter and does not perform vulnerability assessments on EC2 instances."
+      ]
     },
     {
       "q": "Mammoth requires an isolated, single-tenant hardware security module (HSM) to generate and store their SSL keys to comply with FIPS 140-2 Level 3. Which service?",
@@ -2018,7 +2222,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Secure",
-      "exp": "AWS CloudHSM provides dedicated hardware security modules. KMS is multi-tenant and only FIPS 140-2 Level 2 compliant. CloudHSM gives you full control of the keys."
+      "exp": "AWS CloudHSM gives you dedicated, single-tenant HSMs in your VPC that only you control. AWS KMS also runs on FIPS-validated HSMs, but they are multi-tenant and managed by AWS, so it cannot satisfy an isolated single-tenant requirement.",
+      "whyWrong": [
+        "AWS KMS uses FIPS-validated HSMs, but they are multi-tenant and operated by AWS, so it fails the isolated, single-tenant requirement.",
+        "",
+        "AWS Secrets Manager stores application secrets and passwords encrypted via KMS, not SSL keys inside a dedicated FIPS 140-2 Level 3 hardware module.",
+        "AWS Certificate Manager (ACM) provisions and renews TLS certificates, but does not give you a dedicated single-tenant HSM to generate and control raw keys."
+      ]
     },
     {
       "q": "Mammoth needs to transfer 5 PB of market data to AWS. They have a 1 Gbps connection. What is the fastest and most cost-effective method?",
@@ -2030,7 +2240,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Cost",
-      "exp": "Transferring 5 PB over 1 Gbps would take years. Snowball Edge devices can hold 80TB each, so you'd order a bunch of them. Snowmobile is for 100 PB scale."
+      "exp": "Transferring 5 PB over 1 Gbps would take years. Snowball Edge devices can hold 80TB each, so you'd order a bunch of them. Snowmobile is for 100 PB scale.",
+      "whyWrong": [
+        "AWS DataSync is limited by the 1 Gbps network pipe, over which 5 PB would take more than a year to transfer.",
+        "Upgrading or using a 1 Gbps Direct Connect link would still take over a year to move 5 PB over the wire.",
+        "",
+        "AWS Snowmobile is a 45-foot shipping container designed for exabyte-scale migrations (10+ PB to 100 PB), whereas 5 PB is handled with multiple Snowball Edge appliances."
+      ]
     },
     {
       "q": "Mammoth's compliance team mandates that all EBS snapshots and RDS backups must be replicated to a secondary region and locked against deletion. What service centrally manages this?",
@@ -2042,7 +2258,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Resilient",
-      "exp": "AWS Backup centrally manages and automates backups across AWS services. It supports cross-region replication and vault lock (WORM) to prevent deletion."
+      "exp": "AWS Backup centrally manages and automates backups across AWS services. It supports cross-region replication and vault lock (WORM) to prevent deletion.",
+      "whyWrong": [
+        "",
+        "Amazon DLM automates EBS snapshots and AMIs, but does not centrally manage RDS backups or provide AWS Backup Vault Lock (WORM) across services.",
+        "AWS Systems Manager handles operational runbooks and patching, not centralized WORM-locked backup vaults across EBS and RDS.",
+        "AWS Storage Gateway connects on-premises environments to cloud storage; it does not manage cross-region RDS and EBS backup replication."
+      ]
     },
     {
       "q": "Mammoth wants to run ultra-low latency trading apps on AWS infrastructure located directly within their own on-prem data center. Which service provides this?",
@@ -2054,7 +2276,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Performance",
-      "exp": "AWS Outposts brings native AWS services, infrastructure, and operating models to virtually any data center. Local Zones are AWS-managed facilities near large populations."
+      "exp": "AWS Outposts brings native AWS services, infrastructure, and operating models to virtually any data center. Local Zones are AWS-managed facilities near large populations.",
+      "whyWrong": [
+        "AWS Local Zones place AWS compute in AWS-managed metro facilities near major cities, not physically inside Mammoth's own on-premises data center.",
+        "AWS Wavelength embeds AWS compute inside 5G telecom providers' networks for mobile edge latency, not inside a customer's private data center.",
+        "",
+        "AWS Direct Connect is a dedicated fiber network link to an AWS Region; it does not place physical AWS server racks inside your data center."
+      ]
     },
     {
       "q": "Mammoth's remote traders need to access VPC resources from their laptops at home using OpenVPN. What managed service should they use?",
@@ -2066,7 +2294,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Secure",
-      "exp": "AWS Client VPN is a managed client-based VPN service. Site-to-Site connects entire networks (like an office branch) to AWS."
+      "exp": "AWS Client VPN is a managed client-based VPN service. Site-to-Site connects entire networks (like an office branch) to AWS.",
+      "whyWrong": [
+        "AWS Site-to-Site VPN connects an entire corporate office network (via a customer gateway router) to a VPC over IPsec, not individual remote laptops using OpenVPN.",
+        "",
+        "AWS Direct Connect is a physical fiber circuit between a data center colocation facility and AWS, not a remote-worker laptop VPN solution.",
+        "AWS Transit Gateway routes traffic between VPCs and networks, but does not terminate OpenVPN connections from end-user laptops by itself."
+      ]
     },
     {
       "q": "Mammoth wants to intercept and inspect all traffic entering their VPC before it reaches their ALB using third-party firewall appliances. What architecture should they use?",
@@ -2078,7 +2312,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Secure",
-      "exp": "Gateway Load Balancer lets you deploy, scale, and manage virtual appliances, like firewalls, transparently in the network path."
+      "exp": "Gateway Load Balancer lets you deploy, scale, and manage virtual appliances, like firewalls, transparently in the network path.",
+      "whyWrong": [
+        "A NAT Gateway translates private IPv4 addresses for outbound internet access and cannot route inbound traffic through third-party firewall appliances.",
+        "",
+        "AWS Transit Gateway is a network transit hub for interconnecting VPCs, whereas GWLB is specifically built to deploy, scale, and load-balance inline virtual network appliances.",
+        "AWS WAF is AWS's native Layer 7 web firewall, not a load balancer for routing raw network packets through third-party virtual firewall appliances."
+      ]
     },
     {
       "q": "Mammoth's machine learning models need a high-performance, POSIX-compliant file system integrated with S3 for scratch data. What should they use?",
@@ -2090,7 +2330,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Performance",
-      "exp": "FSx for Lustre is optimized for compute-intensive workloads and natively integrates with S3, acting as a high-performance cache. EFS is for general-purpose workloads."
+      "exp": "FSx for Lustre is optimized for compute-intensive workloads and natively integrates with S3, acting as a high-performance cache. EFS is for general-purpose workloads.",
+      "whyWrong": [
+        "Amazon EFS is a general-purpose NFS file system; it lacks the sub-millisecond parallel HPC throughput and native two-way S3 data repository integration of FSx for Lustre.",
+        "",
+        "Amazon FSx for Windows File Server uses the SMB protocol for Windows workloads, not POSIX-compliant HPC scratch storage linked to S3.",
+        "Amazon EBS Multi-Attach provides raw block storage (up to 16 Linux instances in one AZ) without a POSIX file system or native S3 integration."
+      ]
     },
     {
       "q": "Mammoth has an app that processes streaming market data with sub-millisecond latency. They need an in-memory datastore. Which service?",
@@ -2102,7 +2348,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Performance",
-      "exp": "ElastiCache provides sub-millisecond latency for caching and real-time use cases. DynamoDB is fast, but ElastiCache is explicitly an in-memory engine."
+      "exp": "ElastiCache provides sub-millisecond latency for caching and real-time use cases. DynamoDB is fast, but ElastiCache is explicitly an in-memory engine.",
+      "whyWrong": [
+        "Amazon RDS is a disk-backed relational database with millisecond response times, not an in-memory sub-millisecond datastore.",
+        "Standard Amazon DynamoDB delivers single-digit millisecond latency on SSD storage, whereas ElastiCache for Redis is a pure in-memory datastore for sub-millisecond access.",
+        "",
+        "Amazon Redshift is a columnar OLAP data warehouse built for heavy analytical queries, not sub-millisecond in-memory streaming lookups."
+      ]
     },
     {
       "q": "Mammoth needs to route users to a backup site if their primary ALB fails. Which Route 53 routing policy should they use?",
@@ -2114,7 +2366,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Resilient",
-      "exp": "Failover routing routes traffic to a primary resource unless it's unhealthy, then sends it to a secondary resource. Just like switching from your homelab to AWS when your ISP goes down."
+      "exp": "Failover routing routes traffic to a primary resource unless it's unhealthy, then sends it to a secondary resource. Just like switching from your homelab to AWS when your ISP goes down.",
+      "whyWrong": [
+        "Weighted Routing splits traffic across endpoints by percentage (such as for canary releases) rather than keeping a backup site strictly passive until primary failure.",
+        "",
+        "Latency Routing sends users to whichever active region has the lowest network latency, which is active-active rather than primary-to-backup failover.",
+        "Multivalue Answer Routing returns up to eight healthy IP records in DNS responses (and cannot be used with ALB Alias records for active-passive DR)."
+      ]
     },
     {
       "q": "Mammoth's DynamoDB table is getting hammered with read requests for identical market data, causing high costs. How can they reduce read capacity usage without changing application logic significantly?",
@@ -2126,7 +2384,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Cost",
-      "exp": "DAX is an in-memory cache for DynamoDB that requires minimal app changes and massively reduces read load on the underlying table."
+      "exp": "DAX is an in-memory cache for DynamoDB that requires minimal app changes and massively reduces read load on the underlying table.",
+      "whyWrong": [
+        "DynamoDB Global Tables replicate data across multiple Regions for global locality, which increases cost rather than caching repeated reads in a single Region.",
+        "",
+        "Migrating from DynamoDB to RDS would require a complete application and database rewrite.",
+        "Increasing Read Capacity Units (RCUs) directly increases your monthly DynamoDB bill instead of offloading repeated reads to a cache."
+      ]
     },
     {
       "q": "Mammoth needs to continuously replicate a massive on-prem Oracle database to Aurora PostgreSQL with near-zero downtime. What combination of services is best?",
@@ -2138,7 +2402,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Resilient",
-      "exp": "The Schema Conversion Tool (SCT) converts the schema, and Database Migration Service (DMS) continuously replicates the data."
+      "exp": "The Schema Conversion Tool (SCT) converts the schema, and Database Migration Service (DMS) continuously replicates the data.",
+      "whyWrong": [
+        "",
+        "AWS DataSync and S3 move flat files and objects, not relational database schemas and continuous change-data-capture (CDC) transactions.",
+        "AWS Snowball is an offline bulk data transfer appliance that cannot perform continuous near-zero-downtime replication or Oracle-to-PostgreSQL schema conversion.",
+        "AWS Backup and Amazon EFS manage cloud backups and NFS file storage, neither of which converts heterogeneous database schemas or streams live DB changes."
+      ]
     },
     {
       "q": "Mammoth is receiving streaming ticker data from thousands of sources and needs to load it into Redshift for analysis. Which service can capture, transform, and load this streaming data?",
@@ -2150,7 +2420,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Performance",
-      "exp": "Kinesis Data Firehose (now just Data Firehose) automatically captures, transforms, and loads streaming data into destinations like S3 or Redshift."
+      "exp": "Kinesis Data Firehose (now just Data Firehose) automatically captures, transforms, and loads streaming data into destinations like S3 or Redshift.",
+      "whyWrong": [
+        "Kinesis Data Streams ingests and buffers real-time streams for custom consumers, but does not natively transform and load data directly into Redshift without extra consumer logic.",
+        "",
+        "Amazon SQS is a message queue for decoupling microservices, not a managed streaming ETL delivery pipe into Amazon Redshift.",
+        "AWS Glue is primarily a batch/micro-batch ETL service rather than a turnkey managed delivery stream for loading real-time data into Redshift."
+      ]
     },
     {
       "q": "Mammoth's developers want to run a web app using Docker containers but refuse to manage clusters or servers. They just want to provide the image and let AWS handle scaling. What service?",
@@ -2162,7 +2438,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Resilient",
-      "exp": "AWS App Runner is a fully managed service that makes it easy to quickly deploy containerized web applications and APIs directly from a registry."
+      "exp": "AWS App Runner is a fully managed service that makes it easy to quickly deploy containerized web applications and APIs directly from a registry.",
+      "whyWrong": [
+        "Amazon ECS with EC2 requires managing both the ECS cluster configuration and the underlying fleet of EC2 container instances.",
+        "",
+        "Amazon EKS requires configuring and managing Kubernetes clusters, networking, and node groups or Fargate profiles.",
+        "AWS Elastic Beanstalk provisions and exposes EC2 instances, Auto Scaling Groups, and load balancers in your account rather than abstracting all infrastructure away like App Runner."
+      ]
     },
     {
       "q": "Mammoth requires centralized management of single sign-on (SSO) across all their AWS accounts, integrated with their on-prem Active Directory. Which service?",
@@ -2174,7 +2456,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Secure",
-      "exp": "IAM Identity Center (formerly AWS SSO) centrally manages access to multiple AWS accounts and business applications, and connects to AD."
+      "exp": "IAM Identity Center (formerly AWS SSO) centrally manages access to multiple AWS accounts and business applications, and connects to AD.",
+      "whyWrong": [
+        "Standard AWS IAM operates within a single AWS account and requires complex manual cross-account role chaining compared to centralized IAM Identity Center.",
+        "Amazon Cognito provides customer identity and access management (CIAM) for web and mobile app end-users, not workforce SSO across AWS Organization accounts.",
+        "",
+        "AWS Directory Service provides a managed Active Directory domain in AWS, but IAM Identity Center is the service that centrally manages workforce SSO permissions across all AWS accounts."
+      ]
     },
     {
       "q": "Mammoth wants to offload the SSL/TLS decryption for their web servers to a managed service to save compute cycles. Where should they attach their ACM certificate?",
@@ -2186,7 +2474,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Performance",
-      "exp": "Attaching the cert to an ALB offloads SSL termination, meaning the load balancer does the heavy crypto math instead of your expensive EC2 instances."
+      "exp": "Attaching the cert to an ALB offloads SSL termination, meaning the load balancer does the heavy crypto math instead of your expensive EC2 instances.",
+      "whyWrong": [
+        "Public ACM certificates cannot be exported to EC2 instances (unless using ACM Private CA), and terminating TLS on EC2 would still consume the instances' own CPU cycles.",
+        "",
+        "Amazon Route 53 is a DNS service that resolves domain names; it never sits in the HTTP data path to terminate SSL/TLS connections.",
+        "A NAT Gateway performs IPv4 network address translation for outbound traffic from private subnets and does not terminate inbound HTTPS/TLS."
+      ]
     },
     {
       "q": "Mammoth's analytical jobs run once a week and can be interrupted without issue. They need a massive amount of compute power cheaply. What pricing model?",
@@ -2198,7 +2492,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Cost",
-      "exp": "Spot instances offer up to 90% discounts for fault-tolerant, flexible workloads. If AWS needs the capacity back, they pull the plug with a 2-minute warning."
+      "exp": "Spot instances offer up to 90% discounts for fault-tolerant, flexible workloads. If AWS needs the capacity back, they pull the plug with a 2-minute warning.",
+      "whyWrong": [
+        "On-Demand Instances charge full price with no discount, wasting money when the workload is interruptible and eligible for Spot.",
+        "Reserved Instances bill for 24/7 capacity over 1 or 3 years, which is extremely wasteful for a job that only runs once a week.",
+        "",
+        "Dedicated Hosts are the most expensive EC2 option, meant for strict physical server isolation or BYOL socket/core licensing, not cheap batch analytics."
+      ]
     },
     {
       "q": "Mammoth wants to map a hostname like 'app.mammoth.local' to an internal ALB, but only allow resources within their VPC to resolve it. What do they need?",
@@ -2210,7 +2510,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Secure",
-      "exp": "A Private Hosted Zone in Route 53 resolves domain names only within specified VPCs. No one on the internet can see your internal naming schemes."
+      "exp": "A Private Hosted Zone in Route 53 resolves domain names only within specified VPCs. No one on the internet can see your internal naming schemes.",
+      "whyWrong": [
+        "A Route 53 Public Hosted Zone exposes DNS records to anyone on the public internet, violating the internal-only resolution requirement.",
+        "",
+        "AWS Directory Service is for Active Directory domain services and authentication, whereas Route 53 Private Hosted Zones are the cloud-native way to manage private VPC DNS records.",
+        "Enabling VPC DNS Support and DNS Hostnames is a prerequisite, but without a Route 53 Private Hosted Zone you cannot create custom domain records like app.mammoth.local."
+      ]
     },
     {
       "q": "Mammoth needs to establish a dedicated, private connection from their data center to AWS that bypasses the internet, with 10 Gbps speeds. What service?",
@@ -2222,7 +2528,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Performance",
-      "exp": "AWS Direct Connect bypasses the public internet entirely, giving you a dedicated physical fiber connection straight into an AWS facility."
+      "exp": "AWS Direct Connect bypasses the public internet entirely, giving you a dedicated physical fiber connection straight into an AWS facility.",
+      "whyWrong": [
+        "AWS Site-to-Site VPN runs encrypted IPsec tunnels over the public internet and caps out around 1.25 Gbps per tunnel, failing both the private physical circuit and 10 Gbps requirements.",
+        "",
+        "AWS Transit Gateway is a cloud router that connects VPCs and attachments, not the physical fiber circuit between an on-premises data center and AWS.",
+        "AWS PrivateLink privately exposes specific services between VPCs via ENIs, rather than providing a 10 Gbps physical connection from an on-premises data center."
+      ]
     },
     {
       "q": "Mammoth's web app allows users to upload profile pictures to S3. They want S3 to automatically trigger a Lambda function to resize the image immediately upon upload. How?",
@@ -2234,7 +2546,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Performance",
-      "exp": "S3 Event Notifications natively trigger Lambda functions, SQS queues, or SNS topics when objects are created."
+      "exp": "S3 Event Notifications natively trigger Lambda functions, SQS queues, or SNS topics when objects are created.",
+      "whyWrong": [
+        "",
+        "CloudTrail is for security auditing and governance logging, introducing unnecessary latency and cost compared to native S3 Event Notifications.",
+        "Routing through CloudWatch metrics/logs alarms adds complexity and delay when S3 Event Notifications can invoke Lambda directly on s3:ObjectCreated.",
+        "S3 does not poll SQS; polling an SQS queue without S3 Event Notifications first publishing events wouldn't know when an object was uploaded."
+      ]
     },
     {
       "q": "Mammoth's developers want to access EC2 instances securely without opening SSH port 22, managing SSH keys, or deploying bastion hosts. What service?",
@@ -2246,7 +2564,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Secure",
-      "exp": "Session Manager provides interactive shell access over an encrypted tunnel without opening inbound ports or managing keys. It's magic."
+      "exp": "Session Manager provides interactive shell access over an encrypted tunnel without opening inbound ports or managing keys. It's magic.",
+      "whyWrong": [
+        "",
+        "AWS Client VPN connects remote users to the VPC network, but still requires opening SSH port 22 on the instances and managing SSH authentication.",
+        "EC2 Instance Connect eliminates long-lived SSH keys by pushing ephemeral keys, but still requires SSH port 22 to be open on the instance.",
+        "AWS Secrets Manager stores and rotates credentials; it does not provide an interactive shell tunnel into EC2 instances."
+      ]
     },
     {
       "q": "Mammoth needs a serverless data integration service that makes it easy to discover, prepare, and combine data for analytics, machine learning, and app development. What service?",
@@ -2258,7 +2582,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Performance",
-      "exp": "AWS Glue is a fully managed serverless ETL (extract, transform, load) service. EMR is Hadoop/Spark clusters you have to manage."
+      "exp": "AWS Glue is a fully managed serverless ETL (extract, transform, load) service. EMR is Hadoop/Spark clusters you have to manage.",
+      "whyWrong": [
+        "",
+        "Amazon EMR requires configuring and managing big-data clusters (even with EMR Serverless, Glue is AWS's dedicated serverless data catalog and ETL integration service).",
+        "AWS Data Pipeline is a legacy workflow service that relies on provisioning EC2/EMR resources rather than providing serverless data discovery and ETL.",
+        "Amazon Athena is an interactive SQL query service for reading data in S3, not a full data catalog and ETL data integration service."
+      ]
     },
     {
       "q": "Mammoth's mobile app requires user authentication and authorization, supporting social identity providers like Google and Apple. Which service?",
@@ -2270,7 +2600,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Secure",
-      "exp": "Amazon Cognito provides authentication, authorization, and user management for web and mobile apps, including federation with social IDPs."
+      "exp": "Amazon Cognito provides authentication, authorization, and user management for web and mobile apps, including federation with social IDPs.",
+      "whyWrong": [
+        "AWS IAM is designed for AWS account administrators, developers, and services—not for scaling to millions of mobile app end-users.",
+        "",
+        "AWS IAM Identity Center is built for workforce single sign-on into AWS accounts and business apps, not consumer mobile app sign-up/sign-in with social IdPs.",
+        "Amazon Macie is an S3 data-privacy service that discovers PII, having nothing to do with mobile user authentication."
+      ]
     },
     {
       "q": "Mammoth wants to ensure that all data written to an S3 bucket is automatically encrypted before being saved to disk, without relying on client-side encryption. What feature?",
@@ -2282,7 +2618,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Secure",
-      "exp": "Server-Side Encryption (SSE-S3 or SSE-KMS) encrypts data at the object level as it is written to disks in AWS data centers."
+      "exp": "Server-Side Encryption (SSE-S3 or SSE-KMS) encrypts data at the object level as it is written to disks in AWS data centers.",
+      "whyWrong": [
+        "",
+        "Client-Side Encryption requires the application to encrypt data before uploading it to S3, which the scenario explicitly wants to avoid.",
+        "AWS CloudHSM is a dedicated hardware appliance for managing cryptographic keys, not S3's built-in automatic object encryption feature.",
+        "TLS/SSL encrypts data in transit over the network between the client and S3, not data at rest when written to S3 disks."
+      ]
     },
     {
       "q": "Mammoth needs to deploy a globally distributed application with ultra-low latency reads and writes. Data must be replicated across multiple AWS Regions automatically. What service?",
@@ -2294,7 +2636,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Resilient",
-      "exp": "DynamoDB Global Tables provide fully managed, multi-region, active-active databases. Aurora Global Database is active-passive for writes."
+      "exp": "DynamoDB Global Tables provide fully managed, multi-region, active-active databases. Aurora Global Database is active-passive for writes.",
+      "whyWrong": [
+        "RDS Cross-Region Read Replicas only scale reads; all writes must still travel back to the single primary Region.",
+        "",
+        "Amazon Aurora Global Database provides fast local reads across Regions, but has a single primary Region for writes (unless write forwarding is used, which still incurs cross-region latency).",
+        "S3 Cross-Region Replication replicates flat objects asynchronously for object storage, not low-latency transactional database reads and writes."
+      ]
     },
     {
       "q": "Mammoth wants to define their infrastructure as code using familiar programming languages like Python and TypeScript rather than YAML/JSON. Which tool?",
@@ -2306,7 +2654,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Resilient",
-      "exp": "AWS CDK lets you write infrastructure in code (Python, TS, Java) and synthesizes it into CloudFormation templates."
+      "exp": "AWS CDK lets you write infrastructure in code (Python, TS, Java) and synthesizes it into CloudFormation templates.",
+      "whyWrong": [
+        "AWS CloudFormation templates are written directly in declarative JSON or YAML, not imperative programming languages like Python or TypeScript.",
+        "",
+        "AWS Elastic Beanstalk is a PaaS application deployment service, not an Infrastructure-as-Code SDK for defining arbitrary AWS resources in Python/TypeScript.",
+        "AWS OpsWorks is a configuration management service based on Chef and Puppet (Ruby DSL), not a general-purpose Python/TypeScript IaC framework."
+      ]
     },
     {
       "q": "Mammoth's workload experiences unpredictable spikes in traffic. They want their EC2 Auto Scaling group to proactively scale out BEFORE the spike happens using machine learning. Which feature?",
@@ -2318,7 +2672,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Performance",
-      "exp": "Predictive Scaling uses machine learning to predict traffic patterns and scales ahead of time. Target tracking is reactive."
+      "exp": "Predictive Scaling uses machine learning to predict traffic patterns and scales ahead of time. Target tracking is reactive.",
+      "whyWrong": [
+        "Target Tracking Scaling is reactive—it scales out only after a metric like average CPU crosses a threshold.",
+        "Step Scaling is also reactive, adding capacity in step adjustments only after a CloudWatch alarm has already been breached.",
+        "",
+        "Scheduled Scaling requires you to manually specify exact times and dates in advance, rather than using machine learning to forecast capacity from historical patterns."
+      ]
     },
     {
       "q": "Mammoth needs to retain compliance logs for 10 years. The data is rarely accessed (maybe once a year) but must be retrievable within 12 hours. Lowest cost is the priority. Which S3 tier?",
@@ -2330,7 +2690,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Cost",
-      "exp": "Glacier Deep Archive is the absolute cheapest storage class on AWS. Retrieval takes up to 12 hours, perfect for compliance hoarding."
+      "exp": "Glacier Deep Archive is the absolute cheapest storage class on AWS. Retrieval takes up to 12 hours, perfect for compliance hoarding.",
+      "whyWrong": [
+        "S3 Standard-IA provides millisecond access at a much higher monthly storage price than archival tiers, wasting money when 12-hour retrieval is acceptable.",
+        "S3 Glacier Flexible Retrieval is meant for archives needing minutes-to-hours retrieval and costs roughly 3–4x more per GB than Glacier Deep Archive.",
+        "",
+        "S3 Intelligent-Tiering charges a per-object monitoring fee and is unnecessary when the access pattern is already known to be cold 10-year archival."
+      ]
     },
     {
       "q": "Mammoth has an RDS MySQL database that is bottlenecked on read-heavy queries. They don't want to change the database engine. How can they scale read performance?",
@@ -2342,7 +2708,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Performance",
-      "exp": "Read Replicas allow you to offload read traffic from the primary DB instance. Multi-AZ is for high availability, not performance."
+      "exp": "Read Replicas allow you to offload read traffic from the primary DB instance. Multi-AZ is for high availability, not performance.",
+      "whyWrong": [
+        "RDS Multi-AZ (with a single standby) keeps the standby instance purely for automatic failover; it cannot serve read queries.",
+        "",
+        "Migrating to DynamoDB violates the requirement not to change the database engine and would require rewriting all SQL queries.",
+        "Increasing EBS IOPS only helps if disk throughput is the bottleneck, whereas Read Replicas horizontally scale both compute and I/O for read queries."
+      ]
     },
     {
       "q": "Mammoth needs to securely transfer files via SFTP directly into Amazon S3. What managed service should they use?",
@@ -2354,7 +2726,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "domain": "Secure",
-      "exp": "AWS Transfer Family provides fully managed support for SFTP, FTPS, and FTP directly into S3 or EFS."
+      "exp": "AWS Transfer Family provides fully managed support for SFTP, FTPS, and FTP directly into S3 or EFS.",
+      "whyWrong": [
+        "AWS Storage Gateway exposes S3 via NFS or SMB protocols for local networks, not as a managed SFTP server endpoint.",
+        "AWS DataSync uses its own agent-based transfer protocol for bulk migrations and does not provide an SFTP endpoint for external partners or clients.",
+        "",
+        "Amazon EFS is a managed NFS file system for EC2 and containers; it neither stores data in S3 nor provides an SFTP server interface."
+      ]
     },
     {
       "q": "Mammoth's web application is being targeted by SQL injection and cross-site scripting (XSS) attacks. Which service can block these at the edge?",
@@ -2366,7 +2744,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Secure",
-      "exp": "AWS WAF (Web Application Firewall) protects against common web exploits like SQLi and XSS. It attaches to ALBs, API Gateway, or CloudFront."
+      "exp": "AWS WAF (Web Application Firewall) protects against common web exploits like SQLi and XSS. It attaches to ALBs, API Gateway, or CloudFront.",
+      "whyWrong": [
+        "",
+        "AWS Shield protects against L3/L4 volumetric and transport-layer DDoS floods, not Layer 7 application-payload exploits like SQLi and XSS.",
+        "Amazon GuardDuty is a detective threat monitoring service that alerts on logs; it does not sit inline at the edge to block malicious HTTP requests.",
+        "AWS Network Firewall inspects VPC network traffic at Layers 3–7 inside the VPC boundary, whereas AWS WAF attaches directly at the edge (CloudFront/ALB) for SQLi and XSS."
+      ]
     },
     {
       "q": "Mammoth wants to connect multiple VPCs and their on-premise networks through a central hub to simplify network architecture. Which service?",
@@ -2378,7 +2762,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "domain": "Resilient",
-      "exp": "AWS Transit Gateway acts as a hub that connects VPCs and on-prem networks, replacing complex point-to-point VPC peering meshes."
+      "exp": "AWS Transit Gateway acts as a hub that connects VPCs and on-prem networks, replacing complex point-to-point VPC peering meshes.",
+      "whyWrong": [
+        "VPC Peering is strictly point-to-point without transitive routing, requiring a complex full-mesh of peering connections as VPC count grows and unable to connect directly to on-premises networks.",
+        "",
+        "AWS Direct Connect is the physical fiber link from on-premises to AWS, not the central hub-and-spoke router interconnecting multiple VPCs.",
+        "AWS PrivateLink exposes individual services across VPCs via ENIs rather than providing full hub-and-spoke network routing across VPCs and on-premises."
+      ]
     },
     {
       "q": "Mammoth needs to analyze VPC Flow Logs to determine which IP addresses are communicating with their EC2 instances without provisioning servers. Which service?",
@@ -2390,7 +2780,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Performance",
-      "exp": "VPC Flow Logs can be saved to S3. Athena can query those logs directly using standard SQL without provisioning infrastructure."
+      "exp": "VPC Flow Logs can be saved to S3. Athena can query those logs directly using standard SQL without provisioning infrastructure.",
+      "whyWrong": [
+        "",
+        "Amazon Redshift is a data warehouse that requires provisioning clusters (or loading data) and is overkill for ad-hoc serverless SQL queries on S3 logs.",
+        "AWS Glue is an ETL and data cataloging service for transforming data, not an interactive SQL query engine for ad-hoc log analysis.",
+        "Amazon EMR provisions big-data Hadoop/Spark clusters, violating the requirement to query VPC Flow Logs without provisioning servers."
+      ]
     },
     {
       "q": "Mammoth's disaster recovery plan requires that their critical EC2 instances are backed up to a different AWS Region. Which service handles cross-region backup automatically?",
@@ -2402,7 +2798,13 @@ var COURSE_AWS = {
       ],
       "ans": 0,
       "domain": "Resilient",
-      "exp": "AWS Backup provides centralized policy-based backup management and natively supports cross-region replication of backups."
+      "exp": "AWS Backup provides centralized policy-based backup management and natively supports cross-region replication of backups.",
+      "whyWrong": [
+        "",
+        "Raw Amazon EBS Snapshots are regional resources that require manual copy actions, custom scripts, or lifecycle policies (DLM/AWS Backup) to automate cross-region EC2 backup plans.",
+        "AWS DataSync transfers files and objects between storage systems, not full EC2 instance AMIs and EBS block-level backups.",
+        "AWS Storage Gateway connects on-premises storage to AWS and has nothing to do with copying EC2 backups across AWS Regions."
+      ]
     },
     {
       "q": "Mammoth Capital runs a financial modeling job every night from 11 PM to 3 AM. The job uses 20 EC2 r6i.2xlarge instances. These instances sit idle the other 20 hours of the day. What is the most cost-effective purchasing option?",
@@ -2414,7 +2816,13 @@ var COURSE_AWS = {
       ],
       "ans": 3,
       "exp": "Spot Instances are ideal here. The batch job runs on a predictable schedule, is fault-tolerant (can checkpoint and restart), and runs during off-peak hours when Spot capacity is plentiful. Spot can save 70-90% over On-Demand. Reserved Instances would be wasteful — you'd pay for 24/7 capacity but only use 4 hours. On-Demand is the most expensive option for predictable workloads.",
-      "domain": "Cost"
+      "domain": "Cost",
+      "whyWrong": [
+        "On-Demand Instances charge full hourly rates, whereas off-peak nightly batch jobs can save 70–90% by using Spot Instances.",
+        "Standard Reserved Instances charge for 24/7 capacity all year, wasting 20 idle hours per day when the job only runs 4 hours a night.",
+        "Scheduled Reserved Instances have been retired by AWS in practice and never came close to the 70–90% discount of Spot Instances for batch jobs.",
+        ""
+      ]
     },
     {
       "q": "A company has 50 EC2 instances spread across 4 AWS accounts. AWS Cost Explorer shows the total bill is $180,000/month. The CFO wants a single consolidated bill and volume discount. What is the correct AWS feature to implement?",
@@ -2426,7 +2834,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "exp": "AWS Organizations with Consolidated Billing combines usage from all member accounts into a single payer account. This unlocks volume pricing tiers (e.g., S3 charges drop at higher usage tiers) and provides one consolidated bill. Cost Explorer and Budgets help you analyse and alert on spend, but they don't create consolidated billing. Control Tower sets up multi-account governance, not billing consolidation.",
-      "domain": "Cost"
+      "domain": "Cost",
+      "whyWrong": [
+        "AWS Cost Explorer visualizes spending only after accounts are linked via AWS Organizations; it is a reporting tool, not the billing consolidation mechanism.",
+        "",
+        "AWS Budgets sends threshold alerts when spending exceeds limits, but does not merge bills or aggregate usage across accounts for volume discounts.",
+        "AWS Control Tower orchestrates multi-account governance and guardrails on top of AWS Organizations, whereas Consolidated Billing is the native Organizations feature that combines bills."
+      ]
     },
     {
       "q": "An RDS PostgreSQL database (db.r5.2xlarge, Multi-AZ) runs 24/7 for a production application. It has been running On-Demand for 14 months and the workload is stable. AWS Cost Explorer shows it costs $4,200/month. What should you do?",
@@ -2438,7 +2852,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "exp": "A stable, predictable, 24/7 production database is a textbook case for RDS Reserved Instances. 1-year All-Upfront reservation saves approximately 40% ($4,200 → ~$2,520/month). Aurora Serverless is designed for variable workloads — a stable production database would pay more with Serverless than with a Reserved Instance. Migrating to DynamoDB would require a full application rewrite for minimal guaranteed cost benefit.",
-      "domain": "Cost"
+      "domain": "Cost",
+      "whyWrong": [
+        "Migrating a production PostgreSQL application to NoSQL DynamoDB requires a costly, high-risk application rewrite when the goal is simply lowering steady-state RDS billing.",
+        "",
+        "Aurora Serverless is optimized for intermittent or spiky workloads; for a database active 24/7, Serverless ACU pricing costs more than a Reserved Instance.",
+        "Nothing in the scenario indicates the database is over-provisioned, so downsizing risks production performance degradation when a Reserved Instance cuts cost with zero performance impact."
+      ]
     },
     {
       "q": "A startup stores 500TB of user-generated videos on S3 Standard. Analysis shows 90% of videos are never watched after 30 days. The CTO asks how to cut the $11,500/month S3 bill. What is the correct solution?",
@@ -2450,7 +2870,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "exp": "S3 Lifecycle policies are the correct tool. After 30 days: move to S3 Standard-IA (40% cheaper). After 90 days: move to S3 Glacier Instant Retrieval (68% cheaper) or Glacier Flexible Retrieval (85% cheaper). S3 Intelligent-Tiering automatically moves objects between access tiers with no retrieval fees. This can reduce the bill from $11,500 to under $2,000/month. Single-AZ reduces availability — inappropriate for user data at this scale.",
-      "domain": "Cost"
+      "domain": "Cost",
+      "whyWrong": [
+        "S3 Transfer Acceleration speeds up global uploads via CloudFront edge locations for an extra fee; it increases data transfer costs and does nothing to lower storage bills.",
+        "",
+        "Video formats are already heavily compressed, and re-encoding 500TB of video consumes massive compute without addressing the underlying storage tier mismatch.",
+        "Moving primary user-generated videos to S3 One Zone-IA risks permanent data loss if that single Availability Zone experiences a disaster."
+      ]
     },
     {
       "q": "AWS Trusted Advisor flags 12 EC2 instances with CPU utilization under 5% over the last 30 days. These are production application servers. What is the recommended cost-optimization action?",
@@ -2462,7 +2888,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "exp": "Rightsizing is the correct answer. First, validate with CloudWatch: check CPU, memory (via CloudWatch Agent), and network metrics across peak and off-peak periods. Then move to a smaller instance type (e.g., m5.xlarge → m5.large). Terminating production instances without analysis is reckless. Converting to Spot is inappropriate for production servers — they can be interrupted. Buying Reserved Instances for oversized instances locks in waste at a discount.",
-      "domain": "Cost"
+      "domain": "Cost",
+      "whyWrong": [
+        "Low CPU utilization does not mean the servers are unused—they are active production servers and may be memory-bound, so terminating them would cause an outage.",
+        "",
+        "Spot Instances can be interrupted by AWS with a 2-minute warning, making them unsuitable for stateful or critical production application servers.",
+        "Buying Reserved Instances before rightsizing locks you into paying for oversized capacity for 1 to 3 years."
+      ]
     },
     {
       "q": "A data analytics team spins up 30 large EC2 instances every morning, runs analysis jobs for 6 hours, and terminates them. They do this 5 days a week. Each instance costs $0.96/hour On-Demand. What purchasing model saves the most money for this exact pattern?",
@@ -2474,7 +2906,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "exp": "Spot Instances via a diversified Spot Fleet save the most — typically 70-90% off On-Demand ($0.96 → ~$0.10-$0.28/hr). The workload is batch, fault-tolerant (can checkpoint jobs), and runs during business hours when spot availability is high. Using a diversified Spot Fleet across multiple instance types and AZs minimizes interruption risk. Reserved Instances would cover 24/7 usage — but these instances only run 30 hours/week, making RIs wasteful. Savings Plans offer less discount than Spot for batch workloads.",
-      "domain": "Cost"
+      "domain": "Cost",
+      "whyWrong": [
+        "Standard Reserved Instances charge for 168 hours/week of capacity, whereas this workload only runs 30 hours/week (18% utilization), making RIs lose money.",
+        "",
+        "A 1-year Compute Savings Plan also commits to an hourly spend 24/7/365, wasting commitment during the 138 hours each week the cluster is off.",
+        "Auto Scaling helps match capacity to demand, but still pays full On-Demand rates ($0.96/hr) instead of Spot's 70–90% discount."
+      ]
     },
     {
       "q": "A company is designing a new microservices application. The architects are choosing between running services on EC2 (always-on), ECS on Fargate, or AWS Lambda. Each service handles unpredictable traffic bursts — quiet for hours then 10,000 requests in 5 minutes. Which option minimizes cost for this traffic pattern?",
@@ -2486,7 +2924,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "exp": "Lambda is the most cost-effective for unpredictable burst traffic. You pay only for actual execution time (100ms increments) and the first 1 million requests/month are free. During quiet periods, Lambda costs $0. EC2 and Fargate charge whether the service is handling requests or sitting idle. For a service that's quiet for hours then spikes to 10,000 requests, Lambda costs a tiny fraction of always-on EC2. The trade-off: Lambda has a 15-minute execution limit and cold start considerations.",
-      "domain": "Cost"
+      "domain": "Cost",
+      "whyWrong": [
+        "EC2 Reserved Instances have low per-hour rates when fully utilized, but paying 24/7 for servers that sit completely idle for hours wastes money.",
+        "ECS on Fargate still requires keeping at least minimum tasks running (and paying per vCPU-second/GB-second) to avoid multi-second container startup lag during bursts.",
+        "",
+        "EC2 Spot Instances still charge while idle between bursts and can be reclaimed by AWS with a 2-minute notice, causing user-facing outages."
+      ]
     },
     {
       "domain": "Resilient",
@@ -2498,7 +2942,13 @@ var COURSE_AWS = {
         "S3 Cross-Region Replication of application state with Lambda-triggered EC2 launches in us-west-2 on CloudWatch alarm"
       ],
       "ans": 2,
-      "exp": "Pilot Light hits both targets. Core infrastructure is pre-deployed and idle in us-west-2 (satisfies RTO < 15 min — just scale up and promote the RDS replica). Cross-region RDS read replicas with near-real-time replication satisfy RPO < 5 min. Option A (daily snapshots) fails RPO — you lose up to 24h of data. Option B (Multi-AZ) is intra-region only — it does not survive a full regional failure. Option D is non-standard, introduces Lambda cold-start lag, and has no proven failover path for database state."
+      "exp": "Pilot Light hits both targets. Core infrastructure is pre-deployed and idle in us-west-2 (satisfies RTO < 15 min — just scale up and promote the RDS replica). Cross-region RDS read replicas with near-real-time replication satisfy RPO < 5 min. Option A (daily snapshots) fails RPO — you lose up to 24h of data. Option B (Multi-AZ) is intra-region only — it does not survive a full regional failure. Option D is non-standard, introduces Lambda cold-start lag, and has no proven failover path for database state.",
+      "whyWrong": [
+        "Daily snapshots have an RPO of up to 24 hours and manual runbook restoration takes roughly an hour, failing both the 5-minute RPO and 15-minute RTO.",
+        "A Multi-AZ deployment inside us-east-1 protects against a single data center outage, not a full us-east-1 regional failure.",
+        "",
+        "S3 Cross-Region Replication does not replicate transactional relational database state, and cold-booting an entire EC2 fleet from scratch risks breaching the 15-minute RTO."
+      ]
     },
     {
       "domain": "Resilient",
@@ -2510,7 +2960,13 @@ var COURSE_AWS = {
         "Add a try/catch block in the Lambda handler and log errors to CloudWatch without rethrowing, so processing continues"
       ],
       "ans": 1,
-      "exp": "The correct fix is Option B. Lambda's Kinesis event source mapping supports bisect-on-error (splits the failing batch in half to isolate the bad record), a maximum retry count, and an on-failure destination (DLQ or SNS). This isolates the poison pill without stalling the shard. Option A (longer timeout) does nothing — the crash happens immediately on JSON parse, not from timeout. Option C (SQS) would require re-architecting the ingestion pipeline and loses Kinesis ordering guarantees. Option D (swallowing errors) silently drops data, which is unacceptable for financial feeds."
+      "exp": "The correct fix is Option B. Lambda's Kinesis event source mapping supports bisect-on-error (splits the failing batch in half to isolate the bad record), a maximum retry count, and an on-failure destination (DLQ or SNS). This isolates the poison pill without stalling the shard. Option A (longer timeout) does nothing — the crash happens immediately on JSON parse, not from timeout. Option C (SQS) would require re-architecting the ingestion pipeline and loses Kinesis ordering guarantees. Option D (swallowing errors) silently drops data, which is unacceptable for financial feeds.",
+      "whyWrong": [
+        "Malformed JSON fails parsing immediately on every retry; a longer Lambda timeout only delays failure rather than clearing the blocked shard iterator.",
+        "",
+        "Replacing Kinesis with an SQS Standard Queue sacrifices per-shard ordering and multi-consumer stream replay required by market data feeds.",
+        "Swallowing exceptions in a try/catch discards failed records into text logs with no structured DLQ for replay or whole-batch isolation."
+      ]
     },
     {
       "domain": "Resilient",
@@ -2522,7 +2978,13 @@ var COURSE_AWS = {
         "Store sessions in an RDS Multi-AZ MySQL database instead, as relational databases handle concurrent session reads better than Redis"
       ],
       "ans": 1,
-      "exp": "Option B is correct. ElastiCache for Redis with Cluster Mode enabled and Multi-AZ automatic failover promotes a replica to primary within ~30 seconds of a node failure — sessions survive. The app only needs one config change: point to the cluster endpoint instead of a primary endpoint. Option A (DynamoDB) works but requires changing the session serialization format and adding IAM permissions — more code change than a cluster endpoint swap. Option C (manual dual-node logic) is error-prone, introduces split-brain risk, and is exactly what ElastiCache Multi-AZ already solves natively. Option D (RDS for sessions) is functionally valid but adds unnecessary RDBMS overhead for a key-value session store and is still single-AZ without its own Multi-AZ configuration."
+      "exp": "Option B is correct. ElastiCache for Redis with Cluster Mode enabled and Multi-AZ automatic failover promotes a replica to primary within ~30 seconds of a node failure — sessions survive. The app only needs one config change: point to the cluster endpoint instead of a primary endpoint. Option A (DynamoDB) works but requires changing the session serialization format and adding IAM permissions — more code change than a cluster endpoint swap. Option C (manual dual-node logic) is error-prone, introduces split-brain risk, and is exactly what ElastiCache Multi-AZ already solves natively. Option D (RDS for sessions) is functionally valid but adds unnecessary RDBMS overhead for a key-value session store and is still single-AZ without its own Multi-AZ configuration.",
+      "whyWrong": [
+        "Switching from Redis to DynamoDB requires replacing the Redis client library, rewriting session access calls, and configuring IAM permissions.",
+        "",
+        "Writing custom dual-node failover logic in application code is complex and risks split-brain data loss when ElastiCache Multi-AZ handles failover natively.",
+        "Moving sessions from Redis to MySQL requires code changes and trades sub-millisecond in-memory speed for slower disk-backed relational queries."
+      ]
     },
     {
       "domain": "Cost",
@@ -2534,7 +2996,13 @@ var COURSE_AWS = {
         "Purchase Convertible Reserved Instances for both fleets so Mammoth Capital can change instance types freely without any trade-offs."
       ],
       "ans": 1,
-      "exp": "Standard Reserved Instances (RIs) offer the deepest discounts (up to ~72%) for steady, predictable workloads with known instance families and sizes—ideal for Mammoth Capital's always-on order-matching engines. Compute Savings Plans (up to ~66%) offer flexible discounts that automatically apply across any EC2 instance family, size, region, or OS, making them perfect for the unpredictable burst analytics fleet. Using Spot for mission-critical order-matching engines is dangerous due to interruption risk. Convertible RIs allow instance-type changes but are less flexible than Savings Plans and carry exchange complexity."
+      "exp": "Standard Reserved Instances (RIs) offer the deepest discounts (up to ~72%) for steady, predictable workloads with known instance families and sizes—ideal for Mammoth Capital's always-on order-matching engines. Compute Savings Plans (up to ~66%) offer flexible discounts that automatically apply across any EC2 instance family, size, region, or OS, making them perfect for the unpredictable burst analytics fleet. Using Spot for mission-critical order-matching engines is dangerous due to interruption risk. Convertible RIs allow instance-type changes but are less flexible than Savings Plans and carry exchange complexity.",
+      "whyWrong": [
+        "This reverses the optimal match: running steady 24/7 order-matching engines on full-price On-Demand forfeits up to 72% savings from Standard Reserved Instances.",
+        "",
+        "Spot Instances can be interrupted with 2 minutes' notice at any time, which is unacceptable for mission-critical 24/7 order-matching engines.",
+        "Convertible Reserved Instances offer a smaller discount than Standard RIs for the steady fleet and are less flexible than Compute Savings Plans (which also cover Fargate and Lambda)."
+      ]
     },
     {
       "domain": "Cost",
@@ -2546,7 +3014,13 @@ var COURSE_AWS = {
         "Move all data to S3 Glacier Deep Archive immediately after ingestion to minimize storage costs, and restore objects as needed using Expedited retrievals."
       ],
       "ans": 2,
-      "exp": "A tiered Lifecycle policy is the most cost-effective for Mammoth Capital's data lake. S3 Standard-IA suits objects accessed less than once a month after 30 days, cutting storage costs ~58% vs Standard. Glacier Instant Retrieval reduces costs further (~68% vs Standard) for the 90-day compliance data still requiring millisecond access. Glacier Deep Archive provides the lowest cost (~95% savings) for long-term archival. Supplementing with S3 Intelligent-Tiering for unpredictable mid-tier access removes manual guesswork. Keeping everything in S3 Standard wastes significant spend. Deep Archive for all data adds high retrieval costs and latency for frequently needed backtesting data."
+      "exp": "A tiered Lifecycle policy is the most cost-effective for Mammoth Capital's data lake. S3 Standard-IA suits objects accessed less than once a month after 30 days, cutting storage costs ~58% vs Standard. Glacier Instant Retrieval reduces costs further (~68% vs Standard) for the 90-day compliance data still requiring millisecond access. Glacier Deep Archive provides the lowest cost (~95% savings) for long-term archival. Supplementing with S3 Intelligent-Tiering for unpredictable mid-tier access removes manual guesswork. Keeping everything in S3 Standard wastes significant spend. Deep Archive for all data adds high retrieval costs and latency for frequently needed backtesting data.",
+      "whyWrong": [
+        "Keeping terabytes of aging data in S3 Standard forever wastes up to 95% on storage costs once objects pass the 30-day active window.",
+        "When access patterns follow a known lifecycle schedule, explicit S3 Lifecycle transitions avoid Intelligent-Tiering's per-object monthly monitoring fees.",
+        "",
+        "S3 Glacier Deep Archive does not support Expedited retrievals (restores take 12–48 hours) and has a 180-day minimum storage duration, making it unusable for active 30-day backtesting."
+      ]
     },
     {
       "domain": "Cost",
@@ -2558,7 +3032,13 @@ var COURSE_AWS = {
         "Use AWS Trusted Advisor's Cost Optimization checks to identify idle instances, then terminate any instance with less than 10% average CPU utilization over 14 days."
       ],
       "ans": 1,
-      "exp": "AWS Compute Optimizer uses machine learning to analyze up to 14 days of CloudWatch utilization data—including CPU, memory (when the CloudWatch agent is installed), network throughput, and disk I/O—and recommends optimal EC2 instance types and sizes. This multi-dimensional analysis prevents the common mistake of right-sizing on CPU alone while ignoring memory bottlenecks, which is critical for Mammoth Capital's memory-intensive trading microservices. Trusted Advisor only flags idle/low-utilization instances based on CPU thresholds and lacks Compute Optimizer's granularity. Switching to T3 burstable instances is not universally appropriate—sustained workloads can exhaust CPU credits and become more expensive. Manual 7-day reviews are incomplete and error-prone compared to Compute Optimizer's automated, multi-metric analysis."
+      "exp": "AWS Compute Optimizer uses machine learning to analyze up to 14 days of CloudWatch utilization data—including CPU, memory (when the CloudWatch agent is installed), network throughput, and disk I/O—and recommends optimal EC2 instance types and sizes. This multi-dimensional analysis prevents the common mistake of right-sizing on CPU alone while ignoring memory bottlenecks, which is critical for Mammoth Capital's memory-intensive trading microservices. Trusted Advisor only flags idle/low-utilization instances based on CPU thresholds and lacks Compute Optimizer's granularity. Switching to T3 burstable instances is not universally appropriate—sustained workloads can exhaust CPU credits and become more expensive. Manual 7-day reviews are incomplete and error-prone compared to Compute Optimizer's automated, multi-metric analysis.",
+      "whyWrong": [
+        "Downsizing based on 7 days of CPU metrics alone ignores memory, disk I/O, and network bottlenecks and can starve memory-intensive microservices.",
+        "",
+        "Blindly switching production microservices to T3 burstable instances can incur extra T3 Unlimited surplus CPU charges if sustained bursts exhaust CPU credits.",
+        "Terminating active microservice instances just because average CPU is below 10% will cause service outages rather than right-sizing them safely."
+      ]
     },
     {
       "q": "A company runs a massive data processing workload on EC2 instances every weekend. The workload is fault-tolerant and can be interrupted and resumed without issue. Which EC2 purchasing option provides the MOST cost-effective solution?",
@@ -2570,7 +3050,13 @@ var COURSE_AWS = {
       ],
       "ans": 2,
       "exp": "Because the workload is fault-tolerant and can be interrupted, Spot Instances offer up to a 90% discount compared to On-Demand, making them the most cost-effective choice for flexible batch processing.",
-      "domain": "Cost"
+      "domain": "Cost",
+      "whyWrong": [
+        "On-Demand Instances pay full list price, missing out on up to 90% savings available with Spot Instances for interruptible workloads.",
+        "Reserved Instances require paying for 24/7 capacity all week, which is wasteful for a job that only runs on weekends.",
+        "",
+        "Dedicated Hosts are physical servers billed continuously for compliance or licensing needs, making them the most expensive option."
+      ]
     },
     {
       "q": "An organization stores petabytes of compliance logs in Amazon S3. The logs must be retained for 7 years but are rarely accessed after 30 days. When they are needed, retrieval within 12 hours is acceptable. Which storage class minimizes cost?",
@@ -2582,7 +3068,13 @@ var COURSE_AWS = {
       ],
       "ans": 3,
       "exp": "S3 Glacier Deep Archive is the lowest-cost storage class in AWS. It is designed for long-term retention of rarely accessed data where retrieval times of 12 hours are acceptable.",
-      "domain": "Cost"
+      "domain": "Cost",
+      "whyWrong": [
+        "S3 Standard is the highest-cost multi-AZ storage tier and is meant for frequently accessed hot data, not 7-year cold archives.",
+        "S3 Intelligent-Tiering charges monthly per-object monitoring fees and defaults to frequent/infrequent tiers unless archive tiers are manually enabled.",
+        "S3 Glacier Flexible Retrieval supports faster retrievals (minutes to hours) at roughly 3–4x the storage cost of Glacier Deep Archive.",
+        ""
+      ]
     },
     {
       "q": "A company wants to identify the AWS services and accounts responsible for their highest monthly expenditures. They also want to forecast their cloud spend for the next quarter based on historical data. Which AWS service should they use?",
@@ -2594,7 +3086,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "exp": "AWS Cost Explorer allows you to visualize, understand, and manage your AWS costs and usage over time, and provides forecasting capabilities based on historical trends.",
-      "domain": "Cost"
+      "domain": "Cost",
+      "whyWrong": [
+        "AWS Trusted Advisor provides best-practice checks (like flagging idle resources), not historical spend breakdowns by service/account or quarterly spend forecasting.",
+        "",
+        "AWS Pricing Calculator estimates the cost of new architectures before deployment; it does not analyze your actual historical account billing data.",
+        "CloudWatch Billing Alarms trigger alerts when current charges cross a threshold, without offering visual spend breakdowns or multi-month forecasting."
+      ]
     },
     {
       "q": "An application runs on EC2 instances in a single Availability Zone behind an Application Load Balancer. The Solutions Architect needs to eliminate the single point of failure with the LEAST operational overhead. What should they do?",
@@ -2606,7 +3104,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "exp": "A single AZ is always a single point of failure, no matter how large the instances are. Spreading the target group's instances across multiple AZs is what actually removes the SPOF — resizing or changing load balancer type doesn't touch the underlying AZ risk.",
-      "domain": "Resilient"
+      "domain": "Resilient",
+      "whyWrong": [
+        "Vertical scaling increases compute capacity within the same Availability Zone, leaving the application completely vulnerable if that AZ fails.",
+        "",
+        "Hourly manual AMI snapshots create high operational overhead and still leave up to an hour of data loss and manual recovery downtime during an AZ outage.",
+        "Switching from an ALB (Layer 7) to an NLB (Layer 4) changes load balancer protocol behavior without adding a second Availability Zone for the EC2 targets."
+      ]
     },
     {
       "q": "A company's RDS database must survive the complete loss of its primary Availability Zone with an automatic failover and minimal data loss. Which RDS feature satisfies this requirement?",
@@ -2618,7 +3122,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "exp": "Multi-AZ deployments synchronously replicate to a standby in a different AZ and fail over automatically — Read Replicas are asynchronous and meant for read scaling, not automatic DR failover.",
-      "domain": "Resilient"
+      "domain": "Resilient",
+      "whyWrong": [
+        "Read Replicas in the same AZ fail alongside the primary during an AZ outage, and Read Replicas use asynchronous replication that requires manual promotion.",
+        "",
+        "Manual daily snapshots require manual restoration (high RTO) and lose up to 24 hours of transactions (high RPO).",
+        "Increasing EBS storage IOPS improves disk performance on the primary instance, but provides zero redundancy if the Availability Zone goes down."
+      ]
     },
     {
       "q": "An Auto Scaling Group is configured with a minimum of 2, desired of 2, and maximum of 2 instances. During a traffic spike, users report slow response times, but no new instances launch. What is the MOST likely cause?",
@@ -2630,7 +3140,13 @@ var COURSE_AWS = {
       ],
       "ans": 1,
       "exp": "An Auto Scaling Group can never exceed its configured maximum — with max=desired=2, there is no room to scale out no matter how a scaling policy is configured. The maximum needs to be raised.",
-      "domain": "Resilient"
+      "domain": "Resilient",
+      "whyWrong": [
+        "A health check grace period that is too short causes premature replacement of launching instances, rather than preventing scale-out beyond 2 instances.",
+        "",
+        "Sticky sessions control whether a user stays pinned to one instance; they do not affect whether an Auto Scaling Group launches new instances.",
+        "Spreading instances across multiple Availability Zones is standard high-availability practice and does not block an ASG from scaling out."
+      ]
     },
     {
       "q": "A company needs a Recovery Time Objective (RTO) of a few minutes and a Recovery Point Objective (RPO) of seconds for a critical database, with cost being a secondary concern. Which disaster recovery strategy should be used?",
@@ -2642,7 +3158,151 @@ var COURSE_AWS = {
       ],
       "ans": 3,
       "exp": "Multi-Site Active-Active runs full production capacity in more than one Region simultaneously, giving near-zero RTO and RPO — the fastest (and most expensive) of the four standard AWS DR strategies. Pilot Light and Warm Standby trade some RTO/RPO for lower cost.",
-      "domain": "Resilient"
+      "domain": "Resilient",
+      "whyWrong": [
+        "Backup and Restore is the cheapest DR strategy, but restoring from backups takes hours (high RTO) and loses data since the last backup (high RPO).",
+        "Pilot Light keeps only minimal core infrastructure running and must provision/scale full production compute during failover, taking tens of minutes rather than near-zero RTO.",
+        "Warm Standby runs a scaled-down copy of the environment that still requires scaling out under full production load during failover, making it slower than Multi-Site Active-Active.",
+        ""
+      ]
+    },
+    {
+      "q": "Mammoth Capital runs EC2 instances in isolated private subnets with no Internet Gateway or NAT Gateway attached to the VPC. The instances need to read and write sensitive financial reports to an Amazon S3 bucket in the same Region and fetch database credentials from AWS Secrets Manager, without any traffic ever traversing the public internet. Which two actions must the Solutions Architect take to meet these requirements? (Choose TWO.)",
+      "opts": [
+        "Create a VPC Gateway Endpoint for Amazon S3 and add a route to it in the private subnets' route tables.",
+        "Create a VPC Interface Endpoint (AWS PrivateLink) for AWS Secrets Manager in the private subnets with private DNS enabled.",
+        "Create a VPC Gateway Endpoint for AWS Secrets Manager and attach an endpoint policy allowing GetSecretValue.",
+        "Attach an Egress-Only Internet Gateway to the VPC and update the private route tables to route 0.0.0.0/0 to it.",
+        "Configure S3 Transfer Acceleration on the bucket so the private EC2 instances connect over the AWS edge network."
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Secure",
+      "exp": "Amazon S3 uses a free VPC Gateway Endpoint (configured via route table entries) for private connectivity within the Region, while AWS Secrets Manager requires a VPC Interface Endpoint powered by AWS PrivateLink (which places ENIs in the private subnets). Together, they allow private EC2 instances to reach both S3 and Secrets Manager without a NAT Gateway or Internet Gateway.",
+      "whyWrong": [
+        "",
+        "",
+        "VPC Gateway Endpoints only support Amazon S3 and Amazon DynamoDB; AWS Secrets Manager requires an Interface Endpoint.",
+        "An Egress-Only Internet Gateway routes IPv6 traffic out to the public internet and requires an Internet Gateway concept, violating the no-internet requirement.",
+        "S3 Transfer Acceleration routes uploads over the public internet to CloudFront edge locations, which cannot be reached from an isolated private subnet."
+      ]
+    },
+    {
+      "q": "A FinTech company hosts a static Single-Page Application (SPA) in an Amazon S3 bucket fronted by an Amazon CloudFront distribution. A security audit requires that users must never be able to bypass CloudFront to access objects directly via the S3 bucket URL, and all public access directly to the S3 bucket must be blocked. Which two steps should the Solutions Architect take together to meet this requirement? (Choose TWO.)",
+      "opts": [
+        "Configure CloudFront Origin Access Control (OAC) and associate it with the S3 origin in the CloudFront distribution.",
+        "Enable S3 Block Public Access on the bucket and add an S3 bucket policy that grants s3:GetObject only to the CloudFront service principal for that distribution.",
+        "Enable S3 Static Website Hosting on the bucket and set the CloudFront origin to the S3 website endpoint.",
+        "Attach an AWS WAF web ACL directly to the S3 bucket to drop any requests not originating from CloudFront IP ranges.",
+        "Place the S3 bucket inside a private VPC subnet and attach a Security Group that only allows port 443 from CloudFront."
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Secure",
+      "exp": "To lock down an S3 origin behind CloudFront, you enable S3 Block Public Access on the bucket, configure Origin Access Control (OAC) on the CloudFront distribution, and apply an S3 bucket policy permitting s3:GetObject only to the CloudFront service principal (cloudfront.amazonaws.com) scoped to that distribution's ARN.",
+      "whyWrong": [
+        "",
+        "",
+        "S3 Static Website Hosting endpoints require public read access and do not support CloudFront Origin Access Control (OAC).",
+        "AWS WAF attaches to CloudFront, ALB, API Gateway, AppSync, or Cognito—it cannot be attached directly to an Amazon S3 bucket.",
+        "Amazon S3 is a regional object storage service outside of VPC subnets; you cannot place an S3 bucket inside a subnet or attach a Security Group to it."
+      ]
+    },
+    {
+      "q": "An e-commerce company runs a stateful web application on EC2 instances in an Auto Scaling Group across three Availability Zones behind an Application Load Balancer. Currently, both user session data and uploaded product catalog images are stored on each EC2 instance's local EBS volume, causing missing images and dropped sessions whenever instances scale in. Which two changes will make the architecture stateless and resilient across AZs? (Choose TWO.)",
+      "opts": [
+        "Move user session state off the local EBS volumes into Amazon ElastiCache for Redis (Multi-AZ) or Amazon DynamoDB.",
+        "Store uploaded product catalog images in Amazon S3 (or on a shared Amazon EFS file system mounted across all instances) instead of local EBS volumes.",
+        "Convert the local EBS volumes to Provisioned IOPS SSD (io2) and enable EBS Multi-Attach across all three Availability Zones.",
+        "Replace the Application Load Balancer with an AWS Gateway Load Balancer to synchronize local disk state across instances.",
+        "Configure the Auto Scaling Group to use a Cluster Placement Group so all instances share the same underlying physical storage rack."
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Resilient",
+      "exp": "Externalizing user sessions to a shared store like ElastiCache for Redis (Multi-AZ) or DynamoDB ensures any instance can serve any user request. Moving user-uploaded images to Amazon S3 (or multi-AZ Amazon EFS) decouples file persistence from individual EC2 lifecycles so scaling in never loses data.",
+      "whyWrong": [
+        "",
+        "",
+        "EBS Multi-Attach only works within a single Availability Zone (up to 16 instances) and requires a cluster-aware file system, so it cannot span three AZs.",
+        "Gateway Load Balancer is used to route traffic through inline third-party virtual network appliances (like firewalls), not to replicate disk state.",
+        "A Cluster Placement Group packs instances into a single Availability Zone for low-latency HPC networking, which breaks Multi-AZ resilience and does not share EBS storage."
+      ]
+    },
+    {
+      "q": "Mammoth Capital is building an event-driven settlement system where an order service publishes a single trade-executed event that must simultaneously fan out to two independent downstream consumers: a real-time risk engine and an archival audit worker. Neither consumer may drop messages if its worker fleet is temporarily overwhelmed. Which two steps form the standard AWS fanout architecture to satisfy this requirement? (Choose TWO.)",
+      "opts": [
+        "Create an Amazon SNS topic and configure the order service to publish each trade-executed event to that topic.",
+        "Create two separate Amazon SQS queues—one for the risk engine and one for the audit worker—and subscribe both queues to the SNS topic.",
+        "Create a single Amazon SQS queue and have both the risk engine fleet and the audit worker fleet poll that same queue concurrently.",
+        "Use an AWS Step Functions Express Workflow as a message buffer that retains unprocessed events for up to 14 days.",
+        "Configure Amazon Route 53 Multivalue Answer routing to duplicate each HTTP POST request to both backend services simultaneously."
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Resilient",
+      "exp": "The SNS + SQS fanout pattern publishes a message once to an Amazon SNS topic, which pushes copies to multiple subscribed Amazon SQS queues in parallel. Each downstream consumer polls its own independent SQS queue, providing durable buffering (up to 14 days) so neither consumer loses messages if temporarily overwhelmed.",
+      "whyWrong": [
+        "",
+        "",
+        "In a single SQS queue, once one consumer processes and deletes a message, the other consumer never receives it—SQS queues are competing-consumer, not pub/sub.",
+        "Step Functions Express Workflows are limited to a 5-minute maximum execution duration and are not durable 14-day message queues.",
+        "Route 53 is a DNS service that resolves domain names to IPs; it cannot duplicate or buffer HTTP POST payloads across multiple backend services."
+      ]
+    },
+    {
+      "q": "A financial analytics application runs on an Amazon RDS for PostgreSQL Multi-AZ DB instance. The database is experiencing high CPU utilization and connection exhaustion caused by thousands of short-lived AWS Lambda invocations opening new database connections and repeatedly querying the same reference market-data tables. Which two services should the Solutions Architect add to resolve both bottlenecks with minimal code changes? (Choose TWO.)",
+      "opts": [
+        "Deploy Amazon RDS Proxy between the AWS Lambda functions and the RDS PostgreSQL database to pool and reuse database connections.",
+        "Add an Amazon ElastiCache for Redis cluster in front of RDS to cache the frequently queried reference market-data results.",
+        "Attach Amazon DynamoDB Accelerator (DAX) in front of the RDS PostgreSQL instance to provide microsecond read caching.",
+        "Enable a second RDS Multi-AZ standby instance in a third Availability Zone so Lambda automatically distributes read queries across both standbys.",
+        "Place an AWS Global Accelerator in front of the RDS PostgreSQL endpoint to multiplex TCP database connections."
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Performance",
+      "exp": "Amazon RDS Proxy sits between Lambda and RDS to pool and share established database connections, preventing connection exhaustion during Lambda concurrency spikes. Amazon ElastiCache for Redis caches the repeated reference data queries in memory, offloading read CPU pressure from the PostgreSQL instance.",
+      "whyWrong": [
+        "",
+        "",
+        "DynamoDB Accelerator (DAX) is exclusively compatible with Amazon DynamoDB and cannot be used to cache queries for Amazon RDS.",
+        "Standard RDS Multi-AZ standby instances are exclusively for failover and do not serve read traffic (unlike Multi-AZ DB Clusters or Read Replicas), nor do they pool Lambda connections.",
+        "AWS Global Accelerator optimizes public network paths to edge endpoints via Anycast IPs; it does not pool PostgreSQL database connections."
+      ]
+    },
+    {
+      "q": "During a monthly finops review, a Solutions Architect finds that NAT Gateway data processing charges account for 35% of the AWS bill. VPC Flow Logs reveal that 80% of the traffic traversing the NAT Gateways comes from EC2 instances in private subnets downloading large objects from Amazon S3 and reading items from Amazon DynamoDB in the same AWS Region. Which two actions will eliminate the NAT Gateway charges for this traffic at the lowest cost? (Choose TWO.)",
+      "opts": [
+        "Create a VPC Gateway Endpoint for Amazon S3 and associate it with the private subnets' route tables.",
+        "Create a VPC Gateway Endpoint for Amazon DynamoDB and associate it with the private subnets' route tables.",
+        "Deploy VPC Interface Endpoints (AWS PrivateLink) for both Amazon S3 and Amazon DynamoDB in every Availability Zone.",
+        "Replace the managed NAT Gateways with an AWS Direct Connect connection to route S3 and DynamoDB traffic through the corporate data center.",
+        "Enable Amazon S3 Cross-Region Replication to copy the bucket into the VPC's private CIDR block."
+      ],
+      "ans": [
+        0,
+        1
+      ],
+      "domain": "Cost",
+      "exp": "VPC Gateway Endpoints are supported specifically for Amazon S3 and Amazon DynamoDB and have zero hourly or per-GB data processing charges. Adding both Gateway Endpoints to the private route tables routes all same-Region S3 and DynamoDB traffic directly over the AWS private network, bypassing the NAT Gateways completely.",
+      "whyWrong": [
+        "",
+        "",
+        "While S3 and DynamoDB also support Interface Endpoints, Interface Endpoints charge both an hourly fee per AZ and per-GB data processing fees, whereas Gateway Endpoints are completely free.",
+        "AWS Direct Connect links on-premises networks to AWS and charges port hours plus data transfer out fees; it does not reduce intra-Region VPC-to-S3 costs.",
+        "S3 Cross-Region Replication copies objects to another S3 bucket in a different Region (incurring replication and storage charges) and cannot place S3 buckets inside a VPC CIDR."
+      ]
     }
   ],
   "arch": [

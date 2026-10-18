@@ -11,4 +11,4 @@ content into this file directly rather than maintaining two files.
 
 **Oct 6, 2026: Mammoth mode.** Every `www/*.html` loads `mammoth/mammoth-mode.js` (hidden retro theme: Konami code or 5 taps
 on the logo). The `www/mammoth/` folder is a copy; the source is MammothCapitalSite `site/mammoth/` + `tools/sync-mammoth.py`.
-Service worker cache is `mammoth-academy-v3`. Deploy steps are in Nathan's private notes (MammothCapitalSite CLAUDE.md, "Mammoth Academy operations").
+Service worker cache is `mammoth-academy-v5` (Oct 18, 2026). Deploy steps are in Nathan's private notes (MammothCapitalSite CLAUDE.md, "Mammoth Academy operations").
