@@ -26,8 +26,11 @@ html[data-mammoth]{color-scheme:dark;
   --mm-orange:#FFA300;--mm-yellow:#FFEC27;--mm-blue:#29ADFF;--mm-red:#FF004D;--mm-green:#00E436;--mm-plum:#7E2553;
   --mm-read:'MM Atkinson',system-ui,sans-serif;--mm-pixel:'MM Pixelify',monospace;--mm-label:'MM Silkscreen',monospace;
   --mm-shadow:4px 4px 0 #000;background:#1D2B53}
-html[data-mammoth] body{background:#1D2B53 linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/100% 4px!important;
-  color:#FFF1E8;font-family:var(--mm-read)!important}
+html[data-mammoth] body{background-color:var(--mm-deep)!important; background-image:linear-gradient(rgba(0,0,0,0.35) 50%, transparent 50%)!important; background-size:100% 4px!important;
+  color:#FFF1E8;font-family:var(--mm-read)!important;
+  animation: mm-scanline 2s linear infinite, mm-crt-flicker 0.15s infinite alternate;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="%23FFA300" stroke="%23FFF1E8" stroke-width="1.5" d="M2,2 L14,14 L10,14 L14,22 L11,22 L7,14 L2,18 Z"/></svg>') 2 2, auto !important;
+}
 html[data-mammoth] :is(h1,h2,h3,h4){font-family:var(--mm-read)!important;font-weight:800!important;letter-spacing:0!important}
 html[data-mammoth] :is(button,.btn,.button,input[type=submit],input[type=button],[role=button]){font-family:var(--mm-pixel)!important;letter-spacing:.02em}
 html[data-mammoth] :is(code,pre,kbd,samp,.mono){font-family:var(--mm-pixel)!important}
@@ -118,9 +121,15 @@ html[data-mammoth][data-mm-site=pulse] [class*="bg-\[\#161b22\]\/"]{background-c
 html[data-mammoth][data-mm-site=pulse] .bg-\[\#ff8c00\]{background-color:#FFA300!important}
 html[data-mammoth][data-mm-site=pulse] .text-\[\#ff8c00\]{color:#FFA300!important}
 
-/* ---------- Kempo: kempo.mammothcapital.site (gold on midnight → yellow on navy) */
-html[data-mammoth][data-mm-site=kempo] .bg-\[\#050a14\]{background-color:#1D2B53!important}
-html[data-mammoth][data-mm-site=kempo] .glass{background:#0F1733!important;backdrop-filter:none!important;border:3px solid #000!important;box-shadow:4px 4px 0 #000,inset 0 0 0 2px #2B3C70}
+/* ---------- Kempo: kempo.mammothcapital.site (KempoPro + Digital Dojo, Oct 2026: CSS tokens in style.css) */
+html[data-mammoth][data-mm-site=kempo]{--color-bg-base:#1D2B53;--color-bg-card:#0F1733;--color-bg-card-hover:#16224A;--color-bg-overlay:rgba(15,23,51,.92);
+  --color-accent-gold:#FFEC27;--color-accent-gold-glow:transparent;--color-accent-crimson:#FF004D;--color-accent-crimson-glow:transparent;
+  --color-accent-teal:#29ADFF;--color-accent-teal-glow:transparent;--color-text-main:#FFF1E8;--color-text-muted:#A9B1D3;--color-text-dark:#1D2B53;
+  --font-body:'MM Atkinson',system-ui,sans-serif;--shadow-glow-gold:4px 4px 0 #000;--shadow-glow-teal:4px 4px 0 #000;--shadow-glow-crimson:4px 4px 0 #000}
+html[data-mammoth][data-mm-site=kempo] :is(#main-nav,.daily-banner){background:#0F1733!important;backdrop-filter:none!important;border-bottom:3px solid #000!important}
+html[data-mammoth][data-mm-site=kempo] :is(.kp-card,.video-card,.tb-card,.tb-lock,.philosophy-card,.pillar){border:3px solid #000!important;box-shadow:4px 4px 0 #000,inset 0 0 0 2px #2B3C70!important;border-radius:4px!important}
+html[data-mammoth][data-mm-site=kempo] :is(.clock-face,.drill-count span,.db-stat-num){font-family:'MM Pixelify',monospace!important}
+html[data-mammoth][data-mm-site=kempo] #particle-canvas{opacity:.35}
 
 /* ---------- Park Family OS (tailnet only; Tailwind zinc surfaces) */
 html[data-mammoth][data-mm-site=family] :is(.bg-\[\#09090b\],.bg-zinc-950,[class*="bg-\[\#09090b\]\/"],[class*="bg-zinc-950\/"]){background-color:#1D2B53!important}
@@ -131,3 +140,46 @@ html[data-mammoth][data-mm-site=family] :is([class*="border-white\/"],.border-zi
 html[data-mammoth][data-mm-site=family] :is(.text-zinc-400,.text-zinc-500){color:#A9B1D3!important}
 html[data-mammoth][data-mm-site=family] .backdrop-blur-xl{backdrop-filter:none!important}
 html[data-mammoth][data-mm-site=family] input.bg-transparent{background:transparent!important;border:0!important;border-bottom:2px dotted #2B3C70!important}
+
+/* Enhancements: CRT, Glitch, Scanline Drift, and 8-Bit Cursor */
+@keyframes mm-scanline {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 4px; }
+}
+@keyframes mm-glitch {
+  0% { transform: translate(0) skew(0); filter: hue-rotate(0deg); }
+  20% { transform: translate(-3px, 1px) skew(-2deg); filter: hue-rotate(90deg); }
+  40% { transform: translate(3px, -1px) skew(2deg); filter: hue-rotate(-90deg); }
+  60% { transform: translate(-1px, 2px) skew(-1deg); filter: hue-rotate(45deg); }
+  80% { transform: translate(2px, -2px) skew(1deg); filter: hue-rotate(-45deg); }
+  100% { transform: translate(0) skew(0); filter: hue-rotate(0deg); }
+}
+@keyframes mm-crt-flicker {
+  0% { opacity: 0.98; }
+  50% { opacity: 1; }
+  100% { opacity: 0.99; }
+}
+
+html[data-mammoth].mm-glitching body {
+  animation: mm-glitch 0.2s steps(2) 2, mm-scanline 1s linear infinite, mm-crt-flicker 0.15s infinite alternate !important;
+}
+
+
+/* ----- GLOBAL RETRO ENFORCEMENTS (Consistency across all apps) ----- */
+/* 1. Kill smooth modern transitions. Retro hardware redraws instantly. */
+html[data-mammoth] *, html[data-mammoth] *::before, html[data-mammoth] *::after {
+  transition-duration: 0s !important;
+}
+
+/* 2. Blocky 8-bit Scrollbars */
+html[data-mammoth] ::-webkit-scrollbar { width: 16px; height: 16px; }
+html[data-mammoth] ::-webkit-scrollbar-track { background: #0F1733; border-left: 2px solid #1D2B53; }
+html[data-mammoth] ::-webkit-scrollbar-thumb { background: #FFA300; border: 2px solid #000; box-shadow: inset 2px 2px 0 #FFEC27; }
+html[data-mammoth] ::-webkit-scrollbar-thumb:hover { background: #FF004D; }
+html[data-mammoth] ::-webkit-scrollbar-thumb:active { background: #FF004D; box-shadow: inset 2px 2px 0 #000; }
+html[data-mammoth] ::-webkit-scrollbar-corner { background: #0F1733; }
+
+/* 3. Global chunky button presses */
+html[data-mammoth] :is(button, .btn, .link-btn, .project-card, .card, .bento-card, .dir-item):active {
+  transform: translate(3px, 3px) !important;
+}

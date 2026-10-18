@@ -20,7 +20,7 @@
   function put(k, v) { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) { } }
 
   var css = document.createElement('link');
-  css.rel = 'stylesheet'; css.href = base + 'mammoth-mode.css?v=1';
+  css.rel = 'stylesheet'; css.href = base + 'mammoth-mode.css?v=4';
   (document.head || html).appendChild(css);
 
   function isOn() { return html.hasAttribute('data-mammoth'); }
@@ -30,7 +30,14 @@
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) { if (!meta.dataset.mmWas) meta.dataset.mmWas = meta.content; meta.content = on ? '#0F1733' : meta.dataset.mmWas; }
     renderSlots();
-    if (!quiet) toast(on ? 'MAMMOTH MODE: ON' : 'Mammoth mode off', on ? 'Tap the logo 5 times to turn it off' : '');
+    if (!quiet) {
+      toast(on ? 'MAMMOTH MODE: ON' : 'Mammoth mode off', on ? 'Tap the logo 5 times to turn it off' : '');
+      play8BitSound(on);
+      if (on) {
+        html.classList.add('mm-glitching');
+        setTimeout(function() { html.classList.remove('mm-glitching'); }, 400);
+      }
+    }
     try { window.dispatchEvent(new CustomEvent('mammothmode', { detail: { on: on } })); } catch (e) { }
   }
 
@@ -38,6 +45,31 @@
   var q = /[?&]mammoth=(on|off|1|0)\b/.exec(location.search);
   if (q) set(q[1] === 'on' || q[1] === '1', true);
   else if (get(KEY_ON) === '1') html.setAttribute('data-mammoth', '');
+
+
+  function play8BitSound(on) {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'square';
+      if (on) {
+        osc.frequency.setValueAtTime(150, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(800, ctx.currentTime + 0.1);
+        osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.2);
+      } else {
+        osc.frequency.setValueAtTime(600, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.2);
+      }
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.2);
+    } catch (e) {}
+  }
 
   function toast(title, sub) {
     var t = document.getElementById('mm-toast');
