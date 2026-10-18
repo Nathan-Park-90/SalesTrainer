@@ -19,7 +19,41 @@ var COURSE_COMPTIA_NETWORKPLUS = {
       "Network Troubleshooting": "Network Troubleshooting: Command Line Tools"
     },
     "version": "1.0.0",
-    "category": "CompTIA"
+    "category": "CompTIA",
+    "passThreshold": 0.8,
+    "examDurationMinutes": 90,
+    "examName": "CompTIA Network+ N10-009",
+    "examFormat": {
+      "questions": 90,
+      "passLabel": "720 / 900 (scaled)",
+      "blueprint": [
+        {
+          "domain": "Network Troubleshooting",
+          "label": "Network Troubleshooting",
+          "weight": 24
+        },
+        {
+          "domain": "Networking Concepts",
+          "label": "Networking Concepts",
+          "weight": 23
+        },
+        {
+          "domain": "Network Implementation",
+          "label": "Network Implementation",
+          "weight": 20
+        },
+        {
+          "domain": "Network Operations",
+          "label": "Network Operations",
+          "weight": 19
+        },
+        {
+          "domain": "Network Security",
+          "label": "Network Security",
+          "weight": 14
+        }
+      ]
+    }
   },
   "modules": [
     {

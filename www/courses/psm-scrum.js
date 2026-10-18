@@ -21,7 +21,12 @@ var COURSE_PSM_SCRUM = {
       "Artifacts": "Artifacts & Commitments"
     },
     "version": "1.0.0",
-    "category": "Agile & Scrum"
+    "category": "Agile & Scrum",
+    "examFormat": {
+      "questions": 80,
+      "passLabel": "85%",
+      "blueprint": []
+    }
   },
   "modules": [
     {

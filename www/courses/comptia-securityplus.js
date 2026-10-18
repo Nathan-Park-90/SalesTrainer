@@ -19,7 +19,41 @@ var COURSE_COMPTIA_SECURITYPLUS = {
       "Security Program Management and Oversight": "Program Management & Governance"
     },
     "version": "1.0.0",
-    "category": "CompTIA"
+    "category": "CompTIA",
+    "passThreshold": 0.83,
+    "examDurationMinutes": 90,
+    "examName": "CompTIA Security+ SY0-701",
+    "examFormat": {
+      "questions": 90,
+      "passLabel": "750 / 900 (scaled)",
+      "blueprint": [
+        {
+          "domain": "Security Operations",
+          "label": "Security Operations",
+          "weight": 28
+        },
+        {
+          "domain": "Threats, Vulnerabilities, and Mitigations",
+          "label": "Threats, Vulnerabilities & Mitigations",
+          "weight": 22
+        },
+        {
+          "domain": "Security Program Management and Oversight",
+          "label": "Security Program Management & Oversight",
+          "weight": 20
+        },
+        {
+          "domain": "Security Architecture",
+          "label": "Security Architecture",
+          "weight": 18
+        },
+        {
+          "domain": "General Security Concepts",
+          "label": "General Security Concepts",
+          "weight": 12
+        }
+      ]
+    }
   },
   "modules": [
     {

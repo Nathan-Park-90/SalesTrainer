@@ -20,7 +20,46 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       "DevOps Fundamentals": "Infrastructure as Code (IaC) & Cloud Operations"
     },
     "version": "1.0.0",
-    "category": "CompTIA"
+    "category": "CompTIA",
+    "passThreshold": 0.83,
+    "examDurationMinutes": 90,
+    "examName": "CompTIA Cloud+ CV0-004",
+    "examFormat": {
+      "questions": 90,
+      "passLabel": "750 / 900 (scaled)",
+      "blueprint": [
+        {
+          "domain": "Cloud Architecture",
+          "label": "Cloud Architecture",
+          "weight": 23
+        },
+        {
+          "domain": "Deployment",
+          "label": "Deployment",
+          "weight": 19
+        },
+        {
+          "domain": "Security",
+          "label": "Security",
+          "weight": 19
+        },
+        {
+          "domain": "Operations",
+          "label": "Operations",
+          "weight": 17
+        },
+        {
+          "domain": "Troubleshooting",
+          "label": "Troubleshooting",
+          "weight": 12
+        },
+        {
+          "domain": "DevOps Fundamentals",
+          "label": "DevOps Fundamentals",
+          "weight": 10
+        }
+      ]
+    }
   },
   "modules": [
     {

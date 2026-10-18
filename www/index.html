@@ -533,8 +533,10 @@
             examPacks.forEach(m => {
                 const max = Math.min((DATA['exam_' + m.examKey] || []).length, 65);
                 const score = parseInt(localStorage.getItem('st_highscore_' + m.examKey) || '0');
-                if (score > 0) anyAttempted = true;
+                const pct = parseFloat(localStorage.getItem('st_highscore_pct_' + m.examKey) || '0');
+                if (score > 0 || pct > 0) anyAttempted = true;
                 if (max > 0) bestPct = Math.max(bestPct, score / max);
+                bestPct = Math.max(bestPct, pct);
             });
             const scorePct = anyAttempted ? Math.round(bestPct * 100) + '%' : '—';
 

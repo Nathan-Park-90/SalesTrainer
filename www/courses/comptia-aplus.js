@@ -23,7 +23,205 @@ var COURSE_COMPTIA_APLUS = {
       "Security": "Security: The Domain That Decides If You Pass Core 2"
     },
     "version": "1.0.0",
-    "category": "CompTIA"
+    "category": "CompTIA",
+    "passThreshold": 0.77,
+    "examDurationMinutes": 90,
+    "examName": "CompTIA A+",
+    "examFormat": {
+      "questions": 90,
+      "passLabel": "675 / 900 (Core 1), 700 / 900 (Core 2)",
+      "blueprint": [
+        {
+          "domain": "Hardware and Network Troubleshooting",
+          "label": "Hardware & Network Troubleshooting",
+          "weight": 14
+        },
+        {
+          "domain": "Hardware",
+          "label": "Hardware",
+          "weight": 12.5
+        },
+        {
+          "domain": "Networking",
+          "label": "Networking",
+          "weight": 11.5
+        },
+        {
+          "domain": "Mobile Devices",
+          "label": "Mobile Devices",
+          "weight": 6.5
+        },
+        {
+          "domain": "Virtualization and Cloud",
+          "label": "Virtualization & Cloud Computing",
+          "weight": 5.5
+        },
+        {
+          "domain": "Operating Systems",
+          "label": "Operating Systems",
+          "weight": 14
+        },
+        {
+          "domain": "Security",
+          "label": "Security",
+          "weight": 14
+        },
+        {
+          "domain": "Software Troubleshooting",
+          "label": "Software Troubleshooting",
+          "weight": 11.5
+        },
+        {
+          "domain": "Operational Procedures",
+          "label": "Operational Procedures",
+          "weight": 10.5
+        }
+      ],
+      "modes": [
+        {
+          "id": "core1",
+          "name": "A+ Core 1 (220-1201)",
+          "passThreshold": 0.75,
+          "passLabel": "675 / 900 (75%)",
+          "questions": 90,
+          "minutes": 90,
+          "blueprint": [
+            {
+              "domain": "Hardware and Network Troubleshooting",
+              "label": "Hardware & Network Troubleshooting",
+              "weight": 28
+            },
+            {
+              "domain": "Hardware",
+              "label": "Hardware",
+              "weight": 25
+            },
+            {
+              "domain": "Networking",
+              "label": "Networking",
+              "weight": 23
+            },
+            {
+              "domain": "Mobile Devices",
+              "label": "Mobile Devices",
+              "weight": 13
+            },
+            {
+              "domain": "Virtualization and Cloud",
+              "label": "Virtualization & Cloud Computing",
+              "weight": 11
+            }
+          ]
+        },
+        {
+          "id": "core2",
+          "name": "A+ Core 2 (220-1202)",
+          "passThreshold": 0.78,
+          "passLabel": "700 / 900 (78%)",
+          "questions": 90,
+          "minutes": 90,
+          "blueprint": [
+            {
+              "domain": "Operating Systems",
+              "label": "Operating Systems",
+              "weight": 28
+            },
+            {
+              "domain": "Security",
+              "label": "Security",
+              "weight": 28
+            },
+            {
+              "domain": "Software Troubleshooting",
+              "label": "Software Troubleshooting",
+              "weight": 23
+            },
+            {
+              "domain": "Operational Procedures",
+              "label": "Operational Procedures",
+              "weight": 21
+            }
+          ]
+        },
+        {
+          "id": "combined",
+          "name": "A+ Combined (Core 1 + Core 2)",
+          "passLabel": "Must clear both cores",
+          "questions": 180,
+          "minutes": 180,
+          "blueprint": [
+            {
+              "domain": "Hardware and Network Troubleshooting",
+              "label": "Hardware & Network Troubleshooting",
+              "weight": 14
+            },
+            {
+              "domain": "Hardware",
+              "label": "Hardware",
+              "weight": 12.5
+            },
+            {
+              "domain": "Networking",
+              "label": "Networking",
+              "weight": 11.5
+            },
+            {
+              "domain": "Mobile Devices",
+              "label": "Mobile Devices",
+              "weight": 6.5
+            },
+            {
+              "domain": "Virtualization and Cloud",
+              "label": "Virtualization & Cloud Computing",
+              "weight": 5.5
+            },
+            {
+              "domain": "Operating Systems",
+              "label": "Operating Systems",
+              "weight": 14
+            },
+            {
+              "domain": "Security",
+              "label": "Security",
+              "weight": 14
+            },
+            {
+              "domain": "Software Troubleshooting",
+              "label": "Software Troubleshooting",
+              "weight": 11.5
+            },
+            {
+              "domain": "Operational Procedures",
+              "label": "Operational Procedures",
+              "weight": 10.5
+            }
+          ],
+          "parts": [
+            {
+              "name": "Core 1",
+              "domains": [
+                "Hardware and Network Troubleshooting",
+                "Hardware",
+                "Networking",
+                "Mobile Devices",
+                "Virtualization and Cloud"
+              ],
+              "passThreshold": 0.75
+            },
+            {
+              "name": "Core 2",
+              "domains": [
+                "Operating Systems",
+                "Security",
+                "Software Troubleshooting",
+                "Operational Procedures"
+              ],
+              "passThreshold": 0.78
+            }
+          ]
+        }
+      ]
+    }
   },
   "modules": [
     {

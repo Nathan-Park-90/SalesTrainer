@@ -236,12 +236,15 @@
 
         let examPct = 0, examAttempted = false, examScore = 0, examMax = 0, passed = false, weak = null;
         if (track.examType) {
+            // Best percentage (any exam mode, e.g. A+ Core 1 alone) wins over the
+            // older raw full-exam score, which is still read for attempts made before it.
             const raw = localStorage.getItem('st_highscore_' + track.examType);
-            examAttempted = raw !== null;
+            const rawPct = localStorage.getItem('st_highscore_pct_' + track.examType);
+            examAttempted = raw !== null || rawPct !== null;
             examScore = parseInt(raw || '0');
             const bank = DATA['exam_' + track.examType];
             examMax = Math.min((bank || []).length, 65);
-            examPct = examMax ? examScore / examMax : 0;
+            examPct = Math.max(examMax ? examScore / examMax : 0, parseFloat(rawPct || '0'));
             const passBar = track.passThreshold;
             passed = examAttempted && examPct >= passBar;
 
@@ -339,7 +342,7 @@
                 </div>
 
                 ${t.examType ? `<div class="path-bar-row">
-                    <div class="path-bar-label"><span>Best Exam Score</span><span>${r.examAttempted ? r.examScore + ' / ' + r.examMax : '—'}</span></div>
+                    <div class="path-bar-label"><span>Best Exam Score</span><span>${r.examAttempted ? pct(r.examPct) + ' (pass ' + pct(t.passThreshold) + ')' : '—'}</span></div>
                     <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.examPct)}" style="width:${pct(r.examPct)}"></div></div>
                 </div>` : ''}
 

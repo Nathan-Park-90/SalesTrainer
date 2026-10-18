@@ -184,6 +184,136 @@
            hardcoded rule per cert — a new exam-bearing course needs no CSS edits. */
         .gauntlet-btn { background: var(--tab-color, var(--accent-primary)); }
 
+        /* ── Exam simulator (app.js): picker, testing-center shell, grid, results ── */
+        .gauntlet-btn-container { align-items: stretch; }
+        .exam-practice-toggle { display: flex; gap: 10px; align-items: flex-start; text-align: left; font-size: 0.9rem; color: var(--text-muted); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; cursor: pointer; }
+        .exam-practice-toggle input { margin-top: 3px; accent-color: var(--accent-primary); }
+        .exam-practice-toggle strong { color: var(--text-main); }
+        .exam-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+        .gauntlet-btn.exam-card { max-width: none; display: flex; flex-direction: column; gap: 6px; text-align: left; padding: 16px 18px; font-size: 1rem; background: color-mix(in srgb, var(--tab-color) 16%, rgba(255,255,255,0.02)); border: 1px solid color-mix(in srgb, var(--tab-color) 55%, transparent); border-left: 4px solid var(--tab-color); }
+        .gauntlet-btn.exam-card:hover { background: color-mix(in srgb, var(--tab-color) 26%, rgba(255,255,255,0.02)); }
+        .exam-card-name { font-weight: 800; }
+        .exam-card-meta { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
+
+        .exam-topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 0 14px; border-bottom: 1px solid var(--glass-border); margin-bottom: 14px; position: sticky; top: var(--exam-sticky-top, 70px); z-index: 20; background: var(--bg-card, #0d1324); }
+        .exam-topbar-title { font-weight: 800; color: var(--text-main); }
+        .exam-topbar .exam-timer { margin-bottom: 0; }
+        .exam-pill { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 2px 8px; border-radius: 999px; background: rgba(0,242,255,0.12); color: var(--accent-primary); vertical-align: middle; }
+        .exam-toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+        .exam-counter { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-right: auto; }
+        .exam-tool { font-family: inherit; font-size: 0.82rem; font-weight: 600; color: var(--text-main); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+        .exam-tool:hover { border-color: var(--accent-primary); }
+        .exam-tool.flag.on { background: rgba(245,158,11,0.15); border-color: var(--accent-warning); color: var(--accent-warning); }
+
+        .exam-grid-wrap { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px; margin-bottom: 18px; }
+        .exam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); gap: 6px; max-height: 220px; overflow-y: auto; }
+        .exam-grid-wrap.big .exam-grid { max-height: none; }
+        .exam-tile { position: relative; height: 36px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700; cursor: pointer; border: 1px solid rgba(255,255,255,0.14); background: transparent; color: var(--text-muted); }
+        .exam-tile.answered { background: rgba(0,242,255,0.14); border-color: rgba(0,242,255,0.45); color: var(--text-main); }
+        .exam-tile.flagged { box-shadow: inset 0 -3px 0 var(--accent-warning); border-color: var(--accent-warning); }
+        .exam-tile.flagged::after { content: ""; position: absolute; top: 3px; right: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-warning); }
+        .exam-tile.current { outline: 2px solid #fff; outline-offset: 1px; }
+        .exam-grid-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: 0.72rem; color: var(--text-muted); }
+        .exam-grid-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -2px; border: 1px solid rgba(255,255,255,0.2); }
+        .exam-grid-legend i.answered { background: rgba(0,242,255,0.3); border-color: rgba(0,242,255,0.6); }
+        .exam-grid-legend i.flagged { background: var(--accent-warning); border-color: var(--accent-warning); }
+
+        .exam-select-badge { display: inline-block; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 800; letter-spacing: 1.5px; color: #020617; background: var(--accent-warning); padding: 4px 10px; border-radius: 6px; margin-bottom: 12px; }
+        .exam-opt { display: flex; align-items: flex-start; gap: 12px; }
+        .exam-opt .opt-mark { flex: 0 0 auto; width: 18px; height: 18px; margin-top: 4px; border: 2px solid rgba(255,255,255,0.4); border-radius: 50%; }
+        .exam-opt.multi .opt-mark { border-radius: 4px; }
+        .exam-opt.selected { background: rgba(0,242,255,0.12); border-color: var(--accent-primary); }
+        .exam-opt.selected .opt-mark { border-color: var(--accent-primary); background: radial-gradient(circle, var(--accent-primary) 45%, transparent 50%); }
+        .exam-opt.multi.selected .opt-mark { background: var(--accent-primary); box-shadow: inset 0 0 0 2px #020617; }
+        .exam-opt .opt-letter { font-family: var(--font-mono); font-weight: 700; color: var(--text-muted); }
+        .exam-opt.correct, .exam-opt.wrong { opacity: 1; }
+        .exam-hint { min-height: 1.2em; margin-top: 10px; font-size: 0.82rem; color: var(--text-muted); }
+        .exam-hint.warn { color: var(--accent-warning); font-weight: 700; }
+        .exam-check { margin-top: 10px; }
+        .exam-check:disabled { opacity: 0.45; cursor: not-allowed; }
+        .exam-nav { display: flex; gap: 10px; flex-wrap: wrap; justify-content: space-between; margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--glass-border); }
+        .exam-nav-btn { font-family: inherit; font-size: 0.9rem; font-weight: 700; padding: 11px 18px; border-radius: 8px; cursor: pointer; color: var(--text-main); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); }
+        .exam-nav-btn:disabled { opacity: 0.35; cursor: default; }
+        .exam-nav-btn.primary { background: var(--accent-primary); color: #020617; border-color: var(--accent-primary); }
+        .exam-nav-btn.submit { background: rgba(16,185,129,0.15); border-color: var(--accent-success); color: var(--accent-success); margin-left: auto; }
+
+        .exam-explain { margin-top: 20px; padding: 18px 20px; border-radius: 10px; border-left: 4px solid; line-height: 1.6; background: rgba(255,255,255,0.03); }
+        .exam-explain.right { border-color: var(--accent-success); }
+        .exam-explain.wrong { border-color: var(--accent-danger); }
+        .exam-explain-head { font-weight: 800; margin-bottom: 8px; }
+        .exam-explain.right .exam-explain-head { color: var(--accent-success); }
+        .exam-explain.wrong .exam-explain-head { color: var(--accent-danger); }
+        .exam-traps-head { margin-top: 12px; font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-warning); }
+        .exam-traps { margin: 6px 0 0; padding-left: 18px; }
+        .exam-traps li { margin: 4px 0; }
+        .trap-tag { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; padding: 1px 6px; border-radius: 4px; background: rgba(245,158,11,0.18); color: var(--accent-warning); }
+
+        .exam-review-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+        .exam-review-stats div { text-align: center; padding: 14px 8px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .exam-review-stats strong { display: block; font-size: 1.8rem; color: var(--text-main); letter-spacing: 0; }
+        .exam-review-stats .warn strong { color: var(--accent-danger); }
+        .exam-review-stats .flag strong { color: var(--accent-warning); }
+        .exam-review-line { font-size: 0.9rem; line-height: 2; }
+        .exam-link { font-family: var(--font-mono); font-size: 0.78rem; padding: 2px 8px; border-radius: 6px; cursor: pointer; background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid rgba(255,255,255,0.15); }
+
+        .exam-result-hero { text-align: center; padding: 22px; border-radius: 14px; margin-bottom: 26px; border: 1px solid; }
+        .exam-result-hero.pass { border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.07); }
+        .exam-result-hero.fail { border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.07); }
+        .exam-result-verdict { font-family: var(--font-mono); font-weight: 800; letter-spacing: 3px; }
+        .pass .exam-result-verdict { color: var(--accent-success); }
+        .fail .exam-result-verdict { color: var(--accent-danger); }
+        .exam-result-score { font-family: var(--font-heading); font-size: 3rem; font-weight: 900; color: var(--text-main); }
+        .exam-result-score span { font-size: 1.3rem; color: var(--text-muted); margin-left: 12px; }
+        .exam-result-sub { font-size: 0.85rem; color: var(--text-muted); }
+        .exam-result-note { font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; font-style: italic; }
+        .exam-parts { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+        .exam-part { padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; border: 1px solid; }
+        .exam-part.good { border-color: var(--accent-success); color: var(--accent-success); }
+        .exam-part.bad { border-color: var(--accent-danger); color: var(--accent-danger); }
+        .exam-h { font-size: 1.05rem; margin: 26px 0 12px; color: var(--text-main); }
+        .exam-domains { display: flex; flex-direction: column; gap: 10px; }
+        .exam-dom-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) 72px; gap: 12px; align-items: center; }
+        .exam-dom-name { font-size: 0.88rem; color: var(--text-main); }
+        .exam-dom-name span { display: block; font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); }
+        .exam-dom-bar { height: 8px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; }
+        .exam-dom-bar div { height: 100%; border-radius: 999px; }
+        .exam-dom-bar .good { background: var(--accent-success); }
+        .exam-dom-bar .bad { background: var(--accent-danger); }
+        .exam-dom-val { text-align: right; font-weight: 800; }
+        .exam-dom-val span { display: block; font-size: 0.7rem; font-weight: 500; color: var(--text-muted); }
+        .exam-dom-val.good { color: var(--accent-success); }
+        .exam-dom-val.bad { color: var(--accent-danger); }
+        .exam-dom-row.empty { opacity: 0.5; }
+        .exam-dom-row.empty .exam-dom-val { font-size: 0.7rem; font-weight: 500; }
+        .exam-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+        .exam-filter button { font-family: inherit; font-size: 0.8rem; padding: 7px 12px; border-radius: 999px; cursor: pointer; color: var(--text-muted); background: transparent; border: 1px solid rgba(255,255,255,0.15); }
+        .exam-filter button.on { color: #020617; background: var(--accent-primary); border-color: var(--accent-primary); font-weight: 700; }
+        .exam-autopsies { display: flex; flex-direction: column; gap: 14px; }
+        .exam-autopsy { border: 1px solid rgba(255,255,255,0.08); border-left: 4px solid; border-radius: 10px; padding: 16px 18px; background: rgba(255,255,255,0.02); }
+        .exam-autopsy.right { border-left-color: var(--accent-success); }
+        .exam-autopsy.wrong { border-left-color: var(--accent-danger); }
+        .aut-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 8px; }
+        .aut-q { font-weight: 600; line-height: 1.5; margin-bottom: 10px; }
+        .aut-opts { list-style: none; padding: 0; margin: 0 0 10px; display: flex; flex-direction: column; gap: 6px; }
+        .aut-opts li { padding: 8px 10px; border-radius: 8px; background: rgba(255,255,255,0.02); font-size: 0.9rem; }
+        .aut-opts li.is-correct { background: rgba(16,185,129,0.1); }
+        .aut-opts li.is-picked:not(.is-correct) { background: rgba(239,68,68,0.1); }
+        .aut-mark { display: inline-block; width: 18px; font-weight: 800; }
+        .is-correct .aut-mark { color: var(--accent-success); }
+        .is-picked .aut-mark { color: var(--accent-danger); }
+        .aut-why { margin: 4px 0 0 18px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+        .aut-why strong { color: var(--accent-warning); }
+        .aut-exp { font-size: 0.88rem; line-height: 1.6; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1); }
+        .exam-empty { color: var(--text-muted); font-style: italic; }
+        @media (max-width: 600px) {
+            .gauntlet-section { padding: 22px 16px; }
+            .exam-dom-row { grid-template-columns: 1fr 64px; }
+            .exam-dom-bar { grid-column: 1 / -1; grid-row: 2; }
+            .exam-nav-btn { flex: 1 1 auto; }
+            .exam-nav-btn.submit { margin-left: 0; }
+            .exam-result-score { font-size: 2.3rem; }
+        }
+
     </style>
     <script src="mammoth/mammoth-mode.js?v=1" data-site="academy" data-egg=".nav-brand"></script>
 </head>
@@ -409,7 +539,7 @@
                 <div class="section-header">
                     <span class="section-label">Certification</span>
                     <h2 class="section-title">Full Exam Gauntlet</h2>
-                    <p class="section-desc" id="gauntlet-desc">Up to 65 questions, weighted toward the ones you've missed before. Passing bar matches each real exam's own cut score.</p>
+                    <p class="section-desc" id="gauntlet-desc">Questions drawn to each exam's official domain weights, missed ones first.</p>
                 </div>
                 <div class="gauntlet-section" id="exam-container">
                     <div class="gauntlet-btn-container" id="gauntlet-btn-container">
@@ -452,53 +582,7 @@
             });
         });
 
-        // ── Exam Timer ──
-        let examTimerInterval = null;
-        let examSecondsLeft = 0;
-
-        function startExamTimer(type) {
-            clearInterval(examTimerInterval);
-            const meta = (DATA._courseMeta || []).find(m => m.examKey === type);
-            const durationMinutes = (meta && meta.examDurationMinutes) || 90;
-            examSecondsLeft = durationMinutes * 60;
-
-            // Inject timer display into exam container
-            const existing = document.getElementById('exam-timer-display');
-            if (existing) existing.remove();
-            const timerEl = document.createElement('div');
-            timerEl.id = 'exam-timer-display';
-            timerEl.className = 'exam-timer';
-            timerEl.innerHTML = '⏱ <span id="exam-timer-text">--:--</span>';
-            const container = document.getElementById('exam-container');
-            if (container) container.insertBefore(timerEl, container.firstChild);
-
-            examTimerInterval = setInterval(() => {
-                examSecondsLeft--;
-                const mins = Math.floor(examSecondsLeft / 60);
-                const secs = examSecondsLeft % 60;
-                const text = String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
-                const el = document.getElementById('exam-timer-text');
-                const timerDiv = document.getElementById('exam-timer-display');
-                if (el) el.textContent = text;
-                if (timerDiv) {
-                    if (examSecondsLeft <= 300) timerDiv.className = 'exam-timer timer-danger';
-                    else if (examSecondsLeft <= 1200) timerDiv.className = 'exam-timer timer-warning';
-                }
-                if (examSecondsLeft <= 0) {
-                    clearInterval(examTimerInterval);
-                    if (typeof app !== 'undefined' && app.submitExamA) app.submitExamA();
-                }
-            }, 1000);
-        }
-
-        // Patch app.startExam to also start timer
-        document.addEventListener('DOMContentLoaded', () => {
-            const origStart = app.startExam.bind(app);
-            app.startExam = function(type) {
-                origStart(type);
-                startExamTimer(type);
-            };
-        });
+        // The exam timer, flagging, question grid and results live in app.js (exam simulator).
     </script>
 
     <!-- MAMMOTH FOOTER -->

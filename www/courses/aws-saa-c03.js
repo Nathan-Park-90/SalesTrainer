@@ -21,7 +21,33 @@ var COURSE_AWS = {
       "Cost": "Cost Optimization (The CFO's Architecture)"
     },
     "version": "1.0.0",
-    "category": "AWS"
+    "category": "AWS",
+    "examFormat": {
+      "questions": 65,
+      "passLabel": "720 / 1000",
+      "blueprint": [
+        {
+          "domain": "Secure",
+          "label": "Design Secure Architectures",
+          "weight": 30
+        },
+        {
+          "domain": "Resilient",
+          "label": "Design Resilient Architectures",
+          "weight": 26
+        },
+        {
+          "domain": "Performance",
+          "label": "Design High-Performing Architectures",
+          "weight": 24
+        },
+        {
+          "domain": "Cost",
+          "label": "Design Cost-Optimized Architectures",
+          "weight": 20
+        }
+      ]
+    }
   },
   "modules": [
     {
