@@ -16,7 +16,8 @@ var COURSE_COMPTIA_CLOUDPLUS = {
       "Deployment": "Infrastructure as Code (IaC) & Cloud Operations",
       "Security": "Security & Compliance in the Cloud",
       "Operations": "Operations, Support, and FinOps",
-      "Troubleshooting": "Troubleshooting Cloud Environments"
+      "Troubleshooting": "Troubleshooting Cloud Environments",
+      "DevOps Fundamentals": "Infrastructure as Code (IaC) & Cloud Operations"
     },
     "version": "1.0.0",
     "category": "CompTIA"

@@ -294,7 +294,7 @@
         let weakHtml = '';
         if (t.examType) {
             if (r.weak) {
-                const modTitle = t.domainModuleMap[r.weak.dom];
+                const modTitle = t.domainModuleMap && t.domainModuleMap[r.weak.dom];
                 weakHtml = `<div class="path-weak">📉 Weakest domain: <strong>${r.weak.dom}</strong> (${pct(r.weak.pct)} on ${r.weak.total} Qs).
                     ${modTitle ? `<a href="${libraryLink(t.courseId, modTitle)}" style="color:var(--accent-warning);">Review ${modTitle} →</a>` : ''}</div>`;
             } else if (r.examAttempted) {
@@ -367,7 +367,10 @@
         const withWeak = results.filter(r => r.weak).sort((a, b) => a.weak.pct - b.weak.pct);
         if (withWeak.length > 0) {
             const r = withWeak[0];
-            const modTitle = r.track.domainModuleMap[r.weak.dom];
+            // A domain with no mapped module (new exam domain, renamed module) still
+            // gets a working link: the track's next unfinished module, else Module 1.
+            const modTitle = (r.track.domainModuleMap && r.track.domainModuleMap[r.weak.dom])
+                || (r.nextModule || r.modules[0] || {}).title;
             return {
                 icon: '📉',
                 text: `Your weakest spot right now is <strong>${r.weak.dom}</strong> in ${r.track.name} — ${pct(r.weak.pct)} correct across ${r.weak.total} questions. Review <strong>${modTitle}</strong>.`,
@@ -399,7 +402,7 @@
         }
         return {
             icon: '🏆',
-            text: `Every module across all three tracks is complete. Keep your edge sharp with a fresh Arena exam or a flashcard drill in the Gym.`,
+            text: `Every module across all ${results.length} tracks is complete. Keep your edge sharp with a fresh Arena exam or a flashcard drill in the Gym.`,
             href: 'arena.html',
             cta: 'Stay Sharp'
         };

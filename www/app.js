@@ -588,7 +588,9 @@ const app = {
     // --- Course Engine ---
     setLibraryTab(tab) {
         // The tab key IS the course id (see renderLibraryTabs) — no separate mapping
-        // table to keep in sync when a new course pack is added.
+        // table to keep in sync when a new course pack is added. An unknown id falls
+        // back to the first course so the sidebar never renders empty.
+        if (!DATA._courseMeta.some(m => m.id === tab)) tab = DATA._courseMeta[0] && DATA._courseMeta[0].id;
         this.state.activeLibraryTab = tab;
 
         // Re-render the switcher so the trigger label/icon and the checked
@@ -645,12 +647,22 @@ const app = {
             </div>
         `).join('');
 
+        // One-tap icon badges under the trigger so every track is visible at a
+        // glance. Capped (the rest stay one click away in the panel) so this row
+        // can't turn back into the wall of chips the panel replaced.
+        const BADGE_CAP = 10;
+        const all = DATA._courseMeta;
+        const badges = all.slice(0, BADGE_CAP).map(meta => `
+            <button class="course-badge ${meta.id === active.id ? 'active' : ''}" style="--tab-color:${meta.color || '#00f2ff'};" title="${meta.name}" aria-label="${meta.name}" onclick="app.setLibraryTab('${meta.id}')">${meta.icon || '📖'}</button>
+        `).join('') + (all.length > BADGE_CAP ? `<button class="course-badge more" onclick="app.toggleCourseMenu(event)">+${all.length - BADGE_CAP}</button>` : '');
+
         container.innerHTML = `
             <button class="course-menu-trigger" style="--tab-color:${active.color || '#00f2ff'};" onclick="app.toggleCourseMenu(event)">
                 <span class="course-menu-trigger-icon">${active.icon || '📖'}</span>
-                <span class="course-menu-trigger-text"><span class="course-menu-trigger-label">Now Viewing</span>${active.name}</span>
-                <span class="course-menu-caret">&#9662;</span>
+                <span class="course-menu-trigger-text"><span class="course-menu-trigger-label">Now Viewing</span>${active.name}${active.subtitle ? `<span class="course-menu-trigger-sub">${active.subtitle}</span>` : ''}</span>
+                <span class="course-menu-count">${all.length} tracks <span class="course-menu-caret">&#9662;</span></span>
             </button>
+            <div class="course-badges" aria-label="All tracks">${badges}</div>
             <div class="course-menu-panel" id="course-menu-panel" hidden>
                 <input type="text" class="course-menu-search" id="course-menu-search" placeholder="Search courses..." oninput="app.filterCourseMenu(this.value)">
                 <div class="course-menu-list">${rows}</div>

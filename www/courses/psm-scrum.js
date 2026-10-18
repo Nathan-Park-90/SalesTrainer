@@ -1672,17 +1672,17 @@ var COURSE_PSM_SCRUM = {
         {
           "title": "What Is It?",
           "body": "The Sprint is a fixed-length event of one month or less where a team builds a consistent, usable Increment. It is the container for all other Scrum events. Sprints run consecutively—the next one starts immediately after the previous one finishes.",
-          "anchor": "Core definition, punchy, 3-4 sentences"
+          "anchor": "⏱️ Fixed length, back to back: the Sprint is the container for every other event."
         },
         {
           "title": "How It Works",
           "body": "During the Sprint, no changes are made that would endanger the Sprint Goal. Quality doesn't decrease, and the Product Backlog gets refined as needed. The scope can be clarified and renegotiated with the Product Owner as more is learned.",
-          "anchor": "Mechanics, real-world example"
+          "anchor": "🎯 Scope can flex with the Product Owner; the Sprint Goal and quality cannot."
         },
         {
           "title": "Real World",
           "body": "At Mammoth Capital, the algo team runs 2-week Sprints. They lock in a Sprint Goal to optimize trade execution latency. Mid-Sprint, the CEO asks for a new reporting dashboard. Because the Sprint is immutable, the PO pushes the request to the Product Backlog for the next Sprint.",
-          "anchor": "Mammoth Capital / FinTech Scrum team angle"
+          "anchor": "📥 New request mid-Sprint? It goes to the Product Backlog, not into this Sprint."
         }
       ],
       "quiz": [
@@ -1755,17 +1755,17 @@ var COURSE_PSM_SCRUM = {
         {
           "title": "What Is It?",
           "body": "Sprint Planning initiates the Sprint by laying out the work to be performed. The entire Scrum Team collaborates to define the Sprint Goal, select items from the Product Backlog, and create a plan for delivering them.",
-          "anchor": "Core definition, punchy, 3-4 sentences"
+          "anchor": "🧭 The whole Scrum Team plans together: Why, What, and How."
         },
         {
           "title": "How It Works",
           "body": "The team answers three questions: Why is this Sprint valuable? (Sprint Goal). What can be Done this Sprint? (Selecting PBIs). How will the chosen work get done? (Creating actionable tasks).",
-          "anchor": "Mechanics, real-world example"
+          "anchor": "❓ Why = Sprint Goal. What = selected PBIs. How = the Developers' plan."
         },
         {
           "title": "Real World",
           "body": "Mammoth's DevOps team pulls the highest priority item: migrating the risk engine to AWS Fargate. They agree on a Sprint Goal to reduce operational overhead. The Developers break the migration into small, manageable daily tasks.",
-          "anchor": "Mammoth Capital / FinTech Scrum team angle"
+          "anchor": "🧩 Big work gets broken into pieces small enough to finish in a day or less."
         }
       ],
       "quiz": [
@@ -1838,17 +1838,17 @@ var COURSE_PSM_SCRUM = {
         {
           "title": "What Is It?",
           "body": "A 15-minute daily event for the Developers to inspect progress toward the Sprint Goal and adapt the Sprint Backlog as necessary, adjusting the upcoming planned work.",
-          "anchor": "Core definition, punchy, 3-4 sentences"
+          "anchor": "🕘 15 minutes, same time and place, for the Developers, about the Sprint Goal."
         },
         {
           "title": "How It Works",
           "body": "Held at the same time and place every working day. The Developers select whatever structure and techniques they want, as long as it focuses on progress toward the Sprint Goal.",
-          "anchor": "Mechanics, real-world example"
+          "anchor": "🛠️ Any format works, as long as it inspects progress and adapts the plan."
         },
         {
           "title": "Real World",
           "body": "At 9 AM, Mammoth's data engineering team huddles. Dev A says they hit a snag with the DynamoDB schema. Dev B offers to pair program after the Daily Scrum. They adapt their plan to ensure the data pipeline feature still hits the Sprint Goal.",
-          "anchor": "Mammoth Capital / FinTech Scrum team angle"
+          "anchor": "🤝 Problems surface in the Daily Scrum; solving them happens right after it."
         }
       ],
       "quiz": [
@@ -1921,17 +1921,17 @@ var COURSE_PSM_SCRUM = {
         {
           "title": "What Is It?",
           "body": "The Sprint Review is held at the end of the Sprint to inspect the outcome and determine future adaptations. The Scrum Team presents the results of their work to key stakeholders.",
-          "anchor": "Core definition, punchy, 3-4 sentences"
+          "anchor": "🔍 Inspect the Increment with stakeholders, then adapt the Product Backlog."
         },
         {
           "title": "How It Works",
           "body": "It's a working session, not a formal presentation. The team discusses what was accomplished (the Increment), what challenges they faced, and what to do next based on market changes or stakeholder feedback.",
-          "anchor": "Mechanics, real-world example"
+          "anchor": "💬 A working session, not a slide show: feedback is the point."
         },
         {
           "title": "Real World",
           "body": "Mammoth's web team demos the new institutional trading portal to the VP of Sales. The VP loves the real-time pricing but asks for a darker color scheme. The PO adds this feedback to the Product Backlog.",
-          "anchor": "Mammoth Capital / FinTech Scrum team angle"
+          "anchor": "📝 Stakeholder feedback becomes Product Backlog items the Product Owner orders."
         }
       ],
       "quiz": [
@@ -2004,17 +2004,17 @@ var COURSE_PSM_SCRUM = {
         {
           "title": "What Is It?",
           "body": "The Sprint Retrospective concludes the Sprint. It is an opportunity for the Scrum Team to inspect itself and plan improvements to increase quality and effectiveness for the next Sprint.",
-          "anchor": "Core definition, punchy, 3-4 sentences"
+          "anchor": "🔁 The Sprint ends by improving how the team works, not just what it built."
         },
         {
           "title": "How It Works",
           "body": "The team discusses what went well, what problems it encountered, and how those problems were (or were not) solved. They identify the most helpful changes to improve their effectiveness.",
-          "anchor": "Mechanics, real-world example"
+          "anchor": "⚖️ Look at people, interactions, process, tools, and the Definition of Done."
         },
         {
           "title": "Real World",
           "body": "Mammoth's infrastructure team notes that their AWS deployments failed three times due to manual configuration errors. They decide to mandate Terraform for all future deployments. This action item goes into the next Sprint Backlog.",
-          "anchor": "Mammoth Capital / FinTech Scrum team angle"
+          "anchor": "✅ The most helpful improvement can go straight into the next Sprint Backlog."
         }
       ],
       "quiz": [
@@ -2087,17 +2087,17 @@ var COURSE_PSM_SCRUM = {
         {
           "title": "What Is It?",
           "body": "An emergent, ordered list of what is needed to improve the product. It is the single source of work undertaken by the Scrum Team.",
-          "anchor": "Core definition, punchy, 3-4 sentences"
+          "anchor": "📚 One ordered list, one Product Owner: the single source of work."
         },
         {
           "title": "How It Works",
           "body": "The Product Owner is accountable for the backlog, ensuring it's visible, transparent, and clearly understood. Items at the top are more detailed and smaller; items at the bottom are larger and less defined.",
-          "anchor": "Mechanics, real-world example"
+          "anchor": "🔺 Top items are small and refined; bottom items are big and fuzzy."
         },
         {
           "title": "Real World",
           "body": "Mammoth's PO orders the backlog for the trading app. 'Add biometric login' is at the top, fully refined and ready for the next Sprint. 'Integrate with obscure crypto exchange' is at the bottom, just a vague idea.",
-          "anchor": "Mammoth Capital / FinTech Scrum team angle"
+          "anchor": "🧹 Refinement keeps the next Sprint's work ready before Sprint Planning."
         }
       ],
       "quiz": [
@@ -2170,17 +2170,17 @@ var COURSE_PSM_SCRUM = {
         {
           "title": "What Is It?",
           "body": "A formal description of the state of the Increment when it meets the quality measures required for the product. It creates transparency by providing a shared understanding of what work was completed.",
-          "anchor": "Core definition, punchy, 3-4 sentences"
+          "anchor": "🏁 Not Done means not in the Increment, and not shown at the Sprint Review."
         },
         {
           "title": "How It Works",
           "body": "When a Product Backlog item meets the Definition of Done, an Increment is born. If an item doesn't meet the DoD, it cannot be released or even presented at the Sprint Review.",
-          "anchor": "Mechanics, real-world example"
+          "anchor": "🚫 Unfinished items return to the Product Backlog; Done is never partial."
         },
         {
           "title": "Real World",
           "body": "Mammoth's DoD mandates 90% unit test coverage, a passed SonarQube scan, and peer review. A developer finishes a new risk model but skips the tests. It is NOT Done, cannot be demoed, and goes back to the backlog.",
-          "anchor": "Mammoth Capital / FinTech Scrum team angle"
+          "anchor": "🧪 The Definition of Done is the quality bar everyone can see."
         }
       ],
       "quiz": [

@@ -1479,6 +1479,77 @@ body {
     font-size: 0.8rem;
 }
 
+/* Prominence pass (Oct 18, 2026): bigger trigger tinted with the active track's
+   color, a "7 tracks" count, and a row of one-tap icon badges beneath it, so it's
+   obvious every track lives in the Library, not just the one on screen. */
+.course-menu-trigger {
+    min-width: 340px;
+    padding: 16px 20px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--tab-color, #00f2ff) 14%, transparent), rgba(255, 255, 255, 0.03));
+    border-color: color-mix(in srgb, var(--tab-color, #00f2ff) 40%, transparent);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--tab-color, #00f2ff) 15%, transparent);
+}
+.course-menu-trigger-icon { font-size: 1.7rem; }
+.course-menu-trigger-text { font-size: 1.12rem; }
+.course-menu-trigger-sub {
+    display: block;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+.course-menu-count {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-main, #f8fafc);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 5px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.course-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+.course-badge {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--text-muted);
+    opacity: 0.65;
+    transition: all 0.15s ease;
+}
+.course-badge:hover { opacity: 1; border-color: var(--tab-color, var(--accent-primary)); transform: translateY(-1px); }
+.course-badge.active {
+    opacity: 1;
+    border-color: var(--tab-color, var(--accent-primary));
+    background: color-mix(in srgb, var(--tab-color, #00f2ff) 18%, transparent);
+    box-shadow: 0 0 0 1px var(--tab-color, var(--accent-primary));
+}
+.course-badge.more { font-family: var(--font-mono, monospace); font-size: 0.75rem; font-weight: 700; }
+/* Restated here because the min-width above comes later than the mobile block. */
+@media (max-width: 768px) {
+    .course-menu-trigger { min-width: 0; padding: 14px 16px; }
+    .course-badges { gap: 6px; }
+    .course-badge { width: 36px; height: 36px; font-size: 1rem; }
+}
+
 .course-menu-panel {
     position: absolute;
     top: calc(100% + 8px);

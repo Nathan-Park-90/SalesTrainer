@@ -85,15 +85,17 @@
             // Smart Path page): ?course=<courseId> alone jumps to that track's tab;
             // adding &title=<module title> also opens that specific module. Resolved
             // by course id + title, not array position, since position isn't stable.
+            // A title that doesn't match (renamed module, stale link) still lands on
+            // the requested course's Module 1, Lesson 1 rather than staying on
+            // whatever course loads first; an unknown course id is ignored.
             const params = new URLSearchParams(location.search);
-            const courseId = params.get('course');
+            const known = id => DATA._courseMeta.some(m => m.id === id);
+            const courseId = known(params.get('course')) ? params.get('course') : null;
             const title = params.get('title');
-            if (courseId && title) {
-                const modIdx = DATA.course.findIndex(m => m.courseId === courseId && m.title === title);
-                if (modIdx !== -1) {
-                    app.setLibraryTab(courseId); // courseId IS the tab key now
-                    app.renderLessonContent(modIdx, 0);
-                }
+            const modIdx = title ? DATA.course.findIndex(m => m.title === title && (!courseId || m.courseId === courseId)) : -1;
+            if (modIdx !== -1) {
+                app.setLibraryTab(DATA.course[modIdx].courseId); // courseId IS the tab key now
+                app.renderLessonContent(modIdx, 0);
             } else if (courseId) {
                 app.setLibraryTab(courseId);
             }
