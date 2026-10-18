@@ -656,83 +656,417 @@ var COURSE_COMPTIA_CLOUDPLUS = {
   ],
   "daily": [
     {
+      "day": 1,
       "track": "cloudplus",
+      "concept": "IaC & CI/CD — Infrastructure in Version Control",
+      "domain": "Deployment",
+      "icon": "📜",
+      "color": "#8b5cf6",
+      "tagline": "Stop clicking in consoles; deploy infrastructure as code.",
+      "slides": [
+        {
+          "title": "Why Infrastructure as Code (IaC) Wins",
+          "body": "Manually clicking through a cloud web console to build servers is slow, unrepeatable, and prone to human error. <strong>Infrastructure as Code (IaC)</strong>—using declarative tools like <strong>Terraform</strong> or AWS CloudFormation—defines your entire cloud environment (VPCs, VMs, firewalls, databases) in text files. Stored in <strong>Git version control</strong>, your infrastructure becomes repeatable, auditable, and identical across staging and production.",
+          "anchor": "📐 IaC is a recipe: run the same code in any region and get the exact same infrastructure."
+        },
+        {
+          "title": "CI/CD Pipelines, Drift & Rapid Elasticity",
+          "body": "IaC reaches full power inside a <strong>CI/CD pipeline</strong>: <strong>Continuous Integration (CI)</strong> automatically lints syntax and previews changes (<em>terraform plan</em>) on every Git commit, while <strong>Continuous Deployment (CD)</strong> applies validated changes automatically. Avoid manual console tweaks, which cause <strong>Configuration Drift</strong> between live servers and code. Also distinguish <strong>Scalability</strong> (capacity to grow) from <strong>Rapid Elasticity</strong> (automatically scaling out and back in based on real-time demand).",
+          "anchor": "🔄 Manual SSH or console edits cause configuration drift; every change belongs in Git."
+        },
+        {
+          "title": "Real-World: 6-Minute Recovery at Mammoth Capital",
+          "body": "When a severe storm knocks out Mammoth Capital's primary US East trading environment, the cloud team doesn't panic-click through web consoles at 3 AM. They trigger their <strong>GitOps CI/CD pipeline</strong>, executing validated Terraform modules that provision an identical VPC, firewall ruleset, and auto-scaling compute cluster in eu-central-1 in six minutes flat. Every resource matches production bit-for-bit with a complete Git audit trail.",
+          "anchor": "🚀 Git + CI/CD + Terraform turns a 3 AM disaster recovery scramble into a deterministic script."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "During a late-night incident, a cloud administrator logs into the web console and manually adds an inbound firewall rule to a production Security Group without updating the team's Terraform files. What problem does this create?",
+          "opts": [
+            "Vendor lock-in across regions",
+            "Configuration drift between the live cloud environment and the IaC source of truth",
+            "Hypervisor resource exhaustion",
+            "Automatic deletion of the Git repository"
+          ],
+          "ans": 1,
+          "exp": "Out-of-band manual changes create configuration drift—the running infrastructure no longer matches the declarative IaC code, meaning the next automated Terraform run may overwrite the hotfix."
+        },
+        {
+          "q": "Mammoth Capital configures its Git repository so that every pull request to the Terraform codebase automatically runs a syntax linter, a security compliance check, and a dry-run plan before any human merges it. Which practice is this?",
+          "opts": [
+            "Lift-and-shift re-hosting",
+            "Blue/Green cutover",
+            "Chaos engineering",
+            "Continuous Integration (CI)"
+          ],
+          "ans": 3,
+          "exp": "Continuous Integration (CI) is the automated build, linting, and validation stage triggered on every code commit before changes are merged and deployed."
+        },
+        {
+          "q": "A cloud trading platform automatically adds 30 compute instances at 9:25 AM when market-open order flow spikes, then automatically terminates those 30 instances at 4:05 PM when demand drops. Which cloud characteristic does this demonstrate?",
+          "opts": [
+            "Rapid Elasticity",
+            "Multitenancy",
+            "Data Sovereignty",
+            "Vertical Scaling"
+          ],
+          "ans": 0,
+          "exp": "Rapid Elasticity is the ability to automatically scale resources outward and inward dynamically in response to real-time workload demand."
+        },
+        {
+          "q": "An enterprise wants to vacate its on-premises data center before its lease expires in 60 days. They export 120 existing VMware virtual machines and run them directly on cloud IaaS instances without modifying the applications. What migration strategy is this?",
+          "opts": [
+            "Re-architecting (Cloud-Native)",
+            "Repurchasing (Drop and Shop)",
+            "Lift-and-Shift (Re-hosting)",
+            "Refactoring to Serverless"
+          ],
+          "ans": 2,
+          "exp": "Lift-and-Shift (Re-hosting) moves existing virtual machines or workloads to the cloud as-is without redesigning their code or architecture, optimizing for migration speed."
+        },
+        {
+          "q": "After an unexpected routing failure, the security team needs to determine who modified the production VPC route table last Tuesday, which exact lines were changed, and who approved the pull request. Which tool provides this audit trail?",
+          "opts": [
+            "An Application Load Balancer health check",
+            "Version Control (Git) commit history",
+            "A Content Delivery Network (CDN) edge log",
+            "An ephemeral instance store volume"
+          ],
+          "ans": 1,
+          "exp": "Storing Infrastructure as Code in a Version Control System like Git records every line change with an immutable commit hash, author identity, timestamp, and peer-review history."
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "track": "cloudplus",
+      "concept": "Designing for Failure — Multi-AZ & DR Patterns",
+      "domain": "Cloud Architecture",
+      "icon": "🏗️",
+      "color": "#8b5cf6",
+      "tagline": "Assume every server will die—architect so nobody notices.",
+      "slides": [
+        {
+          "title": "Single Points of Failure & Multi-AZ",
+          "body": "Cloud architects design with one certainty: servers crash, disks fail, and whole data centers lose power. Instead of relying on a single giant server, resilient architectures deploy stateless compute instances across <strong>multiple Availability Zones (AZs)</strong> behind a <strong>Load Balancer</strong>. Because each AZ has independent power, cooling, and networking within a Region, a single data center outage becomes a non-event.",
+          "anchor": "🌩️ A single Availability Zone—no matter how many servers are inside—is still one blast radius."
+        },
+        {
+          "title": "Disaster Recovery Tiers & Microservices",
+          "body": "Know the four <strong>Disaster Recovery (DR)</strong> tiers ordered from highest to lowest RTO: <strong>Backup & Restore</strong> (cheapest, slowest recovery), <strong>Pilot Light</strong> (only core DB/data replicated; compute stays off until failover), <strong>Warm Standby</strong> (a scaled-down but fully functional copy of the entire stack always running), and <strong>Multi-Site Active/Active</strong> (zero downtime, highest cost). Pairing <strong>Microservices</strong> with horizontally scalable <strong>NoSQL</strong> databases further isolates component failures.",
+          "anchor": "🕯️ Pilot Light keeps only the database warm; Warm Standby runs the entire stack in miniature."
+        },
+        {
+          "title": "Real-World: Mammoth Capital's Warm Standby",
+          "body": "Mammoth Capital splits its monolithic trading app into independent <strong>microservices</strong> running across three Availability Zones in US East, backed by a Multi-AZ database. To protect against a full regional blackout without paying double for idle hardware, they run a <strong>Warm Standby</strong> environment in US West at 15% capacity—continuously receiving replicated data and ready to auto-scale to 100% production load in minutes.",
+          "anchor": "⚖️ Use Multi-AZ for local high availability and Multi-Region Warm Standby for fast regional DR."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "A financial services company needs a cross-region Disaster Recovery architecture where a scaled-down, fully functional version of the web, app, and database tiers runs 24/7 in the secondary region and can scale up quickly on failover. Which DR model is this?",
+          "opts": [
+            "Cold Backup and Restore",
+            "Pilot Light",
+            "Warm Standby",
+            "Single-AZ Snapshot"
+          ],
+          "ans": 2,
+          "exp": "Warm Standby keeps a scaled-down but fully functional copy of all application tiers running continuously in the recovery site. Pilot Light, by contrast, keeps only the core data layer running while compute remains off."
+        },
+        {
+          "q": "An administrator deploys eight web servers behind a load balancer, all placed inside us-east-1a. When a fiber cut and transformer fire knock out us-east-1a, the entire application goes offline. What architectural change fixes this?",
+          "opts": [
+            "Distribute the web servers across multiple Availability Zones (e.g., us-east-1a, 1b, and 1c) behind the load balancer",
+            "Upgrade the eight servers to a larger CPU instance family inside us-east-1a",
+            "Replace the load balancer with a static DNS A record",
+            "Attach larger local NVMe scratch disks to each server"
+          ],
+          "ans": 0,
+          "exp": "All eight servers lived in a single Availability Zone (one physical data center complex). Spanning instances across multiple isolated AZs ensures the application survives the loss of an entire facility."
+        },
+        {
+          "q": "A B2B SaaS provider serves 200 enterprise clients from a shared cloud database cluster and compute pool, using strict tenant ID filtering and encryption keys so Client A can never access Client B's data. Which concept describes this?",
+          "opts": [
+            "Physical Air-Gapping",
+            "Dedicated Bare-Metal Hosting",
+            "Hybrid Cloud Bursting",
+            "Multitenancy with Logical Isolation"
+          ],
+          "ans": 3,
+          "exp": "Multitenancy shares underlying physical compute and storage across multiple customers for cost efficiency, relying on logical isolation in software to keep each tenant's data strictly segregated."
+        },
+        {
+          "q": "Mammoth Capital has a legacy monolithic application where a memory leak in the monthly PDF statement generator crashes the live order-routing engine. Which architecture pattern best decouples these components?",
+          "opts": [
+            "Client-Server Mainframe",
+            "Microservices communicating over APIs and message queues",
+            "Single-tier vertical scaling",
+            "Host-only local virtualization"
+          ],
+          "ans": 1,
+          "exp": "Breaking a monolith into independent microservices ensures each service has its own compute lifecycle and fault boundary—so a crash in PDF generation never takes down order routing."
+        },
+        {
+          "q": "A systems engineer is configuring a new VM in a local Proxmox homelab and needs the VM to obtain a LAN IP address directly from the physical network's DHCP server so other office machines can reach it directly. Which virtual network mode should be selected?",
+          "opts": [
+            "Host-Only",
+            "NAT (Network Address Translation)",
+            "Bridged",
+            "Isolated Internal VLAN"
+          ],
+          "ans": 2,
+          "exp": "Bridged networking connects the virtual machine's vNIC directly to the physical network switch via a software bridge, allowing it to act as an independent peer host on the LAN."
+        }
+      ]
+    },
+    {
       "day": 3,
-      "concept": "Cloud+ Review - Day 3",
-      "domain": "Cloud+",
-      "icon": "☁️",
+      "track": "cloudplus",
+      "concept": "Shared Responsibility — Who Secures What?",
+      "domain": "Security",
+      "icon": "🔒",
       "color": "#8b5cf6",
-      "tagline": "CompTIA Cloud+ Core Principles",
+      "tagline": "The cloud provider secures the building; you lock the door.",
       "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for Cloud+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
+        {
+          "title": "Security OF the Cloud vs. IN the Cloud",
+          "body": "Moving workloads to AWS, Azure, or GCP does not outsource your accountability. Under the <strong>Shared Responsibility Model</strong>, the provider secures the <em>cloud itself</em>—physical data center guards, power, host hardware, and hypervisors. The customer is always responsible for security <em>in the cloud</em>: your data, IAM permissions, and access policies. If a public S3 bucket leaks 10 million records, the fault is 100% the customer's.",
+          "anchor": "🏢 The landlord secures the building foundation; locking your own apartment door is on you."
+        },
+        {
+          "title": "IaaS vs. PaaS vs. SaaS & CASB Governance",
+          "body": "The dividing line shifts with the service model: in <strong>IaaS</strong>, you patch the guest OS, firewall rules, and apps; in <strong>PaaS</strong>, the provider patches the OS and runtime while you secure your application code, access, and data; in <strong>SaaS</strong>, you remain responsible for <strong>data classification, IAM, and endpoint security</strong>. To govern multiple cloud apps, a <strong>CASB (Cloud Access Security Broker)</strong> enforces DLP and access policies between users and cloud services.",
+          "anchor": "📊 IaaS = you patch the OS. PaaS = you secure app & data. SaaS = you govern data & IAM."
+        },
+        {
+          "title": "Real-World: GDPR & CASB at Mammoth Capital",
+          "body": "When Mammoth Capital opens a trading desk in Frankfurt, European regulators require that EU client PII never leave European Union borders. The cloud architect enforces <strong>data residency</strong> by restricting deployments to the <strong>eu-central-1 Region</strong>, deploys a <strong>CASB</strong> to stop employees from syncing sensitive spreadsheets to personal cloud drives, and enables control-plane <strong>audit logging (CloudTrail)</strong> to track every API call.",
+          "anchor": "🌍 Strong encryption protects confidentiality, but only Region selection enforces data residency."
+        }
       ],
       "quiz": [
         {
-          "q": "Are you ready to crush the Cloud+ exam?",
+          "q": "A company runs production Linux virtual machines on an IaaS cloud provider. When a critical vulnerability is announced in the guest Ubuntu OS kernel, who is responsible for applying the patch?",
           "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
+            "The customer",
+            "The cloud service provider",
+            "The internet service provider (ISP)",
+            "Both the provider and customer share guest OS patching equally"
           ],
           "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "exp": "In an IaaS model, the cloud provider secures the physical hardware and hypervisor, while the customer is fully responsible for patching and securing the guest operating system, applications, and data."
+        },
+        {
+          "q": "Mammoth Capital's CISO discovers that analysts are uploading proprietary financial models to unsanctioned third-party SaaS tools. Which cloud security tool acts as a policy enforcement intermediary between users and multiple cloud providers?",
+          "opts": [
+            "Virtual Private Gateway",
+            "Hypervisor Type-1",
+            "Network Load Balancer",
+            "Cloud Access Security Broker (CASB)"
+          ],
+          "ans": 3,
+          "exp": "A CASB sits between enterprise users and cloud service providers to discover shadow IT, enforce IAM and MFA policies, and apply Data Loss Prevention (DLP) rules across cloud applications."
+        },
+        {
+          "q": "To comply with strict national data sovereignty laws, a financial institution must guarantee that Canadian customer records are stored and processed exclusively within Canada. How is this enforced in the public cloud?",
+          "opts": [
+            "By encrypting the database with customer-managed AES-256 keys",
+            "By provisioning all storage and compute resources strictly within Canadian Cloud Regions",
+            "By caching the web portal across global CDN Edge Locations",
+            "By routing user traffic through an IPSec VPN tunnel"
+          ],
+          "ans": 1,
+          "exp": "Cloud providers never move customer data out of the selected Region unless explicitly configured by the customer. Selecting only Canadian Regions guarantees geographic data residency."
+        },
+        {
+          "q": "An enterprise migrates its CRM from self-hosted servers to a cloud-based Software as a Service (SaaS) platform. Under the Shared Responsibility Model, which task remains the customer's responsibility?",
+          "opts": [
+            "Patching the underlying database operating system",
+            "Replacing failed solid-state drives in the storage array",
+            "Managing user identities, role permissions (IAM), and data classification",
+            "Securing the hypervisor against side-channel attacks"
+          ],
+          "ans": 2,
+          "exp": "Even in SaaS—where the provider manages hardware, hypervisor, OS, and application code—the customer is always responsible for their data and controlling who has access to it (IAM)."
+        },
+        {
+          "q": "A security analyst notices that a production security group was modified at 1:45 AM to allow inbound SSH from 0.0.0.0/0. Which cloud logging service records the exact IAM user, source IP, and API call that made this change?",
+          "opts": [
+            "Cloud control-plane audit logs (e.g., AWS CloudTrail)",
+            "CPU utilization metric graphs",
+            "CDN access logs",
+            "Application memory dump files"
+          ],
+          "ans": 0,
+          "exp": "Control-plane audit logs (such as AWS CloudTrail or Azure Activity Logs) record every management API call in the account, answering 'who did what, when, and from where.'"
         }
       ]
     },
     {
+      "day": 4,
       "track": "cloudplus",
-      "day": 7,
-      "concept": "Cloud+ Review - Day 7",
-      "domain": "Cloud+",
-      "icon": "☁️",
+      "concept": "Cloud Operations & FinOps — Taming the Bill",
+      "domain": "Operations",
+      "icon": "💸",
       "color": "#8b5cf6",
-      "tagline": "CompTIA Cloud+ Core Principles",
+      "tagline": "In an OpEx world, every idle server is a live invoice.",
       "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for Cloud+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
+        {
+          "title": "CapEx vs. OpEx & The FinOps Mindset",
+          "body": "Traditional data centers require massive upfront <strong>CapEx (Capital Expenditure)</strong> to buy physical servers that depreciate over years. Cloud computing shifts IT to <strong>OpEx (Operational Expenditure)</strong>—you rent capacity by the second and pay on a monthly invoice. Because leaving a 64-core VM idle all month still bills thousands of dollars, <strong>FinOps (Cloud Financial Operations)</strong> makes right-sizing and waste elimination core engineering responsibilities.",
+          "anchor": "💳 Cloud trades upfront CapEx for variable OpEx: if a resource is running, the meter is spinning."
+        },
+        {
+          "title": "Pricing Tiers & Zero-Downtime Patching",
+          "body": "Match the pricing model to the workload: <strong>Reserved Instances / Savings Plans</strong> trade a 1- or 3-year commitment for up to 72% off steady 24/7 workloads; <strong>Spot / Preemptible Instances</strong> give up to 90% off for stateless, interruptible batch jobs; <strong>On-Demand</strong> covers short-term spiky needs. For Day-2 maintenance, use <strong>Rolling Updates</strong> behind a load balancer and automated configuration management (Ansible) to patch fleets without downtime.",
+          "anchor": "🏷️ Steady 24/7 baseline → Reserved. Interruptible batch → Spot. Short-term spiky → On-Demand."
+        },
+        {
+          "title": "Real-World: Cutting Mammoth Capital's Cloud Bill",
+          "body": "Mammoth Capital's CFO flags a $45,000 monthly spike in AWS spend. The cloud operations lead audits utilization metrics, <strong>right-sizes</strong> over-provisioned m5.8xlarge instances down to m5.xlarge, purchases <strong>3-year Reserved Instances</strong> for the 24/7 core database tier, and schedules an automation policy that powers off all development VMs outside 8 AM–7 PM weekdays—cutting the monthly bill by 52%.",
+          "anchor": "📉 Right-sizing oversized VMs and auto-stopping dev environments at night are the fastest FinOps wins."
+        }
       ],
       "quiz": [
         {
-          "q": "Are you ready to crush the Cloud+ exam?",
+          "q": "A cloud engineer reviews 60 days of telemetry for a fleet of 20 compute instances and finds average CPU utilization is 6% and memory usage never exceeds 12%. What FinOps action should the engineer take to reduce costs without hurting performance?",
           "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
+            "Migrate the instances to Multi-Site Active/Active disaster recovery",
+            "Enable Content Delivery Network (CDN) caching",
+            "Attach additional persistent block storage volumes",
+            "Right-size the instances by scaling down to a smaller instance type"
+          ],
+          "ans": 3,
+          "exp": "Right-sizing matches instance capacity (vCPU and RAM) to actual measured workload utilization, eliminating paying for idle over-provisioned resources."
+        },
+        {
+          "q": "Mammoth Capital runs a production PostgreSQL database that will operate 24/7 for the next three years, and also runs a nightly Monte Carlo simulation that is stateless and can tolerate sudden 2-minute interruptions. Which pricing models should be paired with each workload?",
+          "opts": [
+            "Spot Instances for the database; On-Demand for the nightly simulation",
+            "Reserved Instances (3-year) for the database; Spot Instances for the nightly simulation",
+            "On-Demand for both workloads to maximize billing cost",
+            "Dedicated Hosts for the simulation; Spot Instances for the database"
+          ],
+          "ans": 1,
+          "exp": "Reserved Instances provide huge discounts (up to 72%) for predictable 24/7 workloads like core databases, while Spot Instances save up to 90% on fault-tolerant, interruptible batch jobs."
+        },
+        {
+          "q": "An operations engineer needs to apply a security patch across 40 web servers behind a load balancer during business hours with zero downtime and without spinning up a duplicate 40-server environment. Which update method should they use?",
+          "opts": [
+            "Simultaneous reboot of all 40 instances",
+            "Lift-and-shift migration",
+            "Rolling update (draining, patching, and health-checking instances in small batches)",
+            "Offline cold backup restoration"
+          ],
+          "ans": 2,
+          "exp": "A rolling update takes a small batch of instances out of load balancer rotation, patches them, verifies health checks pass, and moves to the next batch—achieving zero downtime without doubling fleet cost."
+        },
+        {
+          "q": "To prevent unexpected invoice shock and track spending across the Quantitative, Compliance, and Retail departments, which operational practices should a cloud administrator implement?",
+          "opts": [
+            "Enforce mandatory cost-allocation resource tags and configure automated budget threshold alerts",
+            "Switch all workloads from OpEx to upfront hardware CapEx",
+            "Disable auto-scaling groups across all production environments",
+            "Encrypt all object storage buckets with asymmetric RSA keys"
           ],
           "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "exp": "Resource tagging enables accurate cost attribution (chargeback/showback) by department, while automated budget alerts notify teams before monthly spend exceeds thresholds."
+        },
+        {
+          "q": "A cloud engineer is provisioning storage for a transactional database VM. The data on the volume must persist even if the VM is stopped, rebooted, or terminated. Which storage type is required?",
+          "opts": [
+            "Ephemeral instance store (scratch disk)",
+            "In-memory Redis cache",
+            "CPU L3 cache",
+            "Persistent block storage (e.g., Amazon EBS)"
+          ],
+          "ans": 3,
+          "exp": "Persistent block storage volumes operate independently of the compute instance lifecycle and retain data across stops and reboots, whereas ephemeral instance stores wipe data when the VM stops."
         }
       ]
     },
     {
+      "day": 5,
       "track": "cloudplus",
-      "day": 11,
-      "concept": "Cloud+ Review - Day 11",
-      "domain": "Cloud+",
-      "icon": "☁️",
+      "concept": "Cloud Troubleshooting — Network vs. Permissions",
+      "domain": "Troubleshooting",
+      "icon": "🔧",
       "color": "#8b5cf6",
-      "tagline": "CompTIA Cloud+ Core Principles",
+      "tagline": "Timeouts mean network blocks; 403s mean IAM denied you.",
       "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for Cloud+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
+        {
+          "title": "The Triage Rule: Timeout vs. 403 Forbidden",
+          "body": "Cloud troubleshooting boils down to separating network path failures from identity permission failures. If your connection <strong>times out</strong> with no response, the packet never arrived or returned—check <strong>Security Groups, subnet NACLs, and VPC Route Tables</strong>. If you receive an <strong>HTTP 403 / Access Denied</strong> immediately, the network path worked perfectly and <strong>IAM or a resource policy</strong> rejected the action.",
+          "anchor": "🧭 Connection timeout = check firewalls and routing. 403 Access Denied = check IAM policies."
+        },
+        {
+          "title": "Stateful vs. Stateless & Bottleneck Diagnosis",
+          "body": "Remember the firewall trap: <strong>Security Groups</strong> are instance-level and <em>stateful</em> (allowing inbound port 443 automatically allows the return traffic), while <strong>NACLs</strong> are subnet-level and <em>stateless</em> (requiring explicit inbound AND outbound ephemeral port rules). In IAM, an <strong>explicit DENY always overrides any ALLOW</strong>. For resource bottlenecks, fix <strong>Out of Memory (OOM)</strong> crashes by scaling RAM <em>vertically</em>, and fix maxed-out <strong>Database Read IOPS</strong> with <strong>Read Replicas</strong> or faster storage.",
+          "anchor": "🛑 An explicit DENY in any policy overrides every ALLOW, even for an account Administrator."
+        },
+        {
+          "title": "Real-World: Fixing Mammoth Capital's Outage",
+          "body": "Mammoth Capital deploys a new trade-settlement worker in a private subnet, but external API calls time out and S3 uploads fail with <em>AccessDenied</em>. The engineer diagnoses each symptom by its signature: they add a <strong>NAT Gateway route</strong> to the private subnet's route table so the worker can reach external APIs outbound, and remove a restrictive <strong>explicit Deny</strong> condition in the S3 bucket policy—restoring full service in ten minutes.",
+          "anchor": "🔬 Never guess: let timeouts point you to VPC routing and 403s point you to IAM."
+        }
       ],
       "quiz": [
         {
-          "q": "Are you ready to crush the Cloud+ exam?",
+          "q": "A cloud engineer launches a web server in a public subnet, allows inbound TCP port 443 on the Security Group, and adds an inbound allow rule for port 443 on a custom subnet Network ACL (NACL). However, external users still experience connection timeouts because the NACL has no outbound rules. Why?",
           "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
+            "Security Groups are stateless and drop return packets by default",
+            "Public subnets require a VPN concentrator to serve HTTPS traffic",
+            "NACLs are stateless and require an explicit outbound rule allowing return traffic on ephemeral ports",
+            "Port 443 is reserved exclusively for SSH management traffic"
+          ],
+          "ans": 2,
+          "exp": "Unlike stateful Security Groups, Network ACLs (NACLs) are stateless—they inspect inbound and outbound traffic separately, so without an outbound allow rule for ephemeral return ports, responses are dropped."
+        },
+        {
+          "q": "A microservices container running in a cloud VPC attempts to read a secret from the cloud key vault and immediately receives an HTTP 403 AccessDeniedException response. Where should the engineer look FIRST?",
+          "opts": [
+            "The IAM Role and resource permissions policy attached to the container task",
+            "The VPC Internet Gateway attachment state",
+            "The container's CPU thermal throttling settings",
+            "The physical Ethernet cable in the cloud data center"
           ],
           "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "exp": "An immediate 403 Access Denied response proves TCP/TLS network connectivity succeeded and the API endpoint was reached, pinpointing an IAM or resource policy permission issue."
+        },
+        {
+          "q": "During peak trading hours, Mammoth Capital's analytics portal slows to a crawl. Database monitoring shows CPU utilization at 15% and free memory at 60%, but Disk Read IOPS are pinned at 100% from analysts running heavy SELECT queries. What is the BEST fix?",
+          "opts": [
+            "Reboot the primary database server every 30 minutes",
+            "Add Read Replicas to offload read queries or provision higher-IOPS storage",
+            "Switch the web servers to a compute-optimized CPU family",
+            "Place a Web Application Firewall (WAF) in front of the database"
+          ],
+          "ans": 1,
+          "exp": "When Disk Read IOPS are the bottleneck and CPU is idle, adding Read Replicas offloads analytical read traffic from the primary database, and scaling storage IOPS directly relieves disk contention."
+        },
+        {
+          "q": "An application running on an Auto Scaling Group of t3.micro (1 GB RAM) instances crashes every afternoon with Out of Memory (OOM) kernel errors when loading a 2.5 GB risk matrix into RAM. Why did adding more t3.micro instances horizontally fail to fix the crashes?",
+          "opts": [
+            "Horizontal scaling disables the load balancer's health checks",
+            "Auto Scaling Groups only work with UDP traffic",
+            "Cloud hypervisors block applications from using more than 50% of RAM",
+            "Each individual instance still lacks enough RAM to hold the 2.5 GB process; the instance size must be scaled vertically"
+          ],
+          "ans": 3,
+          "exp": "When a single workload process exceeds the physical RAM of an instance and triggers OOM kills, spawning more undersized instances just causes each new node to crash. You must scale vertically to an instance with more RAM."
+        },
+        {
+          "q": "A cloud administrator whose IAM user belongs to the full Administrators group tries to delete a regulatory audit S3 bucket, but receives an 'Access Denied' error. What is the MOST likely cause?",
+          "opts": [
+            "The cloud provider's DNS servers are offline",
+            "The administrator's laptop has a full hard drive",
+            "The S3 bucket policy or an organizational Service Control Policy (SCP) contains an explicit DENY for s3:DeleteBucket",
+            "The Security Group on the administrator's home router blocked port 22"
+          ],
+          "ans": 2,
+          "exp": "In cloud IAM evaluation logic, an explicit DENY in a resource-based bucket policy or organizational SCP always overrides every ALLOW permission, even for full account Administrators."
         }
       ]
     }

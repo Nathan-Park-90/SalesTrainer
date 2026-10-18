@@ -10,7 +10,7 @@ var COURSE_SALES_ENGINEERING = {
     "color": "#10b981",
     "examKey": null,
     "flashcardCat": "Sales",
-    "dailyTrackKey": null,
+    "dailyTrackKey": "sales",
     "domains": null,
     "version": "1.0.0",
     "category": "Sales"
@@ -753,6 +753,423 @@ var COURSE_SALES_ENGINEERING = {
           "text": "I'll try to reach out to the old VP at their new company.",
           "ok": false,
           "fb": "Weak. While you should network with the old VP, it doesn't save the current deal at this company."
+        }
+      ]
+    }
+  ],
+  "daily": [
+    {
+      "day": 1,
+      "track": "sales",
+      "concept": "CRM & Call Intelligence — Your Deal Ledger",
+      "domain": "Enterprise Sales Tech Stack",
+      "icon": "📊",
+      "color": "#10b981",
+      "tagline": "If it isn't in Salesforce, it never happened.",
+      "slides": [
+        {
+          "title": "Salesforce Is Your System of Record",
+          "body": "Enterprise deals span months and involve multiple stakeholders on both sides, making your CRM the single source of truth. <strong>Salesforce</strong> maps the account hierarchy, decision roles (Economic Buyer, Technical Buyer, Champion), and activity timeline across the entire sales cycle. If a technical commitment or architectural constraint isn't logged in the CRM, it doesn't exist when handoffs happen.",
+          "anchor": "📒 The deal is your position and Salesforce is the trading blotter—log every move."
+        },
+        {
+          "title": "Stage Discipline & Gong Game Tape",
+          "body": "Opportunity stages in Salesforce must reflect verifiable <em>customer commitments</em>—such as agreeing to a Proof of Concept—rather than internal optimism. Elite SEs log technical objections, evaluation criteria, and competitor mentions within 30 minutes of every meeting. Meanwhile, <strong>Gong</strong> records and analyzes calls, proving that top SEs maintain a <strong>60/40 prospect-to-SE listen-to-talk ratio</strong> where sharp questions drive the deal.",
+          "anchor": "🎙️ Talk less, ask more: a 70% SE talk ratio is a feature pitch disguised as discovery."
+        },
+        {
+          "title": "Real-World: Mammoth Capital Handoff",
+          "body": "During a discovery call with Mammoth Capital, their VP of Infrastructure casually mentions a strict 90-day security review requirement before any production deployment. Right after the call, the SE checks the <strong>Gong</strong> transcript for the VP's exact phrasing and logs a formal Mutual Action Plan task in <strong>Salesforce</strong> with an owner and target date. When the lead SE is pulled onto another deal two weeks later, a teammate steps in seamlessly without losing a single day.",
+          "anchor": "⏱️ Write CRM notes within 30 minutes as if a teammate has to take over the deal tomorrow."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "After a promising architecture call, an SE wants to advance the Salesforce opportunity stage to 'Technical Validation.' Under strict CRM discipline, when is this stage change justified?",
+          "opts": [
+            "When the SE feels confident that the product can meet the prospect's requirements",
+            "When the customer has explicitly committed to a specific technical validation step, such as a scoped POC",
+            "As soon as the Account Executive sends a follow-up pricing estimate",
+            "Whenever the sales manager asks for a stronger quarterly pipeline forecast"
+          ],
+          "ans": 1,
+          "exp": "Opportunity stages act as a forcing function based on verifiable customer commitments, not internal seller confidence. Advancing a stage without customer agreement corrupts pipeline forecasting."
+        },
+        {
+          "q": "An SE reviews their Gong analytics after a sluggish discovery call and sees their talk-to-listen ratio was 75% SE talking to 25% prospect talking. What does this metric indicate?",
+          "opts": [
+            "The SE demonstrated strong technical authority that accelerated the deal",
+            "The prospect was fully aligned and had no technical objections to raise",
+            "Gong misclassified technical terminology as monologue time",
+            "The SE delivered a premature product pitch instead of asking discovery questions"
+          ],
+          "ans": 3,
+          "exp": "Healthy discovery calls average around a 60/40 prospect-to-SE talk ratio because questions drive deals. A 75% SE talk ratio means the SE monologued rather than uncovering business pain."
+        },
+        {
+          "q": "During a call with Mammoth Capital, the lead architect mentions a rival vendor and states three latency thresholds the platform must beat. What should the SE do within 30 minutes of hanging up?",
+          "opts": [
+            "Log the competitor mention, evaluation criteria, and architectural notes in Salesforce while details are vivid",
+            "Wait until the end of the quarter to summarize all call notes in a single batch update",
+            "Keep the notes in a private local text file so competitors cannot see them",
+            "Immediately email the prospect a 50-page feature comparison matrix"
+          ],
+          "ans": 0,
+          "exp": "Elite SEs log technical objections, competitor mentions, and evaluation criteria in Salesforce within 30 minutes so the entire deal team has institutional visibility."
+        },
+        {
+          "q": "While reviewing a Gong recording to prepare a formal executive proposal, what is the most valuable asset an SE can extract from the transcript?",
+          "opts": [
+            "The exact number of slides presented during the initial intro call",
+            "The timestamps of when the SE spoke for more than two minutes",
+            "The exact words and phrasing the prospect used to describe their business pain",
+            "A list of features that were never mentioned by the customer"
+          ],
+          "ans": 2,
+          "exp": "The prospect's own language is the language of the winning proposal. Using their exact words to frame the problem and solution creates immediate resonance with decision-makers."
+        },
+        {
+          "q": "On a recorded call, a prospect's security lead says, 'We will need to run your architecture through our cloud compliance checklist before sign-off.' How should the SE handle this verbal statement?",
+          "opts": [
+            "Ignore it until the legal team brings it up during contract redlining",
+            "Convert the verbal statement into a Mutual Action Plan item in the CRM with a specific owner and due date",
+            "Tell the prospect that compliance reviews are only allowed after contract signature",
+            "Ask the Account Executive to offer a 10% discount to skip the security review"
+          ],
+          "ans": 1,
+          "exp": "Unlogged verbal statements evaporate and stall deals later. Converting security and evaluation requirements into tracked Mutual Action Plan items with owners and dates keeps the deal moving."
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "track": "sales",
+      "concept": "Zero Trust & Compliance — Selling Security",
+      "domain": "Zero Trust & Security Posture",
+      "icon": "🔐",
+      "color": "#10b981",
+      "tagline": "Compliance isn't red tape; it's the ticket to the deal.",
+      "slides": [
+        {
+          "title": "From Castle-and-Moat to Zero Trust",
+          "body": "Traditional perimeter security assumed anyone inside the corporate network was trustworthy—a fatal flaw when remote employees use cloud apps from anywhere. <strong>Zero Trust</strong> operates on <em>never trust, always verify</em>: every access request must be authenticated, authorized, and continuously validated. Alongside Zero Trust, compliance frameworks like <strong>SOC 2 Type II, HIPAA, and PCI-DSS</strong> serve as mandatory revenue gates for enterprise procurement.",
+          "anchor": "🏰 Zero Trust assumes the perimeter is already breached and locks every internal door."
+        },
+        {
+          "title": "The Three Pillars & Compliance Gates",
+          "body": "An SE pitches Zero Trust across three pillars: <strong>Identity</strong> (universal MFA, IdP federation, least privilege), <strong>Device</strong> (MDM-enforced compliance baselines), and <strong>Data</strong> (classification and encryption in transit and at rest). When enterprise procurement evaluates those controls, certifications provide independent proof: <strong>SOC 2 Type II</strong> validates controls over a 6+ month window, <strong>HIPAA</strong> governs healthcare PHI under a BAA, and <strong>PCI-DSS</strong> protects payment card data.",
+          "anchor": "📜 SOC 2 Type II proves your security controls worked over time, not just on audit day."
+        },
+        {
+          "title": "Real-World: Winning the CISO at Mammoth Capital",
+          "body": "Mammoth Capital is evaluating a cloud analytics vendor, and their CISO asks how the platform contains the blast radius if an analyst's credentials are phished. Instead of saying <em>\"let me ask our security team,\"</em> the SE maps the platform directly to the <strong>Identity, Device, and Data</strong> pillars and walks through their <strong>SOC 2 Type II</strong> report's confidentiality and availability criteria. Technical fluency in compliance turns a two-month security bottleneck into same-week approval.",
+          "anchor": "🤝 Fluency in compliance frameworks turns security reviews from roadblocks into accelerators."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "During an initial meeting, a prospect's CTO says, 'Our board told us to buy a Zero Trust solution this quarter.' How should a credible SE frame the conversation?",
+          "opts": [
+            "Claim your product is a turnkey Zero Trust box that replaces all their existing security tools",
+            "Tell the CTO that Zero Trust is just a marketing buzzword and pivot to pricing",
+            "Explain that Zero Trust is an architecture across Identity, Device, and Data, and start by asking how privileged access is enforced today",
+            "Send a generic security brochure and wait for their procurement team to reply"
+          ],
+          "ans": 2,
+          "exp": "Zero Trust is an architectural framework, not a single SKU. Starting with discovery around Identity, Device, and Data gaps establishes immediate credibility as a trusted advisor."
+        },
+        {
+          "q": "An enterprise SaaS deal is in procurement, and the buyer's security team asks for independent audit proof that your security controls have operated effectively over at least a six-month period. Which report directly satisfies this?",
+          "opts": [
+            "SOC 2 Type II",
+            "A self-signed vendor security questionnaire",
+            "PCI-DSS quarterly port scan summary",
+            "An internal penetration test executive summary"
+          ],
+          "ans": 0,
+          "exp": "A SOC 2 Type II report provides an independent auditor's validation that security controls across the Trust Service Criteria operated consistently over a sustained period (typically 6+ months)."
+        },
+        {
+          "q": "You are pitching a cloud data pipeline to a healthcare network that processes Protected Health Information (PHI). In addition to encryption, access controls, and audit logging, what contractual requirement is mandatory?",
+          "opts": [
+            "A public bug bounty program disclosure",
+            "FedRAMP High authorization from the Department of Defense",
+            "An open-source license exemption",
+            "Executing a HIPAA Business Associate Agreement (BAA)"
+          ],
+          "ans": 3,
+          "exp": "Handling Protected Health Information (PHI) under HIPAA requires both technical safeguards (encryption, access controls, audit trails) and a formal Business Associate Agreement (BAA)."
+        },
+        {
+          "q": "A CISO asks why they need Zero Trust when they already have an expensive perimeter firewall and a corporate VPN. Which business argument is most compelling?",
+          "opts": [
+            "Perimeter firewalls slow down internet speeds for remote executives",
+            "Most breaches involve compromised credentials that walk right through the VPN; Zero Trust limits the blast radius to narrow, verified permissions",
+            "Zero Trust eliminates the need for encryption at rest on backend databases",
+            "VPNs are no longer supported by modern cloud providers"
+          ],
+          "ans": 1,
+          "exp": "When an attacker steals valid credentials, they bypass perimeter firewalls entirely. Zero Trust assumes breach and restricts lateral movement by verifying identity, device, and least-privilege scope on every request."
+        },
+        {
+          "q": "A fintech prospect processes credit card numbers directly and asks how your platform supports their regulatory scope. Which standard and control requirements should you reference?",
+          "opts": [
+            "GDPR right-to-erasure workflows only",
+            "ISO 9001 quality manufacturing standards",
+            "PCI-DSS and its 12 requirements, including encryption, network segmentation, and access control",
+            "DMCA copyright takedown procedures"
+          ],
+          "ans": 2,
+          "exp": "Any system that stores, processes, or transmits cardholder data falls under PCI-DSS, which mandates 12 core requirements including network segmentation, encryption, and strict access controls."
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "track": "sales",
+      "concept": "Technical Judo — Winning the Skeptical CTO",
+      "domain": "Handling the Hostile CTO",
+      "icon": "🥋",
+      "color": "#10b981",
+      "tagline": "Don't block a technical objection; redirect its force.",
+      "slides": [
+        {
+          "title": "The 'Build vs. Buy' Trap",
+          "body": "When a CTO leans back and says <em>\"we could just build this ourselves,\"</em> you are facing an identity or cost objection wrapped in an engineering frame. Never insult their team's capability; validate that they <em>can</em> build it, then reframe around <strong>strategic differentiation vs. Total Cost of Ownership (TCO)</strong>. Ask whether their senior engineers should spend the next 18 months maintaining undifferentiated infrastructure instead of building core product IP.",
+          "anchor": "🏗️ The question is never 'can you build it?'—it's 'should your best engineers maintain it forever?'"
+        },
+        {
+          "title": "The Three Types of Technical Hostility",
+          "body": "<strong>Technical Judo</strong> redirects a skeptical CTO's momentum instead of fighting head-on. Diagnose which resistance you face: meet <strong>Informed Skepticism</strong> (valid throughput or API limits) with honest specifics and workarounds; disarm <strong>Uninformed FUD</strong> (vague competitor claims) by asking for exact vulnerability details; and meet <strong>Philosophical Resistance</strong> (cultural dogma) with open curiosity about their constraints.",
+          "anchor": "🥋 Never counter-attack first; say 'Tell me more about that' to force specificity."
+        },
+        {
+          "title": "Real-World: Converting Mammoth Capital's CTO",
+          "body": "In a heated architecture review at Mammoth Capital, the CTO claims his quant team can build an internal telemetry tool in one quarter and remarks that a competitor called your security model \"flawed.\" The SE validates the team's talent, walks through the hidden TCO of ongoing SOC 2 maintenance and engineer turnover, and calmly asks which specific vulnerability the competitor identified. When the FUD collapses under questioning, the CTO becomes the deal's strongest internal champion.",
+          "anchor": "🏆 A previously skeptical CTO who converts to your side is the most powerful advocate in the room."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "After a strong technical demo, the prospect's VP of Engineering says, 'Honestly, my team is sharp enough to build this in-house over the summer.' What is the best SE response?",
+          "opts": [
+            "Validate their team's capability, then explore whether owning and maintaining this non-core infrastructure long-term is the best use of senior engineering time",
+            "Argue that their engineers lack the specialized expertise to build a reliable version",
+            "Immediately offer a 30% discount so buying looks cheaper than two months of developer salaries",
+            "Ask the Account Executive to escalate directly to the CEO to overrule the VP of Engineering"
+          ],
+          "ans": 0,
+          "exp": "Getting defensive alienates the technical buyer. Validating their talent and pivoting to strategic differentiation vs. long-term maintenance and opportunity cost guides them to see the true TCO."
+        },
+        {
+          "q": "During an evaluation meeting, a hostile CTO says, 'Vendor X told us your multi-tenant architecture has a fundamental security flaw.' How do you apply Technical Judo?",
+          "opts": [
+            "Attack Vendor X's recent outage history to change the subject",
+            "Flatly deny the claim and move on to the next slide as quickly as possible",
+            "Promise to build a custom single-tenant deployment for free",
+            "Respond with curiosity and ask the CTO to share the exact vulnerability Vendor X identified so you can address it precisely"
+          ],
+          "ans": 3,
+          "exp": "Competitor FUD relies on vague fear. Asking calmly for the exact technical mechanism forces specificity—causing unfounded FUD to evaporate in front of the room."
+        },
+        {
+          "q": "A prospect's principal architect points out a genuine API rate limit in your documentation that would throttle their end-of-day batch settlement job. What is the right way to handle this Informed Skepticism?",
+          "opts": [
+            "Pretend the documentation is outdated and hope they don't test it during the POC",
+            "Acknowledge the constraint honestly, validate their math, and walk through your architectural workaround or batch ingestion endpoint",
+            "Tell them rate limits only apply to smaller customers",
+            "Pivot the conversation to high-level executive ROI slides"
+          ],
+          "ans": 1,
+          "exp": "Dismissing or bluffing through an accurate technical concern destroys credibility permanently. Engaging directly, honestly, and with concrete architectural workarounds earns deep engineering trust."
+        },
+        {
+          "q": "When walking a CTO through a 'Build vs. Buy' Total Cost of Ownership (TCO) analysis, which hidden costs do internal 'build' estimates almost always omit?",
+          "opts": [
+            "The initial two-week sprint to build a proof-of-concept prototype",
+            "The cost of buying monitors for the software developers",
+            "Ongoing maintenance, security patching, compliance audits, engineer turnover, and the opportunity cost of delayed core product features",
+            "The one-time fee to register a domain name"
+          ],
+          "ans": 2,
+          "exp": "Internal build estimates usually count only v1 development time, ignoring years of forever-maintenance, compliance audits, retraining after turnover, and lost core product velocity."
+        },
+        {
+          "q": "A CTO states early in a meeting, 'We have a strict rule here: we never use managed cloud services, only bare metal.' How should the SE respond?",
+          "opts": [
+            "Treat it as philosophical resistance and ask curious questions to understand what historical constraint or requirement drives that rule",
+            "Tell the CTO that bare metal is obsolete and wastes 90% of their CPU capacity",
+            "End the meeting immediately since they are unqualified",
+            "Argue that every Fortune 500 competitor has already moved to serverless"
+          ],
+          "ans": 0,
+          "exp": "Cultural or philosophical resistance cannot be beaten with confrontation. Asking curious questions uncovers whether there is a real regulatory/latency constraint or an outdated assumption."
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "track": "sales",
+      "concept": "Discovery & Tell-Show-Tell — Demos That Close",
+      "domain": "The Art of the Demo",
+      "icon": "🎯",
+      "color": "#10b981",
+      "tagline": "Never run a demo without an X-ray of the business pain.",
+      "slides": [
+        {
+          "title": "Discovery First, Always",
+          "body": "The hardest discipline in technical sales is resisting the urge to pitch when you already know the answer. <strong>Discovery</strong> is your diagnostic X-ray before the demo: it uncovers not just what the technical problem is, but what it <em>costs</em>, who owns it, and why previous attempts failed. Exploring <strong>Situational, Problem, Implication, and Outcome</strong> dimensions turns a surface-level annoyance into a funded business priority.",
+          "anchor": "🩺 Skipping discovery to pitch features is like a surgeon operating without an X-ray."
+        },
+        {
+          "title": "The Tell-Show-Tell Framework",
+          "body": "Average SEs click around a UI for 45 minutes narrating features that prospects forget by dinner. Elite SEs structure every workflow using <strong>Tell-Show-Tell</strong>: <strong>Tell (Before)</strong> frames the business context using the prospect's own words from discovery; <strong>Show</strong> executes only the tight clicks needed to prove that point; and <strong>Tell (After)</strong> connects what they just saw to a quantified business outcome.",
+          "anchor": "🎬 Tell them the context, Show the exact workflow, Tell them the dollar impact."
+        },
+        {
+          "title": "Real-World: Demoing to Mammoth Capital",
+          "body": "In discovery, Mammoth Capital's head of compliance reveals her team spends 40 hours a week manually reviewing access logs at $150/hour. Opening the demo, the SE says: <em>\"You mentioned manual log reviews cost your team 40 hours every week—I'm going to show you how we cut that under two hours.\"</em> The SE shows the automated audit workflow in three clicks, then recaps how it recovers $300,000 in annual productivity ahead of their SOC 2 audit.",
+          "anchor": "🗣️ Reflecting a prospect's exact discovery quote back during the demo creates instant buy-in."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "During discovery, an engineering manager mentions that their manual deployment process breaks twice a month. Which follow-up question explores the 'Implication' dimension?",
+          "opts": [
+            "What version of Git are your developers currently using?",
+            "Would you like to see a quick demo of our automated rollback button right now?",
+            "Did you build your current deployment scripts in Python or Bash?",
+            "If those twice-monthly outages continue over the next year as transaction volume doubles, what is the impact on customer churn and revenue?"
+          ],
+          "ans": 3,
+          "exp": "Implication questions expand a technical problem into a business risk over time, helping the prospect articulate why leaving the problem unsolved is unacceptable to leadership."
+        },
+        {
+          "q": "An SE is preparing to demonstrate an automated compliance report using Tell-Show-Tell. What must happen in the opening 'Tell' step before clicking anything in the product?",
+          "opts": [
+            "Explain every menu item in the top navigation bar so the user isn't confused",
+            "Frame what they are about to see by tying it directly to a specific pain point and metric the prospect stated in discovery",
+            "Read the product release notes from the past three quarters",
+            "Ask the prospect to guess which button generates the report"
+          ],
+          "ans": 1,
+          "exp": "The first 'Tell' sets the business context using the prospect's own discovery statements so everyone in the room knows what to watch for and why it matters to them."
+        },
+        {
+          "q": "Halfway through showing a workflow that solves the prospect's top priority, the SE notices an advanced settings tab with ten extra features the prospect never asked about. What should the SE do?",
+          "opts": [
+            "Spend 15 minutes walking through all ten settings to prove the product is comprehensive",
+            "Hand screen control to the prospect and ask them to explore the settings tab",
+            "Skip the extra features and stay tightly focused on proving the specific outcome framed in the opening 'Tell'",
+            "Apologize that the UI has too many buttons"
+          ],
+          "ans": 2,
+          "exp": "Every click that doesn't connect to the prospect's stated pain dilutes focus and burns attention budget. In Tell-Show-Tell, show only what proves the business case."
+        },
+        {
+          "q": "Why is asking 'What have you already tried to solve this problem?' such a high-leverage discovery question?",
+          "opts": [
+            "It reveals failed past initiatives, internal political landmines, and why the problem has resisted simple fixes",
+            "It tricks the prospect into admitting their engineering team is incompetent",
+            "It lets the SE skip the rest of the discovery call",
+            "It fulfills a mandatory legal requirement before signing an NDA"
+          ],
+          "ans": 0,
+          "exp": "Understanding what the prospect already tried prevents you from pitching an approach they already rejected and surfaces the hidden constraints or politics that stalled previous efforts."
+        },
+        {
+          "q": "After executing a tight 2-minute demonstration of automated anomaly detection, how should the SE deliver the closing 'Tell' of Tell-Show-Tell?",
+          "opts": [
+            "Say 'And that's how that feature works—any questions?'",
+            "Immediately jump into the next unrelated feature tab without pausing",
+            "Recite the technical database schema powering the anomaly engine",
+            "Explicitly connect the workflow they just witnessed back to their stated business outcome and quantified time or cost savings"
+          ],
+          "ans": 3,
+          "exp": "The closing 'Tell' cements the memory by translating the visual product workflow directly into the business outcome and ROI metric the buyer cares about."
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "track": "sales",
+      "concept": "The Trusted Advisor — Portfolio & Demo Round",
+      "domain": "SE Career Portfolio Guidance",
+      "icon": "🚀",
+      "color": "#10b981",
+      "tagline": "The AE closes the deal; the SE makes closing possible.",
+      "slides": [
+        {
+          "title": "The SE Mindset Shift",
+          "body": "A software engineer builds what is specified; a <strong>Solutions Engineer (SE)</strong> translates complex technology into business value to solve a customer's problem. While the Account Executive (AE) owns commercial closing and the implementation team owns six-month delivery, the SE owns <strong>technical truth and architectural credibility</strong>. If the product cannot solve the prospect's problem, an elite SE says so early—because trust is your highest-leverage asset.",
+          "anchor": "🧭 An SE is a consulting specialist: protect your credibility by never overselling."
+        },
+        {
+          "title": "Building the 'Hero' Portfolio Project",
+          "body": "When an SE interview panel asks you to walk through a technical project, a basic calculator app won't cut it. A <strong>Hero Project</strong> solves a real problem using production-grade systems—like an AWS serverless stack with authentication or a Proxmox homelab monitoring cluster—backed by <strong>architecture diagrams, trade-off rationales, a failure story, and a B2B value pitch</strong>. Live blueprints prove you think like an architect and communicate like a seller.",
+          "anchor": "🏗️ 'I built X' is a claim; a live architecture diagram and trade-off story is proof."
+        },
+        {
+          "title": "Real-World: Crushing the SE Interview Panel",
+          "body": "In the final mock-demo round for an enterprise SE role, the panel asks a candidate to whiteboard a resilient trading architecture for Mammoth Capital. Instead of drawing boxes immediately, the candidate pauses to ask clarifying discovery questions about latency targets, compliance scope, and peak traffic. During the live demo, they apply <strong>Tell-Show-Tell</strong> and calmly validate and pivot when panelists throw staged objections—treating the interview itself like a textbook enterprise call.",
+          "anchor": "🎤 Asking clarifying requirements before touching the whiteboard IS the demonstration of expertise."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "During an SE interview whiteboard round, the hiring manager says, 'Design a highly available web application on AWS for us.' What should your very first action be?",
+          "opts": [
+            "Immediately draw an ALB, Auto Scaling Group, and Multi-AZ RDS database in silence",
+            "Ask clarifying discovery questions about traffic patterns, latency targets, and compliance requirements before drawing",
+            "Ask the interviewer which AWS services they personally prefer",
+            "Write Terraform code directly on the whiteboard"
+          ],
+          "ans": 1,
+          "exp": "Whiteboard prompts are intentionally underspecified to test how you think. Starting with requirements gathering and discovery questions demonstrates true SE judgment before choosing services."
+        },
+        {
+          "q": "Near the end of a quarter, a prospect asks if your platform can natively perform a specialized legacy mainframe sync. You know it cannot, though the AE is eager to close the contract today. What should the SE do?",
+          "opts": [
+            "Tell the customer it works natively and hope the implementation team builds a custom script later",
+            "Give a vague, evasive answer so the customer assumes the feature is included",
+            "State the truth clearly and early, explaining what the product does natively and scoping realistic alternatives before signature",
+            "Let the AE answer the technical question in an unrecorded phone call"
+          ],
+          "ans": 2,
+          "exp": "The SE's job is technical truth. Overselling to close a deal destroys customer trust, burns implementation teams, and ruins your reputation as a trusted technical advisor."
+        },
+        {
+          "q": "Which of the following makes the strongest 'Hero Project' for a candidate transitioning into a Solutions Engineering role?",
+          "opts": [
+            "A live cloud or homelab system with authentication, architecture diagrams, documented trade-offs, a failure/troubleshooting story, and a business value one-pager",
+            "A local command-line sorting algorithm written in C++ with no documentation",
+            "A fork of an open-source tutorial repository with no architectural changes",
+            "A slide deck describing a hypothetical app that was never built"
+          ],
+          "ans": 0,
+          "exp": "Interview panels evaluate the intersection of systems depth and business communication. A live system paired with architecture diagrams, trade-off reasoning, and a failure story proves both."
+        },
+        {
+          "q": "An SE hiring manager asks, 'Tell me about a time you lost a technical deal or failed to win over a stakeholder.' What are they evaluating?",
+          "opts": [
+            "Whether you have a 100% win rate so they can verify you never make mistakes",
+            "Whether you know how to blame product management or pricing for lost revenue",
+            "Whether you can recite confidential revenue numbers from your previous employer",
+            "Your self-awareness, honesty about a specific misstep you made, what you learned, and how you changed your process afterward"
+          ],
+          "ans": 3,
+          "exp": "Claiming you never lose deals or blaming the product signals low self-awareness. Hiring managers want SEs who objectively dissect their own mistakes and systematically improve."
+        },
+        {
+          "q": "During the mock demo round of an SE interview, a panelist playing a skeptical CTO interrupts you mid-flow with a sharp objection. What is the best way to handle it?",
+          "opts": [
+            "Ask the panelist to hold all questions until the end of the 30-minute presentation",
+            "Pause, validate the concern without getting defensive, clarify the root question, and pivot smoothly back to the business value",
+            "Apologize repeatedly and abandon the rest of the planned demo",
+            "Argue with the panelist to prove they misunderstood your slide"
+          ],
+          "ans": 1,
+          "exp": "Panelists purposefully interrupt to test your composure under pressure. Pausing, validating the objection, and pivoting gracefully proves you can handle real customer rooms."
         }
       ]
     }

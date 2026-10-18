@@ -1056,110 +1056,666 @@ var COURSE_COMPTIA_APLUS = {
   ],
   "daily": [
     {
+      "day": 1,
       "track": "aplus",
+      "concept": "Troubleshooting Methodology — The 6-Step Checklist",
+      "domain": "Hardware and Network Troubleshooting",
+      "icon": "🛠️",
+      "color": "#f59e0b",
+      "tagline": "Diagnose before you dissect. Follow the six steps.",
+      "slides": [
+        {
+          "title": "What Is the CompTIA Troubleshooting Methodology?",
+          "body": "Randomly swapping parts or reinstalling Windows turns a five-minute fix into a three-hour outage. The <strong>CompTIA Troubleshooting Methodology</strong> is a structured six-step framework designed to isolate and resolve hardware and software failures systematically. Every help desk ticket starts by identifying the problem through user questioning and log inspection before you touch a single setting.",
+          "anchor": "🧭 Never touch the hardware until you have questioned the user and checked for recent changes."
+        },
+        {
+          "title": "The Six Steps and How the Exam Tests Them",
+          "body": "Memorize the exact sequence: <strong>1. Identify the problem</strong>, <strong>2. Establish a theory of probable cause</strong> (start with the obvious), <strong>3. Test the theory</strong>, <strong>4. Establish a plan of action and implement the solution</strong>, <strong>5. Verify full system functionality and implement preventive measures</strong>, and <strong>6. Document findings, actions, and outcomes</strong>. If your theory fails during step 3, you return to step 2 to form a new theory or escalate. On the A+ exam, always pick the action that matches the <em>current</em> step in the scenario rather than jumping ahead to the final repair.",
+          "anchor": "📋 Identify → Theory → Test → Plan & Fix → Verify → Document: never skip a step on the exam."
+        },
+        {
+          "title": "Real-World: Mammoth Capital Help Desk",
+          "body": "A quantitative analyst at Mammoth Capital reports that neither of her external monitors works after returning from lunch. Instead of ordering a replacement GPU, the help desk technician follows step 2 (question the obvious) and checks under the desk, discovering the cleaning crew bumped the docking station power brick loose. After reconnecting the adapter, the technician verifies both displays work at native resolution and documents the ticket in the knowledge base.",
+          "anchor": "🔌 Occam's razor rules the help desk: check physical power and cables before blaming the motherboard."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "A technician suspects that a user's flickering monitor is caused by a damaged DisplayPort cable. After swapping in a known-good DisplayPort cable to test the theory, the monitor continues to flicker. According to the CompTIA troubleshooting methodology, what should the technician do NEXT?",
+          "opts": [
+            "Replace the workstation's graphics card immediately",
+            "Establish a new theory of probable cause or escalate if necessary",
+            "Document the failed cable swap and close the ticket",
+            "Reinstall the operating system to rule out driver corruption"
+          ],
+          "ans": 1,
+          "exp": "When testing a theory does not confirm the cause (Step 3), the technician must return to Step 2 to establish a new theory of probable cause or escalate the issue. Jumping straight to replacing the GPU or OS skips forming and testing a new theory."
+        },
+        {
+          "q": "A user calls the help desk and reports that they cannot print to the third-floor accounting laser printer. What should the technician do FIRST?",
+          "opts": [
+            "Restart the print spooler service on the print server",
+            "Replace the printer's maintenance kit and toner cartridge",
+            "Reinstall the printer driver on the user's workstation",
+            "Question the user about any error messages and check whether other users can print"
+          ],
+          "ans": 3,
+          "exp": "Step 1 of the methodology is to identify the problem by questioning the user, identifying changes, and determining whether the issue affects one person or the entire floor before making any changes."
+        },
+        {
+          "q": "A technician replaces a failed power supply inside a desktop PC, boots the system to the Windows login screen, and immediately leaves the user's desk. Twenty minutes later, the user calls back because their secondary storage drive is missing and the front USB ports do not work. Which troubleshooting step did the technician fail to complete?",
+          "opts": [
+            "Verify full system functionality and implement preventive measures",
+            "Establish a theory of probable cause",
+            "Identify the problem and inquire about environmental changes",
+            "Perform a system backup before initiating repairs"
+          ],
+          "ans": 0,
+          "exp": "Booting to the login screen only confirms the primary boot drive and PSU work. Step 5 requires verifying full system functionality — including secondary drives and peripherals — before considering the repair complete."
+        },
+        {
+          "q": "After rolling back a buggy audio driver on an executive's laptop, a technician tests the speakers and microphone in a video call and confirms the issue is resolved. What is the technician's FINAL step?",
+          "opts": [
+            "Establish a plan of action for future driver updates",
+            "Test the theory on a second laptop of the same model",
+            "Document the findings, actions taken, and outcomes in the ticketing system",
+            "Clone the hard drive to create a recovery image"
+          ],
+          "ans": 2,
+          "exp": "Step 6 — documenting findings, actions, and outcomes — is always the final step of the CompTIA troubleshooting methodology so the team has a historical record in the knowledge base."
+        },
+        {
+          "q": "A help desk technician tests a theory and confirms that a corrupt local profile is preventing a user from opening Microsoft Outlook. The technician now maps out the steps to back up the user's local files and rebuild the profile during the user's lunch break. Which step of the methodology is the technician performing?",
+          "opts": [
+            "Identify the problem",
+            "Establish a plan of action to resolve the problem and implement the solution",
+            "Test the theory to determine the cause",
+            "Document findings, actions, and outcomes"
+          ],
+          "ans": 1,
+          "exp": "Once the root cause is confirmed in Step 3, Step 4 is to establish a plan of action to resolve the problem and implement the solution."
+        }
+      ]
+    },
+    {
       "day": 2,
-      "concept": "A+ Review - Day 2",
-      "domain": "A+",
-      "icon": "💻",
+      "track": "aplus",
+      "concept": "Operating Systems & Recovery — Windows, macOS & Linux",
+      "domain": "Operating Systems",
+      "icon": "🖥️",
       "color": "#f59e0b",
-      "tagline": "CompTIA A+ Core Principles",
+      "tagline": "Three OS families, one job: find what broke and fix it.",
       "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for A+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
+        {
+          "title": "Cross-Platform OS Administration",
+          "body": "CompTIA A+ Core 2 tests your ability to administer and troubleshoot <strong>Windows</strong>, <strong>macOS</strong>, and <strong>Linux</strong> side by side. While Windows relies heavily on graphical tools like Disk Management and Task Manager, Linux favors terminal utilities like <em>top</em>, <em>chmod</em>, and <em>chown</em>, and macOS bridges a UNIX foundation with utilities like Activity Monitor and Disk Utility. Across all three platforms, your first move during a slowdown is checking which process is consuming CPU, memory, or disk I/O.",
+          "anchor": "🔍 Task Manager on Windows, Activity Monitor on macOS, and top on Linux all answer what is eating your resources."
+        },
+        {
+          "title": "Crash Diagnostics and Built-In Recovery Tools",
+          "body": "When an operating system fails to boot or crashes mid-session, the exam expects you to match the symptom to the native recovery tool. On Windows, a <strong>Blue Screen of Death (BSOD)</strong> points to a faulty driver or failing hardware, while <strong>Windows Recovery Environment (WinRE)</strong>, <strong>System Restore</strong>, <em>sfc /scannow</em>, and <em>chkdsk</em> repair corrupted boot records and system files. On macOS, <strong>Time Machine</strong> handles backups and Safe Mode isolates third-party extensions; on Linux, a live USB and <em>fsck</em> repair damaged file systems.",
+          "anchor": "🚑 Match the recovery tool to the OS: WinRE and SFC for Windows, Time Machine for macOS, fsck for Linux."
+        },
+        {
+          "title": "Real-World: Mammoth Capital Trading Floor",
+          "body": "After a Tuesday morning GPU driver update, a trader's Windows 11 workstation at Mammoth Capital hits a BSOD stop code every time the multi-chart layout loads. The technician boots into <strong>Safe Mode</strong> via WinRE, uses <strong>Device Manager</strong> to roll back the display adapter driver to the previous stable version, and runs <em>sfc /scannow</em> to confirm no protected system files were corrupted during the crash. The workstation boots cleanly without losing a single local spreadsheet.",
+          "anchor": "⏪ When a recent driver update causes a BSOD, boot into Safe Mode and roll back the driver before considering a wipe."
+        }
       ],
       "quiz": [
         {
-          "q": "Are you ready to crush the A+ exam?",
+          "q": "A Linux administrator writes a shell script named backup.sh, but when a technician attempts to execute it, the terminal returns 'Permission denied.' Which command grants execute permissions on the file?",
           "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
+            "chmod +x backup.sh",
+            "chown root backup.sh",
+            "grep -x backup.sh",
+            "ls -la backup.sh"
           ],
           "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "exp": "The chmod (change mode) command modifies file access permissions in Linux, and +x adds the execute bit. The chown command changes file ownership rather than execute permissions."
+        },
+        {
+          "q": "A technician physically installs a second internal NVMe SSD into a Windows 11 workstation. The drive is detected in UEFI/BIOS, but it does not appear as a drive letter in File Explorer. Which Windows utility should the technician use to initialize, partition, and format the new drive?",
+          "opts": [
+            "Device Manager",
+            "Event Viewer",
+            "Disk Management",
+            "System Configuration (msconfig)"
+          ],
+          "ans": 2,
+          "exp": "Disk Management (diskmgmt.msc) is used to initialize new storage drives, create partitions/volumes, format file systems, and assign drive letters."
+        },
+        {
+          "q": "A graphic designer on macOS reports that their video editing application is completely unresponsive and showing a spinning beachball cursor, while Finder and other apps still respond. Which built-in macOS tool should the technician open to inspect CPU usage and force-quit the hung process?",
+          "opts": [
+            "Time Machine",
+            "Keychain Access",
+            "Disk Utility",
+            "Activity Monitor"
+          ],
+          "ans": 3,
+          "exp": "Activity Monitor is the macOS equivalent of Windows Task Manager, allowing technicians to view CPU, memory, and disk usage by process and force-quit unresponsive applications."
+        },
+        {
+          "q": "After a sudden power outage at a branch office, a Windows workstation boots slowly and logs file system structure errors on the C: drive. Which command-line tool scans the disk for logical file system errors and bad sectors and attempts to repair them?",
+          "opts": [
+            "gpupdate /force",
+            "chkdsk /r",
+            "taskkill /f",
+            "diskpart"
+          ],
+          "ans": 1,
+          "exp": "Check Disk (chkdsk /r) scans the drive for logical file system errors and physical bad sectors, recovering readable information. Diskpart manages partitions and will not repair sector errors."
+        },
+        {
+          "q": "A user complains that their Windows 11 laptop takes several minutes to finish loading after they sign in because numerous chat and updater apps launch automatically. Where should the technician go to disable unnecessary startup applications?",
+          "opts": [
+            "The Startup Apps section in Task Manager",
+            "Windows Memory Diagnostic",
+            "Performance Monitor",
+            "Disk Cleanup"
+          ],
+          "ans": 0,
+          "exp": "In Windows 10 and Windows 11, user startup applications and their startup impact are managed directly in the Startup Apps tab of Task Manager."
         }
       ]
     },
     {
+      "day": 3,
       "track": "aplus",
+      "concept": "PC Internals — Motherboards, RAM, Storage & Power",
+      "domain": "Hardware",
+      "icon": "🔌",
+      "color": "#f59e0b",
+      "tagline": "When the screen stays black, listen to the motherboard.",
+      "slides": [
+        {
+          "title": "Core Internal Components",
+          "body": "Every PC is built around the <strong>motherboard</strong>, which connects the CPU, RAM, storage drives, and expansion cards while drawing regulated DC power from the <strong>Power Supply Unit (PSU)</strong>. Memory modules like <strong>DDR4</strong> and <strong>DDR5</strong> are physically keyed with different notch positions so they cannot be forced into the wrong generation slot, while servers use <strong>ECC RAM</strong> to detect and correct single-bit memory errors on the fly. For storage, <strong>M.2 NVMe SSDs</strong> connect directly over high-speed PCIe lanes, leaving SATA SSDs and spinning HDDs far behind.",
+          "anchor": "⚡ NVMe rides the PCIe highway; SATA takes the back road; DDR4 and DDR5 notches never mix."
+        },
+        {
+          "title": "POST, CMOS, Displays, and PSU Sizing",
+          "body": "When you press the power button, the motherboard runs the <strong>Power-On Self-Test (POST)</strong> before any operating system loads. If critical hardware like RAM or the GPU fails POST, the board emits <strong>beep codes</strong> or lights diagnostic LEDs, whereas losing the system clock and BIOS settings every time wall power is unplugged points to a dead <strong>CR2032 CMOS battery</strong>. On the exam, remember that <strong>OLED</strong> displays emit light per pixel with no backlight, <strong>LCD</strong> panels require an LED backlight, and PSUs should be sized with 20 to 30 percent wattage headroom above peak component draw.",
+          "anchor": "🔊 No video + POST beeps = pre-OS hardware fault (check RAM or GPU, never Windows drivers)."
+        },
+        {
+          "title": "Real-World: Workstation Upgrade Gone Silent",
+          "body": "A technician at Mammoth Capital upgrades a quantitative developer's workstation from 32 GB to 64 GB of DDR5 RAM. Upon pressing the power button, the chassis fans spin up, the monitors remain completely black, and the motherboard speaker emits three short beeps. Recognizing a classic POST memory error, the technician powers down the PC, grounds himself, and firmly reseats the new DIMMs in the dual-channel slots until both retention clips click into place.",
+          "anchor": "🔧 Three beeps and a black screen after a hardware swap almost always means unseated or faulty RAM."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "A user reports that whenever their desktop PC is unplugged from the wall outlet over the weekend, it displays a 'CMOS Checksum Error' on Monday morning and the system clock resets to midnight on January 1. What component needs to be replaced?",
+          "opts": [
+            "The M.2 NVMe boot drive",
+            "The 24-pin ATX power supply cable",
+            "The CR2032 CMOS battery on the motherboard",
+            "The CPU thermal paste"
+          ],
+          "ans": 2,
+          "exp": "The coin-cell CMOS battery (typically CR2032) supplies standby power to the Real-Time Clock (RTC) and CMOS settings when AC power is disconnected."
+        },
+        {
+          "q": "A technician is installing two identical 16 GB DDR5 RAM modules into a motherboard that has four DIMM slots (A1, A2, B1, B2). How should the technician populate the slots to maximize memory performance?",
+          "opts": [
+            "Place both modules in Channel A (slots A1 and A2) so they sit next to each other",
+            "Install the modules in the matched dual-channel pair (such as A2 and B2) specified in the motherboard manual",
+            "Install only one 16 GB module to reduce memory controller latency",
+            "Mix one DDR4 module and one DDR5 module across channels"
+          ],
+          "ans": 1,
+          "exp": "Populating the matched slots across both memory channels enables dual-channel mode, doubling the communication bandwidth between the memory controller and RAM."
+        },
+        {
+          "q": "A technician upgrades an office PC with a high-wattage discrete GPU for 3D modeling. The PC boots to the Windows desktop without issue, but suddenly powers off whenever the user starts a heavy 3D render. CPU and GPU temperatures remain below 65°C right before the crash. What is the MOST likely cause?",
+          "opts": [
+            "A failing CMOS battery",
+            "An incompatible M.2 SATA drive",
+            "Corrupted monitor EDID firmware",
+            "An undersized Power Supply Unit (PSU) tripping under peak wattage load"
+          ],
+          "ans": 3,
+          "exp": "When a GPU transitions from idle to full 3D load, its power draw spikes sharply. If the PSU lacks sufficient wattage capacity and headroom, over-power protection trips and shuts the system off immediately."
+        },
+        {
+          "q": "A technician presses the power button on a desktop PC. The case fans spin, the monitor remains blank, and the motherboard emits a repeating series of three short beeps. Which of the following causes can the technician immediately rule out?",
+          "opts": [
+            "Corrupted Windows display drivers",
+            "Improperly seated RAM modules",
+            "Failed memory DIMMs",
+            "Unseated graphics card"
+          ],
+          "ans": 0,
+          "exp": "POST beep codes occur during hardware initialization before the operating system ever begins loading, which rules out any Windows software or driver issue."
+        },
+        {
+          "q": "Which storage technology uses non-volatile flash memory in a compact gum-stick form factor and communicates directly over PCIe lanes for multi-gigabyte-per-second throughput?",
+          "opts": [
+            "3.5-inch 7200 RPM SATA HDD",
+            "2.5-inch SATA III SSD",
+            "M.2 NVMe SSD",
+            "External USB 3.0 flash drive"
+          ],
+          "ans": 2,
+          "exp": "M.2 NVMe SSDs attach directly to the PCIe bus rather than the legacy SATA controller, delivering vastly higher throughput and lower latency."
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "track": "aplus",
+      "concept": "Mobile Hardware & Hypervisors — Pocket to Bare Metal",
+      "domain": "Mobile Devices",
+      "icon": "📱",
+      "color": "#f59e0b",
+      "tagline": "ARM in your pocket, hypervisors in the rack.",
+      "slides": [
+        {
+          "title": "Mobile Architecture and Wireless Connectivity",
+          "body": "Modern smartphones and tablets run on power-efficient <strong>ARM processors</strong> with integrated system-on-chip (SoC) designs and rely on wireless protocols including 5G/LTE cellular, Wi-Fi, Bluetooth, and NFC. Enterprise IT teams manage company-owned and BYOD phones centrally using <strong>Mobile Device Management (MDM)</strong> to enforce passcodes, push VPN profiles, and quarantine or wipe compromised devices. On the hardware side, a physically <strong>swollen lithium-ion battery</strong> pushing against the screen or chassis is an immediate fire hazard that must never be charged or punctured.",
+          "anchor": "🔋 Swollen battery = immediate fire hazard: power the device down and isolate it in a fire-safe container."
+        },
+        {
+          "title": "Type 1 vs. Type 2 Hypervisors",
+          "body": "Virtualization abstracts physical CPU, RAM, and storage so multiple virtual machines (VMs) can run on a single host using a <strong>hypervisor</strong>. A <strong>Type 1 (bare-metal)</strong> hypervisor — such as VMware ESXi, Microsoft Hyper-V Server, or Proxmox VE — installs directly onto the physical server hardware with no underlying host OS. A <strong>Type 2 (hosted)</strong> hypervisor — such as Oracle VirtualBox, VMware Workstation, or Parallels — runs as a regular application inside an existing desktop OS like Windows or macOS.",
+          "anchor": "🏗️ Type 1 runs directly on bare metal (data center); Type 2 runs inside a host OS (desktop sandbox)."
+        },
+        {
+          "title": "Real-World: Lab Consolidation at Mammoth Capital",
+          "body": "Mammoth Capital's QA engineers were keeping four aging desktop towers under their desks just to test trading client builds on different Windows and Linux versions. The infrastructure team replaces the four towers with a single rack server running a <strong>Type 1 bare-metal hypervisor</strong> and allocates dedicated CPU cores and ECC RAM to each guest VM. Before any VM starts, the technician enables <strong>hardware virtualization extensions</strong> (Intel VT-x / AMD-V) in the server's UEFI/BIOS.",
+          "anchor": "⚙️ If a 64-bit VM refuses to launch, check that Intel VT-x or AMD-V is enabled in UEFI/BIOS."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "A technician installs Oracle VirtualBox on a newly built Windows 11 workstation and attempts to boot a 64-bit Ubuntu virtual machine, but the hypervisor throws an error stating hardware virtualization is unavailable. Where should the technician resolve this?",
+          "opts": [
+            "In Windows Disk Management by converting the disk to GPT",
+            "In the Windows Firewall advanced inbound rules",
+            "By upgrading the workstation's power supply unit",
+            "In the motherboard UEFI/BIOS settings by enabling Intel VT-x or AMD-V"
+          ],
+          "ans": 3,
+          "exp": "Running 64-bit guest virtual machines requires CPU hardware virtualization extensions (Intel VT-x or AMD-V/SVM) to be enabled in the host's UEFI/BIOS firmware."
+        },
+        {
+          "q": "An infrastructure engineer installs VMware ESXi directly onto a bare-metal rack server with no underlying host operating system. How is this hypervisor classified?",
+          "opts": [
+            "Type 1 (bare-metal) hypervisor",
+            "Type 2 (hosted) hypervisor",
+            "Container runtime engine",
+            "Application sandbox"
+          ],
+          "ans": 0,
+          "exp": "A Type 1 hypervisor runs directly on the physical server hardware without a host operating system, providing near-native performance for enterprise workloads."
+        },
+        {
+          "q": "An employee brings a company smartphone to the help desk because the display glass is bulging outward and separating from the metal frame. What should the technician do FIRST?",
+          "opts": [
+            "Clamp the screen back down with adhesive tape and run a battery calibration cycle",
+            "Power off the phone immediately, do not charge it, and place it in a fire-safe container",
+            "Puncture the battery wrapper carefully inside a fume hood to release trapped gas",
+            "Connect the phone to a computer via USB to update the battery management firmware"
+          ],
+          "ans": 1,
+          "exp": "A bulging screen indicates a swollen lithium-ion battery, which poses a severe thermal runaway and fire risk. The device must be powered down immediately, unplugged, and isolated in a fire-safe container."
+        },
+        {
+          "q": "A financial firm allows employees to access corporate email on their personal phones (BYOD) but requires corporate data to reside in an encrypted workspace that IT can selectively wipe if an employee leaves the company. What platform enables this?",
+          "opts": [
+            "BIOS supervisor password",
+            "Local Administrator Password Solution (LAPS)",
+            "Mobile Device Management (MDM) with containerization",
+            "Port forwarding on the SOHO router"
+          ],
+          "ans": 2,
+          "exp": "MDM platforms enforce security policies on mobile devices and use containerization (partitioning) on BYOD devices so corporate apps and data can be managed or remotely wiped without erasing the user's personal photos."
+        },
+        {
+          "q": "A user pairs a standard wireless Bluetooth headset with their laptop at their desk, but the audio stutters and disconnects whenever they walk down the hall to the break room 15 meters (50 feet) away. What is the MOST likely reason?",
+          "opts": [
+            "Bluetooth requires a line-of-sight infrared beam to maintain a connection",
+            "Standard Class 2 Bluetooth devices have a maximum operating range of roughly 10 meters (33 feet)",
+            "The user's laptop is missing an NFC controller chip",
+            "Bluetooth only operates on the 6 GHz wireless frequency band"
+          ],
+          "ans": 1,
+          "exp": "Most consumer Bluetooth headsets and laptops use Class 2 radios, which are designed for short-range Personal Area Networks (PANs) up to about 10 meters (33 feet), especially through office walls."
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "track": "aplus",
+      "concept": "Safety, Change Control & Professionalism — IT Ops Rules",
+      "domain": "Operational Procedures",
+      "icon": "🦺",
+      "color": "#f59e0b",
+      "tagline": "Ground your wrist, back up your work, keep your cool.",
+      "slides": [
+        {
+          "title": "ESD Protection and Physical Safety",
+          "body": "An <strong>Electrostatic Discharge (ESD)</strong> as small as 30 volts — far below the ~3,000 volts required for a human to feel a shock — can permanently damage or cause latent failure in a CPU or RAM module. Before touching internal components, disconnect AC power, press the power button to drain residual capacitor charge, and clip an <strong>ESD wrist strap</strong> to unpainted chassis metal. For chemical hazards such as laser printer toner or cleaning solvents, always consult the <strong>Safety Data Sheet (SDS)</strong> for proper handling and disposal rules.",
+          "anchor": "⚡ You can't feel a 30-volt static zap, but a microchip dies from it — wear the ESD strap every time."
+        },
+        {
+          "title": "Change Management and Customer Communication",
+          "body": "In enterprise IT, unauthorized production tweaks cause more outages than hardware failures. Formal <strong>Change Management</strong> requires a documented request, risk assessment, a defined maintenance window, and a tested <strong>rollback plan</strong> before any production change goes live. When dealing with frustrated or angry users on the help desk, CompTIA's rule is consistent: practice <strong>active listening</strong>, avoid arguing or blaming the user, respect confidential data on their screen, and explain policies politely.",
+          "anchor": "🔄 No change goes to production without an approved window and a tested rollback plan."
+        },
+        {
+          "title": "Real-World: The Friday Afternoon Firmware Patch",
+          "body": "A junior technician at Mammoth Capital notices a firmware update for the office print server at 4:30 PM on tax-filing Friday and wants to install it immediately. The senior engineer stops him and points to the <strong>Change Advisory Board (CAB)</strong> policy: all non-emergency updates require a scheduled weekend maintenance window, stakeholder notification, and a full VM snapshot for rollback. Following change control saves the floor from an unscheduled printing outage during peak deadline hours.",
+          "anchor": "🛑 Never push a non-emergency update during peak business hours without change approval and a backup."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "A technician is preparing to replace a faulty RAM stick inside a desktop computer in a dry, carpeted office. What is the BEST procedure to prevent Electrostatic Discharge (ESD) damage?",
+          "opts": [
+            "Leave the AC power cord plugged in and wear latex gloves while handling the RAM",
+            "Unplug the AC power cord, place the PC on an anti-static mat, and attach an ESD wrist strap to unpainted metal on the chassis",
+            "Rub the RAM contacts with isopropyl alcohol immediately before inserting the module",
+            "Hold the RAM module across the gold contact pins to equalize electrical charge"
+          ],
+          "ans": 1,
+          "exp": "Unplugging AC power and clipping an ESD wrist strap to bare chassis metal equalizes electrical potential between the technician and the computer, preventing static discharge."
+        },
+        {
+          "q": "A system administrator submits a change request to upgrade the database driver on a critical trading server. Before the Change Advisory Board (CAB) approves the request, which element is MOST important to include in case the new driver fails during deployment?",
+          "opts": [
+            "A documented rollback (backout) plan to restore the previous working state",
+            "A list of all employees hired in the past year",
+            "A quote for replacing the office uninterruptible power supplies",
+            "An Acceptable Use Policy (AUP) signed by the vendor"
+          ],
+          "ans": 0,
+          "exp": "Every formal change request requires a tested rollback or backout plan so the team can rapidly revert to the known-good configuration if the change causes unexpected failures."
+        },
+        {
+          "q": "While replacing a waste toner bottle on a floor-standing laser printer, a technician accidentally drops the container and spills fine toner powder across the carpet. How should the technician handle the cleanup?",
+          "opts": [
+            "Sweep it up with a dry broom and wash the rest down the breakroom sink with hot water",
+            "Use a standard office upright vacuum cleaner to suck up the powder quickly",
+            "Consult the Safety Data Sheet (SDS) and use a specialized toner vacuum with fine HEPA filtration",
+            "Spray compressed air across the carpet to disperse the toner particles"
+          ],
+          "ans": 2,
+          "exp": "The SDS provides safe cleanup instructions for hazardous materials like toner. A standard vacuum must never be used because fine toner particles pass through standard bags, melt from motor heat, and can create a static dust explosion hazard."
+        },
+        {
+          "q": "While sitting at an HR manager's desk to troubleshoot a USB headset, a technician notices a confidential layoff list open on the second monitor. What should the technician do?",
+          "opts": [
+            "Take a photo of the screen to document the user's desktop environment in the ticket",
+            "Warn coworkers on the help desk team about the upcoming layoffs",
+            "Read the document carefully to verify whether the IT department is affected",
+            "Politely ask the HR manager to minimize or close the document, complete the repair, and keep anything seen strictly confidential"
+          ],
+          "ans": 3,
+          "exp": "Professionalism and privacy standards require technicians to avoid viewing sensitive user data, ask the user to secure confidential screens when possible, and never disclose sensitive information."
+        },
+        {
+          "q": "A trader calls the help desk frustrated and speaking loudly because his workstation rebooted for an update five minutes before a client call. What is the BEST way for the technician to handle the conversation?",
+          "opts": [
+            "Listen actively without interrupting, express empathy for the disruption, and focus immediately on getting him connected for his call",
+            "Interrupt the user to explain that he ignored three reboot reminder pop-ups earlier in the week",
+            "Place the user on hold without warning until he calms down",
+            "Tell the user that Windows updates are mandatory and hang up"
+          ],
+          "ans": 0,
+          "exp": "Active listening, empathy, and avoiding a defensive or judgmental tone de-escalate frustrated users and allow the technician to solve the immediate problem."
+        }
+      ]
+    },
+    {
       "day": 6,
-      "concept": "A+ Review - Day 6",
-      "domain": "A+",
-      "icon": "💻",
+      "track": "aplus",
+      "concept": "Ports, IP Addressing & Cabling — Field Tech Networking",
+      "domain": "Networking",
+      "icon": "🌐",
       "color": "#f59e0b",
-      "tagline": "CompTIA A+ Core Principles",
+      "tagline": "Know your ports by heart and your cables by distance.",
       "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for A+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
+        {
+          "title": "Essential Ports and Protocols",
+          "body": "Every network service listens on a standardized port number that CompTIA tests relentlessly through troubleshooting scenarios. Memorize the heavy hitters: <strong>21</strong> (FTP), <strong>22</strong> (SSH/SFTP), <strong>23</strong> (Telnet — unencrypted, avoid), <strong>25</strong> (SMTP), <strong>53</strong> (DNS), <strong>67/68</strong> (DHCP), <strong>80</strong> (HTTP), <strong>110</strong> (POP3), <strong>143</strong> (IMAP), <strong>443</strong> (HTTPS), <strong>445</strong> (SMB Windows file sharing), and <strong>3389</strong> (RDP). When one specific task fails — like mapping a Windows shared drive while web browsing works fine — check the port for that protocol first (port 445 for SMB).",
+          "anchor": "🚪 IP addresses get you to the building; port numbers get you to the right service's door."
+        },
+        {
+          "title": "IPv4 Addressing, DHCP, and Cabling Standards",
+          "body": "Private IPv4 ranges (<strong>10.0.0.0/8</strong>, <strong>172.16.0.0/12</strong>, and <strong>192.168.0.0/16</strong>) are used inside LANs and translated to a public IP via <strong>NAT</strong> at the router, while a <strong>169.254.x.x (APIPA)</strong> address means a Windows client could not reach a DHCP server. For copper cabling, <strong>Cat5e</strong> supports 1 Gbps up to 100 meters, <strong>Cat6</strong> supports 10 Gbps up to 55 meters, and <strong>Cat6a</strong> maintains 10 Gbps across the full 100-meter maximum run. On Wi-Fi, <strong>802.11ac (Wi-Fi 5)</strong> runs on 5 GHz, while <strong>802.11ax (Wi-Fi 6E)</strong> expands into the low-interference 6 GHz band.",
+          "anchor": "📏 Need 10 Gbps at the full 100-meter copper limit? Only Cat6a or higher holds the speed."
+        },
+        {
+          "title": "Real-World: The Unreachable Trading NAS",
+          "body": "An analyst at Mammoth Capital reports he can browse HTTPS websites (port 443) and ping the internal NAS at 10.10.20.50, but mapping the Windows network share <em>\\\\10.10.20.50\\research</em> fails with a connection timeout. The field tech recognizes that Windows file sharing relies on <strong>SMB over TCP port 445</strong>, not HTTP or ICMP. A quick check of the host firewall reveals a recent hardening script blocked outbound port 445 on the analyst's VLAN, and adding an exception restores drive access immediately.",
+          "anchor": "📁 Can ping the file server but can't map the Windows share? Check TCP port 445 (SMB)."
+        }
       ],
       "quiz": [
         {
-          "q": "Are you ready to crush the A+ exam?",
+          "q": "A remote support technician can ping a Windows Server in the branch office by IP address, but attempts to connect using Microsoft Remote Desktop (RDP) time out immediately. Which port is most likely blocked on the branch firewall?",
           "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
+            "TCP port 22",
+            "TCP port 445",
+            "TCP port 3389",
+            "UDP port 53"
+          ],
+          "ans": 2,
+          "exp": "Remote Desktop Protocol (RDP) listens on TCP/UDP port 3389. Port 22 is SSH, port 445 is SMB file sharing, and port 53 is DNS."
+        },
+        {
+          "q": "A user plugs their laptop into a conference room Ethernet jack and complains they cannot reach the internet or any internal servers. Running ipconfig shows an IPv4 address of 169.254.42.19. What is the cause of this address?",
+          "opts": [
+            "The DNS server returned an invalid public IP address",
+            "The laptop is connected to an IPv6-only network",
+            "The default gateway is blocking TCP port 443",
+            "The laptop could not reach a DHCP server and self-assigned an APIPA address"
+          ],
+          "ans": 3,
+          "exp": "Any address in the 169.254.0.0/16 block is an Automatic Private IP Addressing (APIPA) address, assigned by the OS when DHCP discovery fails."
+        },
+        {
+          "q": "A technician is running twisted-pair Ethernet cables above a drop ceiling that is used as an air-return duct (plenum space) for the building's HVAC system. Which type of cable jacket MUST be used to comply with fire safety codes?",
+          "opts": [
+            "Plenum-rated (CMP) cable",
+            "PVC (Polyvinyl Chloride) riser cable",
+            "Unshielded Cat3 phone wire",
+            "Standard patch cord with a vinyl jacket"
           ],
           "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "exp": "Plenum-rated (CMP) cable has a low-smoke, fire-retardant jacket required in HVAC air-handling spaces so toxic fumes are not circulated through the building during a fire."
+        },
+        {
+          "q": "Which wireless networking standard introduced support for the 6 GHz frequency spectrum in addition to the 2.4 GHz and 5 GHz bands?",
+          "opts": [
+            "802.11n (Wi-Fi 4)",
+            "802.11ax (Wi-Fi 6E)",
+            "802.11ac (Wi-Fi 5)",
+            "802.11g"
+          ],
+          "ans": 1,
+          "exp": "Wi-Fi 6E extends the IEEE 802.11ax standard into the 6 GHz band, providing wider channels and minimal interference from legacy devices."
+        },
+        {
+          "q": "An executive wants her incoming email folders and read/unread message states to stay synchronized across her iPhone, iPad, and Windows desktop over an encrypted connection. Which protocol and port should the technician configure for incoming mail?",
+          "opts": [
+            "POP3 on TCP port 110",
+            "SMTP on TCP port 25",
+            "FTP on TCP port 21",
+            "IMAPS on TCP port 993"
+          ],
+          "ans": 3,
+          "exp": "IMAP synchronizes messages and folders across multiple client devices (unlike POP3, which downloads and typically removes messages), and IMAPS secures that traffic over TCP port 993."
         }
       ]
     },
     {
+      "day": 7,
       "track": "aplus",
-      "day": 10,
-      "concept": "A+ Review - Day 10",
-      "domain": "A+",
-      "icon": "💻",
+      "concept": "Cloud Models & Traits — IaaS, PaaS, SaaS & Client VMs",
+      "domain": "Virtualization and Cloud",
+      "icon": "☁️",
       "color": "#f59e0b",
-      "tagline": "CompTIA A+ Core Principles",
+      "tagline": "Rent the hardware, the runtime, or the finished app.",
       "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for A+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
+        {
+          "title": "The Five NIST Characteristics of Cloud",
+          "body": "CompTIA defines true cloud computing using five core traits: <strong>On-demand self-service</strong> (provision resources instantly without human approval), <strong>Broad network access</strong> (reach services from any standard device over the network), <strong>Resource pooling</strong> (multi-tenant hardware shared dynamically across customers), <strong>Rapid elasticity</strong> (scale capacity out and in automatically with load), and <strong>Measured service</strong> (metered pay-as-you-go billing). On the exam, you will be given a business scenario and asked which of these five characteristics is being demonstrated.",
+          "anchor": "☁️ Self-service, broad access, resource pooling, rapid elasticity, measured service — the 5 cloud pillars."
+        },
+        {
+          "title": "IaaS vs. PaaS vs. SaaS and Client Sandboxes",
+          "body": "The three cloud service models divide responsibility at different layers: <strong>IaaS (Infrastructure as a Service)</strong> rents virtualized servers, storage, and networking while you manage the OS and apps; <strong>PaaS (Platform as a Service)</strong> provides a managed runtime where developers push code without patching OSes; and <strong>SaaS (Software as a Service)</strong> delivers a complete turn-key application in a browser. Locally, technicians use <strong>client-side virtualization</strong> with snapshots to safely test suspicious installers or run legacy 32-bit apps in an isolated VM.",
+          "anchor": "🍽️ IaaS = rent the kitchen; PaaS = meal kit + chef's counter; SaaS = order off the menu."
+        },
+        {
+          "title": "Real-World: VDI Rollout at Mammoth Capital",
+          "body": "Mammoth Capital hires 30 seasonal compliance auditors who need secure access to internal Windows financial tools from thin clients without storing any company data locally. Instead of buying 30 high-end laptops, IT deploys <strong>Virtual Desktop Infrastructure (VDI)</strong> hosted in a hybrid cloud environment. Each auditor logs into a centralized virtual desktop session where compute, storage, and patching are controlled entirely in the data center, and when the audit ends, the instances are decommissioned in minutes.",
+          "anchor": "🖥️ VDI keeps sensitive data in the data center while letting thin clients run heavy desktop apps."
+        }
       ],
       "quiz": [
         {
-          "q": "Are you ready to crush the A+ exam?",
+          "q": "A small accounting firm replaces its locally installed payroll software with a subscription-based web application accessed through a browser, where the vendor handles all servers, databases, and software updates. Which cloud service model is this?",
           "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
+            "Software as a Service (SaaS)",
+            "Infrastructure as a Service (IaaS)",
+            "Platform as a Service (PaaS)",
+            "Bare-metal colocation"
           ],
           "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "exp": "SaaS delivers a complete, ready-to-use application over the internet with the provider managing all underlying infrastructure, operating systems, and application patches."
+        },
+        {
+          "q": "A cloud provider hosts virtual machines from dozens of unrelated customer organizations on the same physical server cluster, dynamically allocating CPU and RAM while keeping each customer's environment logically isolated. Which cloud computing characteristic does this describe?",
+          "opts": [
+            "Measured service",
+            "On-demand self-service",
+            "Broad network access",
+            "Resource pooling"
+          ],
+          "ans": 3,
+          "exp": "Resource pooling (multi-tenancy) means multiple customers share the same underlying physical hardware pool, with resources dynamically assigned and isolated by the hypervisor."
+        },
+        {
+          "q": "A system administrator provisions virtual machines, virtual networks, and raw block storage volumes in the cloud, then installs Ubuntu Linux, configures iptables firewall rules, and manages database patches manually. Which service model is the administrator using?",
+          "opts": [
+            "SaaS",
+            "IaaS",
+            "PaaS",
+            "FaaS"
+          ],
+          "ans": 1,
+          "exp": "IaaS rents the raw virtualized infrastructure (compute, storage, networking) while leaving operating system installation, patching, and software management to the customer."
+        },
+        {
+          "q": "A help desk technician is about to test a questionable driver package inside a client-side virtual machine and wants to be able to revert the VM to its exact clean state in seconds if the driver causes a crash. What should the technician do BEFORE installing the driver?",
+          "opts": [
+            "Convert the host machine's hard drive from MBR to GPT",
+            "Enable bridged networking on the virtual NIC",
+            "Take a VM snapshot (checkpoint) in the hypervisor",
+            "Increase the VM's video memory allocation to maximum"
+          ],
+          "ans": 2,
+          "exp": "A VM snapshot captures the exact disk, memory, and configuration state of a virtual machine at a point in time, allowing one-click rollback if a test goes wrong."
+        },
+        {
+          "q": "A hospital keeps patient electronic health records on a private on-premises data center for regulatory compliance, while using a public cloud provider to run its public website and seasonal vaccination scheduling portal. What type of cloud deployment model is this?",
+          "opts": [
+            "Hybrid cloud",
+            "Community cloud",
+            "Public-only cloud",
+            "Client-side sandbox"
+          ],
+          "ans": 0,
+          "exp": "A hybrid cloud combines private (on-premises) infrastructure with public cloud services, allowing organizations to keep sensitive data in-house while leveraging public cloud elasticity."
         }
       ]
     },
     {
+      "day": 8,
       "track": "aplus",
-      "day": 14,
-      "concept": "A+ Review - Day 14",
-      "domain": "A+",
-      "icon": "💻",
+      "concept": "Malware, Social Engineering & Hardening — Core 2 Security",
+      "domain": "Security",
+      "icon": "🔐",
       "color": "#f59e0b",
-      "tagline": "CompTIA A+ Core Principles",
+      "tagline": "Patch the OS, encrypt the disk, and watch the door.",
       "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for A+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
+        {
+          "title": "Malware Taxonomy and the 7-Step Removal Process",
+          "body": "CompTIA tests your ability to distinguish malware by behavior: a <strong>worm</strong> self-replicates across networks without user interaction, a <strong>virus</strong> requires a host file to be executed, a <strong>Trojan</strong> disguises itself as legitimate software, <strong>ransomware</strong> encrypts files for extortion, and a <strong>rootkit</strong> hides deep in the OS kernel or firmware. When removing malware, follow the official CompTIA sequence: <strong>1. Investigate and verify symptoms</strong>, <strong>2. Quarantine the infected system</strong> (disconnect from the network), <strong>3. Disable System Restore</strong> in Windows (so malware cannot hide in restore points), <strong>4. Remediate</strong> (update AV and scan in Safe Mode), <strong>5. Schedule scans and updates</strong>, <strong>6. Re-enable System Restore and create a new restore point</strong>, and <strong>7. Educate the end user</strong>.",
+          "anchor": "🦠 Quarantine first, disable System Restore before scanning, and educate the user last."
+        },
+        {
+          "title": "Social Engineering and Endpoint/SOHO Hardening",
+          "body": "Attackers frequently bypass technical controls through social engineering: <strong>phishing</strong> casts a wide email net, <strong>spear phishing</strong> targets a specific person or role, <strong>whaling</strong> targets executives, and <strong>tailgating</strong> follows an employee through a badge-locked door. To harden endpoints and SOHO routers, enable <strong>BitLocker</strong> full-disk encryption, keep <strong>User Account Control (UAC)</strong> enabled to block silent privilege escalation, change default router admin passwords, disable <strong>WPS</strong>, and use <strong>WPA3</strong> encryption. Remember the exam trap: hiding the SSID or filtering MAC addresses is never a substitute for strong WPA3/WPA2 encryption.",
+          "anchor": "🛡️ WPA3 and disabling WPS actually secure Wi-Fi; hiding the SSID only fools casual bystanders."
+        },
+        {
+          "title": "Real-World: Contained Infection at Mammoth Capital",
+          "body": "An intern at Mammoth Capital opens an invoice attachment from a spear-phishing email and notices command prompt windows flashing rapidly on her workstation. The help desk technician immediately unplugs the workstation's Ethernet cable and disables Wi-Fi to <strong>quarantine</strong> the host before a worm or ransomware payload can traverse the LAN. After disabling old System Restore points, cleaning the system from a pre-installation environment, creating a fresh restore point, and walking the intern through phishing red flags, the workstation returns to service safely.",
+          "anchor": "🔌 Step 2 of malware response is always quarantine: pull the network cable before the infection spreads."
+        }
       ],
       "quiz": [
         {
-          "q": "Are you ready to crush the A+ exam?",
+          "q": "A technician investigates a user's workstation and confirms symptoms of an active malware infection. According to the CompTIA malware removal process, what should the technician do NEXT?",
           "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
+            "Create a new Windows System Restore point immediately",
+            "Quarantine the infected system by disconnecting it from wired and wireless networks",
+            "Conduct an end-user security awareness training session",
+            "Delete the user's documents folder to save time"
+          ],
+          "ans": 1,
+          "exp": "Step 2 of the CompTIA malware removal process — immediately after investigating and verifying symptoms — is to quarantine the infected host by disconnecting it from all networks so the malware cannot spread or contact a command-and-control server."
+        },
+        {
+          "q": "Why does the CompTIA malware removal procedure require disabling System Restore in Windows BEFORE remediating the infection and then re-enabling it afterward?",
+          "opts": [
+            "System Restore prevents the computer from booting into Safe Mode",
+            "Disabling System Restore automatically updates Windows Defender definitions",
+            "Malware often backs itself up inside protected restore points and could reinfect the system if an old restore point is used",
+            "System Restore encrypts the drive with BitLocker during antivirus scans"
+          ],
+          "ans": 2,
+          "exp": "Disabling System Restore purges existing restore points where malware copies may be hiding, preventing reinfection after the main drive is cleaned."
+        },
+        {
+          "q": "An attacker crafts a highly personalized email addressed to Mammoth Capital's Chief Executive Officer, spoofing the firm's tax partner and requesting an urgent signature and wire transfer for an acquisition. How is this social engineering attack specifically classified?",
+          "opts": [
+            "Whaling",
+            "Tailgating",
+            "Shoulder surfing",
+            "Dumpster diving"
           ],
           "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "exp": "Whaling is a targeted spear-phishing attack aimed specifically at C-level executives or senior leadership ('big fish')."
+        },
+        {
+          "q": "A traveling sales director has her Windows 11 laptop stolen from a hotel lobby. Which security feature ensures that even if the thief removes the NVMe SSD and connects it to another computer as an external drive, the files remain completely unreadable?",
+          "opts": [
+            "Windows Firewall inbound rules",
+            "User Account Control (UAC)",
+            "A BIOS boot order password",
+            "BitLocker full-disk encryption with TPM"
+          ],
+          "ans": 3,
+          "exp": "BitLocker encrypts the entire storage volume at rest using keys sealed in the Trusted Platform Module (TPM), preventing offline data extraction if the physical drive is removed."
+        },
+        {
+          "q": "While hardening a new SOHO wireless router for an executive's home office, a technician changes the default admin password and enables WPA3 Personal encryption. Which router feature should the technician DISABLE to prevent an attacker from brute-forcing an 8-digit PIN to obtain the Wi-Fi passphrase?",
+          "opts": [
+            "DHCP server",
+            "Wi-Fi Protected Setup (WPS)",
+            "NAT (Network Address Translation)",
+            "Stateful Packet Inspection (SPI)"
+          ],
+          "ans": 1,
+          "exp": "Wi-Fi Protected Setup (WPS) uses an 8-digit PIN that is vulnerable to offline brute-force attacks in a matter of hours, allowing attackers to bypass strong WPA2/WPA3 passphrases."
         }
       ]
     }

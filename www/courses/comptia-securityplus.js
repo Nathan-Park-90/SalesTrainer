@@ -974,83 +974,417 @@ var COURSE_COMPTIA_SECURITYPLUS = {
   ],
   "daily": [
     {
+      "day": 1,
       "track": "securityplus",
+      "concept": "Zero Trust Architecture — The Perimeter Is Dead",
+      "domain": "Security Architecture",
+      "icon": "🛡️",
+      "color": "#10b981",
+      "tagline": "Location is not trust. Authenticate every single packet.",
+      "slides": [
+        {
+          "title": "Why the Castle-and-Moat Died",
+          "body": "For decades, enterprise networks relied on a perimeter firewall (the moat) and trusted every device inside (the castle). When an attacker phishes an employee's VPN credentials, they walk straight through the front door and move laterally across a flat network to own the domain controllers. <strong>Zero Trust Architecture</strong> replaces perimeter trust with one uncompromising rule: <em>never trust, always verify</em>.",
+          "anchor": "🚪 Being on the internal corporate LAN grants zero trust; every request must prove itself."
+        },
+        {
+          "title": "Control Plane, Data Plane & Implicit Deny",
+          "body": "Zero Trust separates the <strong>Control Plane</strong> (the Policy Engine and Policy Administrator evaluating identity, device health, and context) from the <strong>Data Plane</strong> (the Policy Enforcement Point that permits or blocks the session). At the network layer, flat subnets are carved into isolated VLANs, DMZs, and micro-segments governed by <strong>Implicit Deny</strong>—meaning any traffic not explicitly allowed by a rule is automatically dropped.",
+          "anchor": "🧱 Micro-segmentation plus Implicit Deny shrinks the blast radius of any single compromise."
+        },
+        {
+          "title": "Real-World: Segmenting Mammoth Capital",
+          "body": "Rather than placing all servers on a flat /24 subnet, Mammoth Capital places its public-facing NGINX reverse proxy inside a screened <strong>DMZ</strong> VLAN. To query the backend PostgreSQL cluster, traffic must cross a pfSense firewall Policy Enforcement Point that allows <em>only</em> TCP port 5432 from the proxy's verified identity and drops everything else via <strong>Implicit Deny</strong>. Even if the web proxy is compromised, the attacker cannot pivot to the rest of the data center.",
+          "anchor": "🔒 Isolate public-facing proxies in a DMZ and allow only the exact port and host required."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "An attacker compromises a receptionist's workstation via a malicious email attachment and uses an open SMB port to automatically infect 60 servers across the company's single /24 subnet. Which architectural flaw allowed the malware to spread so easily?",
+          "opts": [
+            "Lack of an external Web Application Firewall (WAF)",
+            "Using AES-128 instead of AES-256 encryption",
+            "Lack of network segmentation and micro-segmentation",
+            "Insufficient bandwidth on the perimeter router"
+          ],
+          "ans": 2,
+          "exp": "A flat network without VLAN segmentation or micro-segmentation allows an attacker who compromises one host to move laterally to every other host on the subnet without hitting a firewall barrier."
+        },
+        {
+          "q": "A firewall administrator creates three rules allowing inbound ports 80, 443, and 5432 to specific servers. Without adding any more rules, the firewall automatically blocks traffic on all other ports. Which principle is responsible for this behavior?",
+          "opts": [
+            "Implicit Deny",
+            "Port Security",
+            "Discretionary Access Control",
+            "Split Tunneling"
+          ],
+          "ans": 0,
+          "exp": "Implicit Deny is the foundational firewall and ACL rule that automatically drops any network traffic that does not explicitly match an allow rule."
+        },
+        {
+          "q": "In a Zero Trust Architecture, the Policy Engine evaluates a user's MFA token, device patch status, and geolocation before deciding to permit access to an internal API. Which Data Plane component actually opens or blocks the connection based on that decision?",
+          "opts": [
+            "Security Information and Event Management (SIEM)",
+            "Certificate Authority (CA)",
+            "Hardware Security Module (HSM)",
+            "Policy Enforcement Point (PEP)"
+          ],
+          "ans": 3,
+          "exp": "In the Zero Trust model, the Control Plane (Policy Engine + Policy Administrator) makes the decision, and the Policy Enforcement Point (PEP) in the Data Plane enforces it by allowing or terminating the traffic flow."
+        },
+        {
+          "q": "Mammoth Capital wants external clients to connect to its web portal over HTTPS while keeping the backend trading database completely unreachable from the public internet. How should the network be architected?",
+          "opts": [
+            "Place both the web server and the database in the public DMZ with strong passwords",
+            "Place a reverse proxy in a DMZ subnet and restrict the internal database VLAN to accept connections only from the proxy on its specific database port",
+            "Connect the database directly to the internet and rely on security through obscurity by changing the default port",
+            "Disable all firewalls between the web tier and database tier to minimize latency"
+          ],
+          "ans": 1,
+          "exp": "Placing the public-facing reverse proxy in a DMZ and tightly restricting traffic to the isolated database VLAN ensures external attackers can never directly reach the database tier."
+        },
+        {
+          "q": "An engineer plugs a corporate laptop into a wired ethernet port on the 5th floor inside company headquarters. Under a Zero Trust model, how must the network treat this connection?",
+          "opts": [
+            "Automatically trust the device because it is physically inside the corporate building",
+            "Bypass MFA requirements since wired connections cannot be intercepted from outside",
+            "Authenticate the user, verify device posture, and authorize every resource request just as if the user were on public Wi-Fi",
+            "Grant local administrator rights to the user while connected to the internal VLAN"
+          ],
+          "ans": 2,
+          "exp": "Under Zero Trust, physical or network location is never a proxy for trust. Every request from an internal wired desk must undergo the same authentication, device validation, and authorization as a remote request."
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "track": "securityplus",
+      "concept": "SIEM & Incident Response — Hunting in the Noise",
+      "domain": "Security Operations",
+      "icon": "🔍",
+      "color": "#10b981",
+      "tagline": "Logs without correlation are just an expensive autopsy.",
+      "slides": [
+        {
+          "title": "SIEM: Correlation Over Collection",
+          "body": "Security Operations (SecOps) accounts for <strong>28% of the Security+ exam</strong> because defences are useless if nobody watches the sensors. A <strong>SIEM (Security Information and Event Management)</strong> aggregates logs from firewalls, endpoints, and cloud APIs into a single pane of glass. Its superpower is <strong>correlation</strong>: linking separate log lines—like a login from New York and an RDP attempt from Moscow three minutes later—to fire an actionable alert.",
+          "anchor": "📡 Aggregation collects the haystack; correlation finds the needle that is actually on fire."
+        },
+        {
+          "title": "The Seven-Step Incident Response Process",
+          "body": "Memorize the SY0-701 Incident Response order cold: 1. <strong>Preparation</strong> (playbooks, tools, training) → 2. <strong>Detection</strong> (an alert or report fires) → 3. <strong>Analysis</strong> (confirming it is a true positive and scoping it) → 4. <strong>Containment</strong> (isolating the infected host to stop lateral spread) → 5. <strong>Eradication</strong> (removing the malware and patching the root cause) → 6. <strong>Recovery</strong> (restoring from clean backups) → 7. <strong>Lessons Learned</strong> (post-mortem analysis).",
+          "anchor": "🚨 Detect and analyze first, contain second, eradicate (remove and patch) third."
+        },
+        {
+          "title": "Real-World: 2 AM Alert at Mammoth Capital",
+          "body": "At 2:14 AM, Mammoth Capital's SIEM correlates an <em>impossible travel</em> alert with outbound HTTPS traffic to a known Command-and-Control IP from a trader's workstation. The SOC analyst first <strong>verifies</strong> the alert isn't a corporate VPN artifact (Analysis), then triggers a <strong>SOAR</strong> playbook to quarantine the workstation's switch port (Containment), captures a SHA-256 hashed forensic disk image, and reimages the machine from a golden baseline (Eradication & Recovery).",
+          "anchor": "🛑 Never reimage or unplug a host before verifying the alert and containing the network path."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "A SOC analyst receives a high-severity SIEM alert indicating that a database server is running a port scan against internal subnets. What should the analyst do FIRST before disconnecting the server?",
+          "opts": [
+            "Reimage the database server immediately from last night's backup",
+            "Verify the alert and log evidence to confirm whether it is a true positive or a scheduled vulnerability scan",
+            "Conduct a Lessons Learned meeting with the database administrators",
+            "Delete the suspicious binary from the server's /tmp directory"
+          ],
+          "ans": 1,
+          "exp": "During Detection and Analysis, the analyst must first verify that an alert is a true positive (and not an authorized scan or false positive) before taking disruptive Containment actions on production systems."
+        },
+        {
+          "q": "After confirming that a marketing workstation is actively encrypting files on a local drive, the incident responder disables the workstation's switch port and revokes its active session tokens. Which Incident Response phase is this?",
+          "opts": [
+            "Preparation",
+            "Eradication",
+            "Recovery",
+            "Containment"
+          ],
+          "ans": 3,
+          "exp": "Containment focuses on stopping the bleeding—isolating the compromised host and revoking credentials so the threat cannot spread laterally across the network."
+        },
+        {
+          "q": "During an incident, a technician isolates an infected web server, deletes the web shell file dropped by the attacker, and brings the server back online—only for the server to be re-compromised two hours later via the same unpatched CMS plugin. Which IR phase failed?",
+          "opts": [
+            "Eradication",
+            "Analysis",
+            "Preparation",
+            "Lessons Learned"
+          ],
+          "ans": 0,
+          "exp": "Eradication requires both removing the malicious artifacts (the web shell) AND remediating the root vulnerability (patching the CMS plugin) so the attacker cannot walk right back in."
+        },
+        {
+          "q": "Mammoth Capital's SIEM fires a critical alert when an analyst's account authenticates from London at 14:00 UTC and then authenticates from Singapore at 14:08 UTC. What type of anomaly did the SIEM correlation engine detect?",
+          "opts": [
+            "Brute-force password spraying",
+            "DNS cache poisoning",
+            "Impossible travel",
+            "Privilege escalation"
+          ],
+          "ans": 2,
+          "exp": "Impossible travel occurs when the same identity authenticates from two geographically distant locations within a timeframe that is physically impossible to travel, strongly indicating compromised credentials."
+        },
+        {
+          "q": "While investigating a compromised server, a forensic specialist creates a bit-for-bit clone of the disk and records the SHA-256 hash of both the original disk and the forensic image. Why is this hash comparison critical?",
+          "opts": [
+            "It compresses the disk image so it fits on external storage",
+            "It proves data integrity by demonstrating the forensic copy was not altered during acquisition",
+            "It encrypts the disk image so unauthorized analysts cannot read it",
+            "It automatically removes rootkits hidden in the boot sector"
+          ],
+          "ans": 1,
+          "exp": "Matching cryptographic hashes (like SHA-256) between the original drive and the forensic image mathematically proves data integrity—verifying that not a single bit was modified."
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "track": "securityplus",
+      "concept": "Threats & Social Engineering — Exploiting the Weak Link",
+      "domain": "Threats, Vulnerabilities, and Mitigations",
+      "icon": "🎣",
+      "color": "#10b981",
+      "tagline": "Why hack a firewall when you can just call the help desk?",
+      "slides": [
+        {
+          "title": "Double Extortion & The Human Attack Surface",
+          "body": "Attackers target business continuity and human psychology where technical controls are weakest. Modern <strong>double extortion ransomware</strong> doesn't just encrypt servers to halt operations—threat actors exfiltrate proprietary data first and threaten to publish it unless paid. Meanwhile, <strong>social engineering</strong> bypasses expensive firewalls by manipulating employees into surrendering credentials or MFA tokens directly.",
+          "anchor": "💣 Backups solve the encryption half of ransomware, but they cannot un-leak exfiltrated data."
+        },
+        {
+          "title": "Phishing Variants & The Risk Equation",
+          "body": "Distinguish the exam's social engineering terms: <strong>Phishing</strong> casts a wide email net; <strong>Spear Phishing</strong> targets a specific person or team; <strong>Whaling</strong> targets C-level executives; <strong>Vishing</strong> uses voice calls; and <strong>Smishing</strong> uses SMS texts. In risk management, never confuse the three building blocks: a <strong>Vulnerability</strong> is the weakness (unpatched CVE), a <strong>Threat</strong> is the attacker, and <strong>Risk = Threat × Vulnerability</strong> (Likelihood × Impact).",
+          "anchor": "📐 Vulnerability = open window. Threat = burglar outside. Risk = Threat × Vulnerability."
+        },
+        {
+          "title": "Real-World: Defending Mammoth Capital's Help Desk",
+          "body": "A threat actor spoofs the phone number of Mammoth Capital's Managing Partner, calls the night-shift help desk claiming he lost his phone on a flight (<strong>vishing</strong> + <strong>whaling</strong> context), and demands an immediate MFA reset before the Asian markets open. Because the technician follows a mandatory out-of-band identity verification playbook, the social engineering attempt is blocked before a single credential leaves the building.",
+          "anchor": "🛡️ Manufactured urgency from an 'executive' on the phone is the textbook vishing signature."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "An attacker crafts a highly personalized email addressed to Mammoth Capital's Chief Executive Officer, masquerading as an SEC regulator and attaching a malicious document disguised as an audit notice. What specific type of attack is this?",
+          "opts": [
+            "Smishing",
+            "Pharming",
+            "Watering hole attack",
+            "Whaling"
+          ],
+          "ans": 3,
+          "exp": "Whaling is a highly targeted spear-phishing attack aimed specifically at C-suite executives ('big fish') who hold high-level access and authority."
+        },
+        {
+          "q": "A manufacturing firm hit by ransomware restores all encrypted production servers from offline backups within two hours, yet the attackers still demand 50 Bitcoin to stop the public release of stolen customer contracts. What attack technique is this?",
+          "opts": [
+            "Cryptojacking",
+            "Double extortion ransomware",
+            "On-path downgrade attack",
+            "Pass-the-Hash"
+          ],
+          "ans": 1,
+          "exp": "Double extortion ransomware combines system encryption with prior data exfiltration, coercing victims to pay to prevent public data leaks even if their backups work."
+        },
+        {
+          "q": "A security scanner identifies an unpatched buffer overflow CVE on an internal print server, while threat intelligence reports that an active APT group is scanning for that exact CVE. In security terminology, what is the unpatched CVE itself?",
+          "opts": [
+            "A vulnerability",
+            "A threat actor",
+            "A risk transference control",
+            "An exploit payload"
+          ],
+          "ans": 0,
+          "exp": "The unpatched software flaw (CVE) is the vulnerability (weakness). The APT group is the threat, and the intersection of the two represents the risk."
+        },
+        {
+          "q": "An employee receives an urgent voice call from someone claiming to be from the corporate Fraud Department, asking the employee to read back the 6-digit one-time passcode just sent to their smartphone. What type of attack is occurring?",
+          "opts": [
+            "Smishing",
+            "DNS poisoning",
+            "Vishing",
+            "Supply chain attack"
+          ],
+          "ans": 2,
+          "exp": "Vishing (voice phishing) uses phone calls and social engineering urgency to trick victims into divulging credentials or MFA tokens over the phone."
+        },
+        {
+          "q": "During a penetration test, an ethical hacker enters ' OR 1=1 -- into a web application's login field and gains administrative access to the backend database. What is the BEST code-level remediation to fix this vulnerability?",
+          "opts": [
+            "Enable TLS 1.3 on the web server",
+            "Deploy an Intrusion Detection System (IDS) on the LAN",
+            "Rotate the database administrator password every 30 days",
+            "Use parameterized queries (prepared statements) with input validation"
+          ],
+          "ans": 3,
+          "exp": "The application is vulnerable to SQL Injection (SQLi). Using parameterized queries ensures user input is treated strictly as data rather than executable SQL commands."
+        }
+      ]
+    },
+    {
       "day": 4,
-      "concept": "Security+ Review - Day 4",
-      "domain": "Security+",
-      "icon": "🛡️",
+      "track": "securityplus",
+      "concept": "Governance & Risk — Paperwork With Teeth",
+      "domain": "Security Program Management and Oversight",
+      "icon": "⚖️",
       "color": "#10b981",
-      "tagline": "CompTIA Security+ Core Principles",
+      "tagline": "Firewalls enforce rules; governance decides what they are.",
       "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for Security+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
+        {
+          "title": "Why Governance Drives Architecture",
+          "body": "Security Program Management accounts for <strong>20% of the SY0-701 exam</strong> because technical controls are useless without policies enforcing human behavior. An <strong>Acceptable Use Policy (AUP)</strong> defines what employees may do on corporate assets, while administrative controls like <strong>Separation of Duties</strong> and <strong>Dual Control</strong> ensure no single insider can execute high-risk actions—like approving and wiring funds—by themselves.",
+          "anchor": "📜 Governance is the policy, architecture is the lock, and SecOps is the alarm."
+        },
+        {
+          "title": "Data Roles, RPO/RTO & Risk Strategies",
+          "body": "Know the accountability chain: the <strong>Data Owner</strong> (a senior business executive) classifies data sensitivity, while the <strong>Data Custodian</strong> (IT/security engineers) configures the encryption and ACLs. In disaster recovery, <strong>RPO (Recovery Point Objective)</strong> is the maximum tolerable age of lost data (backup frequency), and <strong>RTO (Recovery Time Objective)</strong> is the maximum tolerable downtime. Manage risk via <strong>Avoidance, Mitigation, Transference</strong> (insurance), or <strong>Acceptance</strong>.",
+          "anchor": "⏱️ RPO = how much data you can lose (time). RTO = how long you can be down (time)."
+        },
+        {
+          "title": "Real-World: Governance at Mammoth Capital",
+          "body": "Mammoth Capital's Head of Quantitative Strategy (the <strong>Data Owner</strong>) classifies proprietary trading algorithms as <em>Restricted</em> and mandates an <strong>RPO of 5 minutes</strong> and an <strong>RTO of 30 minutes</strong>. The infrastructure team (the <strong>Data Custodians</strong>) implements synchronous database replication and enforces <strong>Dual Control</strong> so deleting a production encryption key requires simultaneous sign-off from two senior administrators.",
+          "anchor": "👥 Dual Control requires two sets of keys turned together so no single person can empty the vault."
+        }
       ],
       "quiz": [
         {
-          "q": "Are you ready to crush the Security+ exam?",
+          "q": "Mammoth Capital's board states that in the event of a data center disaster, the order-settlement database must never lose more than 10 minutes of committed transactions. Which metric defines this requirement?",
           "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
+            "Recovery Point Objective (RPO)",
+            "Recovery Time Objective (RTO)",
+            "Mean Time Between Failures (MTBF)",
+            "Mean Time to Repair (MTTR)"
           ],
           "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "exp": "Recovery Point Objective (RPO) defines the maximum tolerable amount of data loss measured in time, dictating how frequently backups or replication must occur."
+        },
+        {
+          "q": "In a large enterprise data governance framework, which role is held by a senior business executive who is accountable for determining the classification label (e.g., Confidential) of customer records?",
+          "opts": [
+            "Data Custodian",
+            "Data Processor",
+            "Data Owner",
+            "Database Administrator"
+          ],
+          "ans": 2,
+          "exp": "The Data Owner (typically a senior business leader) is accountable for classifying data and defining access policy, whereas the Data Custodian (IT) implements the technical controls."
+        },
+        {
+          "q": "To prevent internal fraud, Mammoth Capital configures its deployment pipeline so the developer who writes code for the payment engine cannot be the same person who approves and deploys that code to production. Which principle is this?",
+          "opts": [
+            "Least Privilege",
+            "Separation of Duties",
+            "Clean Desk Policy",
+            "Discretionary Access Control"
+          ],
+          "ans": 1,
+          "exp": "Separation of Duties splits critical workflows across multiple people so no single individual can introduce malicious code or commit fraud without collusion."
+        },
+        {
+          "q": "After calculating that a third-party breach could cost $5 million in regulatory fines, a company purchases a specialized cyber-liability insurance policy to cover potential payouts. Which risk management strategy is this?",
+          "opts": [
+            "Risk Acceptance",
+            "Risk Avoidance",
+            "Risk Mitigation",
+            "Risk Transference"
+          ],
+          "ans": 3,
+          "exp": "Purchasing insurance shifts the financial impact of a potential incident to a third party, which is the textbook definition of Risk Transference."
+        },
+        {
+          "q": "During onboarding, every new hire must sign a policy agreeing not to use corporate laptops for personal cryptocurrency mining, torrenting, or visiting unauthorized gambling sites. Which policy is this?",
+          "opts": [
+            "Acceptable Use Policy (AUP)",
+            "Service Level Agreement (SLA)",
+            "Non-Disclosure Agreement (NDA)",
+            "Memorandum of Understanding (MOU)"
+          ],
+          "ans": 0,
+          "exp": "An Acceptable Use Policy (AUP) defines the rules and permitted behaviors for employees using corporate networks, devices, and information systems."
         }
       ]
     },
     {
+      "day": 5,
       "track": "securityplus",
-      "day": 8,
-      "concept": "Security+ Review - Day 8",
-      "domain": "Security+",
-      "icon": "🛡️",
+      "concept": "Cryptography & IAM — The Math of Trust",
+      "domain": "General Security Concepts",
+      "icon": "🔑",
       "color": "#10b981",
-      "tagline": "CompTIA Security+ Core Principles",
+      "tagline": "Symmetric for speed, asymmetric for trust, hash for truth.",
       "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for Security+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
-      ],
-      "quiz": [
         {
-          "q": "Are you ready to crush the Security+ exam?",
-          "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
-          ],
-          "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "title": "Encryption vs. Hashing & The AAA Framework",
+          "body": "Cryptography powers the <strong>CIA Triad</strong> and <strong>Non-repudiation</strong>. Encryption is a two-way math function that protects <em>Confidentiality</em>, while <strong>hashing</strong> (SHA-256) is a one-way function that creates a fixed-length fingerprint to prove <em>Integrity</em>—you never decrypt a hash, you only compare fingerprints. Surrounding it is IAM's <strong>AAA framework</strong>: <strong>Authentication</strong> (who you are), <strong>Authorization</strong> (what you can touch), and <strong>Accounting</strong> (audit logs).",
+          "anchor": "🧮 Encryption is two-way (confidentiality); hashing is one-way (integrity)."
+        },
+        {
+          "title": "Symmetric vs. Asymmetric & Digital Signatures",
+          "body": "<strong>Symmetric encryption</strong> (AES) uses one shared key to encrypt and decrypt—it is fast and built for bulk data at rest or VPN tunnels. <strong>Asymmetric encryption</strong> (RSA, ECC) uses a public/private key pair: to send a secret message, encrypt with the <em>recipient's public key</em> so only their <em>private key</em> can decrypt it. For a <strong>Digital Signature</strong>, sign a message hash with the <em>sender's private key</em> to provide <strong>non-repudiation</strong> verified by the sender's public key.",
+          "anchor": "📬 Encrypt with the recipient's PUBLIC key for secrecy; sign with your PRIVATE key for proof."
+        },
+        {
+          "title": "Real-World: TLS & ABAC at Mammoth Capital",
+          "body": "When Mammoth Capital's trading server connects to an exchange over TLS, it uses <strong>asymmetric cryptography</strong> (ECC/RSA) to verify certificates and exchange a session key, then switches to <strong>AES-256 symmetric encryption</strong> to stream market data with microsecond latency. Internally, engineers access the server under <strong>ABAC (Attribute-Based Access Control)</strong>, which evaluates their role, device certificate, IP subnet, and market hours before granting access.",
+          "anchor": "⚡ TLS combines both worlds: asymmetric for the handshake, symmetric AES for bulk speed."
         }
-      ]
-    },
-    {
-      "track": "securityplus",
-      "day": 12,
-      "concept": "Security+ Review - Day 12",
-      "domain": "Security+",
-      "icon": "🛡️",
-      "color": "#10b981",
-      "tagline": "CompTIA Security+ Core Principles",
-      "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for Security+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
       ],
       "quiz": [
         {
-          "q": "Are you ready to crush the Security+ exam?",
+          "q": "Mammoth Capital's compliance officer needs to digitally sign a regulatory filing so the exchange can verify the filing wasn't altered and prove the officer cannot deny signing it later. Which key does the officer use to create the signature?",
           "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
+            "The exchange's public key",
+            "The exchange's private key",
+            "The compliance officer's own private key",
+            "A shared AES-256 symmetric session key"
+          ],
+          "ans": 2,
+          "exp": "Digital signatures provide integrity and non-repudiation: the sender signs the hash using their own private key, and anyone can verify the signature using the sender's public key."
+        },
+        {
+          "q": "A storage engineer needs to encrypt 100 terabytes of virtual machine disk volumes in a Proxmox cluster with minimal CPU overhead and maximum throughput. Which cryptographic algorithm is BEST suited for bulk disk encryption?",
+          "opts": [
+            "RSA-4096",
+            "AES-256",
+            "SHA-512",
+            "Diffie-Hellman"
+          ],
+          "ans": 1,
+          "exp": "AES-256 is a symmetric encryption algorithm specifically designed for high-speed bulk data encryption at rest and in transit. RSA is too slow for bulk data, and SHA-512 is a one-way hash."
+        },
+        {
+          "q": "Why does a secure web application store salted SHA-256 or bcrypt hashes of user passwords in its database rather than encrypting the passwords with AES?",
+          "opts": [
+            "Hashes can be decrypted faster by the help desk when users forget their passwords",
+            "Hashing compresses the database size by 90%",
+            "Encryption algorithms cannot handle special characters in passwords",
+            "Hashing is a one-way function, meaning there is no decryption key an attacker could steal to instantly recover plaintext passwords"
+          ],
+          "ans": 3,
+          "exp": "Hashing is strictly one-way. By storing salted hashes and comparing fingerprints at login, the application verifies passwords without ever storing reversible ciphertext."
+        },
+        {
+          "q": "Mammoth Capital configures an access policy that permits quant developers to query the production data lake only if they belong to the 'Quants' group, connect from a corporate-managed laptop, and log in between 08:00 and 18:00 EST. Which access control model is this?",
+          "opts": [
+            "Attribute-Based Access Control (ABAC)",
+            "Discretionary Access Control (DAC)",
+            "Mandatory Access Control (MAC)",
+            "Role-Based Access Control (RBAC)"
           ],
           "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "exp": "ABAC evaluates multiple dynamic attributes—user role, device posture, time of day, and location—whereas RBAC only checks the user's static role or group."
+        },
+        {
+          "q": "To unlock a secure trading terminal, an analyst must enter a 12-character passphrase and press their thumb onto a biometric fingerprint reader. Which authentication factor categories are being combined?",
+          "opts": [
+            "Something you have and something you are",
+            "Something you know and something you have",
+            "Something you know and something you are",
+            "Somewhere you are and something you do"
+          ],
+          "ans": 2,
+          "exp": "A passphrase is 'something you know' (knowledge factor) and a fingerprint is 'something you are' (inherence/biometric factor), providing true multi-factor authentication."
         }
       ]
     }

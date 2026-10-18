@@ -770,110 +770,417 @@ var COURSE_COMPTIA_NETWORKPLUS = {
   ],
   "daily": [
     {
-      "track": "networkplus",
       "day": 1,
-      "concept": "Network+ Review - Day 1",
-      "domain": "Network+",
-      "icon": "🌐",
+      "track": "networkplus",
+      "concept": "The OSI Model — Walking the 7-Layer Stack",
+      "domain": "Networking Concepts",
+      "icon": "🥞",
       "color": "#3b82f6",
-      "tagline": "CompTIA Network+ Core Principles",
+      "tagline": "Don't guess when the network breaks. Walk the stack.",
       "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for Network+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
+        {
+          "title": "What Is the OSI Model?",
+          "body": "The <strong>Open Systems Interconnection (OSI)</strong> model divides network communication into seven distinct layers from physical wiring up to the end-user application: <strong>1. Physical</strong> (bits, cables, optics), <strong>2. Data Link</strong> (frames, MAC addresses, switches, VLANs), <strong>3. Network</strong> (packets, IP addresses, routers), <strong>4. Transport</strong> (segments and datagrams, TCP/UDP port numbers), <strong>5. Session</strong>, <strong>6. Presentation</strong>, and <strong>7. Application</strong> (HTTP, DNS, SMTP). Every layer serves the layer above it and relies on the layer below it through <em>encapsulation</em>. In the field, it is your primary troubleshooting checklist.",
+          "anchor": "🧱 Layer 1 = Bits, Layer 2 = Frames (MAC), Layer 3 = Packets (IP), Layer 4 = Segments (TCP/UDP)."
+        },
+        {
+          "title": "Symptom-to-Layer Mapping on the Exam",
+          "body": "The Network+ exam tests the OSI model by giving you a failure symptom and asking which layer is broken. Unplugged patch cords, damaged fiber, or EMI crosstalk live at <strong>Layer 1</strong>; wrong VLAN tags, MAC spoofing, or STP switching loops live at <strong>Layer 2</strong>; duplicate IP addresses, missing default gateways, or broken OSPF routes live at <strong>Layer 3</strong>; and a firewall blocking TCP port 443 lives at <strong>Layer 4</strong>. If you can ping a server's IP address (Layer 3 works) but a browser gets an HTTP 503 error or DNS fails, your lower layers are healthy and the problem is at <strong>Layer 7</strong>.",
+          "anchor": "🎯 If ping works by IP, Layers 1 through 3 are healthy — look at Layer 4 ports or Layer 7 services."
+        },
+        {
+          "title": "Real-World: Mammoth Capital Trading Terminal",
+          "body": "Five minutes before market open at Mammoth Capital, a trader's workstation loses connection to the internal order-routing gateway. A junior tech wants to restart the core router, but the senior network engineer walks the OSI stack starting at <strong>Layer 1</strong> and spots an amber port LED with rising CRC errors caused by a crushed Cat6 patch cord under the trader's chair mat. Replacing the patch cable at Layer 1 fixes the outage in sixty seconds without touching a single router config.",
+          "anchor": "🔌 Check Layer 1 link lights and physical cables first before reconfiguring Layer 3 routers."
+        }
       ],
       "quiz": [
         {
-          "q": "Are you ready to crush the Network+ exam?",
+          "q": "After a desk relocation, a user reports no network connectivity and the technician observes that both the link and activity LEDs on the workstation's RJ-45 network port are completely dark. At which layer of the OSI model should the technician begin troubleshooting?",
           "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
+            "Layer 1 (Physical)",
+            "Layer 2 (Data Link)",
+            "Layer 3 (Network)",
+            "Layer 7 (Application)"
           ],
           "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "exp": "Dark link LEDs indicate a lack of electrical or optical carrier signal — an unplugged cable, bad patch cord, or dead switch port — which is a Layer 1 (Physical) issue."
+        },
+        {
+          "q": "A workstation on VLAN 10 (10.1.10.45/24) can communicate with every other computer on VLAN 10, but cannot reach any servers on VLAN 20 (10.1.20.0/24) because its default gateway address is typed incorrectly. At which OSI layer does this misconfiguration exist?",
+          "opts": [
+            "Layer 1 (Physical)",
+            "Layer 2 (Data Link)",
+            "Layer 3 (Network)",
+            "Layer 5 (Session)"
+          ],
+          "ans": 2,
+          "exp": "Local communication within VLAN 10 uses Layer 2 MAC switching, which works fine. Routing packets across subnets via an IP default gateway operates at Layer 3 (Network)."
+        },
+        {
+          "q": "Mammoth Capital streams real-time market tick data and VoIP audio where low latency is critical and retransmitting a dropped packet seconds later is worse than ignoring it. Which Layer 4 protocol is best suited for this traffic?",
+          "opts": [
+            "TCP",
+            "ICMP",
+            "ARP",
+            "UDP"
+          ],
+          "ans": 3,
+          "exp": "UDP (User Datagram Protocol) is a connectionless Layer 4 Transport protocol with minimal header overhead and no retransmission delays, ideal for real-time audio, video, and market feeds."
+        },
+        {
+          "q": "As data travels down the OSI stack on a sending host, Layer 2 encapsulates the Layer 3 packet with a header containing source and destination MAC addresses and a trailer with a Frame Check Sequence (FCS). What is the Protocol Data Unit (PDU) at Layer 2 called?",
+          "opts": [
+            "Segment",
+            "Frame",
+            "Packet",
+            "Bit"
+          ],
+          "ans": 1,
+          "exp": "The PDU at Layer 2 (Data Link) is a Frame. Layer 1 uses Bits, Layer 3 uses Packets, and Layer 4 uses Segments (TCP) or Datagrams (UDP)."
+        },
+        {
+          "q": "A network engineer verifies that a client can ping an internal web server's IP address and complete a TCP three-way handshake on port 443, but the user's browser displays 'HTTP 503 Service Unavailable.' At which OSI layer is the failure occurring?",
+          "opts": [
+            "Layer 2 (Data Link)",
+            "Layer 3 (Network)",
+            "Layer 7 (Application)",
+            "Layer 4 (Transport)"
+          ],
+          "ans": 2,
+          "exp": "A successful ping confirms Layers 1–3, and a completed TCP handshake on port 443 confirms Layer 4. An HTTP 503 status code comes from the web application service itself at Layer 7 (Application)."
         }
       ]
     },
     {
+      "day": 2,
       "track": "networkplus",
+      "concept": "Routing & Switching — VLANs, Trunks, STP & OSPF",
+      "domain": "Network Implementation",
+      "icon": "🔀",
+      "color": "#3b82f6",
+      "tagline": "Switches build neighborhoods; routers connect cities.",
+      "slides": [
+        {
+          "title": "Layer 2 Switching: VLANs, 802.1Q, STP, and LACP",
+          "body": "Managed switches operate at Layer 2 using MAC address tables and let you carve one physical switch into multiple isolated broadcast domains using <strong>VLANs</strong>. To carry multiple VLANs between switches over a single cable, you configure an <strong>802.1Q trunk port</strong> that tags each frame with its VLAN ID (except the untagged <em>Native VLAN</em>, which must match on both ends). Meanwhile, <strong>Spanning Tree Protocol (STP / 802.1D)</strong> and <strong>Rapid STP (802.1w)</strong> automatically block redundant paths to prevent broadcast storms, while <strong>LACP (802.3ad)</strong> bundles multiple physical links into one high-bandwidth logical channel.",
+          "anchor": "🏷️ Access ports carry one untagged VLAN to an endpoint; 802.1Q trunk ports carry tagged VLANs between switches."
+        },
+        {
+          "title": "Layer 3 Routing: ARP, OSPF, and BGP",
+          "body": "Because VLANs isolate broadcast domains, traffic moving between VLANs requires a Layer 3 device — a router or Layer 3 switch performing <strong>inter-VLAN routing</strong>. Within a local subnet, hosts use <strong>ARP</strong> to resolve a known IPv4 address to a destination MAC address. Across networks, <strong>OSPF</strong> is a fast link-state Interior Gateway Protocol (IGP) that uses Dijkstra's shortest-path algorithm inside an organization, while <strong>BGP</strong> is the path-vector Exterior Gateway Protocol (EGP) that routes traffic between autonomous systems across the global internet.",
+          "anchor": "🗺️ OSPF routes inside your enterprise (IGP); BGP routes between ISPs and autonomous systems (EGP)."
+        },
+        {
+          "title": "Real-World: Surviving a Cable Loop at Mammoth Capital",
+          "body": "During a trading floor expansion at Mammoth Capital, a contractor accidentally plugs both ends of a patch cable into two ports on the distribution switch while connecting a new access switch. Because <strong>Rapid Spanning Tree Protocol (RSTP / 802.1w)</strong> is enabled across the switching fabric, the switch immediately detects its own BPDUs and places the redundant port into a blocking state in milliseconds. The contractor's mistake logs a clean warning instead of triggering a Layer 2 broadcast storm that would halt trading.",
+          "anchor": "🛡️ Without STP, a single looped patch cable turns a broadcast frame into an infinite network meltdown."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "A network engineer connects an access switch on the second floor to the core switch in the data center using a single fiber uplink. Traffic for VLAN 10 (Voice), VLAN 20 (Data), and VLAN 30 (Guest) must all traverse this single fiber link while remaining logically isolated. How should the uplink ports on both switches be configured?",
+          "opts": [
+            "As untagged access ports assigned to VLAN 1",
+            "As IEEE 802.1Q trunk ports permitting VLANs 10, 20, and 30",
+            "As half-duplex ports with Spanning Tree disabled",
+            "As port-mirroring (SPAN) destination ports"
+          ],
+          "ans": 1,
+          "exp": "An IEEE 802.1Q trunk port inserts a 4-byte VLAN tag into Ethernet frames, allowing multiple VLANs to cross a single physical link between switches while maintaining broadcast isolation."
+        },
+        {
+          "q": "Two workstations are plugged into adjacent ports on the same Layer 2 switch. Workstation A is in VLAN 100 (192.168.100.10/24) and Workstation B is in VLAN 200 (192.168.200.10/24). What is required for Workstation A to send packets to Workstation B?",
+          "opts": [
+            "A Layer 3 router or Layer 3 switch configured for inter-VLAN routing",
+            "A crossover Ethernet cable between the two workstations",
+            "Enabling LACP link aggregation on the two workstation ports",
+            "Disabling ARP on both workstations"
+          ],
+          "ans": 0,
+          "exp": "VLANs are separate Layer 2 broadcast domains and separate Layer 3 subnets. Traffic between different VLANs must pass through a Layer 3 routing interface (either a router-on-a-stick or Layer 3 switch SVIs)."
+        },
+        {
+          "q": "An administrator wants to combine four physical 10 Gbps ports between two distribution switches into a single 40 Gbps logical channel that balances traffic and survives the failure of any single cable. Which standard protocol accomplishes this?",
+          "opts": [
+            "802.1Q",
+            "802.1X",
+            "802.1D (STP)",
+            "802.3ad (LACP)"
+          ],
+          "ans": 3,
+          "exp": "Link Aggregation Control Protocol (LACP / IEEE 802.3ad) bundles multiple physical interfaces into a single logical Port-Channel (LAG) for higher throughput and link redundancy without STP blocking the links."
+        },
+        {
+          "q": "Which dynamic routing protocol is an open-standard link-state Interior Gateway Protocol (IGP) that calculates the best path using interface cost and organizes large networks around a backbone Area 0?",
+          "opts": [
+            "BGP",
+            "RIPv2",
+            "OSPF",
+            "EIGRP"
+          ],
+          "ans": 2,
+          "exp": "Open Shortest Path First (OSPF) is a vendor-neutral link-state IGP that uses cost (derived from bandwidth) and hierarchical areas connected to Area 0."
+        },
+        {
+          "q": "During a maintenance window, an engineer swaps out a failed firewall router with a replacement appliance configured with the exact same IPv4 address (10.0.0.1). For the next two minutes, several internal servers cannot reach the internet until their local caches refresh. Why did this temporary outage occur?",
+          "opts": [
+            "The DNS root servers needed to update the local subnet mask",
+            "The internal servers' ARP caches still mapped 10.0.0.1 to the old router's MAC address",
+            "Spanning Tree disabled the servers' hard drives",
+            "OSPF Area 0 changed the servers' TCP port numbers"
+          ],
+          "ans": 1,
+          "exp": "Hosts cache IP-to-MAC mappings in their local ARP table. Until the old ARP entry expires or a gratuitous ARP updates it, frames sent to 10.0.0.1 are addressed to the old hardware's MAC address."
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "track": "networkplus",
+      "concept": "Network Operations — SNMP, Syslog, Baselines & Uptime",
+      "domain": "Network Operations",
+      "icon": "📊",
+      "color": "#3b82f6",
+      "tagline": "If you don't know normal, you won't spot an outage.",
+      "slides": [
+        {
+          "title": "Monitoring with SNMP, Syslog, and NTP",
+          "body": "Network Operations Centers (NOCs) rely on three foundational protocols to observe infrastructure health: <strong>SNMP</strong>, <strong>Syslog</strong>, and <strong>NTP</strong>. In SNMP, a central manager polls device agents over <strong>UDP port 161</strong> to query structured metrics in the <strong>MIB (Management Information Base)</strong>, while agents send unsolicited alert <em>Traps</em> over <strong>UDP port 162</strong> (always use <strong>SNMPv3</strong> for encryption and authentication). Meanwhile, <strong>Syslog (UDP port 514)</strong> streams timestamped event logs to a central collector, and <strong>NTP (UDP port 123)</strong> keeps every device's clock synchronized so log timelines actually match.",
+          "anchor": "⏱️ SNMP polls metrics (161/162), Syslog pushes events (514), and NTP syncs the clocks (123)."
+        },
+        {
+          "title": "Documentation, Baselines, and Availability Metrics",
+          "body": "Good documentation separates a professional network from guesswork: <strong>physical diagrams</strong> map racks, patch panels, and cable runs, while <strong>logical diagrams</strong> map subnets, VLAN IDs, and routing protocols, and a <strong>performance baseline</strong> captures what normal traffic looks like. On the exam, know your reliability and recovery metrics cold: <strong>MTBF</strong> (Mean Time Between Failures) measures reliability, while <strong>MTTR</strong> (Mean Time To Repair) measures how fast you fix an outage. For disaster recovery, <strong>RPO (Recovery Point Objective)</strong> defines how much data loss you can tolerate in time, and <strong>RTO (Recovery Time Objective)</strong> defines how long systems can stay down.",
+          "anchor": "📐 RPO = how much data you can lose (backup frequency); RTO = how long you can be down (failover speed)."
+        },
+        {
+          "title": "Real-World: Gateway Redundancy at Mammoth Capital",
+          "body": "If Mammoth Capital's single edge router fails during market hours, workstations pointed at default gateway 10.10.1.1 would lose connectivity even if a backup router sits in the next rack. The network team deploys a pair of routers running a <strong>First Hop Redundancy Protocol (FHRP)</strong> like VRRP or HSRP, sharing a single <strong>Virtual IP (VIP)</strong> at 10.10.1.1 while physical routers hold 10.10.1.2 and 10.10.1.3. When the active router drops during a power supply test, the standby takes over the VIP in sub-seconds, and simultaneously emits an <strong>SNMPv3 Trap</strong> and a <strong>Syslog</strong> alert to the NOC.",
+          "anchor": "🔄 FHRP (VRRP/HSRP) gives two physical routers one shared Virtual IP so the default gateway never dies."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "A penetration tester captures management VLAN traffic and discovers that router polling requests contain readable plaintext community strings such as 'public' and 'private.' How should the network engineer remediate this vulnerability?",
+          "opts": [
+            "Change the SNMP polling port from UDP 161 to TCP 80",
+            "Replace SNMP with DHCP Snooping on all routers",
+            "Disable NTP synchronization on the management VLAN",
+            "Upgrade all monitored devices from SNMPv1/v2c to SNMPv3 with authentication and encryption"
+          ],
+          "ans": 3,
+          "exp": "SNMPv1 and SNMPv2c transmit community strings in cleartext. SNMPv3 replaces plaintext community strings with authenticated and encrypted communication."
+        },
+        {
+          "q": "While investigating a security breach across three switches and a firewall, a SOC analyst notices that the Syslog timestamps from the switches are 22 minutes behind the firewall's logs, making it impossible to reconstruct the exact attack timeline. Which service should be configured across all network devices?",
+          "opts": [
+            "SNMP Traps on UDP port 162",
+            "Network Time Protocol (NTP) on UDP port 123",
+            "Dynamic Host Configuration Protocol (DHCP) on UDP port 67",
+            "Simple Mail Transfer Protocol (SMTP) on TCP port 25"
+          ],
+          "ans": 1,
+          "exp": "NTP (UDP port 123) synchronizes device clocks against a reference time source so that Syslog entries and audit trails across different devices share an accurate, unified timeline."
+        },
+        {
+          "q": "Mammoth Capital's business continuity plan states that if the primary portfolio database fails, the firm cannot lose more than 5 minutes of committed transactions, and the database service must be back online within 30 minutes. Which metrics do '5 minutes' and '30 minutes' represent?",
+          "opts": [
+            "RPO = 5 minutes; RTO = 30 minutes",
+            "RTO = 5 minutes; RPO = 30 minutes",
+            "MTBF = 5 minutes; MTTR = 30 minutes",
+            "SLA = 5 minutes; MIB = 30 minutes"
+          ],
+          "ans": 0,
+          "exp": "Recovery Point Objective (RPO) measures the maximum acceptable age of lost data (5 minutes of transactions), while Recovery Time Objective (RTO) measures the maximum acceptable downtime duration (30 minutes)."
+        },
+        {
+          "q": "A new network administrator wants to understand how traffic is segmented and routed between departments. Which document shows IPv4 CIDR blocks, VLAN IDs, firewall zones, and OSPF routing areas rather than physical rack elevations?",
+          "opts": [
+            "A physical wiring and patch panel schedule",
+            "A Safety Data Sheet (SDS)",
+            "A logical network diagram",
+            "A rack thermal heat map"
+          ],
+          "ans": 2,
+          "exp": "A logical network diagram illustrates how data flows across the network — including subnets, VLANs, IP addressing, and routing protocols — whereas a physical diagram shows racks, ports, and cable runs."
+        },
+        {
+          "q": "An enterprise deploys two core routers at the edge of its LAN and wants all internal hosts to configure a single default gateway IP address (10.1.0.1) that automatically fails over to the standby router if the primary router fails. What protocol provides this shared Virtual IP?",
+          "opts": [
+            "Spanning Tree Protocol (STP)",
+            "Link Layer Discovery Protocol (LLDP)",
+            "Domain Name System (DNS)",
+            "A First Hop Redundancy Protocol (FHRP) such as VRRP or HSRP"
+          ],
+          "ans": 3,
+          "exp": "First Hop Redundancy Protocols (such as vendor-neutral VRRP or Cisco HSRP) allow two or more routers to share a Virtual IP (VIP) and virtual MAC address for seamless default gateway failover."
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "track": "networkplus",
+      "concept": "Network Security — Layer 2 Defenses, AAA, IPS & VPNs",
+      "domain": "Network Security",
+      "icon": "🛡️",
+      "color": "#3b82f6",
+      "tagline": "Lock the switch ports first, then guard the perimeter.",
+      "slides": [
+        {
+          "title": "Layer 2 Switch Hardening",
+          "body": "Perimeter firewalls cannot stop an attacker who plugs directly into an unhardened wall jack inside the building. At Layer 2, you lock down access switches with a four-part defense: <strong>Port Security</strong> limits which MAC addresses can use a port (and shuts the port down on violation), <strong>DHCP Snooping</strong> blocks rogue DHCP servers on untrusted ports, <strong>Dynamic ARP Inspection (DAI)</strong> uses the DHCP Snooping binding table to drop spoofed ARP replies, and <strong>BPDU Guard</strong> immediately disables any access port that receives Spanning Tree BPDUs from an unauthorized switch.",
+          "anchor": "🔒 Port Security stops rogue MACs; DHCP Snooping stops rogue DHCP; DAI stops ARP poisoning; BPDU Guard stops rogue switches."
+        },
+        {
+          "title": "802.1X, AAA, IDS vs. IPS, and VPNs",
+          "body": "For identity-based access control, <strong>IEEE 802.1X (NAC)</strong> blocks a switch port or enterprise Wi-Fi connection until a supplicant authenticates against a central <strong>RADIUS</strong> or <strong>TACACS+</strong> AAA server. At the network edge, a firewall filters traffic by rules (ending in an <strong>implicit deny</strong>), an out-of-band <strong>IDS</strong> passively alerts on attack signatures, and an inline <strong>IPS</strong> actively drops malicious packets in real time. For encrypted traffic over untrusted networks, <strong>IPsec</strong> (using <strong>ESP</strong> for encryption) handles Layer 3 site-to-site VPNs, while <strong>TLS/SSL VPNs</strong> commonly handle remote-access laptop clients.",
+          "anchor": "⚔️ IDS watches and alerts from the sideline; IPS sits inline and drops the attack packet."
+        },
+        {
+          "title": "Real-World: Rogue Device on the Trading Floor",
+          "body": "A vendor visiting Mammoth Capital unplugs a conference room VoIP phone and plugs his laptop into the wall jack hoping to sniff local subnet traffic. Because the switch port is hardened with <strong>802.1X</strong> and <strong>sticky MAC port security</strong>, the port immediately rejects the unrecognized MAC address, transitions into an <em>err-disabled</em> state, and fires an alert to the SOC. Even if the vendor had brought a pocket travel router, <strong>DHCP Snooping</strong> and <strong>BPDU Guard</strong> would have prevented it from handing out rogue IPs or altering the Spanning Tree topology.",
+          "anchor": "🚫 An unused wall jack should be administratively shut down or assigned to a dead-end parking VLAN."
+        }
+      ],
+      "quiz": [
+        {
+          "q": "An attacker connected to the office LAN broadcasts forged ARP replies claiming the attacker's MAC address is the default gateway IP, attempting an on-path (man-in-the-middle) interception. Which switch feature checks ARP packets against a trusted IP-to-MAC binding database and drops the forged packets?",
+          "opts": [
+            "BPDU Guard",
+            "Port Mirroring (SPAN)",
+            "Dynamic ARP Inspection (DAI)",
+            "802.1Q VLAN Tagging"
+          ],
+          "ans": 2,
+          "exp": "Dynamic ARP Inspection (DAI) intercepts ARP packets on untrusted ports and validates them against the trusted DHCP Snooping binding table, dropping spoofed ARP responses."
+        },
+        {
+          "q": "A security architect requires that any laptop plugged into a conference room wall jack must authenticate with a digital certificate against a central RADIUS server before the switch port allows any LAN traffic. Which standard enforces this port-based Network Access Control?",
+          "opts": [
+            "IEEE 802.1X",
+            "IEEE 802.1Q",
+            "IEEE 802.3af (PoE)",
+            "IEEE 802.1w (RSTP)"
+          ],
+          "ans": 0,
+          "exp": "IEEE 802.1X provides port-based Network Access Control (NAC), blocking all non-authentication traffic on a switch port or wireless AP until the supplicant is verified by the AAA/RADIUS server."
+        },
+        {
+          "q": "Mammoth Capital places a network security appliance directly in the physical traffic path behind its border router so that packets matching known exploit signatures are dropped before reaching internal web servers. What type of system is this?",
+          "opts": [
+            "A passive Intrusion Detection System (IDS) on a tap port",
+            "An inline Intrusion Prevention System (IPS)",
+            "A Syslog collector",
+            "An authoritative DNS forwarder"
+          ],
+          "ans": 1,
+          "exp": "An Intrusion Prevention System (IPS) sits inline in the traffic path and actively drops malicious packets, whereas an IDS sits out-of-band on a SPAN/tap port and only generates alerts."
+        },
+        {
+          "q": "A network engineer is hardening a new managed switch before deploying it into production. Along with changing default passwords and shutting down unused physical ports, which configuration best secures remote command-line administration?",
+          "opts": [
+            "Enable Telnet on port 23 and allow access from 0.0.0.0/0",
+            "Enable TFTP on UDP port 69 for unauthenticated configuration backups",
+            "Place the switch management IP on the guest Wi-Fi VLAN",
+            "Disable Telnet and enable SSHv2 on port 22 restricted to a dedicated management VLAN"
+          ],
+          "ans": 3,
+          "exp": "Telnet sends credentials and commands in plaintext over port 23. Hardening requires disabling Telnet, enabling encrypted SSH (port 22), and restricting management access to an isolated management VLAN."
+        },
+        {
+          "q": "When configuring an IPsec site-to-site VPN tunnel between Mammoth Capital's New York and London offices, which IPsec protocol must be selected to ensure the packet payload is encrypted for confidentiality?",
+          "opts": [
+            "Authentication Header (AH)",
+            "Generic Routing Encapsulation (GRE) without IPsec",
+            "Encapsulating Security Payload (ESP)",
+            "Point-to-Point Protocol (PPP)"
+          ],
+          "ans": 2,
+          "exp": "Encapsulating Security Payload (ESP) provides both payload encryption (confidentiality) and authentication/integrity. Authentication Header (AH) provides integrity and authentication only, with no encryption."
+        }
+      ]
+    },
+    {
       "day": 5,
-      "concept": "Network+ Review - Day 5",
-      "domain": "Network+",
-      "icon": "🌐",
-      "color": "#3b82f6",
-      "tagline": "CompTIA Network+ Core Principles",
-      "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for Network+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
-      ],
-      "quiz": [
-        {
-          "q": "Are you ready to crush the Network+ exam?",
-          "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
-          ],
-          "ans": 0,
-          "exp": "Confidence is key. Let's execute."
-        }
-      ]
-    },
-    {
       "track": "networkplus",
-      "day": 9,
-      "concept": "Network+ Review - Day 9",
-      "domain": "Network+",
-      "icon": "🌐",
+      "concept": "CLI Diagnostics — Ping, Traceroute, DNS & Physical Faults",
+      "domain": "Network Troubleshooting",
+      "icon": "💻",
       "color": "#3b82f6",
-      "tagline": "CompTIA Network+ Core Principles",
+      "tagline": "The GUI lies; the command line tells you where it died.",
       "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for Network+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
-      ],
-      "quiz": [
         {
-          "q": "Are you ready to crush the Network+ exam?",
-          "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
-          ],
-          "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "title": "The Essential CLI Toolkit",
+          "body": "When a network breaks, six CLI commands give you immediate ground truth: <strong>ipconfig / ifconfig / ip addr</strong> checks local IP, subnet mask, gateway, and MAC address; <strong>ping</strong> tests ICMP reachability and round-trip latency; <strong>tracert / traceroute</strong> maps every Layer 3 router hop along a path; <strong>nslookup / dig</strong> queries DNS servers directly; <strong>arp -a</strong> inspects the IP-to-MAC translation table; and <strong>netstat</strong> lists active TCP/UDP connections and listening ports. Always start local and work outward: verify your own IP first, ping the default gateway second, ping a remote IP third, and test DNS resolution last.",
+          "anchor": "🩺 Local IP → Default Gateway → Remote IP → DNS Name: the four-step CLI diagnostic ladder."
+        },
+        {
+          "title": "Reading the Output and Physical Layer Clues",
+          "body": "The Network+ exam tests whether you can interpret subtle differences in command output and interface counters. In <em>ping</em>, <strong>Request timed out</strong> means a route exists but no reply came back (often a firewall dropping ICMP or a down remote host), whereas <strong>Destination host unreachable</strong> means a router has no route to the destination network or ARP failed locally. On physical links, high <strong>CRC errors / FCS errors</strong> point to EMI, a bad cable, or dirty fiber connectors; a <strong>duplex mismatch</strong> (one side full-duplex, the other half-duplex) causes late collisions and asymmetrically slow throughput; and a <strong>169.254.x.x</strong> address points to DHCP failure or a wrong VLAN on the switch port.",
+          "anchor": "⚠️ Ping works by IP but fails by hostname = DNS issue (test with nslookup or dig)."
+        },
+        {
+          "title": "Real-World: Pinpointing a Black Hole at Mammoth Capital",
+          "body": "Traders at Mammoth Capital's Chicago branch report they can access local file servers but cannot reach the New York market feed server at 10.50.10.20. The on-call engineer runs <strong>ipconfig</strong> (valid IP and gateway), pings the local gateway (1 ms reply), and then runs <strong>tracert 10.50.10.20</strong>, which shows clean 2 ms hops to the Chicago WAN router followed by asterisks (* * *) at the MPLS provider handoff. Armed with the exact failing hop IP from <em>tracert</em>, the engineer opens a carrier ticket with proof that packets are dying at the provider edge rather than wasting hours checking internal switches.",
+          "anchor": "🗺️ Ping tells you THAT the path is broken; traceroute tells you WHICH hop broke it."
         }
-      ]
-    },
-    {
-      "track": "networkplus",
-      "day": 13,
-      "concept": "Network+ Review - Day 13",
-      "domain": "Network+",
-      "icon": "🌐",
-      "color": "#3b82f6",
-      "tagline": "CompTIA Network+ Core Principles",
-      "slides": [
-        "Welcome to the CompTIA Daily Sprint.",
-        "Today we are reviewing core concepts for Network+.",
-        "Review your flashcards, check the library modules, and prepare for the mini-quiz."
       ],
       "quiz": [
         {
-          "q": "Are you ready to crush the Network+ exam?",
+          "q": "After replacing a patch cord and manually configuring an access switch port, a user complains that large file uploads are painfully slow even though the link light is green. Checking the switch interface counters reveals hundreds of late collisions. What is the MOST likely cause?",
           "opts": [
-            "Yes, let's go.",
-            "I need more coffee.",
-            "Still reviewing flashcards.",
-            "Bring on the pain."
+            "The DNS server cache is poisoned",
+            "A duplex mismatch between the switch port and the workstation NIC (one set to full-duplex, the other to half-duplex)",
+            "The workstation's default gateway is set to 127.0.0.1",
+            "An expired SSL certificate on the file server"
+          ],
+          "ans": 1,
+          "exp": "Late collisions and severe throughput degradation on a working copper link are classic symptoms of a duplex mismatch, where the full-duplex side transmits without waiting while the half-duplex side expects CSMA/CD."
+        },
+        {
+          "q": "A developer reports that her workstation cannot connect to 'repo.internal.mammoth.local'. A technician opens a terminal and successfully pings the repository server's IP address (10.20.30.15), but pinging the hostname fails. Which command should the technician run NEXT to diagnose the issue?",
+          "opts": [
+            "arp -d *",
+            "netstat -rn",
+            "tracert 10.20.30.15",
+            "nslookup repo.internal.mammoth.local"
+          ],
+          "ans": 3,
+          "exp": "Since IP connectivity to 10.20.30.15 works, Layers 1–3 are healthy and the issue is name resolution. Running nslookup (or dig) queries the DNS server directly to see if the A record is missing or the DNS server is unreachable."
+        },
+        {
+          "q": "A system administrator suspects that a compromised workstation has a rogue service listening on an unusual TCP port and maintaining an outbound connection to an unknown external IP. Which command-line tool displays active TCP connections and listening ports on the host?",
+          "opts": [
+            "ping",
+            "nslookup",
+            "netstat",
+            "ipconfig /release"
+          ],
+          "ans": 2,
+          "exp": "The netstat (or ss on Linux) utility displays active incoming and outgoing network connections, listening TCP/UDP ports, and the processes associated with each socket."
+        },
+        {
+          "q": "A technician runs 'ping 172.16.50.10' from a workstation (10.1.1.25) and immediately receives 'Reply from 10.1.1.1: Destination net unreachable' (where 10.1.1.1 is the local router). What does this output tell the technician?",
+          "opts": [
+            "The local router (10.1.1.1) has no route in its routing table for the 172.16.50.0 network",
+            "The workstation's Ethernet cable is unplugged",
+            "The remote host (172.16.50.10) is blocking ICMP Echo Requests with a host firewall",
+            "The workstation failed to obtain an IP address from DHCP"
           ],
           "ans": 0,
-          "exp": "Confidence is key. Let's execute."
+          "exp": "When a router returns 'Destination net unreachable,' it means the packet reached the router at 10.1.1.1, but that router lacks a matching route to forward the packet toward the destination network."
+        },
+        {
+          "q": "A field technician terminates a new Cat6 cable run between a patch panel and a wall jack using RJ-45 keystone jacks, but a laptop plugged into the wall jack shows a link speed of only 100 Mbps instead of 1 Gbps. Which tool should the technician attach to both ends of the cable to check if one of the eight internal wires is open, shorted, or crossed?",
+          "opts": [
+            "A Wi-Fi spectrum analyzer",
+            "A cable continuity and wire map tester",
+            "An optical power meter",
+            "A protocol analyzer (Wireshark)"
+          ],
+          "ans": 1,
+          "exp": "1000BASE-T (1 Gbps) requires all four wire pairs (all 8 pins), whereas 100BASE-TX only requires two pairs (pins 1, 2, 3, and 6). A continuity/wire map tester checks all 8 pins end-to-end for opens, shorts, or split pairs."
         }
       ]
     }
