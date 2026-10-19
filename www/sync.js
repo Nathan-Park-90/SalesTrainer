@@ -139,8 +139,8 @@
                 if (merged.length !== before) out[k] = JSON.stringify(merged);
             } else if (/^st_quiz_/.test(k)) {
                 out[k] = a === 'done' || b === 'done' ? 'done' : a;
-            } else if (/^st_highscore/.test(k) || /^st_daily_day_/.test(k) || k === 'st_streak' || k === 'st_arch_completed') {
-                out[k] = num(b) > num(a) ? b : a;             // best score, furthest lesson, longest streak
+            } else if (/^st_highscore/.test(k) || /^st_pbq_/.test(k) || /^st_daily_day_/.test(k) || k === 'st_streak' || k === 'st_arch_completed') {
+                out[k] = num(b) > num(a) ? b : a;             // best score (exams, PBQs), furthest lesson, longest streak
             } else if (k === 'st_last_daily') {
                 out[k] = dateOf(b) > dateOf(a) ? b : a;        // most recent study day keeps the streak alive
             } else if (/^st_domain_perf_/.test(k)) {

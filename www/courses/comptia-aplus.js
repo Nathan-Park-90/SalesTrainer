@@ -1882,80 +1882,395 @@ var COURSE_COMPTIA_APLUS = {
   ],
   "arch": [
     {
-      "title": "Level 8: The Workstation Rebuild",
+      "title": "A+ Lab: The Workstation Rebuild",
       "desc": "A VIP's workstation is catastrophically failing. It takes 10 minutes to boot, crashes when opening large files, and overheats. Replace the bottleneck components to build a high-performance, stable machine.",
       "zones": [
         {
           "id": "storage",
-          "name": "Storage Subsystem",
-          "accepts": [
-            "nvme"
+          "label": "Storage Subsystem",
+          "needed": [
+            "M.2 NVMe SSD"
           ]
         },
         {
           "id": "memory",
-          "name": "Memory & Logic",
-          "accepts": [
-            "ecc",
-            "dualchan"
+          "label": "Memory & Logic",
+          "needed": [
+            "ECC DDR5 RAM",
+            "Populate Dual Channels"
           ]
         },
         {
           "id": "cooling",
-          "name": "Thermal Management",
-          "accepts": [
-            "liquid",
-            "paste"
+          "label": "Thermal Management",
+          "needed": [
+            "AIO Liquid Cooler",
+            "Reapply Thermal Paste"
           ]
         }
       ],
       "palette": [
-        {
-          "id": "nvme",
-          "label": "M.2 NVMe SSD",
-          "type": "resource"
-        },
-        {
-          "id": "hdd",
-          "label": "7200 RPM SATA HDD",
-          "type": "resource"
-        },
-        {
-          "id": "ecc",
-          "label": "ECC DDR5 RAM",
-          "type": "resource"
-        },
-        {
-          "id": "dualchan",
-          "label": "Populate Dual Channels",
-          "type": "policy"
-        },
-        {
-          "id": "liquid",
-          "label": "AIO Liquid Cooler",
-          "type": "resource"
-        },
-        {
-          "id": "paste",
-          "label": "Reapply Thermal Paste",
-          "type": "policy"
-        }
+        "M.2 NVMe SSD",
+        "7200 RPM SATA HDD",
+        "ECC DDR5 RAM",
+        "Populate Dual Channels",
+        "AIO Liquid Cooler",
+        "Reapply Thermal Paste"
       ],
       "dm": {
-        "storage": [
-          "nvme"
-        ],
-        "memory": [
-          "ecc",
-          "dualchan"
-        ],
-        "cooling": [
-          "liquid",
-          "paste"
-        ]
+        "7200 RPM SATA HDD": "⚠️ The 7200 RPM SATA hard drive IS the 10-minute boot. Spinning disks manage a few hundred IOPS; an M.2 NVMe SSD does hundreds of thousands. Replace it, don't reinstall it."
       },
       "wm": "Spot on. The NVMe SSD eliminates the boot bottleneck. ECC RAM prevents data corruption crashes, and populating dual channels doubles bandwidth. Reapplying paste and adding an AIO cooler solves the thermal throttling."
     }
   ],
-  "sales": []
+  "sales": [],
+  "pbq": [
+    {
+      "id": "aplus-builds",
+      "title": "Workstation Architecture Match (Core 1)",
+      "brief": "Spec two machines for Mammoth Capital. The <strong>virtualization / AI workstation</strong> runs several VMs and trains models on a GPU; its motherboard is <strong>AM5 with four DDR5 slots</strong>. The <strong>helpdesk thin client</strong> only runs a browser and a VDI client; everything else lives in the data center.",
+      "parts": [
+        {
+          "kind": "grid",
+          "title": "Pick the right part for each slot",
+          "columns": [
+            {
+              "key": "part",
+              "label": "Component",
+              "type": "select",
+              "options": []
+            }
+          ],
+          "rows": [
+            {
+              "label": "AI workstation: CPU",
+              "options": {
+                "part": [
+                  "16-core AM5 CPU with AMD-V/SVM",
+                  "8-core LGA 1700 CPU with VT-x",
+                  "Low-power quad-core embedded SoC"
+                ]
+              },
+              "answer": {
+                "part": "16-core AM5 CPU with AMD-V/SVM"
+              },
+              "explain": "The socket must match the board (AM5); many cores plus hardware virtualization for the VMs. LGA 1700 will not fit an AM5 board."
+            },
+            {
+              "label": "AI workstation: memory",
+              "options": {
+                "part": [
+                  "4 × 32 GB DDR5 (all channels populated)",
+                  "1 × 32 GB DDR5 in a single slot",
+                  "2 × 16 GB DDR4"
+                ]
+              },
+              "answer": {
+                "part": "4 × 32 GB DDR5 (all channels populated)"
+              },
+              "explain": "VMs and model training need capacity, and matched DIMMs in every channel give full bandwidth. DDR4 is physically keyed differently and will not fit DDR5 slots."
+            },
+            {
+              "label": "AI workstation: storage",
+              "options": {
+                "part": [
+                  "2 × 2 TB NVMe M.2 in RAID 1",
+                  "4 × 7200 RPM HDDs in RAID 0",
+                  "128 GB eMMC"
+                ]
+              },
+              "answer": {
+                "part": "2 × 2 TB NVMe M.2 in RAID 1"
+              },
+              "explain": "NVMe over PCIe for VM and dataset I/O, mirrored so one drive failure loses nothing. RAID 0 HDDs are slow and have no redundancy."
+            },
+            {
+              "label": "AI workstation: graphics",
+              "options": {
+                "part": [
+                  "24 GB PCIe x16 GPU",
+                  "Integrated graphics only",
+                  "USB display adapter"
+                ]
+              },
+              "answer": {
+                "part": "24 GB PCIe x16 GPU"
+              },
+              "explain": "Model training needs a discrete GPU with plenty of VRAM in a full x16 slot."
+            },
+            {
+              "label": "AI workstation: power supply",
+              "options": {
+                "part": [
+                  "1000 W 80 PLUS Gold",
+                  "450 W 80 PLUS Bronze",
+                  "65 W external brick"
+                ]
+              },
+              "answer": {
+                "part": "1000 W 80 PLUS Gold"
+              },
+              "explain": "A high-end GPU (~450 W) plus a 16-core CPU needs a large PSU with headroom; 450 W would trip under load."
+            },
+            {
+              "label": "Thin client: CPU",
+              "options": {
+                "part": [
+                  "Low-power quad-core embedded SoC",
+                  "16-core AM5 CPU with AMD-V/SVM",
+                  "8-core LGA 1700 CPU with VT-x"
+                ]
+              },
+              "answer": {
+                "part": "Low-power quad-core embedded SoC"
+              },
+              "explain": "A browser and VDI client need little compute; low power, low heat, low cost."
+            },
+            {
+              "label": "Thin client: memory",
+              "options": {
+                "part": [
+                  "8 GB SO-DIMM",
+                  "4 × 32 GB DDR5 (all channels populated)",
+                  "1 × 32 GB DDR5 in a single slot"
+                ]
+              },
+              "answer": {
+                "part": "8 GB SO-DIMM"
+              },
+              "explain": "Small form factor uses SO-DIMMs; 8 GB is plenty for a VDI client."
+            },
+            {
+              "label": "Thin client: storage",
+              "options": {
+                "part": [
+                  "128 GB eMMC",
+                  "2 × 2 TB NVMe M.2 in RAID 1",
+                  "4 × 7200 RPM HDDs in RAID 0"
+                ]
+              },
+              "answer": {
+                "part": "128 GB eMMC"
+              },
+              "explain": "Only the OS and client live locally; data stays in the data center."
+            },
+            {
+              "label": "Thin client: power",
+              "options": {
+                "part": [
+                  "65 W external brick",
+                  "1000 W 80 PLUS Gold",
+                  "450 W 80 PLUS Bronze"
+                ]
+              },
+              "answer": {
+                "part": "65 W external brick"
+              },
+              "explain": "Thin clients draw tens of watts and usually ship with an external adapter."
+            }
+          ]
+        }
+      ],
+      "solution": "Match the socket to the board (AM5 CPU on an AM5 board) and the RAM generation to the slots, populate every memory channel for bandwidth, use NVMe in RAID 1 for fast and redundant VM storage, and size the PSU for the GPU plus headroom. A thin client is the opposite: low-power SoC, SO-DIMM, small eMMC and an external brick."
+    },
+    {
+      "id": "aplus-printer-post",
+      "title": "Laser Printer & Boot Failure Triage (Core 1)",
+      "brief": "Two queues at once: the 3rd-floor laser printer is misbehaving, and a few desktops won't boot cleanly. Match each symptom to the failing component, then put the laser imaging process in order.",
+      "parts": [
+        {
+          "kind": "grid",
+          "title": "Symptom → most likely cause",
+          "columns": [
+            {
+              "key": "cause",
+              "label": "Cause",
+              "type": "select",
+              "options": [
+                "Imaging drum / cleaning stage (residual image)",
+                "Fuser assembly",
+                "Transfer roller or corona (dirty or damaged)",
+                "Incorrect or corrupt print driver",
+                "RAM not seated or incompatible",
+                "CMOS battery",
+                "Boot order / UEFI boot mode"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "label": "Faint copies of earlier content repeat further down each page (ghosting)",
+              "answer": {
+                "cause": "Imaging drum / cleaning stage (residual image)"
+              },
+              "explain": "Charge or toner left on the drum after cleaning prints again on the next rotation."
+            },
+            {
+              "label": "Toner smears and wipes off with a finger",
+              "answer": {
+                "cause": "Fuser assembly"
+              },
+              "explain": "The fuser's heat and pressure bond toner to paper; if toner rubs off, it isn't fusing."
+            },
+            {
+              "label": "A white vertical streak runs down every page",
+              "answer": {
+                "cause": "Transfer roller or corona (dirty or damaged)"
+              },
+              "explain": "A dirty or damaged strip of the transfer roller/corona stops toner moving to the paper along that line."
+            },
+            {
+              "label": "Pages of random symbols instead of the document",
+              "answer": {
+                "cause": "Incorrect or corrupt print driver"
+              },
+              "explain": "Garbled characters mean the printer can't interpret the data it receives: wrong or corrupt driver/PDL."
+            },
+            {
+              "label": "After a RAM upgrade: fans spin, continuous beeps, no video",
+              "answer": {
+                "cause": "RAM not seated or incompatible"
+              },
+              "explain": "Memory POST failure beep codes right after a memory change."
+            },
+            {
+              "label": "\"CMOS checksum error\" and the clock resets whenever the PC is unplugged",
+              "answer": {
+                "cause": "CMOS battery"
+              },
+              "explain": "The coin cell keeps firmware settings and the RTC alive without AC power."
+            },
+            {
+              "label": "After cloning to a new SSD: \"No bootable device found\"",
+              "answer": {
+                "cause": "Boot order / UEFI boot mode"
+              },
+              "explain": "The firmware is pointing at the old drive or the wrong boot mode (UEFI vs legacy/CSM) for the cloned partition style."
+            }
+          ]
+        },
+        {
+          "kind": "order",
+          "title": "Laser imaging process (first to last)",
+          "items": [
+            "Processing",
+            "Charging",
+            "Exposing",
+            "Developing",
+            "Transferring",
+            "Fusing",
+            "Cleaning"
+          ],
+          "start": [
+            "Fusing",
+            "Charging",
+            "Cleaning",
+            "Developing",
+            "Processing",
+            "Transferring",
+            "Exposing"
+          ],
+          "explain": "Processing (raster image built in memory) → Charging (drum given a uniform negative charge) → Exposing (laser writes the image) → Developing (toner sticks to the exposed areas) → Transferring (toner moves to paper) → Fusing (heat and pressure bond it) → Cleaning (drum wiped and discharged)."
+        }
+      ],
+      "solution": "Repeating faint images point at the drum/cleaning stage, smearing at the fuser, a white line at the transfer stage, and garbage at the driver. Beeps after a RAM change mean memory, settings lost on unplugging mean the CMOS battery, and \"no bootable device\" after cloning means boot order or UEFI mode. The seven steps: Processing, Charging, Exposing, Developing, Transferring, Fusing, Cleaning."
+    },
+    {
+      "id": "aplus-cli",
+      "title": "Windows & Linux CLI Remediation (Core 2)",
+      "brief": "Eight tickets, eight terminals. Pick the command that fixes each one. Each command is used once.",
+      "parts": [
+        {
+          "kind": "grid",
+          "title": "Issue → command",
+          "columns": [
+            {
+              "key": "cmd",
+              "label": "Command",
+              "type": "select",
+              "options": [
+                "bootrec /rebuildbcd",
+                "sfc /scannow",
+                "DISM /Online /Cleanup-Image /RestoreHealth",
+                "chkdsk C: /f /r",
+                "gpupdate /force",
+                "chmod 600 ~/.ssh/id_ed25519",
+                "chown -R www-data:www-data /var/www/uploads",
+                "grep \"Failed password\" /var/log/auth.log",
+                "ipconfig /flushdns",
+                "chmod 777 /var/www/uploads"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "label": "PC boots to \"The Boot Configuration Data for your PC is missing or contains errors\" (you are in WinRE Command Prompt)",
+              "detail": "File: \\Boot\\BCD   Error code: 0xc000000f",
+              "answer": {
+                "cmd": "bootrec /rebuildbcd"
+              },
+              "explain": "Scans for Windows installations and rebuilds the BCD store."
+            },
+            {
+              "label": "Random \"DLL not found\" errors; Explorer crashes",
+              "detail": "C:\\> (protected system files suspected)",
+              "answer": {
+                "cmd": "sfc /scannow"
+              },
+              "explain": "System File Checker verifies and replaces corrupted protected system files."
+            },
+            {
+              "label": "SFC found corrupt files it could not repair",
+              "detail": "Windows Resource Protection found corrupt files but was unable to fix some of them.\nDetails are included in the CBS.Log windir\\Logs\\CBS\\CBS.log.",
+              "answer": {
+                "cmd": "DISM /Online /Cleanup-Image /RestoreHealth"
+              },
+              "explain": "DISM repairs the component store SFC copies from; run SFC again afterwards."
+            },
+            {
+              "label": "After a power cut, files won't open and the drive reports bad sectors",
+              "detail": "Event 55 (Ntfs): A corruption was discovered in the file system structure on volume C:.",
+              "answer": {
+                "cmd": "chkdsk C: /f /r"
+              },
+              "explain": "/f fixes file system errors; /r locates bad sectors and recovers readable data."
+            },
+            {
+              "label": "A new GPO that maps the S: drive hasn't reached a user's PC",
+              "detail": "C:\\> gpresult /r  (the new \"Map S Drive\" GPO is not listed)",
+              "answer": {
+                "cmd": "gpupdate /force"
+              },
+              "explain": "Forces an immediate refresh of computer and user Group Policy."
+            },
+            {
+              "label": "SSH refuses your key",
+              "detail": "@@@@ WARNING: UNPROTECTED PRIVATE KEY FILE! @@@@\nPermissions 0644 for '/home/nate/.ssh/id_ed25519' are too open.\nThis private key will be ignored.",
+              "answer": {
+                "cmd": "chmod 600 ~/.ssh/id_ed25519"
+              },
+              "explain": "Private keys must be readable only by the owner (600)."
+            },
+            {
+              "label": "Nginx can't save uploads after files were copied in as root",
+              "detail": "$ ls -ld /var/www/uploads\ndrwxr-xr-x 2 root root 4096 Oct 18 09:12 /var/www/uploads\n[error] open() \"/var/www/uploads/q3.pdf\" failed (13: Permission denied)  (nginx runs as www-data)",
+              "answer": {
+                "cmd": "chown -R www-data:www-data /var/www/uploads"
+              },
+              "explain": "Give ownership to the service account. chmod 777 would \"work\" but lets every user write there."
+            },
+            {
+              "label": "Security asks which login attempts failed on the jump host",
+              "detail": "$ wc -l /var/log/auth.log\n48211 /var/log/auth.log",
+              "answer": {
+                "cmd": "grep \"Failed password\" /var/log/auth.log"
+              },
+              "explain": "grep filters the log to just the failed SSH password attempts."
+            }
+          ]
+        }
+      ],
+      "solution": "Boot store broken = bootrec; protected files = sfc; sfc can't repair = DISM then sfc again; file system or bad sectors = chkdsk /f /r; policy not applied = gpupdate /force; key too open = chmod 600; wrong owner for a service = chown (never chmod 777); search a log = grep."
+    }
+  ]
 };

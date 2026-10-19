@@ -445,10 +445,10 @@
             <div class="ma-zone" onclick="window.location.href='gym.html'">
                 <div class="ma-zone-header">
                     <div class="ma-zone-icon">🏋️</div>
-                    <div class="ma-zone-tag"><span id="tag-flashcards">89</span> cards &middot; <span id="tag-arch">5</span> labs &middot; <span id="tag-sales">10</span> scenarios</div>
+                    <div class="ma-zone-tag"><span id="tag-flashcards">89</span> cards &middot; <span id="tag-arch">5</span> labs &middot; <span id="tag-sales">10</span> scenarios &middot; <span id="tag-pbq">12</span> PBQs</div>
                 </div>
                 <h3>The Gym</h3>
-                <p>The training floor. Flashcards with mastery tracking, AWS architecture drag-and-drop labs, and interactive sales objection scenarios. Knowledge without reps is just theory.</p>
+                <p>The training floor. Flashcards with mastery tracking, AWS and CompTIA architecture labs, CompTIA performance-based question simulations, and interactive sales objection scenarios. Knowledge without reps is just theory.</p>
                 <div class="ma-zone-cta">Start Training &rarr;</div>
             </div>
 
@@ -614,6 +614,7 @@
             s('tag-flashcards', (DATA.flashcards || []).length);
             s('tag-arch',       (DATA.arch || []).length);
             s('tag-sales',      (DATA.sales || []).length);
+            s('tag-pbq',        (DATA.pbq || []).length);
             s('tag-examqs',     examTotal);
             s('tag-exams',      (DATA._courseMeta || []).filter(m => m.examKey && (DATA['exam_' + m.examKey] || []).length).length);
 

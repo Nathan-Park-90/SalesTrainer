@@ -13,6 +13,7 @@
         arch:           [],
         sales:          [],
         daily_lessons:  [],
+        pbq:            [],   // performance-based question labs (gym.html PBQ Lab), tagged with courseId
         _courseMeta:    []   // registry of loaded course packs
         // exam_<key> arrays (e.g. exam_aws, exam_psm) are created below, one per
         // course pack that declares meta.examKey — no fixed list to maintain here.
@@ -48,6 +49,10 @@
             DATA.flashcards.push(...pack.flashcards);
         }
         if (Array.isArray(pack.arch))       DATA.arch.push(...pack.arch);
+        if (Array.isArray(pack.pbq)) {
+            pack.pbq.forEach(p => { p.courseId = pack.meta.id; });
+            DATA.pbq.push(...pack.pbq);
+        }
         if (Array.isArray(pack.sales))      DATA.sales.push(...pack.sales);
         if (Array.isArray(pack.daily)) {
             // Tag every daily lesson with its pack's dailyTrackKey unless the lesson

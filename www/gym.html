@@ -545,6 +545,7 @@
             <button class="gym-tab active" onclick="gym.switchStation('flashcards', this)">🃏 Flashcards</button>
             <button class="gym-tab" onclick="gym.switchStation('architecture', this)">🏗️ Architecture Lab</button>
             <button class="gym-tab" onclick="gym.switchStation('sales', this)">🎯 Sales Scenarios</button>
+            <button class="gym-tab" id="tab-pbq" onclick="gym.switchStation('pbq', this)">🧪 CompTIA PBQ Lab</button>
         </div>
 
         <!-- ══════════════════════════════════
@@ -601,7 +602,7 @@
             </div>
 
             <div class="arch-header-row">
-                <div class="arch-scenario-counter" id="arch-counter">Scenario 1 of 5</div>
+                <div class="arch-scenario-counter" id="arch-counter">Scenario 1</div>
                 <button class="arch-btn arch-btn-ghost" onclick="gym.resetArchBoard()">↺ Reset Board</button>
             </div>
 
@@ -642,6 +643,18 @@
             <div class="sales-grid" id="sales-grid-container"></div>
         </div>
 
+        <!-- ══════════════════════════════════
+             STATION 4 — COMPTIA PBQ LAB (pbq.js; content = each CompTIA pack's `pbq` array)
+        ══════════════════════════════════ -->
+        <div id="station-pbq" class="gym-station">
+            <div class="station-intro">
+                <div class="station-eyebrow">Performance-Based Questions</div>
+                <h2>CompTIA PBQ Lab</h2>
+                <p>Hands-on simulations like the ones that open every CompTIA exam: fix a firewall rule table, configure switch ports, subnet a /24, read terminal output. <span id="pbq-count"></span>. Partial credit counts, just like the real thing.</p>
+            </div>
+            <div id="pbq-app"></div>
+        </div>
+
     </div><!-- /.gym-hero -->
 
     <script src="courses/aws-saa-c03.js"></script>
@@ -656,6 +669,7 @@
     <script src="pwa.js"></script>
     <script src="sync.js"></script>
     <script src="app.js"></script>
+    <script src="pbq.js"></script>
     <script>
     const gym = {
         // ── State ──
@@ -794,8 +808,11 @@
             // Zones
             const zonesEl = document.getElementById('arch-zones-list');
             zonesEl.innerHTML = scenario.zones.map((z, i) => {
+                // A chip sits on top of its zone, so its click must not also bubble into the zone's drop
+                // handler; and with a service selected, clicking a chip places that service in the zone
+                // rather than deleting the chip (filled zones used to eat existing placements).
                 const chips = state.board[i].map(svc =>
-                    `<span class="zone-chip" onclick="gym.removeFromZone(${i}, '${svc.replace(/'/g, "\\'")}')" title="Click to remove">${svc} ✕</span>`
+                    `<span class="zone-chip" onclick="event.stopPropagation(); gym.chipClick(${i}, '${svc.replace(/'/g, "\\'")}')" title="Click to remove">${svc} ✕</span>`
                 ).join('');
                 const isActive = this.selectedSvc !== null ? 'zone-active' : '';
                 return `<div class="arch-zone ${isActive}" onclick="gym.dropInZone(${i})">
@@ -824,6 +841,11 @@
             this.archState.board[zoneIdx].push(svc);
             this.selectedSvc = null;
             this.renderArchBoard();
+        },
+
+        chipClick(zoneIdx, svc) {
+            if (this.selectedSvc) this.dropInZone(zoneIdx);
+            else this.removeFromZone(zoneIdx, svc);
         },
 
         removeFromZone(zoneIdx, svc) {
@@ -1001,6 +1023,9 @@
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof app !== 'undefined' && app.init) app.init();
         gym.init();
+        pbq.init();
+        // Deep link: gym.html#pbq opens the PBQ Lab (used by Smart Path and the homepage).
+        if (location.hash === '#pbq') gym.switchStation('pbq', document.getElementById('tab-pbq'));
     });
     </script>
 

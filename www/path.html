@@ -271,7 +271,12 @@
             readiness = moduleCompletionPct * 0.4 + flashcardPct * 0.3 + scenarioPct * 0.3;
         }
 
+        // CompTIA PBQ Lab: a PBQ counts as passed at 80%+ (best score kept in st_pbq_<id> by pbq.js).
+        const pbqs = (DATA.pbq || []).filter(p => p.courseId === track.courseId);
+        const pbqPassed = pbqs.filter(p => parseFloat(localStorage.getItem('st_pbq_' + p.id)) >= 0.8).length;
+
         return {
+            pbqTotal: pbqs.length, pbqPassed,
             track, modules, completedModules: completedModules.length, totalModules: modules.length,
             moduleCompletionPct, nextModule, flashcardPct, masteredInCat, totalCat: catCards.length,
             examPct, examAttempted, examScore, examMax, passed, weak, readiness,
@@ -313,8 +318,10 @@
             </div>`;
         }
 
-        const ctaHref = r.nextModule ? libraryLink(t.courseId, r.nextModule.title) : (t.examType ? 'arena.html' : 'gym.html');
-        const ctaLabel = r.nextModule ? `Continue: ${r.nextModule.title.replace(/^Module \d+:\s*/, '')}` : (t.examType ? 'Take a Full Exam →' : 'Drill Sales Scenarios →');
+        // Modules done: unpassed PBQs come before the full exam, then the exam, then sales drills.
+        const pbqNext = !r.nextModule && r.pbqTotal && r.pbqPassed < r.pbqTotal;
+        const ctaHref = r.nextModule ? libraryLink(t.courseId, r.nextModule.title) : pbqNext ? 'gym.html#pbq' : (t.examType ? 'arena.html' : 'gym.html');
+        const ctaLabel = r.nextModule ? `Continue: ${r.nextModule.title.replace(/^Module \d+:\s*/, '')}` : pbqNext ? 'Practice the PBQs →' : (t.examType ? 'Take a Full Exam →' : 'Drill Sales Scenarios →');
 
         return `
             <div class="path-card">
@@ -341,6 +348,11 @@
                     <div class="path-bar-label"><span>Flashcards Mastered</span><span>${r.masteredInCat} / ${r.totalCat}</span></div>
                     <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.flashcardPct)}" style="width:${pct(r.flashcardPct)}"></div></div>
                 </div>
+
+                ${r.pbqTotal ? `<div class="path-bar-row">
+                    <div class="path-bar-label"><span><a href="gym.html#pbq" style="color:inherit;">PBQ Labs passed (80%+)</a></span><span>${r.pbqPassed} / ${r.pbqTotal}</span></div>
+                    <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.pbqPassed / r.pbqTotal)}" style="width:${pct(r.pbqPassed / r.pbqTotal)}"></div></div>
+                </div>` : ''}
 
                 ${t.examType ? `<div class="path-bar-row">
                     <div class="path-bar-label"><span>Best Exam Score</span><span>${r.examAttempted ? pct(r.examPct) + ' (pass ' + pct(t.passThreshold) + ')' : '—'}</span></div>

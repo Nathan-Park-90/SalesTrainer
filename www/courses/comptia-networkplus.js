@@ -1418,75 +1418,314 @@ var COURSE_COMPTIA_NETWORKPLUS = {
   ],
   "arch": [
     {
-      "title": "Level 6: The Switching Loop (STP & VLANs)",
+      "title": "Network+ Lab: The Switching Loop (STP & VLANs)",
       "desc": "A new intern plugged both ends of a Cat6 cable into the core switch, creating a massive broadcast storm that took down the trading floor. You must logically segment the network using VLANs and prevent future loops.",
       "zones": [
         {
           "id": "core",
-          "name": "Core Switch",
-          "accepts": [
-            "stp",
-            "trunk"
+          "label": "Core Switch",
+          "needed": [
+            "Enable Rapid STP (802.1w)",
+            "Configure 802.1Q Trunk"
           ]
         },
         {
           "id": "access1",
-          "name": "Access Switch 1 (Trading)",
-          "accepts": [
-            "vlan10",
-            "portsec"
+          "label": "Access Switch 1 (Trading)",
+          "needed": [
+            "Assign VLAN 10 (High Priority)",
+            "BPDU Guard / Port Security"
           ]
         },
         {
           "id": "access2",
-          "name": "Access Switch 2 (HR)",
-          "accepts": [
-            "vlan20"
+          "label": "Access Switch 2 (HR)",
+          "needed": [
+            "Assign VLAN 20 (Standard)"
           ]
         }
       ],
       "palette": [
-        {
-          "id": "stp",
-          "label": "Enable Rapid STP (802.1w)",
-          "type": "policy"
-        },
-        {
-          "id": "vlan10",
-          "label": "Assign VLAN 10 (High Priority)",
-          "type": "resource"
-        },
-        {
-          "id": "vlan20",
-          "label": "Assign VLAN 20 (Standard)",
-          "type": "resource"
-        },
-        {
-          "id": "trunk",
-          "label": "Configure 802.1Q Trunk",
-          "type": "policy"
-        },
-        {
-          "id": "portsec",
-          "label": "BPDU Guard / Port Security",
-          "type": "policy"
-        }
+        "Enable Rapid STP (802.1w)",
+        "Assign VLAN 10 (High Priority)",
+        "Assign VLAN 20 (Standard)",
+        "Configure 802.1Q Trunk",
+        "BPDU Guard / Port Security"
       ],
-      "dm": {
-        "core": [
-          "stp",
-          "trunk"
-        ],
-        "access1": [
-          "vlan10",
-          "portsec"
-        ],
-        "access2": [
-          "vlan20"
-        ]
-      },
+      "dm": {},
       "wm": "Perfect. Spanning Tree Protocol (STP) on the core prevents the loop. The 802.1Q trunk carries the separated VLANs to the access switches, and BPDU Guard on the trading switch ensures no rogue switches can hijack the STP root."
     }
   ],
-  "sales": []
+  "sales": [],
+  "pbq": [
+    {
+      "id": "netplus-vlan",
+      "title": "VLAN 802.1Q Ports & Router-on-a-Stick",
+      "brief": "The branch office has broken inter-VLAN routing. <strong>SW1</strong> connects to router <strong>R1</strong> (router-on-a-stick on G0/0) and to a downstream switch <strong>SW2</strong> that serves Sales and Engineering users and is managed on VLAN 99. Configure each SW1 port and each R1 subinterface.",
+      "context": {
+        "type": "pre",
+        "title": "SW1# show vlan brief (current, broken)",
+        "body": "VLAN Name        Status    Ports\n1    default     active    Gi0/1, Gi0/24\n10   SALES       active    Gi0/3\n20   ENG         active    Gi0/2, Gi0/4\n99   MGMT        active\n\nGi0/1  -> R1 G0/0 (router-on-a-stick)\nGi0/2  -> Sales PC          Gi0/3 -> Engineering workstation\nGi0/4  -> Sales printer     Gi0/5 -> Admin laptop (management)\nGi0/24 -> SW2 uplink (SW2 has Sales and Eng users; its management IP is in VLAN 99)"
+      },
+      "parts": [
+        {
+          "kind": "grid",
+          "title": "SW1 port configuration",
+          "columns": [
+            {
+              "key": "cfg",
+              "label": "Configuration",
+              "type": "select",
+              "options": [
+                "Access VLAN 10",
+                "Access VLAN 20",
+                "Access VLAN 99",
+                "Trunk 802.1Q, allowed 10,20,99",
+                "Trunk 802.1Q, allowed 10,20",
+                "Access VLAN 1"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "label": "Gi0/1 → R1 G0/0",
+              "answer": {
+                "cfg": "Trunk 802.1Q, allowed 10,20,99"
+              },
+              "explain": "Router-on-a-stick needs every routed VLAN tagged on one link: trunk with 10, 20 and 99."
+            },
+            {
+              "label": "Gi0/2 → Sales PC",
+              "answer": {
+                "cfg": "Access VLAN 10"
+              },
+              "explain": "End hosts get untagged access ports in their own VLAN."
+            },
+            {
+              "label": "Gi0/3 → Engineering workstation",
+              "answer": {
+                "cfg": "Access VLAN 20"
+              },
+              "explain": "It was in VLAN 10 (Sales): a VLAN mismatch."
+            },
+            {
+              "label": "Gi0/4 → Sales printer",
+              "answer": {
+                "cfg": "Access VLAN 10"
+              },
+              "explain": "The printer belongs with Sales; it was sitting in VLAN 20."
+            },
+            {
+              "label": "Gi0/5 → Admin laptop",
+              "answer": {
+                "cfg": "Access VLAN 99"
+              },
+              "explain": "Management hosts live in the management VLAN."
+            },
+            {
+              "label": "Gi0/24 → SW2 uplink",
+              "answer": {
+                "cfg": "Trunk 802.1Q, allowed 10,20,99"
+              },
+              "explain": "SW2 carries Sales and Eng users and is managed on VLAN 99, so all three must cross the trunk. Pruning 99 would cut off SW2's management."
+            }
+          ]
+        },
+        {
+          "kind": "grid",
+          "title": "R1 subinterfaces (each is that VLAN's default gateway)",
+          "columns": [
+            {
+              "key": "tag",
+              "label": "encapsulation dot1Q",
+              "type": "select",
+              "options": [
+                "1",
+                "10",
+                "20",
+                "99"
+              ]
+            },
+            {
+              "key": "ip",
+              "label": "ip address",
+              "type": "select",
+              "options": [
+                "192.168.10.1 255.255.255.0",
+                "192.168.20.1 255.255.255.0",
+                "192.168.99.1 255.255.255.0",
+                "192.168.1.1 255.255.255.0"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "label": "G0/0.10 (Sales, 192.168.10.0/24)",
+              "answer": {
+                "tag": "10",
+                "ip": "192.168.10.1 255.255.255.0"
+              },
+              "explain": "The subinterface tag must match the VLAN ID the switch tags frames with."
+            },
+            {
+              "label": "G0/0.20 (Eng, 192.168.20.0/24)",
+              "answer": {
+                "tag": "20",
+                "ip": "192.168.20.1 255.255.255.0"
+              },
+              "explain": "VLAN 20 frames arrive tagged 20; the gateway sits in the Eng subnet."
+            },
+            {
+              "label": "G0/0.99 (Mgmt, 192.168.99.0/24)",
+              "answer": {
+                "tag": "99",
+                "ip": "192.168.99.1 255.255.255.0"
+              },
+              "explain": "Management VLAN gateway."
+            }
+          ]
+        }
+      ],
+      "solution": "Access ports for hosts (Sales 10, Eng 20, Mgmt 99), 802.1Q trunks toward the router and the downstream switch (allowing every VLAN that must cross them), and one router subinterface per VLAN whose <code>encapsulation dot1Q</code> tag matches the VLAN ID and whose IP is that subnet's default gateway. Two hosts were simply in the wrong VLAN; the uplinks were access ports in VLAN 1, so nothing was tagged."
+    },
+    {
+      "id": "netplus-vlsm",
+      "title": "CIDR / VLSM Subnetting",
+      "brief": "Carve <strong>192.168.10.0/24</strong> for four segments with no wasted overlap. Allocate the <strong>largest segment first</strong>, starting at 192.168.10.0, each subnet immediately after the previous one. Enter the mask, network ID and broadcast address.",
+      "parts": [
+        {
+          "kind": "grid",
+          "title": "Allocation",
+          "columns": [
+            {
+              "key": "mask",
+              "label": "Prefix",
+              "type": "select",
+              "options": [
+                "/24",
+                "/25",
+                "/26",
+                "/27",
+                "/28",
+                "/29",
+                "/30"
+              ]
+            },
+            {
+              "key": "net",
+              "label": "Network ID",
+              "type": "text",
+              "placeholder": "192.168.10.x"
+            },
+            {
+              "key": "bcast",
+              "label": "Broadcast",
+              "type": "text",
+              "placeholder": "192.168.10.x"
+            }
+          ],
+          "rows": [
+            {
+              "label": "Sales: 100 hosts",
+              "answer": {
+                "mask": "/25",
+                "net": "192.168.10.0",
+                "bcast": "192.168.10.127"
+              },
+              "explain": "100 hosts need 7 host bits (2⁷−2 = 126). /25 = .0–.127."
+            },
+            {
+              "label": "Engineering: 50 hosts",
+              "answer": {
+                "mask": "/26",
+                "net": "192.168.10.128",
+                "bcast": "192.168.10.191"
+              },
+              "explain": "50 hosts need 6 host bits (62 usable). Next free block: .128–.191."
+            },
+            {
+              "label": "Management: 20 hosts",
+              "answer": {
+                "mask": "/27",
+                "net": "192.168.10.192",
+                "bcast": "192.168.10.223"
+              },
+              "explain": "20 hosts need 5 host bits (30 usable). .192–.223."
+            },
+            {
+              "label": "WAN point-to-point link: 2 hosts",
+              "answer": {
+                "mask": "/30",
+                "net": "192.168.10.224",
+                "bcast": "192.168.10.227"
+              },
+              "explain": "Two routers need 2 usable addresses: /30 (4 addresses). .224–.227, leaving .228–.255 free."
+            }
+          ]
+        }
+      ],
+      "solution": "Usable hosts = 2ⁿ − 2. Size each subnet to the smallest block that fits, then allocate from the largest down so every block starts on its own boundary: /25 (.0), /26 (.128), /27 (.192), /30 (.224). The broadcast is the network ID plus the block size minus one."
+    },
+    {
+      "id": "netplus-cli",
+      "title": "CLI Troubleshooting Simulator",
+      "brief": "Four help desk tickets, four terminal captures. Read the output and pick the root cause for each. (The engineering subnet is 10.0.20.0/24, gateway 10.0.20.1, DNS 10.0.20.53.)",
+      "parts": [
+        {
+          "kind": "grid",
+          "title": "Ticket → diagnosis",
+          "columns": [
+            {
+              "key": "dx",
+              "label": "Root cause",
+              "type": "select",
+              "options": [
+                "DNS failure",
+                "Incorrect default gateway",
+                "VLAN mismatch (wrong access VLAN)",
+                "Duplicate IP address",
+                "DHCP scope exhausted",
+                "Faulty patch cable"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "label": "Ticket 1: \"Websites won't load\"",
+              "detail": "C:\\> ipconfig /all\n   IPv4 Address. . . . : 10.0.20.45(Preferred)  Subnet Mask . . : 255.255.255.0\n   Default Gateway . . : 10.0.20.1        DNS Servers . . : 10.0.20.53\nC:\\> ping 8.8.8.8\n   Reply from 8.8.8.8: bytes=32 time=12ms TTL=117   (4/4 received)\nC:\\> ping www.mammothcapital.site\n   Ping request could not find host www.mammothcapital.site.\nC:\\> nslookup www.mammothcapital.site\n   DNS request timed out.  timeout was 2 seconds.\n   Server:  UnKnown   Address:  10.0.20.53",
+              "answer": {
+                "dx": "DNS failure"
+              },
+              "explain": "Routing to the internet works by IP; only name resolution fails, and the DNS server times out."
+            },
+            {
+              "label": "Ticket 2: \"Can print locally, no internet\"",
+              "detail": "C:\\> ipconfig\n   IPv4 Address. . . . : 10.0.20.46   Subnet Mask . . : 255.255.255.0\n   Default Gateway . . : 10.0.30.1\nC:\\> ping 10.0.20.1\n   Reply from 10.0.20.1: bytes=32 time<1ms TTL=255   (4/4 received)\nC:\\> ping 8.8.8.8\n   PING: transmit failed. General failure.",
+              "answer": {
+                "dx": "Incorrect default gateway"
+              },
+              "explain": "The configured gateway (10.0.30.1) is not on the host's own subnet, so nothing off-subnet can be sent; the real gateway 10.0.20.1 answers fine."
+            },
+            {
+              "label": "Ticket 3: \"Internet works but I can't reach the build servers\" (engineering desk)",
+              "detail": "C:\\> ipconfig\n   IPv4 Address. . . . : 10.0.30.112   Subnet Mask . . : 255.255.255.0\n   Default Gateway . . : 10.0.30.1   (DHCP, lease obtained 09:02)\nC:\\> arp -a\n   10.0.30.1     00-1a-2b-30-00-01   dynamic\nC:\\> ping build01.eng.local\n   Request timed out.\n   Request timed out.\n   (build01.eng.local resolves to 10.0.20.30)",
+              "answer": {
+                "dx": "VLAN mismatch (wrong access VLAN)"
+              },
+              "explain": "DHCP worked, but it handed out a guest-VLAN (30) address to an engineering desk: the switch port is in the wrong access VLAN."
+            },
+            {
+              "label": "Ticket 4: \"My PC drops off the network every few minutes\"",
+              "detail": "C:\\> ipconfig /all\n   Physical Address. . : 3C-52-82-11-4A-07\n   IPv4 Address. . . . : 10.0.20.50(Duplicate)\n   Autoconfiguration IPv4 Address : 169.254.33.18(Preferred)\nHelp desk PC> arp -a | findstr 10.0.20.50\n   10.0.20.50    00-1b-21-9c-02-e4   dynamic   (not this PC's MAC)",
+              "answer": {
+                "dx": "Duplicate IP address"
+              },
+              "explain": "Windows flags the static address as (Duplicate) and falls back to APIPA; another device with a different MAC answers for 10.0.20.50."
+            }
+          ]
+        }
+      ],
+      "solution": "Work up the stack: works by IP but not by name = DNS; gateway on the wrong subnet = no off-subnet traffic; a valid DHCP address from the <em>wrong</em> subnet = wrong VLAN on the port; \"(Duplicate)\" plus another MAC in ARP = IP conflict."
+    }
+  ]
 };

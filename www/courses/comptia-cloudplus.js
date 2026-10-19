@@ -1221,82 +1221,331 @@ var COURSE_COMPTIA_CLOUDPLUS = {
   ],
   "arch": [
     {
-      "title": "Level 7: Auto-Healing Cloud Infrastructure",
+      "title": "Cloud+ Lab: Auto-Healing Cloud Infrastructure",
       "desc": "The primary database server panicked and the web instances are running out of memory. Design a cloud-native architecture that automatically scales compute horizontally and ensures database high availability.",
       "zones": [
         {
           "id": "edge",
-          "name": "Network Edge",
-          "accepts": [
-            "alb",
-            "waf"
+          "label": "Network Edge",
+          "needed": [
+            "Application Load Balancer",
+            "Web App Firewall"
           ]
         },
         {
           "id": "compute",
-          "name": "Compute Tier",
-          "accepts": [
-            "asg",
-            "stateless"
+          "label": "Compute Tier",
+          "needed": [
+            "Auto Scaling Group",
+            "Stateless EC2 Instances"
           ]
         },
         {
           "id": "data",
-          "name": "Data Tier",
-          "accepts": [
-            "multiaz",
-            "readrep"
+          "label": "Data Tier",
+          "needed": [
+            "Multi-AZ RDS (Synchronous)",
+            "RDS Read Replica (Asynchronous)"
           ]
         }
       ],
       "palette": [
-        {
-          "id": "alb",
-          "label": "Application Load Balancer",
-          "type": "resource"
-        },
-        {
-          "id": "waf",
-          "label": "Web App Firewall",
-          "type": "policy"
-        },
-        {
-          "id": "asg",
-          "label": "Auto Scaling Group",
-          "type": "policy"
-        },
-        {
-          "id": "stateless",
-          "label": "Stateless EC2 Instances",
-          "type": "resource"
-        },
-        {
-          "id": "multiaz",
-          "label": "Multi-AZ RDS (Synchronous)",
-          "type": "resource"
-        },
-        {
-          "id": "readrep",
-          "label": "RDS Read Replica (Asynchronous)",
-          "type": "resource"
-        }
+        "Application Load Balancer",
+        "Web App Firewall",
+        "Auto Scaling Group",
+        "Stateless EC2 Instances",
+        "Multi-AZ RDS (Synchronous)",
+        "RDS Read Replica (Asynchronous)"
       ],
-      "dm": {
-        "edge": [
-          "alb",
-          "waf"
-        ],
-        "compute": [
-          "asg",
-          "stateless"
-        ],
-        "data": [
-          "multiaz",
-          "readrep"
-        ]
-      },
+      "dm": {},
       "wm": "Excellent. The ALB distributes traffic. Compute must be stateless so the Auto Scaling Group can kill/spawn instances without losing session data. Multi-AZ handles the automated failover, while the Read Replica offloads read-heavy queries to prevent DB exhaustion."
     }
   ],
-  "sales": []
+  "sales": [],
+  "pbq": [
+    {
+      "id": "cloudplus-contention",
+      "title": "Hypervisor Resource Contention",
+      "brief": "Host <strong>HV-07</strong> (32 physical cores, 256 GB RAM, SATA HDD datastore + an NVMe tier) is slow. Read each telemetry finding and choose the remediation.",
+      "context": {
+        "type": "pre",
+        "title": "HV-07 telemetry (peak hour)",
+        "body": "VM            vCPU  CPU use  CPU Ready   RAM   Ballooned  Swap-in   Disk latency  IOPS\nquant-sim      16      11%      19.4%     64G     0          0          4 ms        300\nrisk-db         8      58%       2.1%     96G     0          0         48 ms       2,900 (HDD tier max ~3,000)\nreports-01      4      40%       3.0%     32G    22G       180 MB/s    6 ms        150\nweb-01..06    6×4      35%       2.6%   6×20G     8G        40 MB/s    3 ms        400\n\nHost: vCPU:pCore 52:32 (1.6:1)   RAM configured 312G / 256G physical (122%)   balloon + host swapping active"
+      },
+      "parts": [
+        {
+          "kind": "grid",
+          "title": "Finding → remediation",
+          "columns": [
+            {
+              "key": "fix",
+              "label": "Remediation",
+              "type": "select",
+              "options": [
+                "Right-size: cut quant-sim's vCPU count",
+                "Add host RAM / reduce memory overcommitment",
+                "Move risk-db to the NVMe storage tier",
+                "Add more vCPUs to quant-sim",
+                "Enable ballooning on more VMs",
+                "Upgrade the host NIC"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "label": "quant-sim: 16 vCPU, 11% used, CPU Ready 19.4%",
+              "answer": {
+                "fix": "Right-size: cut quant-sim's vCPU count"
+              },
+              "explain": "High CPU Ready with low utilization means the VM waits to get all 16 vCPUs scheduled at once. Fewer vCPUs schedule faster; adding more makes it worse."
+            },
+            {
+              "label": "Host RAM 122% configured, balloon driver reclaiming 30 GB, host swapping",
+              "answer": {
+                "fix": "Add host RAM / reduce memory overcommitment"
+              },
+              "explain": "Ballooning plus host-level swapping is memory contention; the fix is more physical RAM or less committed memory, not more ballooning."
+            },
+            {
+              "label": "risk-db: 48 ms disk latency at ~2,900 IOPS on a tier that tops out near 3,000",
+              "answer": {
+                "fix": "Move risk-db to the NVMe storage tier"
+              },
+              "explain": "The HDD tier is saturated; tier the database onto NVMe for far higher IOPS and lower latency."
+            }
+          ]
+        }
+      ],
+      "solution": "CPU Ready high but usage low = oversized VM (right-size down). Balloon/swap activity = memory overcommitment (add RAM or rebalance). High latency at the tier's IOPS ceiling = storage bottleneck (move to a faster tier)."
+    },
+    {
+      "id": "cloudplus-migration-dr",
+      "title": "Cloud Migration & DR Architecture Match",
+      "brief": "Mammoth Capital is leaving its data center. First choose a migration strategy (the \"6 Rs\") for each workload, then pick a DR strategy that meets each system's targets at the lowest cost.",
+      "parts": [
+        {
+          "kind": "grid",
+          "title": "Workload → migration strategy",
+          "columns": [
+            {
+              "key": "r",
+              "label": "Strategy",
+              "type": "select",
+              "options": [
+                "Rehost",
+                "Replatform",
+                "Refactor",
+                "Repurchase",
+                "Retain",
+                "Retire"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "label": "On-prem Exchange server; leadership wants Microsoft 365 instead",
+              "answer": {
+                "r": "Repurchase"
+              },
+              "explain": "Dropping the self-hosted product for a SaaS equivalent is repurchasing."
+            },
+            {
+              "label": "Custom Java app on VMs; the data-center lease ends in 60 days, no time for changes",
+              "answer": {
+                "r": "Rehost"
+              },
+              "explain": "Lift-and-shift the VMs as-is."
+            },
+            {
+              "label": "Self-managed MySQL VM moving to a managed database service with minor changes",
+              "answer": {
+                "r": "Replatform"
+              },
+              "explain": "\"Lift, tinker and shift\": same app, a managed platform underneath."
+            },
+            {
+              "label": "Monolithic order engine rebuilt as microservices so each part scales on its own",
+              "answer": {
+                "r": "Refactor"
+              },
+              "explain": "Re-architecting the code for cloud-native scaling is refactoring."
+            },
+            {
+              "label": "Mainframe settlement batch with regulatory constraints; stays on-prem for now",
+              "answer": {
+                "r": "Retain"
+              },
+              "explain": "Keep it where it is and revisit later."
+            },
+            {
+              "label": "Legacy reporting app nobody has opened in 14 months",
+              "answer": {
+                "r": "Retire"
+              },
+              "explain": "Switch it off rather than migrate it."
+            }
+          ]
+        },
+        {
+          "kind": "grid",
+          "title": "System → DR strategy (cheapest one that meets the targets)",
+          "columns": [
+            {
+              "key": "dr",
+              "label": "DR strategy",
+              "type": "select",
+              "options": [
+                "Backup and restore",
+                "Pilot light",
+                "Warm standby",
+                "Multi-site active-active"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "label": "Trading platform: RTO ≈ 0, RPO ≈ 0, cost is secondary",
+              "answer": {
+                "dr": "Multi-site active-active"
+              },
+              "explain": "Only full capacity serving live traffic in two places gives near-zero RTO and RPO."
+            },
+            {
+              "label": "Client portal: RTO 15 minutes, RPO 1 minute",
+              "answer": {
+                "dr": "Warm standby"
+              },
+              "explain": "A scaled-down but running copy can scale up within minutes, with continuous replication."
+            },
+            {
+              "label": "Internal HR app: RTO 4 hours, RPO 1 hour, keep cost low",
+              "answer": {
+                "dr": "Pilot light"
+              },
+              "explain": "Replicate the core data; keep compute off until failover. Hours of RTO are fine."
+            },
+            {
+              "label": "Document archive: RTO 48 hours, RPO 24 hours",
+              "answer": {
+                "dr": "Backup and restore"
+              },
+              "explain": "Daily backups and a restore when needed meet these loose targets at the lowest cost."
+            }
+          ]
+        }
+      ],
+      "solution": "6 Rs: SaaS swap = Repurchase, as-is move = Rehost, managed platform = Replatform, re-architect = Refactor, keep = Retain, switch off = Retire. DR from cheapest/slowest to fastest/most expensive: backup and restore → pilot light → warm standby → multi-site active-active; pick the cheapest that still meets RTO and RPO."
+    },
+    {
+      "id": "cloudplus-vpn",
+      "title": "Hybrid Cloud VPN Triage",
+      "brief": "The site-to-site IPsec tunnel between the office firewall and the cloud VPN gateway is down, and once it is up the app tier still can't reach the on-prem SQL server (10.50.0.0/16, TCP 1433). Fix each setting.",
+      "context": {
+        "type": "pre",
+        "title": "Tunnel logs and config",
+        "body": "Cloud VPN gateway (required):  IKEv2 | P1: AES-256, SHA-256, DH group 14 | P2: AES-256, SHA-256, PFS group 14\n                               BGP over tunnel: cloud ASN 64512, office ASN 65010\nOffice firewall (current):     IKEv2 | P1: AES-128, SHA-256, DH group 2  | P2: AES-256, SHA-256, PFS off\n                               router bgp 65010 / neighbor 169.254.21.1 remote-as 65001\n\nfw01: IKEv2 SA_INIT: NO_PROPOSAL_CHOSEN (P1)\nVPC route table rt-app: 10.20.0.0/16 local | 0.0.0.0/0 igw   (route propagation: disabled)\nsg-app egress: TCP 443 → 0.0.0.0/0"
+      },
+      "parts": [
+        {
+          "kind": "grid",
+          "title": "Setting → correct value",
+          "columns": [
+            {
+              "key": "v",
+              "label": "Set it to",
+              "type": "select",
+              "options": []
+            }
+          ],
+          "rows": [
+            {
+              "label": "Office P1 encryption",
+              "options": {
+                "v": [
+                  "AES-256",
+                  "AES-128",
+                  "3DES"
+                ]
+              },
+              "answer": {
+                "v": "AES-256"
+              },
+              "explain": "Phase 1 proposals must match exactly; the cloud side requires AES-256."
+            },
+            {
+              "label": "Office P1 Diffie-Hellman group",
+              "options": {
+                "v": [
+                  "Group 14 (2048-bit)",
+                  "Group 2 (1024-bit)",
+                  "Group 5 (1536-bit)"
+                ]
+              },
+              "answer": {
+                "v": "Group 14 (2048-bit)"
+              },
+              "explain": "DH group mismatch gives NO_PROPOSAL_CHOSEN; group 2 is also too weak to use."
+            },
+            {
+              "label": "Office P2 perfect forward secrecy",
+              "options": {
+                "v": [
+                  "PFS group 14",
+                  "PFS off",
+                  "PFS group 2"
+                ]
+              },
+              "answer": {
+                "v": "PFS group 14"
+              },
+              "explain": "Phase 2 (IPsec SA) must match too: the cloud requires PFS with group 14."
+            },
+            {
+              "label": "Office BGP neighbor remote-as",
+              "options": {
+                "v": [
+                  "64512",
+                  "65001",
+                  "65010"
+                ]
+              },
+              "answer": {
+                "v": "64512"
+              },
+              "explain": "remote-as is the <em>peer's</em> ASN (the cloud side, 64512). 65010 is the office's own ASN."
+            },
+            {
+              "label": "VPC route table rt-app",
+              "options": {
+                "v": [
+                  "Enable route propagation from the VPN gateway",
+                  "Add 10.50.0.0/16 → internet gateway",
+                  "No change needed"
+                ]
+              },
+              "answer": {
+                "v": "Enable route propagation from the VPN gateway"
+              },
+              "explain": "Without a route for 10.50.0.0/16 via the VPN gateway, return traffic goes nowhere useful. Propagation installs the BGP-learned routes."
+            },
+            {
+              "label": "sg-app egress",
+              "options": {
+                "v": [
+                  "Add TCP 1433 → 10.50.0.0/16",
+                  "Allow all traffic → 0.0.0.0/0",
+                  "No change needed"
+                ]
+              },
+              "answer": {
+                "v": "Add TCP 1433 → 10.50.0.0/16"
+              },
+              "explain": "Least privilege: open only SQL to the on-prem range. \"Allow all\" works but violates the principle."
+            }
+          ]
+        }
+      ],
+      "solution": "Both IKE phases must agree exactly (encryption, integrity, DH group, PFS). BGP <code>remote-as</code> is the neighbor's ASN. Then the cloud side needs a route back (propagate the VPN routes) and a security group that allows the specific traffic, nothing broader."
+    }
+  ]
 };
