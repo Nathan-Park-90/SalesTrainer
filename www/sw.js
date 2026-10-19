@@ -9,7 +9,7 @@
  * get whatever was last cached. Bump CACHE_NAME on any app-shell file list
  * change so old caches get cleaned up on the next visit.
  */
-const CACHE_NAME = 'mammoth-academy-v7';   // v7: Oct 19, 2026 (CompTIA PBQ Lab, CompTIA arch labs fixed)
+const CACHE_NAME = 'mammoth-academy-v8';   // v8: Oct 19, 2026 (versioned asset URLs; PBQ Lab)
 
 const APP_SHELL = [
   'index.html',
@@ -73,7 +73,9 @@ self.addEventListener('fetch', (event) => {
         return response;
       })
       .catch(() =>
-        caches.match(event.request).then((cached) => cached || caches.match('index.html'))
+        // ignoreSearch: pages reference assets as file.js?v=<deploy stamp> (tools/stamp-assets.js), while the
+        // precache stores plain file.js; either copy is fine offline.
+        caches.match(event.request, { ignoreSearch: true }).then((cached) => cached || caches.match('index.html'))
       )
   );
 });

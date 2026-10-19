@@ -6,7 +6,8 @@
         "sync": "npx cap sync",
         "build": "echo No build step required — static HTML/JS/CSS",
         "open": "npx cap open android",
-        "export-notebooklm": "node www/courses/build-notebooklm-exports.js"
+        "export-notebooklm": "node www/courses/build-notebooklm-exports.js",
+        "stamp": "node tools/stamp-assets.js"
     },
     "dependencies": {
         "@capacitor/android": "^8.5.1",

@@ -272,3 +272,10 @@ the "⇄ Sync & Backup" footer link, or `#sync` on any URL. CSS at the end of st
   load order): don't reorder course scripts.
 - Tests: scratch `pbq_test.py` (all 12 PBQs scored through the UI, ACL simulation cases, partial credit, Smart
   Path/Home counts, Sync merge, all 9 arch labs solvable and empty boards rejected, phone layout). Cache v7.
+
+## Deploys and Cloudflare's edge cache (Oct 19, 2026) — run `npm run stamp` before every deploy
+Cloudflare caches .js/.css at its edge for 4 hours (origin sends no Cache-Control) but not HTML, so a deploy served new
+pages with old scripts (the PBQ tab loaded with yesterday's course-loader.js and showed nothing). `tools/stamp-assets.js`
+rewrites every local script/stylesheet reference in www/*.html to `?v=<yyyymmddhhmm>`; new URLs per deploy can't be
+stale. The service worker serves its offline cache with `ignoreSearch`, so stamped URLs work offline (tested). There is
+no Cloudflare API token (GODMODE says so), so purging needs the dashboard; stamping makes that unnecessary.
