@@ -1062,6 +1062,11 @@ const app = {
         // would silently point saved progress at the wrong module/topic).
         const quizKey = 'st_quiz_' + mod.courseId + '_' + mod.localIdx + '_' + topicIdx;
         const quizDone = localStorage.getItem(quizKey) === 'done';
+        // A lesson with no quiz counts as done once it's been read, otherwise its module could never be
+        // completed on the Smart Path. Separate key, so it doesn't count toward the quiz badges.
+        if (!(topic.quiz && topic.quiz.length)) {
+            try { localStorage.setItem('st_read_' + mod.courseId + '_' + mod.localIdx + '_' + topicIdx, 'done'); } catch (e) { }
+        }
         let quizHtml = '';
         if (topic.quiz && topic.quiz.length > 0) {
             quizHtml = `

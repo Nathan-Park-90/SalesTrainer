@@ -221,7 +221,11 @@
         // Keyed by courseId+localIdx (stable identity) to match app.js —
         // NOT the module's position in the merged DATA.course array, which
         // shifts if script load order or any course's module count changes.
-        return mod.topics.every((t, ti) => localStorage.getItem('st_quiz_' + mod.courseId + '_' + mod.localIdx + '_' + ti) === 'done');
+        // Quiz topics count when their quiz is done; topics without a quiz count once read (st_read_*, app.js).
+        return mod.topics.every((t, ti) => {
+            const suffix = mod.courseId + '_' + mod.localIdx + '_' + ti;
+            return localStorage.getItem('st_quiz_' + suffix) === 'done' || (!(t.quiz && t.quiz.length) && localStorage.getItem('st_read_' + suffix) === 'done');
+        });
     }
 
     function computeTrack(track) {

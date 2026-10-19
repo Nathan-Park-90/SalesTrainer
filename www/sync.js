@@ -137,7 +137,7 @@
                 const merged = list(a), before = merged.length;
                 list(b).forEach(x => { if (!merged.includes(x)) merged.push(x); });
                 if (merged.length !== before) out[k] = JSON.stringify(merged);
-            } else if (/^st_quiz_/.test(k)) {
+            } else if (/^st_(quiz|read)_/.test(k)) {
                 out[k] = a === 'done' || b === 'done' ? 'done' : a;
             } else if (/^st_highscore/.test(k) || /^st_pbq_/.test(k) || /^st_daily_day_/.test(k) || k === 'st_streak' || k === 'st_arch_completed') {
                 out[k] = num(b) > num(a) ? b : a;             // best score (exams, PBQs), furthest lesson, longest streak
