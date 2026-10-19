@@ -1,5 +1,5 @@
 ## MAMMOTH ACADEMY — Memory Log
-Last updated: 2026-10-18
+Last updated: 2026-10-19
 
 ---
 
@@ -96,6 +96,7 @@ Gotcha: any element toggled via the `hidden` attribute that also has its own CSS
 | st_highscore_pct_<examKey> | float string | Best percentage from any run/mode (Oct 18); Home and Smart Path prefer it. Written on a first attempt even at 0% |
 | st_exam_practice | '1'/'0' | Arena Practice mode toggle (instant feedback) vs. real exam rules |
 | st_failed_qs | array | Question texts missed in the Arena (drawn first next time) |
+| ma_sync_undo | object | Snapshot taken right before the last Sync & Backup import (powers "Undo it"). Deliberately NOT `st_`-prefixed so it is never exported |
 | st_domain_perf_<examKey> | object | Cumulative per-domain correct/total from the Arena, feeds Smart Path's weakest domain |
 | st_streak | int | Daily study streak |
 | st_last_daily | string | Date of last daily completion |
@@ -224,3 +225,27 @@ Live at academy.mammothcapital.site, service worker v5.
 - **Content** (drafted by agy on Gemini 4 Argon, every answer key reviewed by Claude): 28 Daily Flash lessons (Sales 5, A+ 8, Net+ 5, Sec+ 5, Cloud+ 5) replacing CompTIA placeholders that rendered "undefined"; Scrum lesson anchors were authoring notes and are now real takeaways; `whyWrong` on all 252 old questions + 20 new multi-response questions. Corrections made in review: SY0-701 IR steps (Detection/Analysis, not Identification), an ambiguous implicit-deny question (Net+/Sec+), an MTD-vs-RTO question, KMS FIPS wording, PSM Scrum-Team size and Daily Scrum wording.
 - **Study bank** (Jake): multi-response questions are excluded (the coach grades one reaction); PSM explanations were blank in the export (field is `explanation`) and are fixed.
 - Banks are still thin vs. real exams (A+ Core 2 has 9 questions; Cloud+ has no Security-domain questions, so the sampler fills those slots from other domains).
+
+## Sync & Backup (Oct 19, 2026) — `www/sync.js`, loaded on every page
+Moves progress between browsers/devices with no server. Opened by the "⇄ SYNC" item sync.js injects into the navbar,
+the "⇄ Sync & Backup" footer link, or `#sync` on any URL. CSS at the end of style.css.
+- **What's exported:** every `st_*` key plus `mammoth.mode` / `mammoth.unlocked`, values copied as raw strings (no
+  renaming, so courseId/localIdx/flashcard-id keys survive). Payload `{app:"mammoth-academy", version:1, exportedAt,
+  keyCount, checksum (CRC-32 of the sorted key/value list), keys}`.
+- **Sync Code:** `MA1z.` + Base64URL(deflate-raw(JSON)) via CompressionStream; `MA1j.` = uncompressed fallback. Raw
+  JSON pastes are accepted too. **File:** `mammoth-academy-backup-YYYY-MM-DD.json` (download hidden in the Capacitor
+  app, where downloads don't work; it says to use the code).
+- **Validation before anything is written:** app id, version (newer = "reload to update"), only our keys, string values,
+  list keys parse as arrays, checksum. A truncated or edited code says so in plain words.
+- **Smart Merge:** union for st_fc_mastered / st_badges / st_sales_solved / st_arch_done_ids / st_completed /
+  st_failed_qs; st_quiz_* done if either; max for st_highscore* / st_daily_day_* / st_streak / st_arch_completed;
+  most recent st_last_daily; st_domain_perf_* keeps the larger sample per domain (summing would double-count on a
+  repeat merge); preferences stay this device's. Idempotent: values are only rewritten when the merge changes them.
+  **Overwrite** needs a confirm tick and replaces only our keys (other apps' keys on the origin are untouched).
+  Every import saves an undo snapshot first.
+- Also fixed that day: the First Blood / Passing Grade / Overachiever badges read `st_highscore`, which nothing has
+  written since exams split per course, so they could never unlock; they now use the best `st_highscore_pct_*`.
+  The Arena runs the badge check after each exam. The service worker now precaches sync.js and all 7 course packs
+  (the 4 CompTIA packs were missing, so those tracks weren't fully offline). Cache v6.
+- Tests: scratch Playwright `sync_test.py` (two separate browser profiles, every merge rule, idempotency, undo,
+  overwrite, file restore, 9 kinds of bad input, uncompressed fallback, phone layout): all pass.

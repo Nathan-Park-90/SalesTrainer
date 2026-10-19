@@ -4,9 +4,9 @@
 // =============================================
 const Achievements = {
     badges: [
-        { id: 'first_blood',   icon: '⚔️',  title: 'First Blood',       desc: 'Completed your first exam',                    check: (s) => parseInt(s.highscore) > 0 },
-        { id: 'passing_grade', icon: '✅',  title: 'Passing Grade',     desc: 'Scored 72%+ on the full exam',                 check: (s) => parseInt(s.highscore) >= 47 },
-        { id: 'overachiever',  icon: '🏆',  title: 'Overachiever',      desc: 'Scored 85%+ on the full exam',                 check: (s) => parseInt(s.highscore) >= 56 },
+        { id: 'first_blood',   icon: '⚔️',  title: 'First Blood',       desc: 'Completed your first exam',                    check: (s) => s.examAttempted },
+        { id: 'passing_grade', icon: '✅',  title: 'Passing Grade',     desc: 'Scored 72%+ on a practice exam',              check: (s) => s.bestExamPct >= 0.72 },
+        { id: 'overachiever',  icon: '🏆',  title: 'Overachiever',      desc: 'Scored 85%+ on a practice exam',              check: (s) => s.bestExamPct >= 0.85 },
         { id: 'streak_3',      icon: '🔥',  title: 'On Fire',           desc: '3-day study streak',                           check: (s) => parseInt(s.streak) >= 3 },
         { id: 'streak_7',      icon: '💎',  title: 'Consistent',        desc: '7-day study streak',                           check: (s) => parseInt(s.streak) >= 7 },
         { id: 'flash_master',  icon: '⚡',  title: 'Flash Master',      desc: 'Completed all 13 AWS daily lessons',           check: (s) => parseInt(s.dailyDayAws) >= 13 },
@@ -22,8 +22,12 @@ const Achievements = {
     getState() {
         const mastered = JSON.parse(localStorage.getItem('st_fc_mastered') || '[]');
         const quizKeys = Object.keys(localStorage).filter(k => k.startsWith('st_quiz_') && localStorage.getItem(k) === 'done');
+        // Exam badges read the per-exam best percentage the Arena writes (st_highscore_pct_<exam>);
+        // the old single 'st_highscore' key stopped being written when exams split per course.
+        const pctKeys = Object.keys(localStorage).filter(k => k.startsWith('st_highscore_pct_'));
         return {
-            highscore:    localStorage.getItem('st_highscore') || 0,
+            examAttempted: pctKeys.length > 0 || Object.keys(localStorage).some(k => /^st_highscore_./.test(k)),
+            bestExamPct:  pctKeys.reduce((m, k) => Math.max(m, parseFloat(localStorage.getItem(k)) || 0), 0),
             streak:       localStorage.getItem('st_streak') || 0,
             dailyDayAws:   localStorage.getItem('st_daily_day_aws') || 0,
             dailyDayScrum: localStorage.getItem('st_daily_day_scrum') || 0,

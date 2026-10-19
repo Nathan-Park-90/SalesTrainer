@@ -745,6 +745,7 @@ const app = {
 
         ex.filter = ex.results.some(r => !r) ? 'wrong' : 'all';
         this.renderExamQ();
+        if (typeof Achievements !== 'undefined') Achievements.check('arena');
         this.scrollExamIntoView();
     },
 

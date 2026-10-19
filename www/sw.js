@@ -9,7 +9,7 @@
  * get whatever was last cached. Bump CACHE_NAME on any app-shell file list
  * change so old caches get cleaned up on the next visit.
  */
-const CACHE_NAME = 'mammoth-academy-v5';   // v5: Oct 18, 2026 (Arena exam mode, Daily Flash lessons, Library deep links)
+const CACHE_NAME = 'mammoth-academy-v6';   // v6: Oct 19, 2026 (Sync & Backup; all 7 course packs precached)
 
 const APP_SHELL = [
   'index.html',
@@ -25,11 +25,16 @@ const APP_SHELL = [
   'achievements.js',
   'scrum.js',
   'pwa.js',
+  'sync.js',
   'mammoth/mammoth-mode.js?v=1',
   'mammoth/mammoth-mode.css?v=1',
   'courses/aws-saa-c03.js',
   'courses/sales-engineering.js',
   'courses/psm-scrum.js',
+  'courses/comptia-securityplus.js',
+  'courses/comptia-networkplus.js',
+  'courses/comptia-aplus.js',
+  'courses/comptia-cloudplus.js',
   'fonts/mammoth-fonts.css',
   'assets/mammoth-logo.png',
   'assets/icon-192.png',
