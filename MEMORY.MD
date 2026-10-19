@@ -301,3 +301,17 @@ no Cloudflare API token (GODMODE says so), so purging needs the dashboard; stamp
 - Layout fix: `.lesson-canvas` needs `min-width: 0` (grid item) or wide content pushes phones sideways.
 - Screenshot tip: the fixed `#particle-canvas` makes headless Chrome captures come out black at random; hide it in
   test screenshots. Tests: scratch `study_test.py` (fake speechSynthesis records what would be spoken).
+
+## Track Expansion Engine, run 1: AWS SAA-C03 (Oct 19, 2026)
+Nathan's "Prompt 6" (one track at a time, order: AWS → Sec+ → Net+ → A+ Core 1/2 → Cloud+/PSM). AWS is done:
+**54 lessons (+13), 92 flashcards (+55), 213 exam questions (+120: Secure 36, Cost 24, Resilient 31, Performance 29;
+24 multi-response)**, 3 Check-Your-Understanding questions on every lesson (28 older lessons got theirs). All existing
+module/lesson/question ids kept (progress + Discord quiz unaffected); new flashcard ids continue from the max.
+- Drafted by agy (gemini-4-argon-high) in per-job worktrees, then **every answer key reviewed** and fact-fixed
+  before merging: gp3 limits (raised by AWS in 2025: don't quote 16,000 IOPS), "hundreds of" CloudFront edge locations,
+  Snowcone/Snowmobile retired, Elastic IPs billed since 2024, ALB cross-zone can be turned off, gp2 caps at 250 MB/s,
+  EBS volumes can't shrink, single-Region KMS keys can't become Multi-Region, NLB TLS listeners don't keep client IPs.
+- Merge tool + fix scripts live in the session scratchpad (`merge-expansion.js <pack> <draftsDir> [--write]`: validates
+  shapes, domains, "(Choose TWO.)" + 5 options for multi-response, then appends). Re-use it for the next track.
+- Lecture bar (same day): voice menu; default is an American male voice (Nathan doesn't want British voices).
+- SW cache `mammoth-academy-v11`. Study bank rebuilt; **Jake (VM 103) was unreachable, copy it when it's back.**
