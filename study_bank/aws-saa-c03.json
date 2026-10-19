@@ -9,7 +9,7 @@
   "Performance": "Databases (RDS & DynamoDB)",
   "Cost": "Cost Optimization (The CFO's Architecture)"
  },
- "built": "2026-10-18T21:04:27.387Z",
+ "built": "2026-10-19T08:56:04.843Z",
  "items": [
   {
    "id": "aws-saa-c03:mc:7c8e77bfb6",
@@ -1418,7 +1418,7 @@
    "exp": "Elasticity allows Mammoth to dynamically scale resources in and out to meet sudden spikes in demand, like the market open. High Availability is about uptime, Agility is speed to market, Global Reach is geography.",
    "domain": "",
    "module": "Module 1: Cloud 101 (The Absolute Foundation)",
-   "topic": "What is a Server— (Bare Metal vs VM vs Container)"
+   "topic": "What is a Server? (Bare Metal vs VM vs Container)"
   },
   {
    "id": "aws-saa-c03:mc:8ca1329f9c",
@@ -1435,7 +1435,7 @@
    "exp": "Cloud computing shifts Capital Expenses (CapEx) to Variable Expenses, allowing them to pay only for what they consume, unlike physical servers which require large upfront CapEx.",
    "domain": "",
    "module": "Module 1: Cloud 101 (The Absolute Foundation)",
-   "topic": "What is a Server— (Bare Metal vs VM vs Container)"
+   "topic": "What is a Server? (Bare Metal vs VM vs Container)"
   },
   {
    "id": "aws-saa-c03:mc:54899cb8f4",
@@ -1452,7 +1452,7 @@
    "exp": "Spot Instances provide up to 90% discount for fault-tolerant, stateless workloads like backtesting. On-Demand is for unpredictable steady workloads, Reserved is for 1-3 year commitments.",
    "domain": "",
    "module": "Module 1: Cloud 101 (The Absolute Foundation)",
-   "topic": "What is a Server— (Bare Metal vs VM vs Container)"
+   "topic": "What is a Server? (Bare Metal vs VM vs Container)"
   },
   {
    "id": "aws-saa-c03:mc:513b8df2ed",
@@ -2094,9 +2094,9 @@
    "module": ""
   },
   {
-   "id": "aws-saa-c03:fc:fd0563ab61",
+   "id": "aws-saa-c03:fc:c0715cc6ec",
    "kind": "flash",
-   "q": "What is an SQS Dead Letter Queue (DLQ)—",
+   "q": "What is an SQS Dead Letter Queue (DLQ)?",
    "back": "A queue for messages that failed to process after multiple attempts.",
    "analogy": "It's the 'failed trades' ledger. If the order won't clear, don't block the pipe. Move it to the DLQ for manual review.",
    "domain": "Secure",
@@ -2220,9 +2220,9 @@
    "module": ""
   },
   {
-   "id": "aws-saa-c03:fc:a5495bd834",
+   "id": "aws-saa-c03:fc:0ad6c00899",
    "kind": "flash",
-   "q": "What is the difference between a VPC Gateway Endpoint and a VPC Interface Endpoint (PrivateLink)—",
+   "q": "What is the difference between a VPC Gateway Endpoint and a VPC Interface Endpoint (PrivateLink)?",
    "back": "Gateway Endpoints are free, route-table-based, and only work with S3 and DynamoDB. Interface Endpoints (PrivateLink) create an ENI with a private IP in your subnet and work with almost all AWS services (SQS, SNS, KMS, etc.) but have an hourly cost.",
    "analogy": "Gateway Endpoint = a free special on-ramp to the S3 and DynamoDB highways, built directly into your VPC's routing table. Interface Endpoint = a private tunnel using AWS PrivateLink, works with 100+ services but costs per hour.",
    "domain": "Secure",

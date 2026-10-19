@@ -1112,6 +1112,7 @@ const app = {
                 <div class="lesson-prose">
                     ${rawProse}
                 </div>
+                ${(topic.diagrams || []).map(id => typeof Diagrams !== 'undefined' ? Diagrams.render(id) : '').join('')}
                 ${topic.altAnalogy ? `
                 <div class="alt-analogy-wrap">
                     <button class="alt-analogy-btn" onclick="this.nextElementSibling.style.display='block';this.style.display='none';">
@@ -1217,6 +1218,10 @@ const app = {
             toc.classList.remove('mobile-open');
         }
         
+        // Audio lecture bar (lecture.js, Library only): read-aloud / NotebookLM episode for this topic,
+        // auto-continuing into the next topic when it finishes.
+        if (typeof Lecture !== 'undefined') Lecture.attach(mod, topicIdx, hasNext ? [nextMod, nextTopic] : null);
+
         // Scroll to top of page/canvas
         window.scrollTo({ top: 0, behavior: 'smooth' });
         

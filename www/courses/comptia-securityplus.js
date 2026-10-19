@@ -101,6 +101,9 @@ var COURSE_COMPTIA_SECURITYPLUS = {
               "ans": 1,
               "exp": "Network segmentation breaks a network into smaller, isolated subnets or VLANs. If the web server is compromised, the attacker cannot easily pivot to the database server because traffic between the segments is tightly controlled."
             }
+          ],
+          "diagrams": [
+            "zero-trust"
           ]
         }
       ],

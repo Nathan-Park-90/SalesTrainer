@@ -9,7 +9,8 @@
  * get whatever was last cached. Bump CACHE_NAME on any app-shell file list
  * change so old caches get cleaned up on the next visit.
  */
-const CACHE_NAME = 'mammoth-academy-v8';   // v8: Oct 19, 2026 (versioned asset URLs; PBQ Lab)
+const CACHE_NAME = 'mammoth-academy-v9';   // v9: Oct 19, 2026 (cram sheets, lesson diagrams, audio lecture bar)
+const AUDIO_CACHE = 'mammoth-audio';      // NotebookLM episodes saved offline by lecture.js; survives version bumps
 
 const APP_SHELL = [
   'index.html',
@@ -27,6 +28,9 @@ const APP_SHELL = [
   'pwa.js',
   'sync.js',
   'pbq.js',
+  'cram.js',
+  'diagrams.js',
+  'lecture.js',
   'mammoth/mammoth-mode.js?v=1',
   'mammoth/mammoth-mode.css?v=1',
   'courses/aws-saa-c03.js',
@@ -54,7 +58,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME && k !== AUDIO_CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
@@ -64,6 +68,13 @@ self.addEventListener('fetch', (event) => {
   // Only handle same-origin requests — let cross-origin (fonts.googleapis.com,
   // the Mammoth Capital site link, etc.) pass through untouched.
   if (new URL(event.request.url).origin !== self.location.origin) return;
+
+  // Audio episodes: serve a copy the listener saved offline, otherwise stream from the network untouched
+  // (media requests are byte ranges, which can't be stored, and a 50 MB episode shouldn't be cached by accident).
+  if (new URL(event.request.url).pathname.includes('/audio/') && !event.request.url.endsWith('manifest.json')) {
+    event.respondWith(caches.open(AUDIO_CACHE).then((c) => c.match(event.request.url, { ignoreSearch: true })).then((hit) => hit || fetch(event.request)));
+    return;
+  }
 
   event.respondWith(
     fetch(event.request)

@@ -2136,3 +2136,108 @@ body {
     .pbq-acl-implicit { grid-column: 1 / -1; }
     .pbq-context pre, .pbq-detail { font-size: 0.68rem; }
 }
+
+/* ================== CRAM SHEETS DRAWER (cram.js; library + gym) ================== */
+.cram-fab { position: fixed; right: 18px; bottom: 18px; z-index: 900; display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.5px; padding: 11px 16px; border-radius: 999px; cursor: pointer; color: #020617; background: var(--accent-primary); border: none; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 242, 255, 0.4); }
+.cram-fab:hover { filter: brightness(1.08); }
+.cram-on .cram-fab { display: none; }
+.cram-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 1500; width: min(640px, 100%); display: flex; flex-direction: column; background: var(--bg-card, #0d1324); border-left: 1px solid rgba(0, 242, 255, 0.25); box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5); color: var(--text-main); }
+.cram-drawer[hidden] { display: none; }
+.cram-top { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px 8px; }
+.cram-top h2 { margin: 0; font-size: 1.25rem; font-family: var(--font-heading); }
+.cram-x { width: 36px; height: 36px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255, 255, 255, 0.05); color: var(--text-muted); cursor: pointer; }
+.cram-search { margin: 4px 18px 10px; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(0, 0, 0, 0.3); color: var(--text-main); font-family: inherit; font-size: 0.92rem; }
+.cram-search:focus { outline: none; border-color: var(--accent-primary); }
+.cram-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 0 18px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+.cram-tab { flex: 0 0 auto; font-family: inherit; font-size: 0.8rem; font-weight: 700; padding: 7px 12px; border-radius: 999px; cursor: pointer; color: var(--text-muted); background: transparent; border: 1px solid rgba(255, 255, 255, 0.14); white-space: nowrap; }
+.cram-tab[aria-selected="true"] { color: #020617; background: var(--accent-primary); border-color: var(--accent-primary); }
+.cram-body { flex: 1; overflow-y: auto; padding: 10px 18px 28px; }
+.cram-exams { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
+.cram-h { margin: 18px 0 8px; font-size: 0.95rem; color: var(--accent-primary); }
+.cram-note { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin: 4px 0 8px; }
+.cram-table-wrap { overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; }
+.cram-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.cram-table th { position: sticky; top: 0; text-align: left; font-family: var(--font-mono); font-size: 0.64rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); background: #0a1122; padding: 8px 10px; }
+.cram-table td { padding: 7px 10px; border-top: 1px solid rgba(255, 255, 255, 0.06); vertical-align: top; line-height: 1.4; }
+.cram-table td.cram-key { font-family: var(--font-mono); font-weight: 700; color: var(--accent-primary); white-space: nowrap; }
+.cram-table tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+.cram-steps { margin: 0; padding-left: 24px; font-size: 0.86rem; line-height: 1.6; }
+.cram-steps li::marker { font-family: var(--font-mono); font-weight: 700; color: var(--accent-primary); }
+.cram-steps li.hit { color: var(--accent-warning); }
+.cram-elsewhere { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 8px; }
+.cram-jump { font: inherit; font-size: 0.78rem; padding: 3px 9px; margin: 2px; border-radius: 999px; cursor: pointer; color: var(--text-main); background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.14); }
+.cram-empty { color: var(--text-muted); font-style: italic; }
+@media (max-width: 760px) {
+    .cram-drawer { top: auto; height: 86vh; width: 100%; border-left: none; border-top: 1px solid rgba(0, 242, 255, 0.25); border-radius: 16px 16px 0 0; }
+    .cram-fab { right: 12px; bottom: 12px; padding: 10px 14px; }
+}
+
+/* ================== INLINE DIAGRAMS (diagrams.js) ================== */
+.lesson-diagram { margin: 26px 0; padding: 14px; border-radius: 14px; background: #060c1d; border: 1px solid rgba(0, 242, 255, 0.15); }
+.lesson-diagram { position: relative; padding-top: 46px; }   /* top strip keeps the Expand button off the drawing */
+.dg-expand { position: absolute; top: 10px; right: 10px; z-index: 1; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; padding: 5px 9px; border-radius: 8px; cursor: pointer; color: var(--text-main); background: rgba(2, 6, 23, 0.85); border: 1px solid rgba(0, 242, 255, 0.35); }
+.dg-lightbox { position: fixed; inset: 0; z-index: 2100; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(2, 6, 23, 0.95); }
+.dg-lightbox[hidden] { display: none; }
+.dg-lightbox-inner { position: relative; width: min(1180px, 100%); max-height: 100%; overflow: auto; padding: 18px; border-radius: 16px; background: #060c1d; border: 1px solid rgba(0, 242, 255, 0.25); }
+.dg-lightbox-inner p { margin: 10px 0 0; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+.dg-close { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; color: var(--text-main); background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); }
+.lesson-diagram figcaption { margin-top: 10px; font-size: 0.84rem; color: var(--text-muted); line-height: 1.5; text-align: center; }
+.dg { width: 100%; height: auto; display: block; font-family: var(--font-ui, system-ui, sans-serif); }
+.dg-t { fill: var(--text-main, #f8fafc); font-size: 13px; }
+.dg-b { font-weight: 700; font-size: 13.5px; }
+.dg-s { fill: var(--text-muted, #94a3b8); font-size: 12px; }
+.dg-label { fill: var(--text-muted, #94a3b8); font-family: var(--font-mono, monospace); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.dg-big { font-family: var(--font-heading, inherit); font-size: 20px; font-weight: 800; fill: var(--accent-primary, #00f2ff); }
+.dg-pdu { fill: var(--accent-warning, #f59e0b); font-size: 12.5px; font-weight: 700; }
+.dg-node { fill: #0d1730; stroke: rgba(148, 163, 184, 0.45); stroke-width: 1.2; }
+.dg-ext { fill: #12182b; stroke: rgba(148, 163, 184, 0.6); stroke-dasharray: 4 3; }
+.dg-gw { fill: rgba(0, 242, 255, 0.12); stroke: var(--accent-primary, #00f2ff); stroke-width: 1.5; }
+.dg-src { fill: rgba(245, 158, 11, 0.08); stroke: rgba(245, 158, 11, 0.5); }
+.dg-region { fill: none; stroke: rgba(148, 163, 184, 0.35); stroke-dasharray: 6 4; }
+.dg-vpc { fill: rgba(0, 119, 255, 0.05); stroke: rgba(0, 119, 255, 0.6); stroke-width: 1.5; }
+.dg-public { fill: rgba(16, 185, 129, 0.07); stroke: rgba(16, 185, 129, 0.55); }
+.dg-private { fill: rgba(59, 130, 246, 0.07); stroke: rgba(59, 130, 246, 0.55); }
+.dg-pubt { fill: #34d399; }
+.dg-privt { fill: #60a5fa; }
+.dg-ctrl { fill: rgba(245, 158, 11, 0.05); stroke: rgba(245, 158, 11, 0.4); }
+.dg-data { fill: rgba(16, 185, 129, 0.05); stroke: rgba(16, 185, 129, 0.4); }
+.dg-pdp { fill: rgba(245, 158, 11, 0.08); stroke: rgba(245, 158, 11, 0.7); stroke-width: 1.5; }
+.dg-trustzone { fill: rgba(16, 185, 129, 0.06); stroke: rgba(16, 185, 129, 0.6); stroke-dasharray: 5 4; }
+.dg-row { stroke: rgba(255, 255, 255, 0.08); }
+.dg-upper { fill: rgba(139, 92, 246, 0.10); }
+.dg-mid { fill: rgba(0, 242, 255, 0.10); }
+.dg-lower { fill: rgba(59, 130, 246, 0.10); }
+.dg-arrow { stroke: rgba(226, 232, 240, 0.75); stroke-width: 1.8; }
+.dg-out { stroke: #fbbf24; stroke-dasharray: 6 4; }
+.dg-priv { stroke: #34d399; }
+.dg-good-arrow { stroke: #34d399; }
+.dg-headfill { fill: rgba(226, 232, 240, 0.9); }
+.dg-axis { stroke: rgba(148, 163, 184, 0.4); }
+.dg-line { fill: none; stroke-width: 3; }
+.dg-good-line { stroke: #34d399; }
+.dg-warn-line { stroke: #f59e0b; }
+.dg-good-dot { fill: #34d399; }
+.dg-warn-dot { fill: #f59e0b; }
+.dg-good { fill: #34d399; }
+.dg-warn { fill: #f59e0b; }
+
+/* ================== AUDIO LECTURE BAR (lecture.js) ================== */
+/* The lesson column is a grid item: without min-width:0 it grows to its widest unbreakable content (the bar's
+   one-line section label, a wide diagram) and pushes the page wider than a phone screen. */
+.lesson-canvas, .lesson-content-wrapper { min-width: 0; }
+.lecture-bar { min-width: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; margin: 0 0 22px; padding: 10px 12px; border-radius: 14px; background: rgba(0, 242, 255, 0.05); border: 1px solid rgba(0, 242, 255, 0.22); }
+.lecture-bar.playing { border-color: var(--accent-primary); box-shadow: 0 0 18px rgba(0, 242, 255, 0.15); }
+.lec-btn { flex: 0 0 auto; min-width: 38px; height: 38px; padding: 0 10px; border-radius: 10px; cursor: pointer; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--text-main); background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.16); }
+.lec-play { min-width: 46px; color: #020617; background: var(--accent-primary); border-color: var(--accent-primary); font-size: 1rem; }
+.lec-info { flex: 1 1 220px; min-width: 0; }
+.lec-mode { font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-primary); }
+.lec-section { font-size: 0.85rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 2px 0 5px; }
+.lec-progress { height: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.lec-progress span { display: block; height: 100%; width: 0; background: var(--accent-primary); transition: width 0.3s ease; }
+.lec-auto { display: inline-flex; align-items: center; gap: 5px; font-size: 0.78rem; color: var(--text-muted); cursor: pointer; }
+.lec-auto input { accent-color: var(--accent-primary); }
+.lec-modes { display: flex; gap: 6px; flex-wrap: wrap; flex-basis: 100%; }
+.lec-chip { font-family: inherit; font-size: 0.76rem; font-weight: 700; padding: 5px 10px; border-radius: 999px; cursor: pointer; color: var(--text-muted); background: transparent; border: 1px solid rgba(255, 255, 255, 0.16); }
+.lec-chip.on { color: #020617; background: var(--accent-primary); border-color: var(--accent-primary); }
+.lec-warn { flex-basis: 100%; font-size: 0.78rem; color: var(--accent-warning); }
+.lecture-on { background: rgba(0, 242, 255, 0.08); box-shadow: -3px 0 0 var(--accent-primary); border-radius: 4px; transition: background 0.3s ease; }

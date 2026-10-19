@@ -279,3 +279,25 @@ pages with old scripts (the PBQ tab loaded with yesterday's course-loader.js and
 rewrites every local script/stylesheet reference in www/*.html to `?v=<yyyymmddhhmm>`; new URLs per deploy can't be
 stale. The service worker serves its offline cache with `ignoreSearch`, so stamped URLs work offline (tested). There is
 no Cloudflare API token (GODMODE says so), so purging needs the dashboard; stamping makes that unnecessary.
+
+## Study tools (Oct 19, 2026): cram sheets, lesson diagrams, audio lecture bar
+- **Cram Sheets** (`www/cram.js`, library + gym; floating "⚡ Cram Sheets" button, `#cram` opens it): searchable
+  drawer with Ports & Protocols, a COMPUTED CIDR /16–/32 matrix (never hand-type masks), Wi-Fi/copper/fiber,
+  AWS hard limits + S3 classes + EBS types, and ordered processes (A+ 6-step and Network+ 7-step troubleshooting,
+  malware removal, laser imaging, SY0-701 / PICERL / NIST IR, Scrum events). Searching shows which other sheets match.
+- **Diagrams** (`www/diagrams.js`): inline themed SVGs `aws-vpc`, `aws-dr`, `osi`, `zero-trust`; a topic opts in with
+  `diagrams: [id]` in its pack (AWS M3 topics 2-3, AWS M12 topic 1, Net+ M1, Sec+ M1). "⤢ Expand" opens a full-screen
+  view (the lesson column is ~460 px on desktop). The study test checks no label is clipped or overlapping.
+- **Audio lecture bar** (`www/lecture.js`, top of every Library lesson): Read-aloud via the device's speechSynthesis
+  reads the EXACT lesson text in sentence chunks (offline with on-device voices), section indicator + highlight,
+  1×/1.25×/1.5×/2×, prev/next section, Auto-next into the following topic. Episode mode plays NotebookLM Audio
+  Overviews listed in `www/audio/manifest.json` (`{courseId: {moduleLocalIdx: {file, title}}}`, currently `{}`):
+  **the episodes are still only inside NotebookLM (Nathan, Oct 19); download them, drop them in www/audio/, add
+  manifest entries.** "Save offline" puts one in the `mammoth-audio` cache, which the service worker keeps across
+  version bumps and serves offline; it never caches audio by accident. Inside the Android app, audio streams from
+  the site. Prefs `ma_lecture_*` are device-only (not st_, so not synced).
+- **Text fix:** 22 question marks in AWS/PSM/Sales content had been turned into em dashes ("What do you do—");
+  restored (incl. 3 AWS exam questions and 2 flashcards; study bank rebuilt).
+- Layout fix: `.lesson-canvas` needs `min-width: 0` (grid item) or wide content pushes phones sideways.
+- Screenshot tip: the fixed `#particle-canvas` makes headless Chrome captures come out black at random; hide it in
+  test screenshots. Tests: scratch `study_test.py` (fake speechSynthesis records what would be spoken).

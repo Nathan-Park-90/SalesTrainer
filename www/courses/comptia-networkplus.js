@@ -101,6 +101,9 @@ var COURSE_COMPTIA_NETWORKPLUS = {
               "ans": 2,
               "exp": "Layer 4 (Transport) is responsible for end-to-end communication, utilizing protocols like TCP for reliable delivery and UDP for fast, connectionless delivery."
             }
+          ],
+          "diagrams": [
+            "osi"
           ]
         }
       ],
