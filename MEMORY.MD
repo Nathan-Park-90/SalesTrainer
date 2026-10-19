@@ -315,3 +315,19 @@ module/lesson/question ids kept (progress + Discord quiz unaffected); new flashc
   shapes, domains, "(Choose TWO.)" + 5 options for multi-response, then appends). Re-use it for the next track.
 - Lecture bar (same day): voice menu; default is an American male voice (Nathan doesn't want British voices).
 - SW cache `mammoth-academy-v11`. Study bank rebuilt; **Jake (VM 103) was unreachable, copy it when it's back.**
+
+## Offline hardening + "Save for offline" button (Oct 19, 2026), cache v13
+Nathan couldn't use the app on his phone in airplane mode. The live app passed a plain offline test, but two weak spots
+were real: (1) network-first `fetch` had no timeout, so a stalled connection (plane Wi-Fi, one bar) hung forever
+instead of using the cache; (2) any response was cached, so an error page could overwrite a good copy.
+- `sw.js`: 3.5 s network timeout, then the cached copy; after a stall/failure it answers from the cache at once for
+  30 s (one page pulls ~30 files; without this a stalled load took 14 s, now 3.6 s). Only `ok`, same-origin,
+  non-redirected responses are cached. Only navigations fall back to index.html. Precache now includes the 7 woff2
+  fonts, icons and `audio/manifest.json` (42 files, about 3 MB). `message` handler: `status` / `download`
+  (re-fetches the whole shell with `cache: 'reload'`), replies on a MessageChannel port.
+- `pwa.js`: "📥 Study offline" card on the home page (`#offline-card`, under the stats bar) and a compact button in
+  every other page's footer: shows "✓ Saved on this device" when every shell file is cached, downloads on tap, offers
+  Chrome's install prompt (`beforeinstallprompt`), iPhone hint "Share → Add to Home Screen".
+- The old host learncenter.online still serves service worker **v1** (no CompTIA packs offline). Anyone who installed
+  from there has the old app; install from academy.mammothcapital.site instead.
+- Tests (scratch): `offline_test.py`, `hang_test.py` (stalled network), `button_test.py` (wipe cache, tap, go offline).

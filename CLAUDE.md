@@ -11,4 +11,4 @@ content into this file directly rather than maintaining two files.
 
 **Oct 6, 2026: Mammoth mode.** Every `www/*.html` loads `mammoth/mammoth-mode.js` (hidden retro theme: Konami code or 5 taps
 on the logo). The `www/mammoth/` folder is a copy; the source is MammothCapitalSite `site/mammoth/` + `tools/sync-mammoth.py`.
-Service worker cache is `mammoth-academy-v9` (Oct 19, 2026). **Run `npm run stamp` before every deploy** (Cloudflare edge-caches JS/CSS for 4h; see MEMORY.MD). Sync & Backup: `www/sync.js`; CompTIA PBQ Lab: `www/pbq.js` (see MEMORY.MD). Deploy steps are in Nathan's private notes (MammothCapitalSite CLAUDE.md, "Mammoth Academy operations").
+Service worker cache is `mammoth-academy-v13` (Oct 19, 2026). **Run `npm run stamp` before every deploy** (Cloudflare edge-caches JS/CSS for 4h; see MEMORY.MD). Sync & Backup: `www/sync.js`; CompTIA PBQ Lab: `www/pbq.js` (see MEMORY.MD). Deploy steps are in Nathan's private notes (MammothCapitalSite CLAUDE.md, "Mammoth Academy operations").
