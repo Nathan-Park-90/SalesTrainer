@@ -40,16 +40,39 @@ const Lecture = (function () {
     };
     let manifest = null, manifestLoaded = false;
 
-    // ── voices: prefer an on-device English voice (works offline) ──
+    // ── voices: the learner's saved choice, else the best American male voice the device has ──
+    // Oct 19, 2026 (Nathan): "I prefer a male speaker that is direct and articulate", not British. Voice names differ per
+    // platform: Edge's online "Natural" voices (Andrew, Brian, Guy...), Windows (David, Mark), Apple (Aaron, Evan, Tom...),
+    // Android's Google voices (en-us-x-iol/iom/tpd are male). Android Chrome often lists one voice per language: the male
+    // one is then chosen in Android's text-to-speech settings.
+    const PREF_VOICE = 'ma_lecture_voice';
+    const MALE = /\b(andrew|brian|christopher|eric|guy|roger|steffan|davis|jason|tony|david|mark|aaron|alex|evan|tom|fred|nathan|ryan|joe|male)\b|x-(iol|iom|tpd)/i;
+    const englishVoices = () => (synth ? synth.getVoices() : []).filter(v => /^en(-|_|$)/i.test(v.lang));
+    function voiceScore(v) {
+        const lang = v.lang.replace('_', '-');
+        return (/^en-US$/i.test(lang) ? 100 : /^en-(GB|UK)$/i.test(lang) ? 0 : 40)
+            + (MALE.test(v.name + ' ' + v.voiceURI) ? 50 : 0)
+            + (/natural|neural|premium|enhanced/i.test(v.name) ? 20 : 0)
+            + (v.localService ? 5 : 0);
+    }
     function pickVoice() {
         if (!synth) return null;
-        const vs = synth.getVoices();
-        const en = vs.filter(v => /^en(-|_|$)/i.test(v.lang));
-        return en.find(v => v.localService && /en-US/i.test(v.lang)) || en.find(v => v.localService) || en[0] || vs[0] || null;
+        const en = englishVoices();
+        const saved = pref(PREF_VOICE, '');
+        return (saved && en.find(v => v.voiceURI === saved)) || en.slice().sort((a, b) => voiceScore(b) - voiceScore(a))[0]
+            || synth.getVoices()[0] || null;
     }
     if (synth) {
         st.voice = pickVoice();
-        synth.addEventListener && synth.addEventListener('voiceschanged', () => { st.voice = pickVoice(); });
+        synth.addEventListener && synth.addEventListener('voiceschanged', () => { st.voice = pickVoice(); if (bar) fillVoices(); });
+    }
+    function fillVoices() {
+        const sel = bar && bar.querySelector('.lec-voice');
+        if (!sel) return;
+        const en = englishVoices().sort((a, b) => voiceScore(b) - voiceScore(a));
+        sel.innerHTML = en.map(v => `<option value="${escapeHtml(v.voiceURI)}"${st.voice && v.voiceURI === st.voice.voiceURI ? ' selected' : ''}>`
+            + `${escapeHtml(v.name.replace(/^Microsoft /, '').replace(/ - English.*$/, ''))} (${escapeHtml(v.lang)})</option>`).join('');
+        sel.hidden = en.length < 2;
     }
 
     // ── episode manifest (optional file) ──
@@ -106,6 +129,7 @@ const Lecture = (function () {
                     <div class="lec-progress"><span></span></div>
                 </div>
                 <button type="button" class="lec-btn lec-rate" data-act="rate" aria-label="Playback speed">${RATES[st.rateIdx]}&times;</button>
+                ${synth && st.mode !== 'episode' ? '<select class="lec-voice" aria-label="Voice" title="Voice" hidden></select>' : ''}
                 <label class="lec-auto" title="Continue into the next topic automatically"><input type="checkbox" data-act="auto" ${st.auto ? 'checked' : ''}> Auto-next</label>
                 ${ep ? `<div class="lec-modes" role="group" aria-label="Listening mode">
                     <button type="button" class="lec-chip${st.mode === 'episode' ? ' on' : ''}" data-act="mode-episode">🎙️ Episode</button>
@@ -254,6 +278,16 @@ const Lecture = (function () {
             actions[b.dataset.act](b);
         });
         bar.querySelector('[data-act="auto"]').addEventListener('change', e => actions.auto(e.target));
+        const vsel = bar.querySelector('.lec-voice');
+        if (vsel) {
+            fillVoices();
+            vsel.addEventListener('change', () => {
+                const v = englishVoices().find(x => x.voiceURI === vsel.value);
+                if (!v) return;
+                st.voice = v; setPref(PREF_VOICE, v.voiceURI);
+                if (st.playing) { stopSpeech(); speak(); }      // hear the new voice straight away
+            });
+        }
         updateUi();
     }
 
