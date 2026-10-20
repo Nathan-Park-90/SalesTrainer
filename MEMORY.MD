@@ -316,7 +316,7 @@ module/lesson/question ids kept (progress + Discord quiz unaffected); new flashc
 - Lecture bar (same day): voice menu; default is an American male voice (Nathan doesn't want British voices).
 - SW cache `mammoth-academy-v11`. Study bank rebuilt; **Jake (VM 103) was unreachable, copy it when it's back.**
 
-## Offline hardening + "Save for offline" button (Oct 19, 2026), cache v13
+## Offline hardening + "Save for offline" button (Oct 19-20, 2026), cache v14
 Nathan couldn't use the app on his phone in airplane mode. The live app passed a plain offline test, but two weak spots
 were real: (1) network-first `fetch` had no timeout, so a stalled connection (plane Wi-Fi, one bar) hung forever
 instead of using the cache; (2) any response was cached, so an error page could overwrite a good copy.
@@ -325,9 +325,11 @@ instead of using the cache; (2) any response was cached, so an error page could 
   non-redirected responses are cached. Only navigations fall back to index.html. Precache now includes the 7 woff2
   fonts, icons and `audio/manifest.json` (42 files, about 3 MB). `message` handler: `status` / `download`
   (re-fetches the whole shell with `cache: 'reload'`), replies on a MessageChannel port.
-- `pwa.js`: "📥 Study offline" card on the home page (`#offline-card`, under the stats bar) and a compact button in
-  every other page's footer: shows "✓ Saved on this device" when every shell file is cached, downloads on tap, offers
+- `pwa.js` (v14, Oct 20): "📥 OFFLINE" in every page's navbar, next to SYNC (Nathan didn't see a card lower on the page;
+  he wants "all of it offline with one easy click"). One tap opens a panel AND starts the download unless everything is
+  already saved; the label turns "✓ OFFLINE". `#offline` opens the panel. The home page also keeps a card
+  (`#offline-card`, under the stats bar). The panel and card: shows "✓ Saved on this device" when every shell file is cached, downloads on tap, offers
   Chrome's install prompt (`beforeinstallprompt`), iPhone hint "Share → Add to Home Screen".
 - The old host learncenter.online still serves service worker **v1** (no CompTIA packs offline). Anyone who installed
   from there has the old app; install from academy.mammothcapital.site instead.
-- Tests (scratch): `offline_test.py`, `hang_test.py` (stalled network), `button_test.py` (wipe cache, tap, go offline).
+- Tests (scratch): `offline_test.py`, `hang_test.py` (stalled network), `button_test.py` / `nav_test.py` (wipe cache, one nav tap, go offline).
