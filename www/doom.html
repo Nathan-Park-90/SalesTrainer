@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="fonts/mammoth-fonts.css?v=202611052223">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Doom Scroll">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <meta name="description" content="Doom Scroll: a study feed that hits like the feed. Swipe. Read. Answer. Repeat. Every answer feeds your Mammoth Academy review engine.">
+    <title>MAMMOTH ACADEMY | Doom Scroll</title>
+    <link rel="stylesheet" href="juice.css?v=202611052223">
+    <style>
+        /* ═══════════════════════════════════════════════════════════════════════
+           DOOM SCROLL (doom.html, Nov 5 2026). A full-screen vertical feed of study cards for one course pack.
+           Swipe up = next card. Every answer goes through Game.Review.record, so the Leitner boxes, the day log and
+           the streak are the same ones the Arena, Daily and the homepage card use. Shares nothing with app.js on
+           purpose: this page has its own shell and its own CSS so it can feel like a feed, not a web page.
+
+           Two modes (Nathan, Nov 5: "I feel like I am being quizzed on information I haven't learned"):
+           LEARN (default) walks the pack module by module: a cover card, each topic's prose in short fact cards, its
+             anchor, then that topic's quiz; a module-done card unlocks that module's exam questions (a three-question
+             boss round right away, then sprinkled in). Due reviews still jump the queue. The pointer (module, card)
+             is saved in st_doom_learn, so a reload or another device continues where you stopped.
+           GRIND is the original feed: everything in the pack, due reviews first, random mix of question / flashcard /
+             Daily slide, a checkpoint card every 20 answers. Learn turns into Grind once every module is done.
+           VOICE (Nathan picked Kokoro am_onyx + am_michael, Nov 5): cards are narrated from pre-rendered clips in
+             audio/doom/<voice>/<sha1 of the spoken text, 10 hex>.mp3 (built by tools/doom-speech.py, listed in
+             audio/doom/manifest.json; the folder is generated and not in git). Onyx teaches (cover, prose, anchor,
+             flashcards, Daily slides, module done); Michael is the quizmaster (questions, verdicts, traps). Anything
+             without a clip falls back to the browser's own speech. DoomDebug.speechList(courseId) is the list the
+             build script renders, so the page and the clips can never disagree about the text or the hash.
+           ═══════════════════════════════════════════════════════════════════════ */
+        :root {
+            --bg: #020617; --card: #0d1324; --card2: #121a33;
+            --text: #f8fafc; --muted: #94a3b8; --dim: #64748b;
+            --cyan: #00f2ff; --ok: #10b981; --bad: #ef4444; --gold: #f59e0b;
+            --c: var(--cyan);                  /* the active course pack's colour */
+            --font: "Outfit", system-ui, sans-serif; --mono: "JetBrains Mono", "Courier New", monospace;
+            --top: 56px;
+            --safe-t: env(safe-area-inset-top, 0px); --safe-b: env(safe-area-inset-bottom, 0px);
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); overflow: hidden; }
+        button { font: inherit; color: inherit; cursor: pointer; }
+        .hidden { display: none !important; }
+
+        /* ── top bar ── */
+        .d-top {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 20; height: calc(var(--top) + var(--safe-t)); padding: var(--safe-t) 12px 0;
+            display: flex; align-items: center; gap: 8px;
+            background: linear-gradient(180deg, rgba(2,6,23,.96) 60%, rgba(2,6,23,0));
+        }
+        .d-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 800; letter-spacing: 2px; font-size: .95rem; }
+        .d-brand img { height: 26px; width: auto; }
+        .d-brand small { color: var(--muted); font-weight: 600; letter-spacing: 1px; font-size: .65rem; display: block; line-height: 1; }
+        .d-chip {
+            margin-left: auto; border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); background: color-mix(in srgb, var(--c) 12%, transparent);
+            color: var(--c); border-radius: 999px; padding: 6px 12px; font-weight: 700; font-size: .78rem; white-space: nowrap; max-width: 42vw; overflow: hidden; text-overflow: ellipsis;
+        }
+        .d-chip .md { color: var(--muted); font-weight: 600; font-family: var(--mono); font-size: .66rem; margin-left: 6px; }
+        .d-stat { font-family: var(--mono); font-size: .78rem; color: var(--muted); white-space: nowrap; display: flex; align-items: center; gap: 4px; }
+        .d-stat b { color: var(--text); }
+        .d-stat .ma-flame { width: 14px; height: 14px; color: var(--gold); }
+        .d-icon { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); display: grid; place-items: center; font-size: 1rem; }
+        .d-icon[aria-pressed="true"] { border-color: var(--c); color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); }
+
+        /* ── the feed ── */
+        .d-feed {
+            height: 100dvh; overflow-y: auto; overscroll-behavior-y: contain; scroll-snap-type: y mandatory; scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .d-feed::-webkit-scrollbar { display: none; }
+        .d-card {   /* min-height, not height: a long question with four long options may run past one screen, and the feed scrolls through it */
+            min-height: 100dvh; scroll-snap-align: start; scroll-snap-stop: always; position: relative;
+            display: flex; flex-direction: column; justify-content: center; gap: 14px;
+            padding: calc(var(--top) + var(--safe-t) + 12px) 20px calc(44px + var(--safe-b)); max-width: 680px; margin: 0 auto;
+        }
+        .d-card::before {       /* a faint colour wash per card type */
+            content: ""; position: absolute; inset: 0; pointer-events: none; z-index: -1;
+            background: radial-gradient(60% 40% at 50% 0%, color-mix(in srgb, var(--c) 14%, transparent), transparent 70%);
+        }
+        .d-meta { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: .72rem; color: var(--muted); letter-spacing: .5px; text-transform: uppercase; flex-wrap: wrap; }
+        .d-meta .d-dom { color: var(--c); font-weight: 700; }
+        .d-meta .d-box { border: 1px solid rgba(255,255,255,.12); border-radius: 6px; padding: 1px 7px; }
+        .d-meta .d-box.due { border-color: var(--gold); color: var(--gold); }
+        .d-meta .d-box.new { border-color: var(--ok); color: var(--ok); }
+        .d-meta .d-box.boss { border-color: var(--bad); color: var(--bad); }
+        .d-kind { font-size: .72rem; color: var(--dim); font-family: var(--mono); letter-spacing: 1px; }
+        .d-q h2 { margin: 0; font-size: clamp(1rem, 4vw, 1.3rem); line-height: 1.35; font-weight: 600; }
+        .d-q h2.long { font-size: clamp(.95rem, 3.6vw, 1.15rem); }
+        .d-opts { display: flex; flex-direction: column; gap: 10px; }
+        .d-opt {
+            text-align: left; display: flex; gap: 12px; align-items: flex-start; width: 100%;
+            background: var(--card); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 11px 13px; line-height: 1.38; font-size: .93rem;
+            transition: transform .12s ease, border-color .12s ease, background .12s ease;
+        }
+        .d-opt:active { transform: scale(.985); }
+        .d-opt .k { font-family: var(--mono); font-size: .75rem; color: var(--muted); min-width: 18px; padding-top: 3px; }
+        .d-opt.sel { border-color: var(--c); background: color-mix(in srgb, var(--c) 10%, var(--card)); }
+        .d-opt.right { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 16%, var(--card)); }
+        .d-opt.wrong { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 16%, var(--card)); }
+        .d-opt.dim { opacity: .45; }
+        .d-opt:disabled { cursor: default; }
+        .d-check { align-self: flex-start; border: 1px solid var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); color: var(--c); border-radius: 999px; padding: 9px 18px; font-weight: 700; }
+        .d-check:disabled { opacity: .4; }
+
+        .d-after { border-left: 3px solid var(--c); padding: 4px 0 4px 14px; display: flex; flex-direction: column; gap: 8px; animation: d-in .25s ease-out; }
+        .d-after.good { border-color: var(--ok); } .d-after.bad { border-color: var(--bad); }
+        .d-verdict { font-weight: 800; letter-spacing: 1px; font-size: .9rem; }
+        .d-after.good .d-verdict { color: var(--ok); } .d-after.bad .d-verdict { color: var(--bad); }
+        .d-exp { margin: 0; color: var(--text); font-size: .95rem; line-height: 1.5; }
+        .d-trap { margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.45; }
+        .d-trap b { color: var(--bad); font-family: var(--mono); font-size: .72rem; letter-spacing: 1px; }
+        .d-more { align-self: flex-start; background: none; border: none; color: var(--c); font-size: .82rem; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
+        @keyframes d-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+        /* flashcard */
+        .d-fc .d-face { background: var(--card); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 26px 20px; min-height: 180px; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+        .d-fc .d-front { font-size: clamp(1.15rem, 4.6vw, 1.5rem); font-weight: 600; line-height: 1.35; }
+        .d-fc .d-back { font-size: 1.02rem; line-height: 1.5; }
+        .d-fc .d-analogy { color: var(--muted); font-style: italic; font-size: .95rem; line-height: 1.5; border-top: 1px dashed rgba(255,255,255,.12); padding-top: 10px; }
+        .d-row { display: flex; gap: 10px; }
+        .d-btn { flex: 1; border-radius: 14px; padding: 14px; font-weight: 800; letter-spacing: 1px; border: 1px solid rgba(255,255,255,.12); background: var(--card); }
+        .d-btn.yes { border-color: var(--ok); color: var(--ok); } .d-btn.no { border-color: var(--bad); color: var(--bad); }
+        .d-btn.flip { border-color: var(--c); color: var(--c); }
+
+        /* fact (a Daily slide, or a slice of a lesson's prose) + anchor */
+        .d-fact .d-icon-big { font-size: 2.2rem; line-height: 1; }
+        .d-fact h2 { margin: 0; font-size: clamp(1.3rem, 5.2vw, 1.8rem); line-height: 1.2; font-weight: 800; }
+        .d-fact h2.topic { font-size: clamp(1.1rem, 4.4vw, 1.45rem); }
+        .d-fact h3 { margin: 0; color: var(--c); font-size: .85rem; font-family: var(--mono); letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
+        .d-fact .d-body { font-size: 1.02rem; line-height: 1.6; color: var(--text); }
+        .d-fact .d-body.prose { font-size: .98rem; line-height: 1.55; }
+        .d-fact .d-body strong { color: var(--c); }
+        .d-fact .d-body p { margin: 0 0 .8em; } .d-fact .d-body p:last-child { margin-bottom: 0; }
+        .d-fact .d-body ul, .d-fact .d-body ol { margin: 0 0 .8em; padding-left: 1.2em; } .d-fact .d-body li { margin-bottom: .5em; }
+        .d-fact .d-body code { font-family: var(--mono); font-size: .85em; background: rgba(255,255,255,.07); padding: 1px 5px; border-radius: 5px; }
+        .d-fact .d-anchor { background: color-mix(in srgb, var(--c) 10%, var(--card)); border: 1px solid color-mix(in srgb, var(--c) 35%, transparent); border-radius: 14px; padding: 12px 14px; font-weight: 600; line-height: 1.45; }
+        .d-anchorcard .d-anchor { font-size: 1.05rem; padding: 18px 16px; font-weight: 500; }
+        .d-anchorcard .d-anchor strong { color: var(--c); }
+        .d-dots { display: flex; gap: 5px; } .d-dots i { width: 14px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.12); } .d-dots i.on { background: var(--c); }
+
+        /* cover / module-done / checkpoint cards */
+        .d-win { text-align: center; align-items: center; }
+        .d-win .d-big { font-size: clamp(3.4rem, 18vw, 5.5rem); font-weight: 800; line-height: 1; color: var(--c); font-family: var(--mono); }
+        .d-win .d-sub { color: var(--muted); font-size: 1rem; }
+        .d-win .d-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; max-width: 420px; }
+        .d-win .d-tile { background: var(--card); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 12px 6px; }
+        .d-win .d-tile b { display: block; font-family: var(--mono); font-size: 1.3rem; }
+        .d-win .d-tile span { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+        .d-win .d-line { font-size: 1.05rem; font-weight: 600; max-width: 380px; }
+        .d-cover h2 { margin: 0; font-size: clamp(1.6rem, 7vw, 2.4rem); line-height: 1.1; font-weight: 800; max-width: 460px; }
+        .d-cover .d-topics { text-align: left; width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 6px; font-size: .92rem; color: var(--muted); }
+        .d-cover .d-topics div::before { content: "—"; color: var(--c); margin-right: 8px; }
+        .d-progress { width: 100%; max-width: 420px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.08); overflow: hidden; }
+        .d-progress i { display: block; height: 100%; background: var(--c); }
+
+        .d-swipe { position: absolute; left: 0; right: 0; bottom: calc(14px + var(--safe-b)); text-align: center; color: var(--dim); font-family: var(--mono); font-size: .72rem; letter-spacing: 2px; animation: d-bob 1.6s ease-in-out infinite; }
+        @keyframes d-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .d-card.answered .d-swipe, .d-card.d-fact .d-swipe, .d-card.d-win .d-swipe { color: var(--c); }
+
+        /* ── landing (pick a mode + a track) ── */
+        .d-pick {
+            position: fixed; inset: 0; z-index: 30; background: var(--bg); overflow-y: auto;
+            display: flex; flex-direction: column; justify-content: flex-start; gap: 18px; padding: calc(36px + var(--safe-t)) 22px calc(28px + var(--safe-b));
+        }
+        .d-pick::before { content: ""; position: fixed; inset: 0; z-index: -1; background: radial-gradient(70% 45% at 50% 0%, rgba(0,242,255,.16), transparent 70%); }
+        .d-pick > * { width: 100%; max-width: 560px; margin-left: auto; margin-right: auto; }
+        @media (min-height: 1000px) { .d-pick { justify-content: center; } }
+        .d-pick h1 { margin: 0; font-size: clamp(2.4rem, 12vw, 4rem); line-height: .95; font-weight: 800; letter-spacing: -1px; }
+        .d-pick h1 span { color: var(--cyan); }
+        .d-pick p { margin: 0; color: var(--muted); font-size: 1rem; line-height: 1.5; }
+        .d-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .d-mode { text-align: left; background: var(--card); border: 1px solid rgba(255,255,255,.1); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px; }
+        .d-mode b { font-size: .95rem; letter-spacing: 1px; } .d-mode small { color: var(--muted); font-size: .76rem; line-height: 1.3; }
+        .d-mode.on { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 10%, var(--card)); } .d-mode.on b { color: var(--cyan); }
+        .d-tracks { display: flex; flex-direction: column; gap: 10px; }
+        .d-track {
+            display: flex; align-items: center; gap: 14px; text-align: left; width: 100%;
+            background: var(--card); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 14px 16px; transition: transform .12s ease;
+        }
+        .d-track:active { transform: scale(.985); }
+        .d-track .ic { font-size: 1.5rem; width: 36px; text-align: center; }
+        .d-track .nm { font-weight: 700; font-size: 1rem; line-height: 1.2; }
+        .d-track .sb { color: var(--muted); font-size: .78rem; font-family: var(--mono); margin-top: 3px; }
+        .d-track .go { margin-left: auto; color: var(--tc, var(--cyan)); font-weight: 800; font-size: .85rem; letter-spacing: 1px; white-space: nowrap; }
+        .d-track.primary { border-color: var(--tc, var(--cyan)); background: color-mix(in srgb, var(--tc, var(--cyan)) 12%, var(--card)); }
+        .d-pick .d-foot { color: var(--dim); font-size: .78rem; font-family: var(--mono); }
+        .d-pick .d-foot a { color: var(--muted); }
+
+        .d-toast { position: fixed; left: 50%; bottom: calc(26px + var(--safe-b)); transform: translateX(-50%); z-index: 40; background: var(--card2); border: 1px solid rgba(255,255,255,.14); border-radius: 999px; padding: 8px 16px; font-size: .85rem; opacity: 0; transition: opacity .2s; pointer-events: none; white-space: nowrap; }
+        .d-toast.on { opacity: 1; }
+
+        @media (max-width: 520px) {   /* phones: the track chip needs the room more than the brand text does */
+            .d-brand span { font-size: .8rem; letter-spacing: 1px; } .d-brand small { display: none; } .d-stat .lbl { display: none; }
+            .d-chip { flex: 1 1 auto; min-width: 72px; max-width: none; }
+        }
+        @media (min-width: 720px) { .d-card { padding-left: 32px; padding-right: 32px; } .d-opt { font-size: 1.02rem; } }
+        @media (prefers-reduced-motion: reduce) { .d-swipe, .d-after { animation: none; } }
+    </style>
+    <script src="mammoth/mammoth-mode.js?v=202611052223" data-site="academy" data-egg=".d-brand"></script>
+</head>
+<body>
+    <header class="d-top">
+        <a href="index.html" class="d-brand" title="Back to the Academy"><img src="assets/mammoth-logo.png" alt="Mammoth Capital"><span>DOOM<small>SCROLL</small></span></a>
+        <button class="d-chip" id="d-track" title="Change track or mode">Pick a track</button>
+        <div class="d-stat" title="Answers today · streak"><b id="d-today">0</b><span class="lbl">today</span>&nbsp;<svg class="ma-flame" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5c.8 3.6-3.8 6.2-3.8 11a5.8 5.8 0 0 0 11.6 0c0-3.2-1.8-5.3-2.6-7.4-.6 2-1.7 3.2-2.9 3.6.4-2.6-.2-5.2-2.3-7.2z"/></svg><b id="d-streak">0</b></div>
+        <button class="d-icon" id="d-voice" aria-pressed="false" title="Read cards aloud">🗣️</button>
+        <button class="d-icon" id="d-sound" aria-pressed="false" title="Sound effects">🔇</button>
+    </header>
+
+    <section class="d-pick" id="d-pick" aria-label="Pick a mode and a track">
+        <h1>DOOM<br><span>SCROLL</span></h1>
+        <p>Study that hits like the feed. Swipe up, read, answer, swipe again. Every answer lands in the same review engine as the Arena and Daily, so the streak and the Leitner boxes are yours already.</p>
+        <div class="d-modes" id="d-modes">
+            <button class="d-mode" data-mode="learn"><b>LEARN</b><small>Teach first. One module at a time: read it, then get quizzed on it. Exam questions unlock as you go.</small></button>
+            <button class="d-mode" data-mode="grind"><b>GRIND</b><small>Everything in the pack, due reviews first. For when you already know the material.</small></button>
+        </div>
+        <div class="d-tracks" id="d-tracks"></div>
+        <div class="d-foot"><a href="index.html">← Mammoth Academy</a> · swipe or press ↓ · keys 1–4 answer</div>
+    </section>
+
+    <main class="d-feed" id="d-feed" aria-live="polite"></main>
+    <div class="d-toast" id="d-toast"></div>
+
+    <script src="courses/aws-saa-c03.js?v=202611052223"></script>
+    <script src="courses/sales-engineering.js?v=202611052223"></script>
+    <script src="courses/psm-scrum.js?v=202611052223"></script>
+    <script src="courses/comptia-securityplus.js?v=202611052223"></script>
+    <script src="courses/comptia-networkplus.js?v=202611052223"></script>
+    <script src="courses/comptia-aplus.js?v=202611052223"></script>
+    <script src="courses/comptia-cloudplus.js?v=202611052223"></script>
+    <script src="course-loader.js?v=202611052223"></script>
+    <script src="game.js?v=202611052223"></script>
+    <script src="juice.js?v=202611052223"></script>
+    <script src="pwa.js?v=202611052223"></script>
+    <script>
+    (function () {
+        'use strict';
+        const $ = (s, r) => (r || document).querySelector(s);
+        const feed = $('#d-feed'), pick = $('#d-pick'), toastEl = $('#d-toast');
+        const LETTERS = 'ABCDEF';
+        const WIN_EVERY = 20;            // Grind: a checkpoint card after this many answers in the session
+        const MIX = { due: 0.4, question: 0.45, flash: 0.25 };   // Grind: due reviews first (40% of slots while any are due), then question 45% / flashcard 25% / fact 30%
+        const LEARN = { dueEvery: 4, examEvery: 6, boss: 3, chunk: 520 };   // Learn: a due review every 4th slot, an unlocked exam question every 6th, boss round size, chars per fact card
+        const LEARN_KEY = 'st_doom_learn';   // {courseId: {m, i, done[]}}; st_ so Sync & Backup carries it (merge rule in sync.js)
+        const WIN_LINES = [
+            'Certifications don\'t make experts. Pressure does.',
+            'That was a scroll with a return on it.',
+            'The feed owes you nothing. This one paid.',
+            'Box 5 is where questions go to retire. Keep pushing them there.',
+            'Twenty answers. Your thumb did something useful.'
+        ];
+        const DONE_LINES = [
+            'Module down. Its exam questions are now in the feed.',
+            'That one is yours now. The Arena will ask about it; you will know.',
+            'Learned, not memorized. The boss round proves it.'
+        ];
+
+        // ---------- helpers ----------
+        const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+        const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        const el = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
+        const text = html => { const d = document.createElement('div'); d.innerHTML = html || ''; return (d.textContent || '').replace(/\s+/g, ' ').trim(); };
+        let toastT = 0;
+        function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 1800); }
+        const packs = () => Object.keys(window).filter(k => /^COURSE_[A-Z]/.test(k)).map(k => window[k]).filter(p => p && p.meta && p.meta.id);
+        const packOf = id => packs().find(p => p.meta.id === id) || null;
+        const shortName = m => String(m.name || m.id).replace(/^CompTIA\s+/i, '').replace(/^Professional\s+/i, '').replace(/\s+Solutions\s+/i, ' ');
+        const store = {
+            get(k, fb) { try { const v = JSON.parse(localStorage.getItem(k)); return v && typeof v === 'object' ? v : fb; } catch (e) { return fb; } },
+            set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } },
+            raw(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+            put(k, v) { try { localStorage.setItem(k, v); } catch (e) { } }
+        };
+
+        // ---------- state ----------
+        let touched = false;   // Chrome blocks navigator.vibrate before the first tap or key, so juice waits for one
+        ['pointerdown', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, () => { touched = true; }, { once: true, passive: true }));
+        const S = { mode: 'learn', courseId: null, pack: null, unseen: [], later: [], flash: [], facts: [], queued: [], used: new Set(),
+                    answered: 0, correct: 0, wins: 0, cards: 0, flashIdx: 0, factIdx: 0, slot: 0, seq: null, seqM: -1, cursor: null };
+
+        function build(courseId) {
+            const p = packOf(courseId);
+            if (!p) return false;
+            Object.assign(S, { courseId, pack: p, queued: [], used: new Set(), answered: 0, correct: 0, wins: 0, cards: 0, flashIdx: 0, factIdx: 0, slot: 0, seq: null, seqM: -1 });
+            document.documentElement.style.setProperty('--c', p.meta.color || '#00f2ff');
+            // Questions: exam bank + lesson quizzes, as Game ids (one per distinct text).
+            const ids = new Set();
+            (p.exam || []).forEach(q => ids.add(Game.qid(q)));
+            (p.modules || []).forEach(m => (m.topics || []).forEach(t => (t.quiz || []).forEach(q => ids.add(Game.qid(q)))));
+            ids.delete(null);
+            S.unseen = shuffle([...ids].filter(id => Game.Review.priority(id) === 1));
+            S.later = shuffle([...ids].filter(id => Game.Review.priority(id) === 2));
+            S.flash = shuffle((p.flashcards || []).filter(f => f.front && f.back).slice());
+            S.facts = shuffle((p.daily || []).flatMap(l => (l.slides || []).map((s, i) => ({ lesson: l, slide: s, i }))));
+            S.cursor = learnState(courseId);
+            Game.Track.set(courseId);
+            chip();
+            return true;
+        }
+        function chip() {
+            const p = S.pack; if (!p) return;
+            const md = S.mode === 'learn' && !allDone() ? ` <span class="md">M${(S.cursor.m | 0) + 1}/${p.modules.length}</span>` : ' <span class="md">GRIND</span>';
+            $('#d-track').innerHTML = esc((p.meta.icon ? p.meta.icon + ' ' : '') + shortName(p.meta)) + md;
+        }
+
+        // ---------- what a card says (shared with DoomDebug.speechList, so clips and playback hash the same text) ----------
+        const clean = x => String(x == null ? '' : x).replace(/\s+/g, ' ').trim();
+        const SAY = {
+            cover: (m, mod) => [{ role: 'teach', text: `Module ${m + 1}. ${mod.title}. ${mod.topics.length} topic${mod.topics.length === 1 ? '' : 's'}.` }],
+            prose: (t, html, ci) => [{ role: 'teach', text: (ci === 0 ? t.title + '. ' : '') + text(html) }],
+            anchor: html => [{ role: 'teach', text: 'Anchor. ' + text(html) + ' The quiz is next.' }],
+            question: q => [{ role: 'quiz', text: q.q + ' ' + (q.opts || []).map((o, i) => LETTERS[i] + '. ' + o).join(' ') }],
+            verdict: (right, q) => [{ role: 'quiz', text: right ? 'Correct.' : 'Trap.' }].concat(q.exp ? [{ role: 'quiz', text: q.exp }] : []),
+            trap: t => [{ role: 'quiz', text: 'The trap. ' + t }],
+            fcFront: fc => [{ role: 'teach', text: fc.front }],
+            fcBack: fc => [{ role: 'teach', text: fc.back + (fc.analogy ? ' ' + fc.analogy : '') }],
+            daily: (l, sl) => [{ role: 'teach', text: (l.concept || '') + '. ' + (sl.title || '') + '. ' + text(sl.body) + (sl.anchor ? ' ' + sl.anchor : '') }],
+            moddone: (m, line) => [{ role: 'teach', text: `Module ${m + 1} done.` }, { role: 'teach', text: line }]
+        };
+        const DONE_LAST = 'Every module learned. The feed is all Grind from here: due reviews first, then everything.';
+
+        // ---------- Learn: the pointer, the module → question map, the teach sequence ----------
+        function learnState(courseId) {
+            const all = store.get(LEARN_KEY, {});
+            const s = all[courseId || S.courseId];
+            return s && typeof s === 'object' ? { m: s.m | 0, i: s.i | 0, done: Array.isArray(s.done) ? s.done.map(Number) : [] } : { m: 0, i: 0, done: [] };
+        }
+        function saveLearn(st) {
+            const all = store.get(LEARN_KEY, {});
+            all[S.courseId] = { m: st.m | 0, i: st.i | 0, done: [...new Set(st.done)].sort((a, b) => a - b) };
+            store.set(LEARN_KEY, all);
+            S.cursor = learnState();
+            chip();
+        }
+        const doneSet = () => new Set((S.cursor || learnState()).done);
+        const allDone = () => !!S.pack && doneSet().size >= (S.pack.modules || []).length;
+        // Which module teaches a question: exam questions carry ref.module (AWS); lesson quizzes know their module; otherwise the
+        // exam domain maps to a module title through meta.domains; otherwise it unlocks with the last module.
+        function moduleOf(entry) {
+            if (!entry) return -1;
+            const mods = S.pack.modules || [];
+            const byTitle = t => mods.findIndex(m => m.title === t);
+            if (entry.q && entry.q.ref && entry.q.ref.module) { const i = byTitle(entry.q.ref.module); if (i >= 0) return i; }
+            if (entry.source === 'lesson' && typeof entry.module === 'number') return entry.module;
+            const dm = (S.pack.meta.domains || {})[entry.domain];
+            if (dm) { const i = byTitle(dm); if (i >= 0) return i; }
+            return -1;
+        }
+        function unlocked(id) {
+            const mi = moduleOf(Game.entry(id));
+            return mi >= 0 ? doneSet().has(mi) : allDone();
+        }
+
+        // A topic's prose becomes short cards: top-level <p>/<ul> blocks grouped up to ~LEARN.chunk characters of text;
+        // the .lesson-alert <div> (the "⚓ Anchor") becomes its own card at the end of the topic.
+        function chunkProse(html) {
+            const doc = new DOMParser().parseFromString('<body>' + (html || '') + '</body>', 'text/html');
+            const blocks = []; let anchor = '';
+            [...doc.body.children].forEach(node => {
+                const tag = node.tagName;
+                if (tag === 'DIV' && /alert|anchor/i.test(node.className)) { anchor += node.innerHTML; return; }
+                if (tag === 'UL' || tag === 'OL') {
+                    const lis = [...node.children], t = tag.toLowerCase();
+                    for (let i = 0; i < lis.length; i += 2) blocks.push('<' + t + '>' + lis.slice(i, i + 2).map(l => l.outerHTML).join('') + '</' + t + '>');
+                    return;
+                }
+                if (text(node.outerHTML)) blocks.push(node.outerHTML);
+            });
+            const chunks = []; let cur = '', len = 0;
+            blocks.forEach(b => {
+                const L = text(b).length;
+                if (cur && len + L > LEARN.chunk) { chunks.push(cur); cur = ''; len = 0; }
+                cur += b; len += L;
+            });
+            if (cur) chunks.push(cur);
+            anchor = anchor.replace(/^\s*<strong>[^<]*anchor:?\s*<\/strong>\s*/i, '').trim();
+            return { chunks, anchor };
+        }
+        function teachSeq(m) {
+            const mod = (S.pack.modules || [])[m]; if (!mod) return [];
+            const seq = [{ kind: 'cover', m }];
+            (mod.topics || []).forEach((t, ti) => {
+                const { chunks, anchor } = chunkProse(t.prose);
+                chunks.forEach((html, ci) => seq.push({ kind: 'prose', m, ti, ci, n: chunks.length, html }));
+                if (anchor) seq.push({ kind: 'anchor', m, ti, html: anchor });
+                (t.quiz || []).forEach(q => { const id = Game.qid(q); if (id) seq.push({ kind: 'q', id, learn: true }); });
+            });
+            seq.push({ kind: 'moddone', m });
+            return seq;
+        }
+        const minutes = m => { const mod = S.pack.modules[m]; const w = (mod.topics || []).reduce((s, t) => s + text(t.prose).split(' ').length, 0); return Math.max(1, Math.round(w / 200)); };
+
+        // ---------- the mix ----------
+        const dueList = () => Game.Review.due(S.courseId).filter(id => !S.used.has(id) && Game.entry(id));
+        function nextSpec() {
+            if (S.queued.length) return S.queued.shift();
+            if (S.mode === 'learn' && !allDone()) return nextLearn();
+            return nextGrind();
+        }
+        function nextLearn() {
+            S.slot++;
+            const due = dueList();
+            if (S.slot % LEARN.dueEvery === 0 && due.length) return { kind: 'q', id: due[0], due: true };
+            if (S.slot % LEARN.examEvery === 0) { const id = popExam(); if (id) return { kind: 'q', id }; }
+            let st = S.cursor, guard = 0;
+            while (guard++ < 50) {
+                if (st.done.includes(st.m)) { const m = nextModule(st); if (m < 0) return nextGrind(); st = { m, i: 0, done: st.done }; S.cursor = st; continue; }
+                if (!S.seq || S.seqM !== st.m) { S.seq = teachSeq(st.m); S.seqM = st.m; }
+                if (st.i >= S.seq.length) { st = { m: st.m, i: S.seq.length - 1, done: st.done }; S.cursor = st; }   // a pointer past the end (content changed): show the module-done card
+                const spec = Object.assign({}, S.seq[st.i], { ptr: { m: st.m, i: st.i + 1 } });
+                S.cursor = { m: st.m, i: st.i + 1, done: st.done };    // in-memory pointer (persisted when the card is reached)
+                return spec;
+            }
+            return nextGrind();
+        }
+        function nextModule(st) { const n = (S.pack.modules || []).length; for (let k = 0; k < n; k++) { const m = (st.m + k) % n; if (!st.done.includes(m)) return m; } return -1; }
+        function popExam(moduleIdx) {   // an unseen exam question that Learn has unlocked (from one module, or any)
+            const cand = S.unseen.filter(id => { const e = Game.entry(id); return e && e.source === 'exam' && !S.used.has(id) && (moduleIdx == null ? unlocked(id) : moduleOf(e) === moduleIdx); });
+            if (!cand.length) return null;
+            const id = cand[Math.floor(Math.random() * cand.length)];
+            S.unseen = S.unseen.filter(x => x !== id);
+            return id;
+        }
+        function nextGrind() {
+            if (S.answered && S.answered % WIN_EVERY === 0 && S.wins < Math.floor(S.answered / WIN_EVERY)) { S.wins++; return { kind: 'win' }; }
+            const due = dueList();
+            if (due.length && Math.random() < MIX.due) return { kind: 'q', id: due[0], due: true };
+            const r = Math.random();
+            if (r < MIX.question || (!S.flash.length && !S.facts.length)) {
+                const id = popQ();
+                if (id) return { kind: 'q', id };
+            }
+            if (r < MIX.question + MIX.flash && S.flash.length) return { kind: 'fc', fc: S.flash[S.flashIdx++ % S.flash.length] };
+            if (S.facts.length) {
+                const f = S.facts[S.factIdx++ % S.facts.length];
+                // A Daily slide is followed by one of its lesson's quiz questions, so the fact gets used right away.
+                const qs = shuffle((f.lesson.quiz || []).map(q => Game.qid(q)).filter(id => id && !S.used.has(id)));
+                if (qs.length) S.queued.push({ kind: 'q', id: qs[0], after: true });
+                return { kind: 'fact', fact: f };
+            }
+            const id = popQ();
+            return id ? { kind: 'q', id } : { kind: 'win', end: true };
+        }
+        function popQ() {
+            while (S.unseen.length) { const id = S.unseen.pop(); if (!S.used.has(id)) return id; }
+            while (S.later.length) { const id = S.later.pop(); if (!S.used.has(id)) return id; }
+            // Everything in this pack has been seen this session: start over with what is due soonest.
+            const all = Object.keys(Game.Review.all()).filter(id => Game.courseOf(id) === S.courseId && Game.entry(id));
+            if (!all.length) return null;
+            S.used.clear();
+            S.later = shuffle(all);
+            return S.later.pop();
+        }
+
+        // ---------- cards ----------
+        function render(spec) {
+            let card;
+            if (spec.kind === 'q') card = questionCard(spec);
+            else if (spec.kind === 'fc') card = flashCard(spec.fc);
+            else if (spec.kind === 'fact') card = factCard(spec.fact);
+            else if (spec.kind === 'prose') card = proseCard(spec);
+            else if (spec.kind === 'anchor') card = anchorCard(spec);
+            else if (spec.kind === 'cover') card = coverCard(spec);
+            else if (spec.kind === 'moddone') card = moduleDoneCard(spec);
+            else card = winCard(spec);
+            if (!card) return null;
+            card.dataset.idx = String(S.cards++);
+            if (spec.ptr) card._ptr = spec.ptr;
+            card.appendChild(el('<div class="d-swipe">SWIPE UP ↑</div>'));
+            feed.appendChild(card);
+            io.observe(card);
+            return card;
+        }
+
+        function boxLabel(id) {
+            const r = Game.Review.get(id);
+            if (!r) return '<span class="d-box new">NEW</span>';
+            const due = Game.Review.priority(id) === 0;
+            return `<span class="d-box${due ? ' due' : ''}">${due ? 'DUE · ' : ''}BOX ${r.b | 0}</span>`;
+        }
+
+        function questionCard(spec) {
+            const e = Game.entry(spec.id);
+            if (!e) return null;
+            const q = e.q, multi = Array.isArray(q.ans);
+            S.used.add(spec.id);
+            const card = el(`<article class="d-card d-q" data-kind="q" data-src="${e.source}">
+                <div class="d-meta"><span class="d-dom">${esc(e.domain || e.source)}</span>${boxLabel(spec.id)}${spec.boss ? '<span class="d-box boss">BOSS ROUND</span>' : ''}<span>${e.source === 'exam' ? 'exam bank' : 'lesson quiz'}</span>${multi ? '<span class="d-box">CHOOSE ' + q.ans.length + '</span>' : ''}</div>
+                <h2 class="${String(q.q).length > 220 ? 'long' : ''}">${esc(q.q)}</h2>
+                <div class="d-opts"></div>
+                ${multi ? '<button class="d-check" disabled>CHECK</button>' : ''}
+            </article>`);
+            const opts = $('.d-opts', card);
+            (q.opts || []).forEach((o, i) => opts.appendChild(el(`<button class="d-opt" data-i="${i}"><span class="k">${LETTERS[i] || i + 1}</span><span>${esc(o)}</span></button>`)));
+            const sel = new Set();
+            let done = false;
+            const grade = picked => {
+                if (done) return; done = true;
+                const right = multi ? (picked.length === q.ans.length && picked.every(i => q.ans.includes(i))) : picked[0] === q.ans;
+                const correct = multi ? q.ans : [q.ans];
+                opts.querySelectorAll('.d-opt').forEach(b => {
+                    const i = +b.dataset.i; b.disabled = true; b.classList.remove('sel');
+                    if (correct.includes(i)) b.classList.add('right');
+                    else if (picked.includes(i)) b.classList.add('wrong');
+                    else b.classList.add('dim');
+                });
+                const chk = $('.d-check', card); if (chk) chk.remove();
+                const res = Game.Review.record(spec.id, right);
+                S.answered++; if (right) S.correct++;
+                const after = el(`<div class="d-after ${right ? 'good' : 'bad'}">
+                    <div class="d-verdict">${right ? (res && res.mastered ? 'MASTERED ✔' : res && res.rematch ? 'REMATCH WON ✔' : 'CORRECT ✔') : 'TRAP ✘'}</div>
+                    ${q.exp ? `<p class="d-exp">${esc(q.exp)}</p>` : ''}
+                </div>`);
+                const traps = (q.whyWrong || []);
+                const wrongPicked = picked.filter(i => !correct.includes(i) && traps[i]);
+                wrongPicked.forEach(i => after.appendChild(el(`<p class="d-trap"><b>TRAP</b> ${esc(traps[i])}</p>`)));
+                const otherTraps = traps.map((t, i) => ({ t, i })).filter(x => x.t && !correct.includes(x.i) && !picked.includes(x.i));
+                if (otherTraps.length) {
+                    const more = el('<button class="d-more">Show the other traps</button>');
+                    more.addEventListener('click', () => { otherTraps.forEach(x => after.appendChild(el(`<p class="d-trap"><b>${LETTERS[x.i]}</b> ${esc(x.t)}</p>`))); more.remove(); });
+                    after.appendChild(more);
+                }
+                card.insertBefore(after, $('.d-swipe', card));
+                card.classList.add('answered');
+                try { Juice.react(res, card); } catch (err) { }
+                stats();
+                say(SAY.verdict(right, q).concat(wrongPicked.length ? SAY.trap(traps[wrongPicked[0]]) : []), false);
+                ensureAhead();
+                after.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            };
+            opts.addEventListener('click', ev => {
+                const b = ev.target.closest('.d-opt'); if (!b || done) return;
+                const i = +b.dataset.i;
+                if (!multi) return grade([i]);
+                if (sel.has(i)) { sel.delete(i); b.classList.remove('sel'); } else if (sel.size < q.ans.length) { sel.add(i); b.classList.add('sel'); }
+                $('.d-check', card).disabled = sel.size !== q.ans.length;
+            });
+            const chk = $('.d-check', card);
+            if (chk) chk.addEventListener('click', () => grade([...sel]));
+            card._grade = i => { if (!done && !multi && i < (q.opts || []).length) grade([i]); };
+            card._say = SAY.question(q);
+            return card;
+        }
+
+        function flashCard(fc) {
+            const card = el(`<article class="d-card d-fc" data-kind="fc">
+                <div class="d-meta"><span class="d-dom">${esc(fc.domain || fc.cat || 'flashcard')}</span><span>flashcard</span></div>
+                <div class="d-face"><div class="d-front">${esc(fc.front)}</div><div class="d-back hidden">${esc(fc.back)}</div>${fc.analogy ? `<div class="d-analogy hidden">${esc(fc.analogy)}</div>` : ''}</div>
+                <div class="d-row"><button class="d-btn flip">FLIP</button></div>
+            </article>`);
+            const row = $('.d-row', card);
+            let flipped = false, done = false;
+            const flip = () => {
+                if (flipped) return; flipped = true;
+                $('.d-back', card).classList.remove('hidden');
+                const an = $('.d-analogy', card); if (an) an.classList.remove('hidden');
+                row.innerHTML = '<button class="d-btn no" data-r="0">NOPE</button><button class="d-btn yes" data-r="1">KNEW IT</button>';
+                say(SAY.fcBack(fc), false);
+            };
+            row.addEventListener('click', ev => {
+                const b = ev.target.closest('button'); if (!b) return;
+                if (b.classList.contains('flip')) return flip();
+                if (done) return; done = true;
+                const right = b.dataset.r === '1';
+                const id = Game.qid(fc, S.courseId);
+                const res = Game.Review.record(id, right);
+                S.answered++; if (right) S.correct++;
+                row.querySelectorAll('button').forEach(x => { x.disabled = true; if (x !== b) x.style.opacity = .35; });
+                card.classList.add('answered');
+                try { Juice.react(res, card); } catch (err) { }
+                stats(); ensureAhead();
+            });
+            card._flip = flip;
+            card._say = SAY.fcFront(fc);
+            return card;
+        }
+
+        function factCard(f) {   // a Daily slide (Grind)
+            const l = f.lesson, s = f.slide;
+            const card = el(`<article class="d-card d-fact" data-kind="fact">
+                <div class="d-meta"><span class="d-dom">${esc(l.domain || 'lesson')}</span><span>day ${esc(l.day)} · slide ${f.i + 1} of ${(l.slides || []).length}</span></div>
+                <div class="d-icon-big">${l.icon || '📌'}</div>
+                <h3>${esc(l.concept || '')}</h3>
+                <h2>${esc(s.title || '')}</h2>
+                <div class="d-body">${s.body || ''}</div>
+                ${s.anchor ? `<div class="d-anchor">${esc(s.anchor)}</div>` : ''}
+            </article>`);
+            card._say = SAY.daily(l, s);
+            return card;
+        }
+
+        function proseCard(spec) {   // one slice of a lesson topic (Learn)
+            const mod = S.pack.modules[spec.m], t = mod.topics[spec.ti];
+            const dots = Array.from({ length: spec.n }, (_, i) => `<i class="${i <= spec.ci ? 'on' : ''}"></i>`).join('');
+            const card = el(`<article class="d-card d-fact" data-kind="prose">
+                <div class="d-meta"><span class="d-dom">Module ${spec.m + 1}</span><span>topic ${spec.ti + 1} of ${mod.topics.length}</span><span class="d-dots">${dots}</span></div>
+                <h3>${esc(mod.title)}</h3>
+                <h2 class="topic">${esc(t.title)}</h2>
+                <div class="d-body prose">${spec.html}</div>
+            </article>`);
+            card._say = SAY.prose(t, spec.html, spec.ci);
+            return card;
+        }
+        function anchorCard(spec) {
+            const mod = S.pack.modules[spec.m], t = mod.topics[spec.ti];
+            const card = el(`<article class="d-card d-fact d-anchorcard" data-kind="anchor">
+                <div class="d-meta"><span class="d-dom">Module ${spec.m + 1}</span><span>${esc(t.title)}</span></div>
+                <div class="d-icon-big">⚓</div>
+                <h2>Anchor</h2>
+                <div class="d-anchor">${spec.html}</div>
+                <div class="d-kind">THE QUIZ IS NEXT</div>
+            </article>`);
+            card._say = SAY.anchor(spec.html);
+            return card;
+        }
+        function coverCard(spec) {
+            const mods = S.pack.modules, mod = mods[spec.m], done = doneSet().size;
+            const card = el(`<article class="d-card d-win d-cover" data-kind="cover">
+                <div class="d-kind">LEARN · MODULE ${spec.m + 1} OF ${mods.length}</div>
+                <h2>${esc(mod.title)}</h2>
+                <div class="d-sub">${mod.topics.length} topic${mod.topics.length === 1 ? '' : 's'} · about ${minutes(spec.m)} min of reading · ${mod.topics.reduce((s, t) => s + (t.quiz || []).length, 0)} quiz questions</div>
+                <div class="d-topics">${mod.topics.map(t => `<div>${esc(t.title)}</div>`).join('')}</div>
+                <div class="d-progress"><i style="width:${Math.round(done / mods.length * 100)}%"></i></div>
+                <div class="d-kind">${done} OF ${mods.length} LEARNED</div>
+            </article>`);
+            card._say = SAY.cover(spec.m, mod);
+            return card;
+        }
+        function moduleDoneCard(spec) {
+            const mods = S.pack.modules, mod = mods[spec.m];
+            const st = learnState();
+            if (!st.done.includes(spec.m)) saveLearn({ m: spec.m, i: 0, done: st.done.concat([spec.m]) });   // unlock now, so the boss round below is allowed
+            const n = (S.pack.exam || []).filter(q => moduleOf(Game.entry(Game.qid(q))) === spec.m).length;
+            // The boss round: up to three of this module's exam questions, right after this card.
+            const boss = []; for (let k = 0; k < LEARN.boss; k++) { const id = popExam(spec.m); if (!id) break; boss.push({ kind: 'q', id, boss: true }); }
+            S.queued.unshift(...boss);
+            const left = mods.length - doneSet().size;
+            const line = left ? DONE_LINES[spec.m % DONE_LINES.length] : DONE_LAST;
+            const card = el(`<article class="d-card d-win" data-kind="moddone">
+                <div class="d-kind">MODULE ${spec.m + 1} DONE</div>
+                <div class="d-big">${doneSet().size}<span style="font-size:.4em;color:var(--muted)">/${mods.length}</span></div>
+                <div class="d-sub">${esc(mod.title)}</div>
+                <div class="d-grid">
+                    <div class="d-tile"><b>${n}</b><span>exam Qs unlocked</span></div>
+                    <div class="d-tile"><b>${Game.Day.today().a}</b><span>today</span></div>
+                    <div class="d-tile"><b>${Game.Day.streak().days}</b><span>day streak</span></div>
+                </div>
+                <div class="d-line">${esc(line)}</div>
+                ${boss.length ? '<div class="d-kind" style="color:var(--bad)">BOSS ROUND: ' + boss.length + ' EXAM QUESTIONS NEXT</div>' : ''}
+            </article>`);
+            if (touched) { try { Juice.fire('daily', card); } catch (e) { } }
+            card._say = SAY.moddone(spec.m, line);
+            return card;
+        }
+
+        function winCard(spec) {
+            const today = Game.Day.today(), streak = Game.Day.streak().days;
+            let ready = 0; try { ready = Math.round(Game.Review.readiness(S.courseId) * 100); } catch (e) { }
+            const pct = S.answered ? Math.round(S.correct / S.answered * 100) : 0;
+            const line = spec.end ? 'You scrolled the whole pack this session. Switch tracks or keep reviewing what is due.' : WIN_LINES[S.wins % WIN_LINES.length];
+            const card = el(`<article class="d-card d-win" data-kind="win">
+                <div class="d-kind">${spec.end ? 'END OF THE PACK' : 'CHECKPOINT'}</div>
+                <div class="d-big">${S.answered}</div>
+                <div class="d-sub">answers this session · ${pct}% right</div>
+                <div class="d-grid">
+                    <div class="d-tile"><b>${today.a}</b><span>today</span></div>
+                    <div class="d-tile"><b>${streak}</b><span>day streak</span></div>
+                    <div class="d-tile"><b>${ready}%</b><span>exam ready</span></div>
+                </div>
+                <div class="d-line">${esc(line)}</div>
+                <div class="d-row" style="width:100%;max-width:420px"><button class="d-btn flip" data-act="track">SWITCH TRACK</button><a class="d-btn" style="text-align:center;text-decoration:none;display:block" href="path.html">SMART PATH</a></div>
+            </article>`);
+            $('[data-act="track"]', card).addEventListener('click', showPick);
+            if (touched) { try { Juice.fire('daily', card); } catch (e) { } }
+            card._say = [{ role: 'teach', text: `${S.answered} answers this session, ${pct} percent right. ${line}` }];
+            return card;
+        }
+
+        // ---------- feed mechanics ----------
+        let active = null;
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(en => {
+                if (en.intersectionRatio < 0.6) return;
+                if (active === en.target) return;
+                active = en.target;
+                if (active._ptr) {   // Learn: remember the card you reached, so a reload continues here
+                    const st = learnState(), p = active._ptr;
+                    if (!st.done.includes(p.m) && (p.m !== st.m || p.i > st.i)) saveLearn({ m: p.m, i: p.i, done: st.done });
+                }
+                ensureAhead();
+                if (voiceOn) say(active._say, true);
+            });
+        }, { root: feed, threshold: [0.6] });
+
+        function ensureAhead() {
+            const idx = active ? +active.dataset.idx : -1;
+            let guard = 0;
+            while (S.cards - 1 - idx < 3 && guard++ < 8) { if (!render(nextSpec())) break; }
+        }
+        function nextCard() { if (!active) return; const n = active.nextElementSibling; if (n) n.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        function prevCard() { if (!active) return; const n = active.previousElementSibling; if (n) n.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+
+        function stats() {
+            try {
+                const t = Game.Day.today();
+                $('#d-today').textContent = t.a;
+                $('#d-streak').textContent = Game.Day.streak().days;
+                $('#d-today').style.color = t.done ? 'var(--ok)' : '';
+            } catch (e) { }
+        }
+
+        // ---------- voice: pre-rendered Kokoro clips first, the browser's own speech as the fallback. Off by default. ----------
+        const VOICES = { teach: 'onyx', quiz: 'michael' };
+        let voiceOn = false, voice = null, manifest = null;
+        const synth = window.speechSynthesis || null;
+        fetch('audio/doom/manifest.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(m => { manifest = m && typeof m === 'object' ? m : null; }).catch(() => { });
+        const clipUrl = (role, t) => {
+            const v = VOICES[role] || VOICES.teach, h = Game.hash10(t);
+            return manifest && manifest[v] && manifest[v][h] != null ? 'audio/doom/' + v + '/' + h + '.mp3' : null;
+        };
+        const player = new Audio(); player.preload = 'auto';
+        let queue = [], current = null;
+        function playNext() {
+            if (current || !queue.length) return;
+            current = queue.shift();
+            if (current.url) {
+                player.src = current.url;
+                player.play().then(null, () => { const c = current; current = null; if (c) ttsSpeak(c.text); playNext(); });
+            } else { ttsSpeak(current.text); }   // no clip: the browser speaks it, and 'end' below moves the queue on
+        }
+        player.addEventListener('ended', () => { current = null; playNext(); });
+        player.addEventListener('error', () => { const c = current; current = null; if (c && c.text) ttsSpeak(c.text); else playNext(); });
+        function stopAll() { queue = []; current = null; try { player.pause(); player.removeAttribute('src'); player.load(); } catch (e) { } if (synth) synth.cancel(); }
+        // say(items, replace): items = [{role, text}]. replace = true stops whatever is playing (a new card); false queues after it (a verdict).
+        function say(items, replace) {
+            if (!voiceOn || !items || !items.length) return;
+            if (replace) stopAll();
+            items.forEach(it => { const t = clean(it.text); if (t) queue.push({ url: clipUrl(it.role, t), text: t }); });
+            playNext();
+        }
+        function pickVoice() {
+            if (!synth) return null;
+            const vs = synth.getVoices().filter(v => /^en[-_]US/i.test(v.lang));
+            const male = vs.find(v => /male|david|guy|mark|aaron|fred|alex|christopher|eric|andrew|brian/i.test(v.name) && !/female|zira|jenny|aria|samantha/i.test(v.name));
+            return male || vs.find(v => /google us english/i.test(v.name)) || vs[0] || (synth.getVoices()[0] || null);
+        }
+        function ttsSpeak(str) {
+            if (!synth || !str) { current = null; playNext(); return; }
+            if (!voice) voice = pickVoice();
+            const u = new SpeechSynthesisUtterance(String(str).slice(0, 1200));
+            if (voice) u.voice = voice;
+            u.rate = 1.05; u.pitch = 0.9;
+            u.onend = u.onerror = () => { current = null; playNext(); };
+            synth.speak(u);
+        }
+        if (synth) synth.onvoiceschanged = () => { voice = pickVoice(); };
+        $('#d-voice').addEventListener('click', function () {
+            voiceOn = !voiceOn; this.setAttribute('aria-pressed', String(voiceOn));
+            store.put('ma_doom_voice', voiceOn ? '1' : '0');
+            if (voiceOn && active) say(active._say, true); else if (!voiceOn) stopAll();
+        });
+        $('#d-sound').addEventListener('click', function () {
+            const on = !Juice.settings().sound; Juice.set('sound', on);
+            this.setAttribute('aria-pressed', String(on)); this.textContent = on ? '🔊' : '🔇';
+            if (on) Juice.fire('correct', this);
+        });
+        function syncSound() { const on = !!Juice.settings().sound; const b = $('#d-sound'); b.setAttribute('aria-pressed', String(on)); b.textContent = on ? '🔊' : '🔇'; }
+
+        // ---------- landing ----------
+        function setMode(mode) {
+            S.mode = mode === 'grind' ? 'grind' : 'learn';
+            store.put('ma_doom_mode', S.mode);
+            document.querySelectorAll('.d-mode').forEach(b => b.classList.toggle('on', b.dataset.mode === S.mode));
+        }
+        function showPick() {
+            const box = $('#d-tracks'); box.innerHTML = '';
+            const current = S.courseId || Game.Track.get();
+            const list = (DATA._courseMeta || []).slice().sort((a, b) => (a.id === current ? -1 : b.id === current ? 1 : 0));
+            list.forEach(m => {
+                let ready = 0, due = 0;
+                try { ready = Math.round(Game.Review.readiness(m.id) * 100); due = Game.Review.due(m.id).length; } catch (e) { }
+                const p = packOf(m.id) || {};
+                const n = (p.exam || []).length + (p.flashcards || []).length;
+                const st = learnState(m.id), mods = (p.modules || []).length, learned = Math.min(st.done.length, mods);
+                const sub = S.mode === 'learn' && learned < mods
+                    ? `module ${Math.min(mods, learned + 1)} of ${mods}${learned ? ' · ' + learned + ' learned' : ''}${due ? ' · ' + due + ' due' : ''}`
+                    : `${n} cards · ${ready}% ready${due ? ' · ' + due + ' due' : ''}`;
+                const b = el(`<button class="d-track${m.id === current ? ' primary' : ''}" style="--tc:${esc(m.color || '#00f2ff')}">
+                    <span class="ic">${m.icon || '📚'}</span>
+                    <span><span class="nm">${esc(m.name)}</span><div class="sb">${sub}</div></span>
+                    <span class="go">${m.id === current ? 'SCROLL →' : 'START →'}</span>
+                </button>`);
+                b.addEventListener('click', () => start(m.id));
+                box.appendChild(b);
+            });
+            document.querySelectorAll('.d-mode').forEach(b => b.classList.toggle('on', b.dataset.mode === S.mode));
+            pick.classList.remove('hidden');
+            if (synth) synth.cancel();
+        }
+        $('#d-modes').addEventListener('click', ev => { const b = ev.target.closest('.d-mode'); if (!b) return; setMode(b.dataset.mode); showPick(); });
+        function start(courseId) {
+            if (!build(courseId)) return toast('That track is not loaded');
+            feed.innerHTML = ''; active = null;
+            try { history.replaceState(null, '', '?track=' + encodeURIComponent(courseId) + (S.mode === 'grind' ? '&mode=grind' : '')); } catch (e) { }
+            for (let i = 0; i < 4; i++) render(nextSpec());
+            pick.classList.add('hidden');
+            feed.scrollTop = 0;
+            stats();
+            toast(S.mode === 'learn' && !allDone() ? 'Learn mode: read, then answer. Swipe up.' : 'Swipe up for the next card');
+        }
+        $('#d-track').addEventListener('click', showPick);
+
+        // ---------- keys (desktop) ----------
+        document.addEventListener('keydown', ev => {
+            if (!pick.classList.contains('hidden')) return;
+            if (ev.key === 'ArrowDown' || ev.key === ' ' || ev.key === 'j' || ev.key === 'PageDown') { ev.preventDefault(); nextCard(); }
+            else if (ev.key === 'ArrowUp' || ev.key === 'k' || ev.key === 'PageUp') { ev.preventDefault(); prevCard(); }
+            else if (/^[1-6]$/.test(ev.key) && active) {
+                if (active.dataset.kind === 'q' && active._grade) active._grade(+ev.key - 1);
+                else if (active.dataset.kind === 'fc') { if (active._flip && !$('.d-btn.yes', active)) active._flip(); else { const b = $(ev.key === '1' ? '.d-btn.yes' : '.d-btn.no', active); if (b) b.click(); } }
+            }
+            else if (ev.key === 'f' && active && active._flip) active._flip();
+            else if (ev.key === 't') showPick();
+        });
+
+        // ---------- the speech list for a pack: every clip the feed can ask for (rendered by tools/doom-speech.py) ----------
+        window.DoomDebug = {
+            speechList(courseId) {
+                const p = packOf(courseId); if (!p) return [];
+                const out = [], seen = new Set();
+                const add = items => items.forEach(it => { const t = clean(it.text); if (!t) return; const v = VOICES[it.role] || VOICES.teach, h = Game.hash10(t), k = v + '/' + h; if (seen.has(k)) return; seen.add(k); out.push({ voice: v, hash: h, text: t }); });
+                (p.modules || []).forEach((mod, m) => {
+                    add(SAY.cover(m, mod));
+                    (mod.topics || []).forEach(t => {
+                        const { chunks, anchor } = chunkProse(t.prose);
+                        chunks.forEach((html, ci) => add(SAY.prose(t, html, ci)));
+                        if (anchor) add(SAY.anchor(anchor));
+                        (t.quiz || []).forEach(q => { add(SAY.question(q)); add(SAY.verdict(true, q)); add(SAY.verdict(false, q)); (q.whyWrong || []).forEach(w => { if (w) add(SAY.trap(w)); }); });
+                    });
+                    add(SAY.moddone(m, DONE_LINES[m % DONE_LINES.length])); add(SAY.moddone(m, DONE_LAST));
+                });
+                (p.exam || []).forEach(q => { add(SAY.question(q)); add(SAY.verdict(true, q)); add(SAY.verdict(false, q)); (q.whyWrong || []).forEach(w => { if (w) add(SAY.trap(w)); }); });
+                (p.flashcards || []).forEach(fc => { if (fc.front && fc.back) { add(SAY.fcFront(fc)); add(SAY.fcBack(fc)); } });
+                (p.daily || []).forEach(l => (l.slides || []).forEach(sl => add(SAY.daily(l, sl))));
+                return out;
+            },
+            manifest: () => manifest
+        };
+
+        // ---------- boot ----------
+        voiceOn = store.raw('ma_doom_voice') === '1';
+        $('#d-voice').setAttribute('aria-pressed', String(voiceOn));
+        syncSound();
+        stats();
+        const qs = new URLSearchParams(location.search);
+        setMode(qs.get('mode') || store.raw('ma_doom_mode') || 'learn');
+        const want = qs.get('track');
+        if (want && packOf(want)) start(want); else showPick();
+    })();
+    </script>
+</body>
+</html>

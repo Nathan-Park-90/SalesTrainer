@@ -28,7 +28,6 @@ html[data-mammoth]{color-scheme:dark;
   --mm-shadow:4px 4px 0 #000;background:#1D2B53}
 html[data-mammoth] body{background-color:var(--mm-deep)!important; background-image:linear-gradient(rgba(0,0,0,0.35) 50%, transparent 50%)!important; background-size:100% 4px!important;
   color:#FFF1E8;font-family:var(--mm-read)!important;
-  animation: mm-scanline 2s linear infinite, mm-crt-flicker 0.15s infinite alternate;
   cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="%23FFA300" stroke="%23FFF1E8" stroke-width="1.5" d="M2,2 L14,14 L10,14 L14,22 L11,22 L7,14 L2,18 Z"/></svg>') 2 2, auto !important;
 }
 html[data-mammoth] :is(h1,h2,h3,h4){font-family:var(--mm-read)!important;font-weight:800!important;letter-spacing:0!important}
@@ -141,28 +140,21 @@ html[data-mammoth][data-mm-site=family] :is(.text-zinc-400,.text-zinc-500){color
 html[data-mammoth][data-mm-site=family] .backdrop-blur-xl{backdrop-filter:none!important}
 html[data-mammoth][data-mm-site=family] input.bg-transparent{background:transparent!important;border:0!important;border-bottom:2px dotted #2B3C70!important}
 
-/* Enhancements: CRT, Glitch, Scanline Drift, and 8-Bit Cursor */
-@keyframes mm-scanline {
-  0% { background-position: 0 0; }
-  100% { background-position: 0 4px; }
+/* CRT power on/off when the mode is switched (mammoth-mode.js adds the class for one animation; --mm-cy = the middle of
+   the screen). The old always-on flicker and scanline drift were removed Oct 29, 2026: they repainted the whole page
+   forever and ignored reduced motion. */
+html.mm-power-on, html.mm-power-off { background: #000 !important; }
+html.mm-power-on body { transform-origin: 50% var(--mm-cy, 50vh); animation: mm-power-on .65s steps(10) both !important; }
+html.mm-power-off body { transform-origin: 50% var(--mm-cy, 50vh); animation: mm-power-off .44s steps(8) both !important; }
+@keyframes mm-power-on {
+  0% { transform: scale(1, .004); filter: brightness(5); } 30% { transform: scale(1, .004); filter: brightness(5); }
+  65% { transform: scale(1, 1.04); filter: brightness(1.8); } 100% { transform: none; filter: none; }
 }
-@keyframes mm-glitch {
-  0% { transform: translate(0) skew(0); filter: hue-rotate(0deg); }
-  20% { transform: translate(-3px, 1px) skew(-2deg); filter: hue-rotate(90deg); }
-  40% { transform: translate(3px, -1px) skew(2deg); filter: hue-rotate(-90deg); }
-  60% { transform: translate(-1px, 2px) skew(-1deg); filter: hue-rotate(45deg); }
-  80% { transform: translate(2px, -2px) skew(1deg); filter: hue-rotate(-45deg); }
-  100% { transform: translate(0) skew(0); filter: hue-rotate(0deg); }
+@keyframes mm-power-off {
+  0% { transform: none; filter: none; } 45% { transform: scale(1, .004); filter: brightness(5); }
+  80% { transform: scale(.004, .004); filter: brightness(8); } 100% { transform: scale(0, 0); filter: brightness(8); }
 }
-@keyframes mm-crt-flicker {
-  0% { opacity: 0.98; }
-  50% { opacity: 1; }
-  100% { opacity: 0.99; }
-}
-
-html[data-mammoth].mm-glitching body {
-  animation: mm-glitch 0.2s steps(2) 2, mm-scanline 1s linear infinite, mm-crt-flicker 0.15s infinite alternate !important;
-}
+@media (prefers-reduced-motion: reduce) { html.mm-power-on body, html.mm-power-off body { animation: none !important; } }
 
 
 /* ----- GLOBAL RETRO ENFORCEMENTS (Consistency across all apps) ----- */

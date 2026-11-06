@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="fonts/mammoth-fonts.css?v=202610200517">
+    <link rel="stylesheet" href="fonts/mammoth-fonts.css?v=202611052223">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
@@ -11,8 +11,9 @@
     <meta name="apple-mobile-web-app-title" content="MA Academy">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <title>MAMMOTH ACADEMY | Library</title>
-    <link rel="stylesheet" href="style.css?v=202610200517">
-    <script src="mammoth/mammoth-mode.js?v=202610200517" data-site="academy" data-egg=".nav-brand"></script>
+    <link rel="stylesheet" href="style.css?v=202611052223">
+    <link rel="stylesheet" href="juice.css?v=202611052223">
+    <script src="mammoth/mammoth-mode.js?v=202611052223" data-site="academy" data-egg=".nav-brand"></script>
 </head>
 <body>
     <canvas id="particle-canvas"></canvas>
@@ -27,6 +28,7 @@
             <li><a href="daily.html">DAILY</a></li>
             <li><a href="sprint.html">SPRINT</a></li>
             <li><a href="path.html">PATH</a></li>
+            <li><a href="doom.html" class="nav-doom">DOOM</a></li>
         </ul>
     </nav>
     
@@ -65,24 +67,49 @@
 
     </div>
 
-    <script src="courses/aws-saa-c03.js?v=202610200517"></script>
-    <script src="courses/sales-engineering.js?v=202610200517"></script>
-    <script src="courses/psm-scrum.js?v=202610200517"></script>
-    <script src="courses/comptia-securityplus.js?v=202610200517"></script>
-    <script src="courses/comptia-networkplus.js?v=202610200517"></script>
-    <script src="courses/comptia-aplus.js?v=202610200517"></script>
-    <script src="courses/comptia-cloudplus.js?v=202610200517"></script>
-    <script src="course-loader.js?v=202610200517"></script>
-    <script src="achievements.js?v=202610200517"></script>
-    <script src="pwa.js?v=202610200517"></script>
-    <script src="sync.js?v=202610200517"></script>
-    <script src="app.js?v=202610200517"></script>
-    <script src="diagrams.js?v=202610200517"></script>
-    <script src="lecture.js?v=202610200517"></script>
-    <script src="cram.js?v=202610200517"></script>
+    <script src="courses/aws-saa-c03.js?v=202611052223"></script>
+    <script src="courses/sales-engineering.js?v=202611052223"></script>
+    <script src="courses/psm-scrum.js?v=202611052223"></script>
+    <script src="courses/comptia-securityplus.js?v=202611052223"></script>
+    <script src="courses/comptia-networkplus.js?v=202611052223"></script>
+    <script src="courses/comptia-aplus.js?v=202611052223"></script>
+    <script src="courses/comptia-cloudplus.js?v=202611052223"></script>
+    <script src="course-loader.js?v=202611052223"></script>
+    <script src="game.js?v=202611052223"></script>
+    <script src="juice.js?v=202611052223"></script>
+    <script src="intel.js?v=202611052223"></script>
+    <script src="achievements.js?v=202611052223"></script>
+    <script src="pwa.js?v=202611052223"></script>
+    <script src="sync.js?v=202611052223"></script>
+    <script src="app.js?v=202611052223"></script>
+    <script src="diagrams.js?v=202611052223"></script>
+    <script src="lecture.js?v=202611052223"></script>
+    <script src="cram.js?v=202611052223"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if(typeof app === 'undefined' || !app.init) return;
+            const activeId = (typeof Game !== 'undefined' && Game.Track) ? Game.Track.get() : null;
+            if (activeId && Array.isArray(DATA._courseMeta)) {
+                DATA._courseMeta.sort((a, b) => (b.id === activeId ? 1 : 0) - (a.id === activeId ? 1 : 0));
+            }
+            if (app.renderLibraryTabs && !app._origRenderLibraryTabs) {
+                app._origRenderLibraryTabs = app.renderLibraryTabs;
+                app.renderLibraryTabs = function() {
+                    this._origRenderLibraryTabs();
+                    document.querySelectorAll('#course-menu-panel .course-menu-row').forEach(r => {
+                        const m = (r.getAttribute('onclick') || '').match(/'([^']+)'/);
+                        if (m) r.setAttribute('data-course', m[1]);
+                    });
+                    const tid = (typeof Game !== 'undefined' && Game.Track) ? Game.Track.get() : null;
+                    const row = tid && document.querySelector(`#course-menu-panel .course-menu-row[onclick*="'${tid}'"]`);
+                    if (row) {
+                        const grp = row.closest('[data-group]'), list = document.querySelector('#course-menu-panel .course-menu-list');
+                        const lbl = grp && grp.querySelector('.course-menu-group-label');
+                        if (lbl && lbl.nextSibling !== row) grp.insertBefore(row, lbl.nextSibling);
+                        if (grp && list && list.firstElementChild !== grp) list.insertBefore(grp, list.firstElementChild);
+                    }
+                };
+            }
             app.init();
 
             // Deep-link support (e.g. from the homepage Certification Tracks or the
@@ -94,14 +121,20 @@
             // whatever course loads first; an unknown course id is ignored.
             const params = new URLSearchParams(location.search);
             const known = id => DATA._courseMeta.some(m => m.id === id);
-            const courseId = known(params.get('course')) ? params.get('course') : null;
+            const hashId = location.hash ? decodeURIComponent(location.hash.slice(1)) : null;
+            const courseId = known(params.get('course')) ? params.get('course') : (known(hashId) ? hashId : null);
             const title = params.get('title');
             const modIdx = title ? DATA.course.findIndex(m => m.title === title && (!courseId || m.courseId === courseId)) : -1;
             if (modIdx !== -1) {
                 app.setLibraryTab(DATA.course[modIdx].courseId); // courseId IS the tab key now
-                app.renderLessonContent(modIdx, 0);
+                const topic = params.get('topic');
+                const topics = DATA.course[modIdx].topics || [];
+                const topicIdx = topic ? topics.findIndex(t => t && t.title === topic) : -1;
+                app.renderLessonContent(modIdx, topicIdx !== -1 ? topicIdx : 0);
             } else if (courseId) {
                 app.setLibraryTab(courseId);
+            } else if (activeId && known(activeId)) {
+                app.setLibraryTab(activeId);
             }
         });
     </script>

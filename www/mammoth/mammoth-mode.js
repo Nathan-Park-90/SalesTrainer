@@ -20,11 +20,26 @@
   function put(k, v) { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) { } }
 
   var css = document.createElement('link');
-  css.rel = 'stylesheet'; css.href = base + 'mammoth-mode.css?v=4';
+  css.rel = 'stylesheet'; css.href = base + 'mammoth-mode.css?v=5';
   (document.head || html).appendChild(css);
 
   function isOn() { return html.hasAttribute('data-mammoth'); }
+  var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // an old CRT: switching on, the picture opens out of a bright line; switching off, it collapses to a line, then a dot
+  function crt(cls, ms) {
+    html.style.setProperty('--mm-cy', (window.scrollY + window.innerHeight / 2) + 'px');   // collapse around the screen's middle
+    html.classList.add(cls);
+    setTimeout(function () { html.classList.remove(cls); }, ms);
+  }
   function set(on, quiet) {
+    if (!on && !quiet && !still && isOn() && !html.classList.contains('mm-power-off')) {
+      crt('mm-power-off', 440);
+      setTimeout(function () { apply(false, quiet); }, 420);
+      return;
+    }
+    apply(on, quiet);
+  }
+  function apply(on, quiet) {
     if (on) { html.setAttribute('data-mammoth', ''); put(KEY_ON, '1'); put(KEY_SEEN, '1'); }
     else { html.removeAttribute('data-mammoth'); put(KEY_ON, null); }
     var meta = document.querySelector('meta[name="theme-color"]');
@@ -33,10 +48,7 @@
     if (!quiet) {
       toast(on ? 'MAMMOTH MODE: ON' : 'Mammoth mode off', on ? 'Tap the logo 5 times to turn it off' : '');
       play8BitSound(on);
-      if (on) {
-        html.classList.add('mm-glitching');
-        setTimeout(function() { html.classList.remove('mm-glitching'); }, 400);
-      }
+      if (on && !still) crt('mm-power-on', 650);
     }
     try { window.dispatchEvent(new CustomEvent('mammothmode', { detail: { on: on } })); } catch (e) { }
   }

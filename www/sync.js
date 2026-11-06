@@ -18,7 +18,11 @@
     const MAX_BYTES = 4 * 1024 * 1024;      // far above any real backup; rejects junk pastes early
     const isOurs = k => /^st_/.test(k) || k === 'mammoth.mode' || k === 'mammoth.unlocked';
     // Array-valued keys that Smart Merge unions (ids, so a union never duplicates or renames anything).
-    const UNION_KEYS = ['st_fc_mastered', 'st_badges', 'st_sales_solved', 'st_arch_done_ids', 'st_completed', 'st_failed_qs'];
+    // (st_failed_qs used to be here; a union brought back questions you had since cleared. game.js migrates it into
+    // st_review, which merges per question by the newest answer instead.)
+    const UNION_KEYS = ['st_fc_mastered', 'st_badges', 'st_sales_solved', 'st_arch_done_ids', 'st_completed', 'st_boss_down'];
+    // Object-valued keys with their own per-entry merge rule (see smartMerge).
+    const OBJECT_KEYS = ['st_review', 'st_daylog', 'st_active_track', 'st_doom_learn'];
 
     // ---------- storage (every access guarded: private windows can throw) ----------
     function readState() {
@@ -75,6 +79,10 @@
             if (p.keys[k] === undefined) continue;
             try { if (!Array.isArray(JSON.parse(p.keys[k]))) throw 0; } catch (e) { return 'The backup has a malformed list for ' + k + '.'; }
         }
+        for (const k of OBJECT_KEYS) {
+            if (p.keys[k] === undefined) continue;
+            try { const o = JSON.parse(p.keys[k]); if (!o || typeof o !== 'object' || Array.isArray(o)) throw 0; } catch (e) { return 'The backup has a malformed record for ' + k + '.'; }
+        }
         if (crc32(canonical(p.keys)) !== p.checksum) return 'The checksum doesn\'t match: the code was cut off or edited. Copy it again in full.';
         return null;
     }
@@ -124,6 +132,7 @@
     // ---------- Smart Merge ----------
     const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
     const list = v => { try { const a = JSON.parse(v); return Array.isArray(a) ? a : []; } catch (e) { return []; } };
+    const obj = v => { try { const o = JSON.parse(v); return o && typeof o === 'object' && !Array.isArray(o) ? o : {}; } catch (e) { return {}; } };
     const dateOf = v => { const t = Date.parse(v); return isFinite(t) ? t : 0; };
 
     function smartMerge(local, incoming) {
@@ -143,6 +152,47 @@
                 out[k] = num(b) > num(a) ? b : a;             // best score (exams, PBQs), furthest lesson, longest streak
             } else if (k === 'st_last_daily') {
                 out[k] = dateOf(b) > dateOf(a) ? b : a;        // most recent study day keeps the streak alive
+            } else if (k === 'st_review') {
+                // Per question, the record with the newest answer (t) wins; a tie keeps this device's record.
+                const pa = obj(a), pb = obj(b);
+                let changed = false;
+                Object.keys(pb).forEach(id => {
+                    const x = pb[id];
+                    if (!x || typeof x !== 'object') return;
+                    if (!pa[id] || num(x.t) > num(pa[id].t)) { pa[id] = x; changed = true; }
+                });
+                if (changed) out[k] = JSON.stringify(pa);
+            } else if (k === 'st_daylog') {
+                // Per date, keep the device that answered more that day (summing would double-count a repeat merge);
+                // a passed Daily lesson (d) on either device still counts the day.
+                const pa = obj(a), pb = obj(b);
+                let changed = false;
+                Object.keys(pb).forEach(day => {
+                    const x = pb[day];
+                    if (!x || typeof x !== 'object') return;
+                    const y = pa[day];
+                    if (!y || num(x.a) > num(y.a)) {
+                        const keepD = (y && y.d) || x.d;
+                        pa[day] = Object.assign({}, x);
+                        if (keepD) pa[day].d = 1;
+                        changed = true;
+                    } else if (x.d && !y.d) { pa[day] = Object.assign({}, y, { d: 1 }); changed = true; }
+                });
+                if (changed) out[k] = JSON.stringify(pa);
+            } else if (k === 'st_doom_learn') {
+                // Doom Scroll Learn pointer, per course: the device that is further along wins (more modules done, then the later card).
+                const pa = obj(a), pb = obj(b);
+                let changed = false;
+                Object.keys(pb).forEach(c => {
+                    const x = pb[c], y = pa[c];
+                    if (!x || typeof x !== 'object') return;
+                    const dx = Array.isArray(x.done) ? x.done.length : 0, dy = y && Array.isArray(y.done) ? y.done.length : -1;
+                    const ahead = dx > dy || (dx === dy && (num(x.m) > num(y.m) || (num(x.m) === num(y.m) && num(x.i) > num(y.i))));
+                    if (!y || ahead) { pa[c] = x; changed = true; }
+                });
+                if (changed) out[k] = JSON.stringify(pa);
+            } else if (k === 'st_active_track') {
+                out[k] = num(obj(b).t) > num(obj(a).t) ? b : a;  // the track you picked most recently follows you
             } else if (/^st_domain_perf_/.test(k)) {
                 // Per domain, keep whichever device has seen more questions. Summing would double-count
                 // every time the same backup is merged again; this way a repeat merge changes nothing.

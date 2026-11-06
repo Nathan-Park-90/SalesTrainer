@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="fonts/mammoth-fonts.css?v=202610200517">
+    <link rel="stylesheet" href="fonts/mammoth-fonts.css?v=202611052223">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
@@ -11,7 +11,8 @@
     <meta name="apple-mobile-web-app-title" content="MA Academy">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <title>MAMMOTH ACADEMY | Daily Flash</title>
-    <link rel="stylesheet" href="style.css?v=202610200517">
+    <link rel="stylesheet" href="style.css?v=202611052223">
+    <link rel="stylesheet" href="juice.css?v=202611052223">
     <style>
         /* ═══════════════════════════════════════════
            DAILY FLASH — PAGE-SPECIFIC STYLES
@@ -138,6 +139,7 @@
         .slide-container {
             min-height: 320px;
             position: relative;
+            overflow-x: clip; /* slideIn starts at translateX(20px): no sideways scroll on phones */
         }
         .slide {
             display: none;
@@ -345,7 +347,7 @@
             color: #22c55e;
         }
     </style>
-    <script src="mammoth/mammoth-mode.js?v=202610200517" data-site="academy" data-egg=".nav-brand"></script>
+    <script src="mammoth/mammoth-mode.js?v=202611052223" data-site="academy" data-egg=".nav-brand"></script>
 </head>
 <body>
     <canvas id="particle-canvas"></canvas>
@@ -360,6 +362,7 @@
             <li><a href="daily.html" class="active">DAILY</a></li>
             <li><a href="sprint.html">SPRINT</a></li>
             <li><a href="path.html">PATH</a></li>
+            <li><a href="doom.html" class="nav-doom">DOOM</a></li>
         </ul>
     </nav>
 
@@ -457,18 +460,21 @@
         </div>
     </div>
 
-    <script src="courses/aws-saa-c03.js?v=202610200517"></script>
-    <script src="courses/sales-engineering.js?v=202610200517"></script>
-    <script src="courses/psm-scrum.js?v=202610200517"></script>
-    <script src="courses/comptia-securityplus.js?v=202610200517"></script>
-    <script src="courses/comptia-networkplus.js?v=202610200517"></script>
-    <script src="courses/comptia-aplus.js?v=202610200517"></script>
-    <script src="courses/comptia-cloudplus.js?v=202610200517"></script>
-    <script src="course-loader.js?v=202610200517"></script>
-    <script src="achievements.js?v=202610200517"></script>
-    <script src="pwa.js?v=202610200517"></script>
-    <script src="sync.js?v=202610200517"></script>
-    <script src="app.js?v=202610200517"></script>
+    <script src="courses/aws-saa-c03.js?v=202611052223"></script>
+    <script src="courses/sales-engineering.js?v=202611052223"></script>
+    <script src="courses/psm-scrum.js?v=202611052223"></script>
+    <script src="courses/comptia-securityplus.js?v=202611052223"></script>
+    <script src="courses/comptia-networkplus.js?v=202611052223"></script>
+    <script src="courses/comptia-aplus.js?v=202611052223"></script>
+    <script src="courses/comptia-cloudplus.js?v=202611052223"></script>
+    <script src="course-loader.js?v=202611052223"></script>
+    <script src="game.js?v=202611052223"></script>
+    <script src="juice.js?v=202611052223"></script>
+    <script src="intel.js?v=202611052223"></script>
+    <script src="achievements.js?v=202611052223"></script>
+    <script src="pwa.js?v=202611052223"></script>
+    <script src="sync.js?v=202611052223"></script>
+    <script src="app.js?v=202611052223"></script>
     <script>
     const daily = {
         lesson: null,
@@ -480,6 +486,13 @@
         retryMode: false,
         retryQueue: [],
         activeTrack: null, // set from the first available track in renderTrackButtons()
+        rematchQueued: null,
+        advanceTimer: null,
+
+        courseIdForTrack() {
+            const m = (DATA._courseMeta || []).find(x => x.dailyTrackKey === this.activeTrack);
+            return m ? m.id : null;
+        },
 
         // Get this track's lessons — factored out so setTrack() and nextDay() can't drift
         // apart. Every lesson gets an explicit .track at load time (course-loader.js),
@@ -523,6 +536,11 @@
             this.mode = 'slides';
             this.retryMode = false;
             this.retryQueue = [];
+            this.rematchQueued = new Set();
+            clearTimeout(this.advanceTimer);
+            if (window.Intel && Intel.close) Intel.close(true);
+            if (this.lesson && !this.lesson._origQuiz) this.lesson._origQuiz = this.lesson.quiz.slice();
+            if (this.lesson && this.lesson._origQuiz) this.lesson.quiz = this.lesson._origQuiz.slice();
             document.getElementById('slides-section').style.display = '';
             document.getElementById('quiz-section').classList.remove('active');
             document.getElementById('completion-screen').classList.remove('active');
@@ -554,28 +572,28 @@
             this.renderLessonContent();
         },
 
+        streakDays() {
+            if (window.Game) return Game.Day.streak().days;
+            return parseInt(localStorage.getItem('st_streak') || '0', 10) || 0;
+        },
+
         init() {
-            // Streak (track-independent: did the user do *a* daily lesson today, on either track)
-            let streak = parseInt(localStorage.getItem('st_streak') || '0');
-            let lastDate = localStorage.getItem('st_last_daily');
-            let today = new Date().toDateString();
-            if (lastDate !== today) {
-                // Don't reset streak yet — only reset if they missed a day
-                let yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-                if (lastDate !== yesterday.toDateString() && lastDate !== null) {
-                    streak = 0; // Missed a day
-                }
-            }
-            document.getElementById('streak-count').textContent = streak;
+            // Streak (track-independent): days with 5+ answers anywhere in the app, or a passed Daily lesson.
+            // game.js derives it from the day log (st_daylog) and keeps st_streak in step.
+            document.getElementById('streak-count').textContent = this.streakDays();
 
             const tracks = this.renderTrackButtons();
             const savedTrack = localStorage.getItem('st_daily_track');
-            const defaultTrack = (tracks.find(t => t.dailyTrackKey === savedTrack) || tracks[0] || {}).dailyTrackKey;
+            const activeMeta = (typeof Game !== 'undefined' && Game.Track) ? Game.Track.meta() : null;
+            const activeKey = activeMeta && activeMeta.dailyTrackKey;
+            const defaultTrack = ((activeKey && tracks.find(t => t.dailyTrackKey === activeKey)) || tracks.find(t => t.dailyTrackKey === savedTrack) || tracks[0] || {}).dailyTrackKey;
             if (defaultTrack) this.setTrack(defaultTrack);
         },
 
         renderProgress() {
-            const totalSteps = this.lesson.slides.length + this.lesson.quiz.length;
+            const queue = this.retryMode ? this.retryQueue : this.lesson.quiz;
+            const baseQuizLen = queue.filter(q => !q._rematch).length;
+            const totalSteps = this.lesson.slides.length + baseQuizLen;
             let currentStep = 0;
             let label = '';
 
@@ -585,8 +603,9 @@
                 document.getElementById('pill-learn').className = 'phase-pill active';
                 document.getElementById('pill-quiz').className = 'phase-pill';
             } else if (this.mode === 'quiz') {
-                currentStep = this.lesson.slides.length + this.quizIdx;
-                label = `Question ${this.quizIdx + 1} of ${this.lesson.quiz.length}`;
+                const baseDone = queue.slice(0, this.quizIdx).filter(q => !q._rematch).length;
+                currentStep = this.lesson.slides.length + baseDone;
+                label = `Question ${Math.min(baseDone + 1, baseQuizLen)} of ${baseQuizLen}`;
                 document.getElementById('pill-learn').className = 'phase-pill done';
                 document.getElementById('pill-quiz').className = 'phase-pill active';
             } else {
@@ -620,6 +639,11 @@
         },
 
         startQuiz() {
+            clearTimeout(this.advanceTimer);
+            if (window.Intel && Intel.close) Intel.close(true);
+            if (this.lesson && !this.lesson._origQuiz) this.lesson._origQuiz = this.lesson.quiz.slice();
+            if (this.lesson && this.lesson._origQuiz) this.lesson.quiz = this.lesson._origQuiz.slice();
+            this.rematchQueued = new Set();
             this.mode = 'quiz';
             this.quizIdx = 0;
             this.score = 0;
@@ -646,7 +670,21 @@
             }
 
             const q = queue[this.quizIdx];
-            document.getElementById('quiz-q').textContent = q.q;
+            const qEl = document.getElementById('quiz-q');
+            let rTag = document.getElementById('daily-rematch-tag');
+            if (q._rematch) {
+                if (!rTag) {
+                    rTag = document.createElement('div');
+                    rTag.id = 'daily-rematch-tag';
+                    rTag.className = 'rematch-tag';
+                    rTag.style.marginBottom = '10px';
+                    qEl.parentNode.insertBefore(rTag, qEl);
+                }
+                rTag.textContent = '\u2694 Rematch';
+            } else if (rTag) {
+                rTag.remove();
+            }
+            qEl.textContent = q.q;
             document.getElementById('quiz-exp').className = 'quiz-exp';
             document.getElementById('quiz-exp').textContent = '';
 
@@ -665,20 +703,36 @@
             btns.forEach(b => b.disabled = true);
 
             const correct = idx === q.ans;
+            const courseId = this.courseIdForTrack();
+            const qid = window.Game ? Game.qid(q, courseId) : null;
+            const res = (window.Game && qid) ? Game.Review.record(qid, correct) : null;
+            if (window.Juice && Juice.react) Juice.react(res, btns[idx]);
+            document.getElementById('streak-count').textContent = this.streakDays();
 
             btns[idx].classList.add(correct ? 'correct' : 'wrong');
             if (!correct) {
                 btns[q.ans].classList.add('correct');
-                this.missedQs.push(q);
+                if (!q._rematch) this.missedQs.push(q);
+                if (!q._rematch) {
+                    if (!this.rematchQueued) this.rematchQueued = new Set();
+                    const rKey = qid || q.q;
+                    if (!this.rematchQueued.has(rKey) && window.Intel && Intel.makeRematch) {
+                        this.rematchQueued.add(rKey);
+                        const copy = Intel.makeRematch(q, courseId);
+                        const insertAt = Math.min(this.quizIdx + 3, queue.length);
+                        queue.splice(insertAt, 0, copy);
+                    }
+                }
             } else {
-                this.score++;
+                if (!q._rematch) this.score++;
             }
 
             // Update pip
-            const pip = document.getElementById(`pip-${this.quizIdx}`);
+            const baseIdx = queue.slice(0, this.quizIdx).filter(x => !x._rematch).length;
+            const pip = !q._rematch ? document.getElementById(`pip-${baseIdx}`) : null;
             if (pip) pip.className = `quiz-pip ${correct ? 'correct' : 'wrong'}`;
-            const nextPip = document.getElementById(`pip-${this.quizIdx + 1}`);
-            if (nextPip) nextPip.className = 'quiz-pip active';
+            const nextPip = !q._rematch ? document.getElementById(`pip-${baseIdx + 1}`) : null;
+            if (nextPip && !nextPip.classList.contains('correct') && !nextPip.classList.contains('wrong')) nextPip.className = 'quiz-pip active';
 
             // Show explanation
             const exp = document.getElementById('quiz-exp');
@@ -686,7 +740,24 @@
             exp.className = 'quiz-exp visible';
 
             // Auto-advance after 2.5s
-            setTimeout(() => {
+            clearTimeout(this.advanceTimer);
+            const advance = () => {
+                this.quizIdx++;
+                this.renderQuestion();
+            };
+            if (!correct && window.Intel && Intel.open) {
+                Intel.open({
+                    q,
+                    chosen: idx,
+                    courseId,
+                    onClose: () => {
+                        clearTimeout(this.advanceTimer);
+                        this.advanceTimer = setTimeout(advance, 350);
+                    }
+                });
+                return;
+            }
+            this.advanceTimer = setTimeout(() => {
                 this.quizIdx++;
                 this.renderQuestion();
             }, 2500);
@@ -698,7 +769,8 @@
             document.getElementById('completion-screen').classList.add('active');
             document.getElementById('daily-nav').style.display = 'none';
 
-            const total = this.retryMode ? this.retryQueue.length : this.lesson.quiz.length;
+            const queue = this.retryMode ? this.retryQueue : this.lesson.quiz;
+            const total = queue.filter(q => !q._rematch).length;
             const pct = Math.round((this.score / total) * 100);
 
             let emoji = '💪', title = 'Not bad!', msg = 'A few questions tripped you up. Hit Retry to seal the gaps.';
@@ -712,18 +784,10 @@
             document.getElementById('completion-score').style.color = pct >= 80 ? '#22c55e' : '#ef4444';
             document.getElementById('completion-msg').textContent = msg;
 
-            // Update streak & last date if all correct (or >= 80%)
-            if (pct >= 80) {
-                let streak = parseInt(localStorage.getItem('st_streak') || '0');
-                let lastDate = localStorage.getItem('st_last_daily');
-                let today = new Date().toDateString();
-                if (lastDate !== today) {
-                    streak++;
-                    localStorage.setItem('st_streak', streak);
-                    localStorage.setItem('st_last_daily', today);
-                    document.getElementById('streak-count').textContent = streak;
-                }
-            }
+            // A pass (80%+) counts the day for the streak, as it always has; so do 5 answers anywhere.
+            if (pct >= 80 && window.Game) Game.Day.markDaily();
+            if (window.Juice && window.Game && Game.Day.justHitGoal) { Game.Day.justHitGoal = false; Juice.fire('daily', document.getElementById('completion-emoji')); }
+            document.getElementById('streak-count').textContent = this.streakDays();
 
             // Hide retry if none missed
             if (this.missedQs.length === 0) {
@@ -737,6 +801,9 @@
             if (this.missedQs.length === 0) return;
             this.retryMode = true;
             this.retryQueue = [...this.missedQs];
+            this.rematchQueued = new Set();
+            clearTimeout(this.advanceTimer);
+            if (window.Intel && Intel.close) Intel.close(true);
             this.quizIdx = 0;
             this.score = 0;
             this.missedQs = [];

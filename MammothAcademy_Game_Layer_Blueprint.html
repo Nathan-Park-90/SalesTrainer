@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Academy Game Blueprint</title>
+<link rel="stylesheet" href="www/fonts/mammoth-fonts.css">
+<style>
+/* ---------- tokens (same as www/style.css) ---------- */
+:root{
+  --bg:#020617; --card:#0d1324; --card2:#131b31; --line:#1e2a47;
+  --text:#f8fafc; --muted:#94a3b8;
+  --accent:#00f2ff; --accent2:#0077ff; --ok:#10b981; --warn:#f59e0b; --bad:#ef4444;
+  --head:"Outfit",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scrollbar-gutter:stable}
+body{background:var(--bg);color:var(--text);font:16px/1.6 var(--head);padding:0 16px 80px}
+main{max-width:880px;margin:0 auto}
+h1,h2,h3{text-wrap:balance;line-height:1.2}
+h1{font-size:clamp(1.7rem,5vw,2.4rem);font-weight:800;letter-spacing:-.5px;margin:48px 0 8px}
+h2{font-size:1.35rem;margin:52px 0 14px;padding-top:14px;border-top:1px solid var(--line)}
+h2 .n{font-family:var(--mono);color:var(--accent);font-size:.85rem;margin-right:8px}
+h3{font-size:1.05rem;margin:26px 0 8px}
+p,li{color:#d6deea;text-wrap:pretty}
+p+p{margin-top:10px}
+ul,ol{padding-left:22px;margin:8px 0}
+li{margin:4px 0}
+a{color:var(--accent)}
+code{font-family:var(--mono);font-size:.84em;background:var(--card2);padding:1px 6px;border-radius:5px;color:#bfefff;word-break:break-word}
+pre{font-family:var(--mono);font-size:.78rem;background:#060c1d;border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;color:#cfe8ff;margin:10px 0;line-height:1.5}
+.meta{font-family:var(--mono);font-size:.8rem;color:var(--muted);display:flex;gap:8px 16px;flex-wrap:wrap}
+.pill{display:inline-block;font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:.5px;padding:2px 8px;border-radius:99px;border:1px solid currentColor;vertical-align:middle}
+.pill.keep{color:var(--ok)} .pill.change{color:var(--warn)} .pill.skip{color:var(--bad)} .pill.later{color:var(--muted)}
+.pill.s{color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
+.card.hl{border-color:color-mix(in oklch,var(--accent) 45%,var(--line));box-shadow:0 0 24px rgb(0 242 255 / .07)}
+.grid2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))}
+.tw{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:560px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;background:#081027}
+tr:last-child td{border-bottom:0}
+td code{white-space:nowrap}
+.checks{list-style:none;padding:0}
+.checks li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line)}
+.checks input{accent-color:var(--accent);margin-top:6px;flex:none;width:18px;height:18px}
+.feature{border-left:3px solid var(--accent);padding-left:14px;margin:22px 0}
+.feature h3{margin-top:0}
+.k{font-family:var(--mono);font-size:.72rem;color:var(--accent);letter-spacing:.6px;text-transform:uppercase;display:block;margin-top:10px}
+.small{font-size:.86rem;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- reading progress: scroll-driven animation (trick #9, live on this page) ---------- */
+.progress{position:fixed;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--accent2),var(--accent));transform-origin:0 50%;scale:0 1;z-index:50}
+@supports (animation-timeline: scroll()){
+  .progress{animation:grow linear both;animation-timeline:scroll(root)}
+  @keyframes grow{to{scale:1 1}}
+}
+
+/* =================== CSS LAB =================== */
+.lab{background:#070d20;border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0;container-type:inline-size}
+.lab h3{margin:0 0 4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lab .why{font-size:.86rem;color:var(--muted);margin-bottom:12px}
+.stage{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.btn{font:600 .85rem var(--head);color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;transition:scale .08s,background .2s,border-color .2s}
+.btn:active{scale:.96}
+@media (hover:hover){.btn:hover{border-color:var(--accent)}}
+.btn.pri{background:color-mix(in oklch,var(--accent) 18%,var(--card2));border-color:color-mix(in oklch,var(--accent) 50%,var(--line))}
+label.rmt{font-size:.82rem;color:var(--muted);display:inline-flex;gap:6px;align-items:center}
+label.rmt input{accent-color:var(--accent)}
+
+/* #1 boss bar: chip damage (ghost bar) + rolling number via @property */
+@property --num{syntax:'<integer>';inherits:false;initial-value:0}
+.boss{flex:1 1 280px}
+.boss-top{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:.78rem;color:var(--muted);margin-bottom:6px}
+.boss-name{color:var(--text);font-weight:700;font-family:var(--head);font-size:.95rem}
+.hp{position:relative;height:16px;border-radius:9px;background:#151d33;overflow:hidden;box-shadow:inset 0 0 0 1px #24304f}
+.hp>i{position:absolute;inset:0 auto 0 0;width:calc(var(--hp) * 1%);border-radius:inherit}
+.hp .ghost{background:#fde68a;transition:width .55s ease-out .45s}       /* lags behind: the "chip" */
+.hp .fill{background:linear-gradient(90deg,#b91c1c,var(--bad) 60%,#fb7185);transition:width .12s ease-out}
+.count{--num:0;counter-reset:n var(--num);transition:--num .6s ease-out;font-variant-numeric:tabular-nums}
+.count::after{content:counter(n)}
+
+/* #2 sub-boss ring: conic-gradient + mask, animated with @property */
+@property --pct{syntax:'<number>';inherits:false;initial-value:0}
+.rings{display:flex;gap:16px;flex-wrap:wrap}
+.ring-wrap{position:relative;width:88px;text-align:center;font-size:.72rem;color:var(--muted)}
+.ring{--pct:0;width:88px;height:88px;border-radius:50%;background:conic-gradient(var(--c,var(--accent)) calc(var(--pct)*1%),#18213a 0);
+  -webkit-mask:radial-gradient(farthest-side,#0000 70%,#000 71%);mask:radial-gradient(farthest-side,#0000 70%,#000 71%);transition:--pct .9s cubic-bezier(.2,.8,.2,1)}
+.ring-val{position:absolute;top:0;left:0;width:88px;height:88px;display:grid;place-items:center;font:700 1rem var(--mono);color:var(--text)}
+.ring-wrap.down .ring{--c:var(--ok)}
+.ring-wrap.down .ring-val::before{content:"✓ ";color:var(--ok)}
+
+/* #3-#5 question card: press, shake, :has() state, correct pulse, floating text */
+.qcard{position:relative;flex:1 1 320px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;transition:border-color .25s}
+.qcard:has(.opt.right){border-color:var(--ok)}
+.qcard:has(.opt.wrong){border-color:var(--bad)}  /* after .right so a miss wins (the right answer is revealed too) */
+.qcard .q{font-weight:600;margin-bottom:10px}
+.opt{position:relative;display:block;width:100%;text-align:left;font:500 .92rem var(--head);color:var(--text);background:#0a1122;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:6px 0;cursor:pointer;transition:scale .08s,border-color .2s,background .2s}
+.opt:active{scale:.98}
+@media (hover:hover){.opt:not(:disabled):hover{border-color:var(--accent)}}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:color-mix(in oklch,var(--ok) 14%,#0a1122)}
+.opt.wrong{border-color:var(--bad);background:color-mix(in oklch,var(--bad) 14%,#0a1122)}
+.opt.right::after{content:"";position:absolute;inset:-1px;border-radius:inherit;box-shadow:0 0 0 2px var(--ok);animation:ring .55s ease-out forwards;pointer-events:none}
+@keyframes ring{to{box-shadow:0 0 0 14px #10b98100}}
+.shake{animation:shake .32s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shake{20%{translate:-8px}40%{translate:7px}60%{translate:-5px}80%{translate:3px}}
+.float{position:absolute;right:16px;top:10px;font:800 1rem var(--mono);color:var(--ok);pointer-events:none;animation:floatUp .9s ease-out forwards}
+@keyframes floatUp{0%{opacity:0;translate:0 6px}20%{opacity:1}100%{opacity:0;translate:0 -38px}}
+/* reduced motion: no movement, colour only */
+@keyframes flash{50%{box-shadow:0 0 0 3px var(--bad)}}
+.rm .shake{animation:flash .4s}
+.rm .float,.rm .opt.right::after{animation:none;opacity:0}
+@media (prefers-reduced-motion:reduce){
+  .shake{animation:flash .4s} .float,.opt.right::after{animation:none;opacity:0}
+  .count,.ring,.hp>i{transition:none}
+}
+
+/* #6 intel drawer: <dialog> + @starting-style + allow-discrete (enter AND exit animate, zero JS animation) */
+dialog.intel{position:fixed;inset:auto 0 0 0;margin:0 auto;width:min(100%,600px);max-height:80vh;overflow:auto;
+  background:var(--card);color:var(--text);border:1px solid color-mix(in oklch,var(--accent) 40%,var(--line));border-bottom:0;border-radius:18px 18px 0 0;padding:18px 18px 22px;
+  translate:0 100%;opacity:0;transition:translate .35s cubic-bezier(.2,.8,.2,1),opacity .25s,overlay .35s allow-discrete,display .35s allow-discrete}
+dialog.intel[open]{translate:0 0;opacity:1}
+@starting-style{dialog.intel[open]{translate:0 100%;opacity:0}}
+dialog.intel::backdrop{background:rgb(2 6 23 / 0);transition:background .35s,overlay .35s allow-discrete,display .35s allow-discrete}
+dialog.intel[open]::backdrop{background:rgb(2 6 23 / .65)}
+@starting-style{dialog.intel[open]::backdrop{background:rgb(2 6 23 / 0)}}
+body:has(dialog[open]){overflow:hidden}
+.intel .grab{width:42px;height:4px;border-radius:4px;background:#334;margin:0 auto 12px}
+.intel .trap{border-left:3px solid var(--bad);padding:6px 10px;background:#1a0f17;border-radius:0 8px 8px 0;margin:8px 0}
+.intel .rule{border-left:3px solid var(--ok);padding:6px 10px;background:#0b1a17;border-radius:0 8px 8px 0;margin:8px 0}
+.intel .links{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+/* #7 streak flame: heat via color-mix + custom property */
+.flame{--streak:3;width:56px;height:56px;color:color-mix(in oklch,#fbbf24,#ef4444 calc(var(--streak) * 7%));
+  filter:drop-shadow(0 0 calc(var(--streak) * 1.2px) currentColor);transform-origin:50% 90%;animation:flicker 1.3s ease-in-out infinite alternate}
+@keyframes flicker{0%{scale:1 1;rotate:-2deg}50%{scale:1.04 .97}100%{scale:.98 1.05;rotate:2deg}}
+.streak-n{font:800 2rem var(--mono)}
+
+/* #8 radial burst with CSS trig: sin()/cos() place each spark */
+.burst-box{position:relative;width:150px;height:110px;display:grid;place-items:center;font:700 .8rem var(--mono);color:var(--muted)}
+.burst-box span{position:absolute;left:50%;top:50%;width:7px;height:7px;border-radius:50%;background:var(--spark,var(--accent));
+  --a:calc(var(--i) * 30deg);animation:burst .75s cubic-bezier(.1,.7,.3,1) forwards}
+.burst-box span:nth-child(even){--spark:var(--ok);width:5px;height:5px}
+@keyframes burst{from{translate:-50% -50%;opacity:1}to{translate:calc(-50% + cos(var(--a)) * 64px) calc(-50% + sin(var(--a)) * 46px);opacity:0;scale:.4}}
+
+/* #9 daily-minimum "overclock" look: animate the theme hue with an inherited @property */
+@property --hue{syntax:'<number>';inherits:true;initial-value:200}
+.oc{--hue:200;--acc:oklch(.87 .16 var(--hue));transition:--hue 1.2s ease;border:1px solid var(--acc);border-radius:14px;padding:14px 16px;flex:1 1 260px;box-shadow:0 0 22px color-mix(in oklch,var(--acc) 25%,transparent)}
+.oc.on{--hue:330}
+.oc b{color:var(--acc)}
+.oc .bar{height:8px;border-radius:6px;background:#151d33;margin-top:10px;overflow:hidden}
+.oc .bar i{display:block;height:100%;width:var(--w,40%);background:var(--acc);transition:width .4s}
+
+/* #10 view transition between question cards */
+.vt{view-transition-name:qcard;flex:1 1 280px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+::view-transition-old(qcard){animation:vtOut .22s ease-in both}
+::view-transition-new(qcard){animation:vtIn .28s cubic-bezier(.2,.8,.2,1) both}
+@keyframes vtOut{to{opacity:0;translate:-24px 0}}
+@keyframes vtIn{from{opacity:0;translate:24px 0}}
+
+/* container query: card goes compact in narrow slots (home card vs arena vs drawer) */
+@container (max-width:420px){ .qcard .q{font-size:.95rem} .opt{padding:9px 10px} .stage{gap:10px} }
+
+@media print{
+  body{background:#fff;color:#000}
+  p,li,td{color:#111} .lab,.progress{display:none} .card,.tw{border-color:#bbb;background:#fff}
+  code,pre{background:#f2f2f2;color:#000} h2{border-color:#ccc} a{color:#004}
+}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+<main>
+
+<h1>Mammoth Academy · Game Layer Blueprint</h1>
+<div class="meta"><span>Nov 3, 2026</span><span>Status: <b style="color:var(--ok)">built Nov 3 (A-F merged, all tests pass), not deployed yet</b></span><span>Repo: Mammoth/MammothAcademy</span><span>Started from: Gemini's "high-dopamine engine" plan</span></div>
+
+<div class="card hl" style="margin-top:22px">
+<p><b>The one rule behind every choice here:</b> the game has to measure the same thing as the exam. A boss you beat by grinding flashcards feels great and then you still fail SAA-C03. So the boss bar measures <b>how much you'll still remember next week</b>. Combos, sounds and visual effects make that feel good, but they never inflate it.</p>
+<p>Three loops do the learning: <b>miss → see the rule → get asked again</b> (in the same session), <b>come back tomorrow → review what's due</b> (across days), and <b>domain bosses → final boss = a full timed exam</b> (readiness). The CSS lab at the bottom has live demos of every visual idea. Try them on your phone.</p>
+</div>
+
+<!-- ===================================================== -->
+<h2><span class="n">00</span>Before anything is built</h2>
+<ul class="checks">
+<li><input type="checkbox"><div><b>Check Jake's study data</b> (Claude, over Tailscale): are the 20:00 Discord rounds being answered, and how long is the streak? If Jake is doing the job, the app's job is to back up those drills (review what Jake caught). If Jake is ignored, the homepage card (F5) matters more than any boss.</div></li>
+<li><input type="checkbox"><div><b>Pick the timing</b> (Nathan): the Oct 31 focus is the kids' Learning Center. Build this now, or park it?</div></li>
+<li><input type="checkbox"><div><b>Git housekeeping</b> (Nathan): this repo is several commits ahead of the <code>SalesTrainer</code> remote, and <code>Code/Mammoth/CompTIAplus</code> is a diverged clone. Pick the canonical one before a multi-branch build starts.</div></li>
+</ul>
+
+<h2><span class="n">01</span>Decisions for you</h2>
+<p class="small">Each has a recommended default. If you don't override it, the build uses the default.</p>
+<div class="tw"><table>
+<tr><th>#</th><th>Question</th><th>Recommended</th><th>Why</th></tr>
+<tr><td>D1</td><td>What keeps the streak alive?</td><td><b>5 answers anywhere in the app</b> (any page, right or wrong)</td><td>Matches Jake's rule (days with ≥5 answers). The streak measures habit and the boss measures mastery. Today only a Daily Flash at ≥80% counts, which makes a busy day fatal.</td></tr>
+<tr><td>D2</td><td>Sound effects</td><td><b>Off by default</b>, one toggle in the navbar</td><td>You study on a phone in public. Visual feedback and Android vibration carry the effect without sound.</td></tr>
+<tr><td>D3</td><td>Homepage for first-time visitors</td><td><b>Keep the pitch for new visitors</b>; returning users get the question card on top</td><td>academy.mammothcapital.site is public (case study, Ko-fi). Gemini's "rip out the marketing copy" would hurt the portfolio. <code>isReturning</code> already exists (index.html:565).</td></tr>
+<tr><td>D4</td><td>Active track</td><td><b>AWS SAA-C03</b></td><td>Already the Jake track. It's the only bank deep enough for a fair boss (213 questions, 46 to 61 per domain).</td></tr>
+<tr><td>D5</td><td>Should Jake's Discord answers count in the app?</td><td><b>Later</b> (phase 2)</td><td>Needs a tiny endpoint on the home server and a privacy call. Phase 1 uses the same question ids, so the bridge is easy to add later.</td></tr>
+</table></div>
+
+<!-- ===================================================== -->
+<h2><span class="n">02</span>Gemini's ideas, sorted</h2>
+<div class="tw"><table>
+<tr><th>Idea</th><th>Verdict</th><th>What we do instead / why</th></tr>
+<tr><td>Single active campaign</td><td><span class="pill keep">KEEP</span></td><td>F1. Stored, and synced across devices.</td></tr>
+<tr><td>Fail-first intel drawer</td><td><span class="pill keep">KEEP</span></td><td>F3. The best idea in the plan. The data is mostly there already (<code>whyWrong</code> on all 272 questions, <code>meta.domains</code>, Cram Sheets).</td></tr>
+<tr><td>Instant revenge rematch</td><td><span class="pill keep">KEEP</span></td><td>F4. A same-session rematch only proves short-term recall, so it doesn't move the boss. Tomorrow's review does.</td></tr>
+<tr><td>Minimum viable daily rep</td><td><span class="pill keep">KEEP</span></td><td>F6 (D1).</td></tr>
+<tr><td>Inverted boss health bar, 5,000 HP</td><td><span class="pill change">CHANGE</span></td><td>F7. HP = 100% − domain mastery, not a pool of points you click away. A dead boss should mean you'd probably pass.</td></tr>
+<tr><td>5 domain sub-bosses</td><td><span class="pill change">CHANGE</span></td><td>One per <b>official exam domain</b>: 4 for SAA-C03, 5 for Net+/Sec+, 6 for Cloud+. Taken from <code>meta.examFormat.blueprint</code>, never hardcoded.</td></tr>
+<tr><td>Homepage ambush, 15 s clock on page load</td><td><span class="pill change">CHANGE</span></td><td>F5. The card stays, with no clock. A timer that starts before you've even looked at the screen just punishes opening the app.</td></tr>
+<tr><td>Nemesis system</td><td><span class="pill change">CHANGE</span></td><td>F2. Folded into the single review engine. Questions you keep missing get a "Nemesis" badge as a <i>view</i> of that data, not a third list next to Jake's Leitner boxes and the Arena's missed-first list.</td></tr>
+<tr><td>3-minute sudden death, 20 s per question</td><td><span class="pill change">CHANGE</span></td><td>Optional "Blitz" later, paced like the real exam (~2 min per SAA question), using flashcards and short questions only. 20 s per long scenario question trains guessing.</td></tr>
+<tr><td>Boss heals 15 HP on a miss</td><td><span class="pill skip">SKIP</span></td><td>A miss is exactly when the drawer teaches you something. Punishing it teaches you to dread the drawer.</td></tr>
+<tr><td>Loot caches, streak shields, cheat card</td><td><span class="pill skip">SKIP</span></td><td>Random rewards for volume. A cheat card works against the point of studying. A streak shield isn't needed when the daily minimum is 5 answers.</td></tr>
+<tr><td>Overclock double damage</td><td><span class="pill change">CHANGE</span></td><td>Keep the <b>look</b> (neon theme when the daily minimum is hit, lab #9). Drop the double damage: inflated numbers make the boss bar meaningless.</td></tr>
+<tr><td>Web Audio synth, CSS shake/glow</td><td><span class="pill keep">KEEP</span></td><td>F8. Polish layer, muted by default, respects reduced motion, plus Android vibration.</td></tr>
+</table></div>
+
+<!-- ===================================================== -->
+<h2><span class="n">03</span>Data model (the foundation everything sits on)</h2>
+<p>All progress lives in each browser's <code>localStorage</code> and moves between devices through <code>sync.js</code> Smart Merge. Every new key needs a merge rule <b>before</b> it ships, or phone and PC drift apart.</p>
+
+<div class="card">
+<b style="color:var(--bad)">Existing bug found while planning:</b> <code>st_failed_qs</code> is in <code>UNION_KEYS</code> (sync.js:21). Clear a question on your phone, merge with the PC, and it comes back, forever. A list that should <i>shrink</i> can't be merged by union. The new review store fixes this by keeping one record per question, and the newest record wins.
+</div>
+
+<h3>Question ids</h3>
+<p>Use Jake's existing scheme so the two systems can share history later: <code>&lt;courseId&gt;:mc:&lt;sha1(question text) first 10 hex&gt;</code> (build-study-bank.js:18). Browsers can't run SHA-1 without waiting (<code>crypto.subtle</code> is async), so a build step <b>stamps an <code>id</code> onto every question</b> in <code>courses/*.js</code>, with a check that no two collide. Editing a question's text changes its id. That's accepted, and it's how Jake already works.</p>
+
+<h3>New and changed keys</h3>
+<div class="tw"><table>
+<tr><th>Key</th><th>Shape</th><th>Smart Merge rule</th></tr>
+<tr><td><code>st_active_track</code></td><td><code>{"id":"aws-saa-c03","t":1730600000}</code></td><td>Newest <code>t</code> wins (today unknown keys stay device-only, but the track should follow you).</td></tr>
+<tr><td><code>st_review</code></td><td><code>{"&lt;qid&gt;":{"b":2,"t":1730600000,"due":"2026-11-06","n":5,"r":3,"m":0}}</code><br><span class="small">b = Leitner box 0-5, t = last answered (epoch s), n = times seen, r = times right, m = misses in a row</span></td><td><b>Per question, newest <code>t</code> wins.</b> Repeating a merge changes nothing. This is what replaces the union bug.</td></tr>
+<tr><td><code>st_daylog</code></td><td><code>{"2026-11-03":{"a":14,"c":11}}</code> (answers, correct), last 90 days</td><td>Per date, keep the higher <code>a</code>. Same reasoning as <code>st_domain_perf_*</code>: summing would double-count.</td></tr>
+<tr><td><code>st_streak</code> / <code>st_last_daily</code></td><td>unchanged</td><td>Unchanged. They're now <i>derived</i> from <code>st_daylog</code> on every load, so badges and the kiosk keep working.</td></tr>
+<tr><td><code>st_failed_qs</code></td><td>legacy</td><td>Migrated once into <code>st_review</code> (each text matched to its id, box 0), then no longer written. Remove it from <code>UNION_KEYS</code>.</td></tr>
+<tr><td><code>st_juice</code></td><td><code>{"sound":0,"haptics":1}</code></td><td>Device-only (a phone and a laptop want different settings).</td></tr>
+</table></div>
+
+<h3>Review engine (Leitner, same idea as Jake's)</h3>
+<div class="tw"><table>
+<tr><th>Box</th><th>0</th><th>1</th><th>2</th><th>3 = mastered</th><th>4</th><th>5</th></tr>
+<tr><td>Next due</td><td>this session (rematch)</td><td>+1 day</td><td>+3 days</td><td>+7 days</td><td>+16 days</td><td>+35 days</td></tr>
+</table></div>
+<ul>
+<li>Right answer → up one box, <b>at most one move per calendar day</b>. Getting a question right three times in a row in one sitting doesn't count as spaced.</li>
+<li>Wrong answer → box 0 (rematch this session), then due tomorrow. <code>m ≥ 2</code> shows the <b>Nemesis</b> badge until it's answered right on 3 separate days.</li>
+<li>Days use your <b>local</b> date (the laptop travels; you're in CET). The day rolls over at 04:00, so late-night study counts for the day you're still in.</li>
+<li>The Arena's "missed first" draw (app.js:446-474) switches from <code>st_failed_qs</code> to "due or box 0 first", which makes it smarter at no extra cost.</li>
+</ul>
+
+<h3>Readiness formula (what the boss bars show)</h3>
+<pre>domain mastery  = questions in that domain at box ≥ 3  ÷  all exam questions tagged with that domain
+sub-boss HP     = 100% − domain mastery
+readiness       = Σ (blueprint weight × domain mastery)        e.g. 0.30·Secure + 0.26·Resilient + 0.24·Perf + 0.20·Cost
+final boss      = unlocks when every domain ≥ 80% → a FULL timed Arena exam (65 q, 130 min); beat it at ≥ pass mark</pre>
+<p class="small">Mastery decays on its own: a question at box 3 that goes overdue by more than its interval counts as only half mastered until it's reviewed again. So a boss you leave alone for two weeks visibly grows back. That's honest feedback, not a punishment for a single miss.</p>
+<p class="small">Thin banks: a domain with fewer than 15 questions shows "Not enough questions to measure yet" instead of a fake bar (Cloud+ Security has 0, and A+ domains have 1 to 4). Only AWS gets real bosses today.</p>
+
+<!-- ===================================================== -->
+<h2><span class="n">04</span>Features</h2>
+
+<div class="feature"><h3>F1 · Active track lock <span class="pill s">S</span></h3>
+<p>One track drives Home, Daily, Gym, Arena defaults and Path. The other six fold into a "Switch track" drawer (<code>&lt;details&gt;</code>, animated with <code>interpolate-size</code> where supported).</p>
+<span class="k">Where</span><p class="small">index.html track grid (~413), library course switcher, daily.html track buttons, arena exam list, path.html cards. A shared <code>Track.get()/set()</code> helper in a new <code>game.js</code>.</p>
+<span class="k">Done when</span><p class="small">After a fresh install every page opens on AWS. Switching on the phone, then syncing, switches the PC too. Library deep links to another track still work, so the lock only sets defaults and never blocks you.</p></div>
+
+<div class="feature"><h3>F2 · Review engine + migration <span class="pill s">M</span></h3>
+<p>The <code>game.js</code> core: <code>Review.record(qid, right)</code>, <code>Review.due(courseId)</code>, <code>Review.mastery(courseId)</code>, the day log, and the streak derivation. Every answer surface calls <code>record()</code>: Arena (practice instantly, exam mode at submit), lesson quizzes (<code>answerQuiz</code>, app.js:1237), Daily Flash, the homepage card.</p>
+<span class="k">Where</span><p class="small">New <code>www/game.js</code> loaded on every page before app.js. sync.js gets the three merge rules. A one-time migration from <code>st_failed_qs</code>. Build step: <code>tools/stamp-question-ids.js</code>.</p>
+<span class="k">Done when</span><p class="small">A unit test drives a fake clock through 40 days and every box and due date matches the table. Merging A into B, then B into A, then repeating gives the same result (idempotent). A migrated device keeps its missed list. Corrupt or missing storage never throws (private windows).</p></div>
+
+<div class="feature"><h3>F3 · Intel drawer on a miss <span class="pill s">M</span></h3>
+<p>A wrong answer slides up a bottom sheet (lab #6) showing: <b>the trap</b> (<code>whyWrong[chosen]</code>, app.js:426), <b>the rule</b> (the correct option plus <code>exp</code>), and two links: <b>Read the lesson</b> (deep link into Library) and <b>Cram Sheet</b> (opens the right sheet already searched).</p>
+<span class="k">Content job</span><p class="small">Add an optional <code>ref</code> per question: <code>{"module":"&lt;exact title&gt;","topic":"&lt;exact title&gt;","cram":["aws","Glacier"]}</code>. agy authors it for the 213 AWS questions, and a validator script fails the build if any title doesn't resolve. Without a <code>ref</code>, the domain → module map (<code>meta.domains</code>) is the fallback. <code>Cram.open(sheetId)</code> (cram.js:268) gets a second argument, <code>query</code>.</p>
+<span class="k">Where it shows</span><p class="small">Arena <b>practice</b> mode, lesson quizzes, Daily, the homepage card. <b>Never in exam mode</b>: testing-center fidelity stays, and the results autopsy gets the same links per wrong question.</p>
+<span class="k">Done when</span><p class="small">Every AWS question resolves to a real lesson and topic. The drawer is keyboard-closable (Esc), focus returns to the next question, it works at 390 px wide, and it works in Mammoth mode.</p></div>
+
+<div class="feature"><h3>F4 · Rematch <span class="pill s">S</span></h3>
+<p>A missed question comes back <b>3 cards later</b> with its options shuffled, plus a "⚔ Rematch" tag and a small "Revenge" effect when you clear it. In exam mode there's no rematch (fidelity).</p>
+<p class="small">v2, optional: agy writes one <b>variant</b> per AWS question (same concept, new scenario), reviewed like the Oct 18 content. Then the rematch tests the concept, not your memory of the wording.</p>
+<span class="k">Done when</span><p class="small">Miss Q at position 4 and it reappears at 7 with a different option order. Near the end of a set it goes last. Clearing it marks the review record but doesn't promote it past box 1 that day.</p></div>
+
+<div class="feature"><h3>F5 · Homepage "next question" card <span class="pill s">S</span></h3>
+<p>Returning visitors get one live question at the top of index.html: the most overdue review for the active track, otherwise an unseen question from the weakest domain. No timer. Answering opens the drawer on a miss and loads the next card with a view transition (lab #10). A "5 more" button chains a quick set.</p>
+<span class="k">Where</span><p class="small">index.html above the stats (~386). The hero copy (~357) collapses into a one-line strip for returning users (D3). Note: <code>app.init()</code> must not run on index.html (MEMORY.MD), so the card uses <code>game.js</code> plus course-loader only.</p>
+<span class="k">Done when</span><p class="small">Cold load to an answerable card in under 1 s on the phone, offline included. New visitors still see the pitch.</p></div>
+
+<div class="feature"><h3>F6 · Daily minimum + streak <span class="pill s">S</span></h3>
+<p>The streak counts days with ≥5 answers anywhere (D1), derived from <code>st_daylog</code>. Hitting the minimum gives a one-time celebration plus the "overclock" theme for the rest of the day (lab #9), purely cosmetic. The flame heats up with the streak length (lab #7).</p>
+<span class="k">Where</span><p class="small">Replace the streak writes in daily.html:559-569 and 715-724 with <code>Review</code> calls. Home stat (index.html:528) reads the derived value. The Achievements streak badges keep working unchanged.</p>
+<span class="k">Done when</span><p class="small">Clock tests: 5 answers at 23:50 plus 5 at 00:10 = 2 days. A missed day resets. Two devices that each studied on different days merge into the longer streak. Travel across time zones doesn't double-count.</p></div>
+
+<div class="feature"><h3>F7 · Domain bosses on Smart Path <span class="pill s">M</span></h3>
+<p>The active track's card on path.html becomes a boss panel: one ring per blueprint domain (lab #2), a combined readiness bar with chip damage (lab #1), and the <b>final boss</b> locked until every domain is ≥80%. A domain dropping to 0 HP fires the burst (lab #8). The existing completion bars (path.html:321-363) move into a "Coverage" fold, since coverage still matters but it isn't readiness.</p>
+<span class="k">Done when</span><p class="small">Bars match the formula in section 03 for a seeded state. Thin-bank tracks show the "not enough questions" state. The final boss result writes the normal Arena high score.</p></div>
+
+<div class="feature"><h3>F8 · Juice layer <span class="pill s">S</span></h3>
+<p><code>www/juice.css</code> + <code>www/juice.js</code>, exporting <code>juice(event, el)</code>: adds a class, removes it on <code>animationend</code>, optionally plays a synth tone (Web Audio, no files, so it stays offline) and vibrates on Android (<code>navigator.vibrate</code>, a no-op on iOS). Every effect has a reduced-motion version (colour, no movement) and pulls colours from the theme tokens, so Mammoth mode re-skins it for free.</p></div>
+
+<h3>Event → feedback map (replaces Gemini's table)</h3>
+<div class="tw"><table>
+<tr><th>Event</th><th>Visual</th><th>Sound (if on)</th><th>Vibrate</th><th>Effect on the boss</th></tr>
+<tr><td>Tap an option</td><td>98% press (<code>scale</code>)</td><td>soft 800 Hz tick, 15 ms</td><td>—</td><td>—</td></tr>
+<tr><td>Correct</td><td>green ring pulse + "+1"</td><td>rising major third</td><td>—</td><td>box +1 (once a day)</td></tr>
+<tr><td>Combo ×5 in a session</td><td>gold glow on the counter</td><td>pentatonic run</td><td>—</td><td>none (cosmetic)</td></tr>
+<tr><td>Miss</td><td>300 ms shake → drawer slides up</td><td>low 110 Hz buzz, quiet</td><td>40 ms</td><td>box → 0 (the boss doesn't heal)</td></tr>
+<tr><td>Rematch cleared</td><td>"Revenge" stamp</td><td>two-note sting</td><td>—</td><td>none that day</td></tr>
+<tr><td>Question reaches box 3</td><td>ring ticks down, chip damage</td><td>—</td><td>—</td><td>domain HP drops</td></tr>
+<tr><td>Daily minimum hit</td><td>overclock hue shift, flame grows</td><td>chord</td><td>20-40-20</td><td>—</td></tr>
+<tr><td>Sub-boss down / PBQ clear</td><td>radial burst</td><td>layered chord</td><td>60 ms</td><td>—</td></tr>
+</table></div>
+
+<!-- ===================================================== -->
+<h2><span class="n">05</span>CSS lab: try each trick</h2>
+<p class="small">Everything below is plain CSS with a few lines of JS to trigger it. No libraries, all offline-safe. Tick the box to preview the reduced-motion version. Newest features (trig functions, <code>@starting-style</code>, view transitions, scroll timelines) work in current Chrome, Safari and Firefox and quietly do nothing in older ones.</p>
+<label class="rmt"><input type="checkbox" id="rmToggle"> Preview reduced motion</label>
+
+<div class="lab" id="lab1">
+<h3>1 · Boss bar with chip damage + rolling numbers <span class="pill keep">@property</span></h3>
+<p class="why">Fighting-game trick: the red bar drops instantly and a pale "chip" bar follows 0.45 s later, so you <i>see</i> how much damage you did. The number rolls because <code>--num</code> is registered as an <code>&lt;integer&gt;</code>, which lets CSS animate it.</p>
+<div class="stage">
+  <div class="boss">
+    <div class="boss-top"><span class="boss-name">SAA-C03 · Readiness boss</span><span><span class="count" id="hpNum"></span>% HP</span></div>
+    <div class="hp" id="hpBar" style="--hp:72"><i class="ghost"></i><i class="fill"></i></div>
+  </div>
+  <button class="btn pri" onclick="hit(-6)">Card mastered (−6%)</button>
+  <button class="btn" onclick="hit(+9)">Two weeks idle (+9%)</button>
+</div>
+<pre>@property --num { syntax:'&lt;integer&gt;'; inherits:false; initial-value:0 }
+.count { counter-reset:n var(--num); transition:--num .6s }
+.count::after { content:counter(n) }
+.hp .fill  { width:calc(var(--hp)*1%); transition:width .12s }
+.hp .ghost { width:calc(var(--hp)*1%); transition:width .55s .45s }  /* the chip */</pre>
+</div>
+
+<div class="lab" id="lab2">
+<h3>2 · Sub-boss rings (one per exam domain) <span class="pill keep">conic-gradient + mask</span></h3>
+<p class="why">One element, no SVG: a conic gradient sweeps to <code>--pct</code>, and a radial mask punches out the middle. Registering <code>--pct</code> lets the sweep animate smoothly. Turns green with a check at 80%.</p>
+<div class="stage">
+  <div class="rings" id="rings"></div>
+  <button class="btn pri" onclick="studyRings()">Study session</button>
+  <button class="btn" onclick="resetRings()">Reset</button>
+</div>
+<pre>.ring { background:conic-gradient(var(--accent) calc(var(--pct)*1%), #18213a 0);
+        mask:radial-gradient(farthest-side, #0000 70%, #000 71%);
+        transition:--pct .9s }</pre>
+</div>
+
+<div class="lab" id="lab3">
+<h3>3 · Question card: press, shake, pulse, drawer <span class="pill keep">:has()</span> <span class="pill keep">@starting-style</span></h3>
+<p class="why">Press = <code>scale:.98</code> on <code>:active</code>. A miss shakes the card using the separate <code>translate</code> property, so it never fights the press scale. The card border reacts through <code>.qcard:has(.opt.wrong)</code>, with no JS class juggling. The drawer is a native <code>&lt;dialog&gt;</code>: <code>@starting-style</code> + <code>transition-behavior:allow-discrete</code> animate it in <i>and out</i> with zero animation JS, and you get Esc-to-close and focus handling for free.</p>
+<div class="stage">
+  <div class="qcard" id="qcard">
+    <div class="q">A company needs S3 objects retrievable within 12 hours at the lowest cost, accessed about once a year. Which storage class?</div>
+    <button class="opt" data-ok="0">S3 Standard-IA</button>
+    <button class="opt" data-ok="0">S3 Glacier Instant Retrieval</button>
+    <button class="opt" data-ok="1">S3 Glacier Deep Archive</button>
+    <button class="opt" data-ok="0">S3 One Zone-IA</button>
+  </div>
+  <button class="btn" onclick="resetQ()">Reset card</button>
+</div>
+<pre>.qcard:has(.opt.wrong) { border-color:var(--bad) }
+.shake { animation:shake .32s }   @keyframes shake { 20%{translate:-8px} 40%{translate:7px} … }
+dialog.intel        { translate:0 100%; transition:translate .35s, overlay .35s allow-discrete, display .35s allow-discrete }
+dialog.intel[open]  { translate:0 0 }
+@starting-style { dialog.intel[open] { translate:0 100% } }
+@media (prefers-reduced-motion:reduce) { .shake { animation:flash .4s } }</pre>
+</div>
+
+<dialog class="intel" id="intel">
+  <div class="grab"></div>
+  <div class="small" style="font-family:var(--mono);color:var(--bad)">⚠ MISSED · Cost-optimized architectures</div>
+  <div class="trap"><b>Trap:</b> <span id="trapText"></span></div>
+  <div class="rule"><b>Rule:</b> Deep Archive is the cheapest class, with standard retrieval within 12 hours. "Once a year + hours are fine" points straight to it.</div>
+  <div class="links"><button class="btn pri">📖 Read the lesson</button><button class="btn">⚡ Cram Sheet: S3 classes</button><button class="btn" onclick="intel.close()">Got it · rematch in 3</button></div>
+</dialog>
+
+<div class="lab" id="lab4">
+<h3>4 · Streak flame that heats up <span class="pill keep">color-mix()</span></h3>
+<p class="why">One <code>--streak</code> number drives the colour (amber → red via <code>color-mix(in oklch, …)</code>) and the glow radius. The flicker uses <code>scale</code>/<code>rotate</code> from the base of the flame. Drag the slider.</p>
+<div class="stage">
+  <svg class="flame" id="flame" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5c.8 3.6-3.8 6.2-3.8 11a5.8 5.8 0 0 0 11.6 0c0-3.2-1.8-5.3-2.6-7.4-.6 2-1.7 3.2-2.9 3.6.4-2.6-.2-5.2-2.3-7.2z"/></svg>
+  <span class="streak-n num" id="streakN">3</span><span class="small">day streak</span>
+  <input type="range" min="0" max="14" value="3" id="streakR" style="accent-color:var(--warn);flex:1 1 160px" aria-label="Streak length">
+</div>
+<pre>.flame { color:color-mix(in oklch, #fbbf24, #ef4444 calc(var(--streak) * 7%));
+         filter:drop-shadow(0 0 calc(var(--streak) * 1.2px) currentColor) }</pre>
+</div>
+
+<div class="lab" id="lab5">
+<h3>5 · Sub-boss down: radial burst <span class="pill keep">sin() / cos()</span></h3>
+<p class="why">Twelve sparks, each with <code>--i</code>. CSS trig functions place them on an ellipse, so there's no canvas and no particle library. Good for PBQ clears and dead sub-bosses (the homepage already has a <code>#particle-canvas</code>, but this is lighter).</p>
+<div class="stage">
+  <div class="burst-box" id="burst">DOMAIN DOWN</div>
+  <button class="btn pri" onclick="burst()">Fire</button>
+</div>
+<pre>.burst-box span { --a:calc(var(--i) * 30deg); animation:burst .75s forwards }
+@keyframes burst { to { translate:calc(-50% + cos(var(--a))*64px) calc(-50% + sin(var(--a))*46px); opacity:0 } }</pre>
+</div>
+
+<div class="lab" id="lab6">
+<h3>6 · "Overclock": daily minimum hit <span class="pill keep">inherited @property</span></h3>
+<p class="why">Gemini's neon idea without the double damage. A registered, <i>inherited</i> <code>--hue</code> animates and every child colour built from <code>oklch(… var(--hue))</code> follows, so the whole theme glides from cyan to magenta. In the app this would be <code>body[data-daily="done"]</code>.</p>
+<div class="stage">
+  <div class="oc" id="oc"><b>Daily minimum</b> <span class="small num" id="ocTxt">2 / 5 answers</span><div class="bar"><i id="ocBar" style="--w:40%"></i></div></div>
+  <button class="btn pri" onclick="ocStep()">Answer one</button>
+  <button class="btn" onclick="ocReset()">Reset</button>
+</div>
+<pre>@property --hue { syntax:'&lt;number&gt;'; inherits:true; initial-value:200 }
+.oc { --acc:oklch(.87 .16 var(--hue)); transition:--hue 1.2s }
+.oc.on { --hue:330 }</pre>
+</div>
+
+<div class="lab" id="lab7">
+<h3>7 · Next card with a view transition <span class="pill keep">View Transitions API</span></h3>
+<p class="why"><code>document.startViewTransition(update)</code> snapshots the old card, swaps the content, and animates between them using pseudo-elements you style in CSS. For moving between pages (Home → Arena) the app can add one line, <code>@view-transition { navigation: auto; }</code>, and page loads cross-fade too. Needs a test with the service worker.</p>
+<div class="stage">
+  <div class="vt" id="vt"><div class="small" style="font-family:var(--mono)">CARD <span id="vtN">1</span> / 5</div><div id="vtQ" style="font-weight:600;margin-top:6px"></div></div>
+  <button class="btn pri" onclick="nextCard()">Next card</button>
+</div>
+<pre>.vt { view-transition-name:qcard }
+::view-transition-old(qcard) { animation:vtOut .22s }   ::view-transition-new(qcard) { animation:vtIn .28s }</pre>
+</div>
+
+<h3>Small useful ones (no demo needed)</h3>
+<ul>
+<li><b>Scroll-driven progress bar</b> (look at the top of this page): <code>animation-timeline: scroll(root)</code>. Use it for lesson reading progress in the Library. No scroll listeners.</li>
+<li><code>font-variant-numeric: tabular-nums</code> on the Arena timer, HP numbers and stats, so digits stop jittering as they change.</li>
+<li><code>scrollbar-gutter: stable</code>: the page doesn't jump sideways when a drawer locks scrolling.</li>
+<li><code>body:has(dialog[open]) { overflow:hidden }</code>: scroll lock with no JS.</li>
+<li><code>@media (hover:hover)</code> around hover styles, so phones don't get stuck hover states after a tap.</li>
+<li><code>text-wrap: balance</code> on headings and <code>pretty</code> on lesson prose: no more one-word last lines.</li>
+<li>Container queries (<code>container-type:inline-size</code>): one question card that adapts to its slot (homepage, drawer, Arena), not to the screen.</li>
+<li><code>interpolate-size: allow-keywords</code> + <code>::details-content</code>: the "Switch track" drawer animates to <code>height:auto</code> (Chrome now, others ignore it safely).</li>
+<li><code>accent-color</code>: themed checkboxes and sliders in one line (this page uses it).</li>
+</ul>
+
+<!-- ===================================================== -->
+<h2><span class="n">06</span>Build order</h2>
+<p class="small">agy writes the code (Argon-high for judgment, Flash for mechanical work). Claude writes each spec and audits it by running it. At most 2-3 agy jobs at once (quota). Each step ships on its own and leaves the app working.</p>
+<div class="tw"><table>
+<tr><th>Step</th><th>What</th><th>Who</th><th>Depends on</th><th>Proof</th></tr>
+<tr><td>A</td><td>Question ids stamped + <code>game.js</code> review engine + day log + streak + sync rules + migration (F2, F6 data)</td><td>Claude (core state; worth getting right first)</td><td>D1</td><td>Fake-clock unit tests, merge idempotency, migration on a copied real profile</td></tr>
+<tr><td>B</td><td><code>ref</code> authoring for 213 AWS questions + validator</td><td>agy Argon-high (content)</td><td>A (ids)</td><td>Validator passes, spot-check 20 by hand</td></tr>
+<tr><td>C</td><td>Intel drawer + rematch + <code>Cram.open(sheet, query)</code> (F3, F4)</td><td>agy</td><td>A, B</td><td>Playwright: miss → drawer → links land, rematch at +3, exam mode untouched</td></tr>
+<tr><td>D</td><td>Active track + homepage card + hero collapse (F1, F5)</td><td>agy</td><td>A, D3, D4</td><td>Playwright at 390 px and desktop, new vs returning visitor, offline</td></tr>
+<tr><td>E</td><td>Boss panel on Path (F7)</td><td>agy</td><td>A</td><td>Seeded states → expected HP, thin-bank state</td></tr>
+<tr><td>F</td><td><code>juice.css</code> / <code>juice.js</code> + overclock + flame (F8)</td><td>agy Flash (mechanical, lab code above is the spec)</td><td>D2</td><td>Reduced motion, Mammoth mode, sound off by default</td></tr>
+</table></div>
+
+<h3>Ship checklist (every step)</h3>
+<ul class="checks">
+<li><input type="checkbox" checked><div>Bump <code>CACHE_NAME</code> in <code>sw.js</code> (v14 → v15…) and add new files to the precache list</div></li>
+<li><input type="checkbox" checked><div><code>npm run stamp</code> (Cloudflare edge cache)</div></li>
+<li><input type="checkbox"><div>If course files changed: <code>node www/courses/build-study-bank.js</code>, then copy to Jake (command in the private notes). <i>Rebuilt Nov 3; copy at deploy.</i></div></li>
+<li><input type="checkbox" checked><div>Test the Sync code round trip phone ↔ PC with the new keys (<code>npm run test-sync</code>)</div></li>
+<li><input type="checkbox"><div>Deploy <code>www/</code> to the home server (private notes, "Mammoth Academy operations"), then check on the phone</div></li>
+<li><input type="checkbox" checked><div>Update MEMORY.MD: the localStorage keys table, a new feature section, and this blueprint's status</div></li>
+</ul>
+
+<h2><span class="n">07</span>Later / phase 2</h2>
+<ul>
+<li><b>Jake bridge</b> (D5): Jake already uses the same ids. A small endpoint on the home server would let Discord answers feed <code>st_review</code>, and the app's misses feed Jake's 20:00 round. One review history across voice, Discord and the app.</li>
+<li><b>Automatic sync</b> through the same endpoint (still optional; the manual Sync code stays as the offline path).</li>
+<li><b>Variants</b> for rematches (F4 v2), and deeper CompTIA banks so their bosses can switch on.</li>
+<li><b>Blitz mode</b> at exam pace, flashcards plus short questions only.</li>
+<li><b>Security+ SY0-801</b> objectives (GA ~Nov 2026) will change that blueprint, and the bosses follow it automatically, since they're read from <code>meta.examFormat</code>.</li>
+</ul>
+
+<p class="small" style="margin-top:40px">Code references checked Nov 3, 2026: app.js:426, 446-474, 588, 695-706, 1237 · sync.js:21, 142-145 · daily.html:559-569, 715-724 · index.html:357, 386, 528, 565 · path.html:321-363 · cram.js:268 · build-study-bank.js:18. Bank sizes: AWS 213 (Secure 61, Resilient 56, Performance 50, Cost 46), Sec+ 45, Net+ 30, A+ 21, Cloud+ 19, PSM 64.</p>
+</main>
+
+<script>
+/* demo wiring only: none of this is app code */
+const $=s=>document.querySelector(s);
+const rmT=$('#rmToggle'); rmT.addEventListener('change',()=>document.body.classList.toggle('rm',rmT.checked));
+
+/* 1 boss bar */
+let hp=72; const hpBar=$('#hpBar'), hpNum=$('#hpNum');
+function drawHp(){hpBar.style.setProperty('--hp',hp);hpNum.style.setProperty('--num',hp)}
+function hit(d){hp=Math.max(0,Math.min(100,hp+d));drawHp()}
+requestAnimationFrame(drawHp);
+
+/* 2 rings */
+const doms=[['Secure',30],['Resilient',26],['Perf',24],['Cost',20]];
+const rings=$('#rings'); let rv=[34,52,18,61];
+doms.forEach(([n],i)=>{rings.insertAdjacentHTML('beforeend',`<div class="ring-wrap" id="rw${i}"><div class="ring" id="r${i}"></div><div class="ring-val num" id="rt${i}"></div><div style="margin-top:4px">${n}</div></div>`)});
+function drawRings(){rv.forEach((v,i)=>{$('#r'+i).style.setProperty('--pct',v);$('#rt'+i).textContent=v+'%';$('#rw'+i).classList.toggle('down',v>=80)})}
+function studyRings(){rv=rv.map(v=>Math.min(100,v+5+Math.round(Math.random()*12)));drawRings()}
+function resetRings(){rv=[34,52,18,61];drawRings()}
+requestAnimationFrame(drawRings);
+
+/* 3 question card + drawer */
+const qcard=$('#qcard'), intel=$('#intel');
+const traps=["Standard-IA is for monthly-ish access with millisecond retrieval. You pay for speed you don't need.","Instant Retrieval returns data in milliseconds and costs more than Deep Archive. 12 hours is allowed, so pay for less.","","One Zone-IA keeps data in a single AZ and is still far pricier than Deep Archive for once-a-year access."];
+qcard.querySelectorAll('.opt').forEach((b,i)=>b.addEventListener('click',()=>{
+  if(qcard.dataset.done) return; qcard.dataset.done=1;
+  qcard.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(o.dataset.ok==='1')o.classList.add('right')});
+  if(b.dataset.ok==='1'){const f=document.createElement('div');f.className='float';f.textContent='+1';qcard.append(f);f.addEventListener('animationend',()=>f.remove())}
+  else{b.classList.add('wrong');qcard.classList.remove('shake');void qcard.offsetWidth;qcard.classList.add('shake');
+       $('#trapText').textContent=traps[i];setTimeout(()=>intel.showModal(),380)}
+}));
+qcard.addEventListener('animationend',e=>{if(e.target===qcard)qcard.classList.remove('shake')});
+intel.addEventListener('click',e=>{if(e.target===intel)intel.close()});
+function resetQ(){delete qcard.dataset.done;qcard.querySelectorAll('.opt').forEach(o=>{o.disabled=false;o.classList.remove('right','wrong')})}
+
+/* 4 flame */
+const sr=$('#streakR'); sr.addEventListener('input',()=>{$('#flame').style.setProperty('--streak',sr.value);$('#streakN').textContent=sr.value});
+
+/* 5 burst */
+function burst(){const b=$('#burst');b.querySelectorAll('span').forEach(s=>s.remove());for(let i=0;i<12;i++){const s=document.createElement('span');s.style.setProperty('--i',i);b.append(s)}}
+
+/* 6 overclock */
+let oc=2; function ocDraw(){$('#ocTxt').textContent=oc+' / 5 answers'+(oc>=5?' · OVERCLOCK':'');$('#ocBar').style.setProperty('--w',Math.min(100,oc*20)+'%');$('#oc').classList.toggle('on',oc>=5)}
+function ocStep(){oc=Math.min(5,oc+1);ocDraw()} function ocReset(){oc=2;ocDraw()}
+
+/* 7 view transition */
+const cards=["Which service gives a static IP for a global, multi-Region app? (Global Accelerator)","Cheapest way to run a fault-tolerant batch job that can be interrupted? (Spot)","Encrypt EBS volumes by default in a Region: where? (EC2 account setting)","Decouple a spiky order intake from processing? (SQS)","Share a VPC subnet with another account? (RAM)"];
+let ci=0; $('#vtQ').textContent=cards[0];
+function nextCard(){const upd=()=>{ci=(ci+1)%cards.length;$('#vtN').textContent=ci+1;$('#vtQ').textContent=cards[ci]};
+  if(document.startViewTransition && !document.body.classList.contains('rm')) document.startViewTransition(upd); else upd()}
+</script>
+</body>
+</html>

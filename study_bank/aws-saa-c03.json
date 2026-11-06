@@ -9,7 +9,7 @@
   "Performance": "Databases (RDS & DynamoDB)",
   "Cost": "Cost Optimization (The CFO's Architecture)"
  },
- "built": "2026-10-19T13:06:05.961Z",
+ "built": "2026-11-03T11:36:08.256Z",
  "items": [
   {
    "id": "aws-saa-c03:mc:7c8e77bfb6",
@@ -1207,7 +1207,7 @@
     "S3 Cross-Region Replication of application state with Lambda-triggered EC2 launches in us-west-2 on CloudWatch alarm"
    ],
    "ans": 2,
-   "exp": "Pilot Light hits both targets. Core infrastructure is pre-deployed and idle in us-west-2 (satisfies RTO < 15 min — just scale up and promote the RDS replica). Cross-region RDS read replicas with near-real-time replication satisfy RPO < 5 min. Option A (daily snapshots) fails RPO — you lose up to 24h of data. Option B (Multi-AZ) is intra-region only — it does not survive a full regional failure. Option D is non-standard, introduces Lambda cold-start lag, and has no proven failover path for database state.",
+   "exp": "Pilot Light hits both targets. Core infrastructure is pre-deployed and idle in us-west-2 (satisfies RTO < 15 min — just scale up and promote the RDS replica). Cross-region RDS read replicas with near-real-time replication satisfy RPO < 5 min. Daily snapshots fail RPO — you lose up to 24h of data. Multi-AZ is intra-region only — it does not survive a full regional failure. S3 replication with Lambda-launched EC2 is non-standard, introduces Lambda cold-start lag, and has no proven failover path for database state.",
    "domain": "Resilient",
    "module": ""
   },
@@ -1223,7 +1223,7 @@
     "Add a try/catch block in the Lambda handler and log errors to CloudWatch without rethrowing, so processing continues"
    ],
    "ans": 1,
-   "exp": "The correct fix is Option B. Lambda's Kinesis event source mapping supports bisect-on-error (splits the failing batch in half to isolate the bad record), a maximum retry count, and an on-failure destination (DLQ or SNS). This isolates the poison pill without stalling the shard. Option A (longer timeout) does nothing — the crash happens immediately on JSON parse, not from timeout. Option C (SQS) would require re-architecting the ingestion pipeline and loses Kinesis ordering guarantees. Option D (swallowing errors) silently drops data, which is unacceptable for financial feeds.",
+   "exp": "Lambda's Kinesis event source mapping supports bisect-on-error (splits the failing batch in half to isolate the bad record), a maximum retry count, and an on-failure destination (DLQ or SNS). This isolates the poison pill without stalling the shard. A longer timeout does nothing — the crash happens immediately on JSON parse, not from timeout. Switching to SQS would require re-architecting the ingestion pipeline and loses Kinesis ordering guarantees. Swallowing errors silently drops data, which is unacceptable for financial feeds.",
    "domain": "Resilient",
    "module": ""
   },
@@ -1239,7 +1239,7 @@
     "Store sessions in an RDS Multi-AZ MySQL database instead, as relational databases handle concurrent session reads better than Redis"
    ],
    "ans": 1,
-   "exp": "Option B is correct. ElastiCache for Redis with Cluster Mode enabled and Multi-AZ automatic failover promotes a replica to primary within ~30 seconds of a node failure — sessions survive. The app only needs one config change: point to the cluster endpoint instead of a primary endpoint. Option A (DynamoDB) works but requires changing the session serialization format and adding IAM permissions — more code change than a cluster endpoint swap. Option C (manual dual-node logic) is error-prone, introduces split-brain risk, and is exactly what ElastiCache Multi-AZ already solves natively. Option D (RDS for sessions) is functionally valid but adds unnecessary RDBMS overhead for a key-value session store and is still single-AZ without its own Multi-AZ configuration.",
+   "exp": "ElastiCache for Redis with Cluster Mode enabled and Multi-AZ automatic failover promotes a replica to primary within ~30 seconds of a node failure — sessions survive. The app only needs one config change: point to the cluster endpoint instead of a primary endpoint. DynamoDB works but requires changing the session serialization format and adding IAM permissions — more code change than a cluster endpoint swap. Manual dual-node logic is error-prone, introduces split-brain risk, and is exactly what ElastiCache Multi-AZ already solves natively. RDS for sessions is functionally valid but adds unnecessary RDBMS overhead for a key-value session store and is still single-AZ without its own Multi-AZ configuration.",
    "domain": "Resilient",
    "module": ""
   },

@@ -51,6 +51,22 @@ const app = {
         if (document.getElementById('gauntlet-btn-container')) {
             this.renderExamGauntletButtons();
             this.bindExamKeys();
+            const bossMatch = /^#boss=([^&#]+)$/.exec(location.hash || '');
+            if (bossMatch) {
+                const bossKey = decodeURIComponent(bossMatch[1]);
+                const hasExam = (DATA._courseMeta || []).some(m => m.examKey === bossKey && (DATA['exam_' + m.examKey] || []).length);
+                if (hasExam) {
+                    // Boss fight = real exam mode for this run only: startExam reads the checkbox once, so put
+                    // it back afterwards (the next exam on this page keeps the user's practice setting).
+                    const practiceEl = document.getElementById('exam-practice');
+                    const wasChecked = practiceEl ? practiceEl.checked : false;
+                    if (practiceEl) practiceEl.checked = false;
+                    history.replaceState(null, '', location.pathname + location.search);
+                    this.startExam(bossKey);
+                    if (this.exam) this.exam.practice = false;
+                    if (practiceEl) practiceEl.checked = wasChecked;
+                }
+            }
         }
     },
 
@@ -62,7 +78,8 @@ const app = {
         if (!container || !DATA._courseMeta) return;
         clearInterval(this.examTimer);
 
-        const examPacks = DATA._courseMeta.filter(m => m.examKey && (DATA['exam_' + m.examKey] || []).length);
+        const activeId = (typeof Game !== 'undefined' && Game.Track) ? Game.Track.get() : null;
+        const examPacks = DATA._courseMeta.filter(m => m.examKey && (DATA['exam_' + m.examKey] || []).length).sort((a, b) => (b.id === activeId ? 1 : 0) - (a.id === activeId ? 1 : 0));
         const cards = [];
         examPacks.forEach(meta => {
             const modes = (meta.examFormat && meta.examFormat.modes) || [null];
@@ -70,8 +87,8 @@ const app = {
                 const f = this.examFormatFor(meta, mode);
                 const n = this.sampleExam(meta, mode, () => 0.5).length;
                 cards.push(`
-                    <button class="gauntlet-btn exam-card" style="--tab-color:${meta.color || '#00f2ff'};" onclick="app.startExam('${meta.examKey}'${mode ? `, '${mode.id}'` : ''})">
-                        <span class="exam-card-name">${meta.icon || ''} ${f.name}</span>
+                    <button class="gauntlet-btn exam-card${meta.id === activeId ? ' active-track' : ''}" data-course="${meta.id}" data-exam="${meta.examKey}" style="--tab-color:${meta.color || '#00f2ff'};" onclick="app.startExam('${meta.examKey}'${mode ? `, '${mode.id}'` : ''})">
+                        <span class="exam-card-name">${meta.icon || ''} ${f.name}${meta.id === activeId ? ' <span class="exam-pill exam-active-tag">Active track</span>' : ''}</span>
                         <span class="exam-card-meta">${n} Qs &middot; ${f.minutes} min &middot; Pass ${f.passLabel}</span>
                     </button>`);
             });
@@ -443,8 +460,9 @@ const app = {
 
     // Draw the exam. Each blueprint domain gets its official share of the questions
     // (largest-remainder rounding); slots a domain can't fill from the bank go to a
-    // random fill from the rest. Inside every draw, questions missed before go first
-    // (spaced repetition). A mode's blueprint also limits the pool to its domains.
+    // random fill from the rest. Inside every draw, review order decides who goes first
+    // (game.js: due or missed questions, then ones never seen, then the rest). A mode's
+    // blueprint also limits the pool to its domains.
     sampleExam(meta, mode, rand) {
         rand = rand || Math.random;
         const f = this.examFormatFor(meta, mode);
@@ -453,12 +471,10 @@ const app = {
             const doms = new Set(f.blueprint.map(d => d.domain));
             pool = pool.filter(q => doms.has(q.domain));
         }
-        const failed = new Set(JSON.parse(localStorage.getItem('st_failed_qs') || '[]'));
         const shuffle = list => list.map(q => [rand(), q]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
-        const missedFirst = list => {
-            const s = shuffle(list);
-            return s.filter(q => failed.has(q.q || q.front)).concat(s.filter(q => !failed.has(q.q || q.front)));
-        };
+        const G = window.Game;
+        const rank = q => (G ? G.Review.priority(G.qid(q, meta.id)) : 1);
+        const missedFirst = list => shuffle(list).map(q => [rank(q), q]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
         const n = Math.min(f.questions, pool.length);
         const picked = new Set();
         const totalW = f.blueprint.reduce((s, d) => s + d.weight, 0);
@@ -531,8 +547,10 @@ const app = {
         const need = correct.length;
         const chosen = ex.answers[ex.idx];
         const locked = ex.checked[ex.idx];
-        const answered = ex.answers.filter(a => a.length).length;
-        const flagged = ex.flagged.filter(Boolean).length;
+        const baseTotal = ex.questions.filter(item => !item._rematch).length;
+        const baseIdx = ex.questions.slice(0, ex.idx).filter(item => !item._rematch).length;
+        const answered = ex.answers.filter((a, idx) => !ex.questions[idx]._rematch && a.length).length;
+        const flagged = ex.flagged.filter((f, idx) => !ex.questions[idx]._rematch && f).length;
         const WORDS = ['', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE'];
 
         const opts = q.opts.map((o, i) => {
@@ -551,12 +569,13 @@ const app = {
                     <div class="exam-timer" id="exam-timer">&#9201; <span>--:--</span></div>
                 </div>
                 <div class="exam-toolbar">
-                    <div class="exam-counter">Question ${ex.idx + 1} of ${ex.questions.length}</div>
+                    <div class="exam-counter">Question ${Math.min(baseIdx + 1, baseTotal)} of ${baseTotal}</div>
                     <button class="exam-tool flag${ex.flagged[ex.idx] ? ' on' : ''}" aria-pressed="${ex.flagged[ex.idx]}" onclick="app.toggleExamFlag()">&#128681; ${ex.flagged[ex.idx] ? 'Flagged' : 'Flag for Review'}</button>
-                    <button class="exam-tool" aria-expanded="${ex.gridOpen}" onclick="app.toggleExamGrid()">&#9638; ${answered}/${ex.questions.length} answered${flagged ? ' &middot; ' + flagged + ' flagged' : ''} ${ex.gridOpen ? '&#9652;' : '&#9662;'}</button>
+                    <button class="exam-tool" aria-expanded="${ex.gridOpen}" onclick="app.toggleExamGrid()">&#9638; ${answered}/${baseTotal} answered${flagged ? ' &middot; ' + flagged + ' flagged' : ''} ${ex.gridOpen ? '&#9652;' : '&#9662;'}</button>
                 </div>
                 ${ex.gridOpen ? this.examGridHtml(false) : ''}
                 ${multi ? `<div class="exam-select-badge">SELECT ${WORDS[need] || need}</div>` : ''}
+                ${q._rematch ? '<div class="rematch-tag" style="margin-bottom:10px;">&#9876; Rematch</div>' : ''}
                 <div class="q-text">${q.q || q.front}</div>
                 <div class="options-grid exam-opts" id="exam-opts" role="${multi ? 'group' : 'radiogroup'}">${opts}</div>
                 <div class="exam-hint" id="exam-hint">${multi && !locked ? `Choose ${need}. ${chosen.length} of ${need} selected.` : ''}</div>
@@ -569,15 +588,45 @@ const app = {
                 </div>
             </div>`;
         this.tickExamTimer();
+        this.flushExamReveal();
+    },
+
+    // Practice reveal effects queued by recordExamQ: Juice reaction, then the Intel drawer on a miss.
+    flushExamReveal() {
+        const ex = this.exam;
+        if (!ex || !ex._pendingReveal || ex._pendingReveal.idx !== ex.idx) return;
+        const rev = ex._pendingReveal;
+        ex._pendingReveal = null;
+        const targetEl = document.querySelector(rev.right ? '.exam-opt.correct' : '.exam-opt.wrong');
+        if (window.Juice && Juice.react) Juice.react(rev.res, targetEl);
+        if (!rev.right && window.Intel && Intel.open) {
+            Intel.open({
+                q: rev.q,
+                chosen: this.examIsMulti(rev.q) ? rev.chosen : rev.chosen[0],
+                courseId: rev.courseId,
+                onClose: () => {
+                    const nextBtn = document.querySelector('.exam-nav-btn.primary, .exam-nav-btn.submit');
+                    if (nextBtn) nextBtn.focus();
+                }
+            });
+        }
+    },
+
+    // The number a question shows to the user: rematch copies don't take a number.
+    examNum(i) {
+        return this.exam.questions.slice(0, i).filter(q => !q._rematch).length + 1;
     },
 
     // Numbered tiles: answered / unanswered / flagged / current; tap one to jump there.
     examGridHtml(big) {
         const ex = this.exam;
+        let num = 0;
         const tiles = ex.questions.map((q, i) => {
+            if (q._rematch) return '';
+            num++;
             const cls = (ex.answers[i].length ? 'answered' : 'unanswered') + (ex.flagged[i] ? ' flagged' : '') + (i === ex.idx && !ex.reviewing ? ' current' : '');
-            const label = 'Question ' + (i + 1) + (ex.answers[i].length ? ', answered' : ', unanswered') + (ex.flagged[i] ? ', flagged' : '');
-            return `<button class="exam-tile ${cls}" title="${label}" aria-label="${label}" onclick="app.gotoExamQ(${i})">${i + 1}</button>`;
+            const label = 'Question ' + num + (ex.answers[i].length ? ', answered' : ', unanswered') + (ex.flagged[i] ? ', flagged' : '');
+            return `<button class="exam-tile ${cls}" title="${label}" aria-label="${label}" onclick="app.gotoExamQ(${i})">${num}</button>`;
         }).join('');
         return `<div class="exam-grid-wrap${big ? ' big' : ''}">
             <div class="exam-grid">${tiles}</div>
@@ -593,7 +642,7 @@ const app = {
         const a = ex.answers[ex.idx];
         if (!this.examIsMulti(q)) {
             ex.answers[ex.idx] = [i];
-            if (ex.practice) ex.checked[ex.idx] = true;
+            if (ex.practice) { ex.checked[ex.idx] = true; this.recordExamQ(ex.idx); }
         } else if (a.includes(i)) {
             ex.answers[ex.idx] = a.filter(x => x !== i);
         } else if (a.length < need) {
@@ -607,15 +656,50 @@ const app = {
         this.renderExamQ();
     },
 
+    // One review record per question per exam: practice mode records on reveal, exam mode at submit.
+    recordExamQ(i) {
+        const ex = this.exam;
+        if (!ex || !window.Game || (ex.recorded && ex.recorded[i])) return null;
+        ex.recorded = ex.recorded || [];
+        ex.recorded[i] = true;
+        const q = ex.questions[i];
+        const courseId = ex.meta && ex.meta.id;
+        const qid = Game.qid(q, courseId);
+        const right = this.examIsRight(q, ex.answers[i]);
+        const res = Game.Review.record(qid, right);
+        // Practice reveal only (the callers re-render first, so react on the next frame); exam submit stays quiet.
+        if (ex.practice && !ex.done) {
+            if (!right && !q._rematch) {
+                ex.rematchQueued = ex.rematchQueued || new Set();
+                const rKey = qid || q.q || q.front;
+                if (!ex.rematchQueued.has(rKey) && window.Intel && Intel.makeRematch) {
+                    ex.rematchQueued.add(rKey);
+                    const copy = Intel.makeRematch(q, courseId);
+                    if (!copy) return res;
+                    const insertAt = Math.min(i + 3, ex.questions.length);
+                    ex.questions.splice(insertAt, 0, copy);
+                    ex.answers.splice(insertAt, 0, []);
+                    ex.checked.splice(insertAt, 0, false);
+                    ex.flagged.splice(insertAt, 0, false);
+                    ex.recorded.splice(insertAt, 0, false);
+                }
+            }
+            ex._pendingReveal = { idx: i, q, chosen: (ex.answers[i] || []).slice(), courseId, right, res };
+        }
+        return res;
+    },
+
     checkExamQ() {
         const ex = this.exam;
         const q = ex.questions[ex.idx];
         if (ex.answers[ex.idx].length !== this.examCorrect(q).length) return;
         ex.checked[ex.idx] = true;
+        this.recordExamQ(ex.idx);
         this.renderExamQ();
     },
 
     gotoExamQ(i) {
+        if (window.Intel && Intel.close) Intel.close(true);
         const ex = this.exam;
         if (!ex || ex.done || i < 0 || i >= ex.questions.length) return;
         ex.idx = i;
@@ -625,7 +709,7 @@ const app = {
     },
     toggleExamFlag() { const ex = this.exam; ex.flagged[ex.idx] = !ex.flagged[ex.idx]; this.renderExamQ(); },
     toggleExamGrid() { this.exam.gridOpen = !this.exam.gridOpen; this.renderExamQ(); },
-    openExamReview() { this.exam.reviewing = true; this.renderExamQ(); this.scrollExamIntoView(); },
+    openExamReview() { if (window.Intel && Intel.close) Intel.close(true); this.exam.reviewing = true; this.renderExamQ(); this.scrollExamIntoView(); },
 
     // Keep the question (and the sticky timer bar) in view below the fixed site navbar.
     scrollExamIntoView() {
@@ -659,9 +743,10 @@ const app = {
     renderExamReview() {
         const ctr = document.getElementById('exam-container');
         const ex = this.exam;
-        const unanswered = ex.answers.map((a, i) => a.length ? -1 : i).filter(i => i >= 0);
-        const flagged = ex.flagged.map((f, i) => f ? i : -1).filter(i => i >= 0);
-        const links = list => list.map(i => `<button class="exam-link" onclick="app.gotoExamQ(${i})">Q${i + 1}</button>`).join(' ');
+        const baseTotal = ex.questions.filter(q => !q._rematch).length;
+        const unanswered = ex.answers.map((a, i) => (!ex.questions[i]._rematch && !a.length) ? i : -1).filter(i => i >= 0);
+        const flagged = ex.flagged.map((f, i) => (!ex.questions[i]._rematch && f) ? i : -1).filter(i => i >= 0);
+        const links = list => list.map(i => `<button class="exam-link" onclick="app.gotoExamQ(${i})">Q${this.examNum(i)}</button>`).join(' ');
         ctr.innerHTML = `
             <div class="exam-shell">
                 <div class="exam-topbar">
@@ -669,7 +754,7 @@ const app = {
                     <div class="exam-timer" id="exam-timer">&#9201; <span>--:--</span></div>
                 </div>
                 <div class="exam-review-stats">
-                    <div><strong>${ex.questions.length - unanswered.length}</strong>answered</div>
+                    <div><strong>${baseTotal - unanswered.length}</strong>answered</div>
                     <div class="${unanswered.length ? 'warn' : ''}"><strong>${unanswered.length}</strong>unanswered</div>
                     <div class="${flagged.length ? 'flag' : ''}"><strong>${flagged.length}</strong>flagged</div>
                 </div>
@@ -682,9 +767,11 @@ const app = {
                 </div>
             </div>`;
         this.tickExamTimer();
+        this.flushExamReveal();
     },
 
     submitExam() {
+        if (window.Intel && Intel.close) Intel.close(true);
         const ex = this.exam;
         if (!ex || ex.done) return;
         ex.done = true;
@@ -692,24 +779,28 @@ const app = {
         clearInterval(this.examTimer);
         this.state.examActive = false;
 
-        // Grade (all-or-nothing per question) and update the spaced-repetition list.
+        // Grade (all-or-nothing per question) and update the review engine (game.js). Unanswered
+        // questions count as misses, as they always have; practice reveals were recorded already.
         const domainStats = {};
-        const failed = new Set(JSON.parse(localStorage.getItem('st_failed_qs') || '[]'));
         ex.results = ex.questions.map((q, i) => {
             const right = this.examIsRight(q, ex.answers[i]);
-            const dom = q.domain || 'Other';
-            const s = domainStats[dom] = domainStats[dom] || { correct: 0, total: 0 };
-            s.total++;
-            if (right) { s.correct++; failed.delete(q.q || q.front); } else failed.add(q.q || q.front);
+            if (!q._rematch) {
+                const dom = q.domain || 'Other';
+                const s = domainStats[dom] = domainStats[dom] || { correct: 0, total: 0 };
+                s.total++;
+                if (right) s.correct++;
+            }
+            // A rematch copy the user never reached is not a second miss (that would make it a false nemesis).
+            if (!(q._rematch && !ex.answers[i].length)) this.recordExamQ(i);
             return right;
         });
-        localStorage.setItem('st_failed_qs', JSON.stringify([...failed]));
         ex.domainStats = domainStats;
-        ex.score = ex.results.filter(Boolean).length;
-        ex.pct = ex.score / ex.questions.length;
+        ex.total = ex.questions.filter(q => !q._rematch).length;
+        ex.score = ex.results.filter((r, i) => !ex.questions[i]._rematch && r).length;
+        ex.pct = ex.total ? ex.score / ex.total : 0;
         if (ex.f.parts) {
             ex.partResults = ex.f.parts.map(p => {
-                const idx = ex.questions.map((q, i) => i).filter(i => p.domains.includes(ex.questions[i].domain));
+                const idx = ex.questions.map((q, i) => i).filter(i => !ex.questions[i]._rematch && p.domains.includes(ex.questions[i].domain));
                 const c = idx.filter(i => ex.results[i]).length;
                 const pct = idx.length ? c / idx.length : 0;
                 return { name: p.name, correct: c, total: idx.length, pct, bar: p.passThreshold, pass: idx.length > 0 && pct >= p.passThreshold };
@@ -743,7 +834,7 @@ const app = {
         }
         localStorage.setItem(domKey, JSON.stringify(persisted));
 
-        ex.filter = ex.results.some(r => !r) ? 'wrong' : 'all';
+        ex.filter = ex.results.some((r, i) => !ex.questions[i]._rematch && !r) ? 'wrong' : 'all';
         this.renderExamQ();
         if (typeof Achievements !== 'undefined') Achievements.check('arena');
         this.scrollExamIntoView();
@@ -752,6 +843,7 @@ const app = {
     setExamFilter(k) { this.exam.filter = k; this.renderExamQ(); },
 
     leaveExam() {
+        if (window.Intel && Intel.close) Intel.close(true);
         if (this.exam && !this.exam.done) clearInterval(this.examTimer);
         this.exam = null;
         this.state.examActive = false;
@@ -783,16 +875,22 @@ const app = {
 
         const parts = (ex.partResults || []).map(p => `<div class="exam-part ${p.pass ? 'good' : 'bad'}"><strong>${p.name}</strong> ${p.total ? Math.round(p.pct * 100) + '%' : 'no questions'} (needs ${Math.round(p.bar * 100)}%) ${p.pass ? '&#10003;' : '&#10007;'}</div>`).join('');
 
-        const counts = { wrong: ex.results.filter(r => !r).length, flagged: ex.flagged.filter(Boolean).length, right: ex.score, all: ex.questions.length };
+        const baseTotal = ex.total || ex.questions.filter(q => !q._rematch).length;
+        const counts = {
+            wrong: ex.results.filter((r, i) => !ex.questions[i]._rematch && !r).length,
+            flagged: ex.flagged.filter((f, i) => !ex.questions[i]._rematch && f).length,
+            right: ex.score,
+            all: baseTotal
+        };
         const names = { wrong: 'Incorrect', flagged: 'Flagged', right: 'Correct', all: 'All' };
-        const show = ex.questions.map((q, i) => i).filter(i => ex.filter === 'all' || (ex.filter === 'wrong' && !ex.results[i]) || (ex.filter === 'right' && ex.results[i]) || (ex.filter === 'flagged' && ex.flagged[i]));
+        const show = ex.questions.map((q, i) => i).filter(i => !ex.questions[i]._rematch && (ex.filter === 'all' || (ex.filter === 'wrong' && !ex.results[i]) || (ex.filter === 'right' && ex.results[i]) || (ex.filter === 'flagged' && ex.flagged[i])));
         const used = Math.max(1, Math.round((ex.finishedAt - ex.startedAt) / 60000));
 
         ctr.innerHTML = `
             <div class="exam-shell exam-results">
                 <div class="exam-result-hero ${ex.passed ? 'pass' : 'fail'}">
                     <div class="exam-result-verdict">${ex.passed ? 'PASS' : 'NOT YET'}</div>
-                    <div class="exam-result-score">${ex.score}/${ex.questions.length}<span>${Math.round(ex.pct * 100)}%</span></div>
+                    <div class="exam-result-score">${ex.score}/${baseTotal}<span>${Math.round(ex.pct * 100)}%</span></div>
                     <div class="exam-result-sub">${ex.f.name} &middot; pass mark ${ex.f.passLabel} &middot; ${used} min used${ex.timedOut ? ' (time ran out)' : ''} &middot; best ${Math.round(ex.bestPct * 100)}%</div>
                     ${parts ? `<div class="exam-parts">${parts}</div>` : ''}
                     ${/scaled/.test(ex.f.passLabel) || ex.f.parts ? '<div class="exam-result-note">CompTIA scores are scaled (100-900), so the percentage bar is an estimate of the cut score, not an exact conversion.</div>' : ''}
@@ -822,10 +920,11 @@ const app = {
         }).join('');
         const status = ex.results[i] ? '&#10003; Correct' : chosen.length ? '&#10007; Incorrect' : '&mdash; Unanswered';
         return `<div class="exam-autopsy ${ex.results[i] ? 'right' : 'wrong'}">
-            <div class="aut-head"><span>Q${i + 1} &middot; ${labelOf[q.domain] || q.domain || 'General'}${this.examIsMulti(q) ? ' &middot; Select ' + correct.length : ''}</span><span>${ex.flagged[i] ? '&#128681; ' : ''}${status}</span></div>
+            <div class="aut-head"><span>Q${this.examNum(i)} &middot; ${labelOf[q.domain] || q.domain || 'General'}${this.examIsMulti(q) ? ' &middot; Select ' + correct.length : ''}</span><span>${ex.flagged[i] ? '&#128681; ' : ''}${status}</span></div>
             <div class="aut-q">${q.q || q.front}</div>
             <ul class="aut-opts">${opts}</ul>
             <div class="aut-exp"><strong>Why the answer wins:</strong> ${this.examExp(q)}</div>
+            ${!ex.results[i] && window.Intel && Intel.linksHtml ? Intel.linksHtml(q, ex.meta && ex.meta.id) : ''}
         </div>`;
     },
 
@@ -1014,6 +1113,7 @@ const app = {
     },
 
     renderLessonContent(modIdx, topicIdx) {
+        if (window.Intel && Intel.close) Intel.close(true);
         const canvas = document.getElementById('lesson-canvas');
         if (!canvas) return;
         
@@ -1248,6 +1348,12 @@ const app = {
             if (i === qItem.ans) btn.classList.add('qopt-correct');
             else if (i === chosenOi && i !== qItem.ans) btn.classList.add('qopt-wrong');
         });
+
+        const res = window.Game ? Game.Review.record(Game.qid(qItem, mod.courseId), chosenOi === qItem.ans) : null;
+        if (window.Juice && Juice.react) Juice.react(res, btns[chosenOi]);
+        if (chosenOi !== qItem.ans && window.Intel && Intel.open) {
+            Intel.open({ q: qItem, chosen: chosenOi, courseId: mod.courseId });
+        }
 
         const expEl = document.getElementById('qexp-' + modIdx + '-' + topicIdx + '-' + qi);
         if (expEl) {

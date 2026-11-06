@@ -1,0 +1,720 @@
+/* ================== MAMMOTH ACADEMY · JUICE LAYER (juice.css) ==================
+   Visual feedback classes (.jc-*), game components (.ma-*), overclock theme,
+   Mammoth retro overrides, and reduced-motion fallbacks.
+   Pulls tokens from www/style.css :root so Mammoth mode can re-skin it. */
+
+/* Registered custom properties for smooth number rolling, conic ring sweeps,
+   and inherited overclock hue shift. */
+@property --num {
+    syntax: '<integer>';
+    inherits: false;
+    initial-value: 0;
+}
+
+@property --pct {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+}
+
+@property --ma-hue {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 200;
+}
+
+:root {
+    --ma-hue: 200;
+    transition: --ma-hue 1.2s ease;
+}
+
+/* ================== OVERCLOCK (daily minimum hit) ================== */
+/* Only .ma-overclock-aware and the .ma-* / .jc-* components pick up --ma-glow
+   so the rest of the site keeps its standard palette. */
+html[data-daily="done"] {
+    --ma-hue: 330;
+    --ma-glow: oklch(0.87 0.16 var(--ma-hue));
+    /* 3 passes (~4.5 s) ending on 330, never infinite: an inherited property animated on <html>
+       restyles the whole page every frame. */
+    animation: jc-overclock-hue 1.5s ease-in-out 3 alternate;
+}
+
+/* Page opened when the day was already done: steady glow, no shimmer. */
+html[data-daily="done"].jc-oc-steady {
+    animation: none;
+}
+
+@keyframes jc-overclock-hue {
+    from { --ma-hue: 200; }
+    to   { --ma-hue: 330; }
+}
+
+.ma-overclock-aware {
+    border: 1px solid rgba(0, 242, 255, 0.22);
+    border-radius: 14px;
+    padding: 14px 16px;
+    background: var(--bg-card, #0d1324);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+html[data-daily="done"] .ma-overclock-aware {
+    border-color: var(--ma-glow);
+    box-shadow: 0 0 22px color-mix(in oklch, var(--ma-glow) 25%, transparent);
+}
+
+html[data-daily="done"] .ma-overclock-aware b,
+html[data-daily="done"] .ma-overclock-aware .ma-overclock-accent {
+    color: var(--ma-glow);
+}
+
+/* ================== EFFECT CLASSES (Juice.fire / float / burst) ================== */
+
+/* Correct: green border + expanding ring pulse via ::after */
+.jc-correct {
+    position: relative;
+    border-color: var(--accent-success, #10b981) !important;
+    animation: jc-correct-hold 0.55s ease-out;
+}
+
+.jc-correct::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    box-shadow: 0 0 0 2px var(--accent-success, #10b981);
+    animation: jc-ring 0.55s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes jc-correct-hold {
+    from, to { border-color: var(--accent-success, #10b981); }
+}
+
+@keyframes jc-ring {
+    to { box-shadow: 0 0 0 14px rgba(16, 185, 129, 0); }
+}
+
+/* Combo: gold glow pulse */
+.jc-combo {
+    animation: jc-combo-pulse 0.6s ease-out;
+}
+
+@keyframes jc-combo-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+    }
+    40% {
+        border-color: var(--accent-warning, #f59e0b);
+        box-shadow: 0 0 22px 4px color-mix(in oklch, var(--accent-warning, #f59e0b) 55%, transparent);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+    }
+}
+
+/* Miss: horizontal shake using standalone translate property so it never fights :active scale */
+.jc-miss {
+    animation: jc-shake 0.32s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes jc-shake {
+    20% { translate: -8px 0; }
+    40% { translate: 7px 0; }
+    60% { translate: -5px 0; }
+    80% { translate: 3px 0; }
+}
+
+@keyframes jc-flash {
+    50% {
+        box-shadow: 0 0 0 3px var(--accent-danger, #ef4444);
+        outline: 2px solid var(--accent-danger, #ef4444);
+    }
+}
+
+/* Rematch: subtle scale stamp when clearing a revenge question */
+.jc-rematch {
+    animation: jc-stamp 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes jc-stamp {
+    0% {
+        scale: 1.04;
+        border-color: var(--accent-warning, #f59e0b);
+        box-shadow: 0 0 0 2px var(--accent-warning, #f59e0b);
+    }
+    50% {
+        scale: 0.99;
+        box-shadow: 0 0 18px color-mix(in oklch, var(--accent-warning, #f59e0b) 45%, transparent);
+    }
+    100% {
+        scale: 1;
+        box-shadow: 0 0 0 0 transparent;
+    }
+}
+
+/* Mastered: short cyan (or overclock) glow when a card reaches box 3 */
+.jc-mastered {
+    animation: jc-mastered-glow 0.55s ease-out;
+}
+
+@keyframes jc-mastered-glow {
+    0% {
+        box-shadow: 0 0 0 0 transparent;
+    }
+    45% {
+        border-color: var(--ma-glow, var(--accent-primary, #00f2ff));
+        box-shadow: 0 0 20px 3px color-mix(in oklch, var(--ma-glow, var(--accent-primary, #00f2ff)) 50%, transparent);
+    }
+    100% {
+        box-shadow: 0 0 0 0 transparent;
+    }
+}
+
+/* Floating feedback label over target element */
+.jc-float {
+    position: absolute;
+    right: 16px;
+    top: 10px;
+    z-index: 30;
+    font: 800 1rem var(--font-mono, monospace);
+    color: var(--accent-success, #10b981);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+    animation: jc-float-up 0.9s ease-out forwards;
+}
+
+.jc-float-good { color: var(--accent-success, #10b981); }
+.jc-float-bad  { color: var(--accent-danger, #ef4444); }
+.jc-float-gold {
+    color: var(--accent-warning, #f59e0b);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+@keyframes jc-float-up {
+    0%   { opacity: 0; translate: 0 6px; }
+    20%  { opacity: 1; }
+    100% { opacity: 0; translate: 0 -38px; }
+}
+
+/* Radial burst: 12 sparks positioned with CSS sin() / cos() */
+.jc-spark {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--spark, var(--ma-glow, var(--accent-primary, #00f2ff)));
+    pointer-events: none;
+    z-index: 25;
+    --a: calc(var(--i, 0) * 30deg);
+    animation: jc-burst 0.75s cubic-bezier(0.1, 0.7, 0.3, 1) forwards;
+}
+
+.jc-spark:nth-child(even) {
+    --spark: var(--accent-success, #10b981);
+    width: 5px;
+    height: 5px;
+}
+
+@keyframes jc-burst {
+    from {
+        translate: -50% -50%;
+        opacity: 1;
+    }
+    to {
+        translate: calc(-50% + cos(var(--a)) * 64px) calc(-50% + sin(var(--a)) * 46px);
+        opacity: 0;
+        scale: 0.4;
+    }
+}
+
+/* ================== COMPONENTS (.ma-*) ================== */
+
+/* #1 Boss bar with chip damage + rolling integer counter */
+.ma-hp {
+    --hp: 100;
+    position: relative;
+    height: 16px;
+    border-radius: 9px;
+    background: #151d33;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px #24304f;
+}
+
+.ma-hp > i,
+.ma-hp .ma-hp-ghost,
+.ma-hp .ma-hp-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--hp, 0) * 1%);
+    border-radius: inherit;
+    display: block;
+}
+
+/* Ghost bar lags 0.45s behind the red fill so chip damage is visible */
+.ma-hp .ma-hp-ghost {
+    background: #fde68a;
+    transition: width 0.55s ease-out 0.45s;
+}
+
+.ma-hp .ma-hp-fill {
+    background: linear-gradient(90deg, #b91c1c, var(--accent-danger, #ef4444) 60%, #fb7185);
+    transition: width 0.12s ease-out;
+}
+
+.ma-count {
+    --num: 0;
+    counter-reset: n var(--num);
+    transition: --num 0.6s ease-out;
+    font-variant-numeric: tabular-nums;
+}
+
+.ma-count::after {
+    content: counter(n);
+}
+
+/* #2 Sub-boss domain ring: conic-gradient + radial mask on ::before so .ma-ring-val stays visible */
+.ma-ring {
+    --pct: 0;
+    --ring-c: var(--ma-glow, var(--accent-primary, #00f2ff));
+    position: relative;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    display: inline-grid;
+    place-items: center;
+    transition: --pct 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ma-ring::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(var(--ring-c) calc(var(--pct, 0) * 1%), #18213a 0);
+    -webkit-mask: radial-gradient(farthest-side, #0000 70%, #000 71%);
+    mask: radial-gradient(farthest-side, #0000 70%, #000 71%);
+}
+
+.ma-ring-val {
+    position: relative;
+    z-index: 1;
+    font: 700 1rem var(--font-mono, monospace);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-main, #f8fafc);
+}
+
+.ma-ring.is-down {
+    --ring-c: var(--accent-success, #10b981);
+}
+
+.ma-ring.is-down .ma-ring-val::before {
+    content: "✓ ";
+    color: var(--accent-success, #10b981);
+}
+
+/* #3 Bottom-sheet <dialog class="ma-sheet"> with @starting-style + allow-discrete */
+dialog.ma-sheet,
+.ma-sheet {
+    position: fixed;
+    inset: auto 0 0 0;
+    margin: 0 auto;
+    width: min(100%, 600px);
+    max-height: 80vh;
+    overflow: auto;
+    background: var(--bg-card, #0d1324);
+    color: var(--text-main, #f8fafc);
+    border: 1px solid color-mix(in oklch, var(--ma-glow, var(--accent-primary, #00f2ff)) 40%, #1e2a47);
+    border-bottom: 0;
+    border-radius: 18px 18px 0 0;
+    padding: 18px 18px 22px;
+    translate: 0 100%;
+    opacity: 0;
+    transition:
+        translate 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 0.25s,
+        overlay 0.35s allow-discrete,
+        display 0.35s allow-discrete;
+}
+
+dialog.ma-sheet[open],
+.ma-sheet[open] {
+    translate: 0 0;
+    opacity: 1;
+}
+
+@starting-style {
+    dialog.ma-sheet[open],
+    .ma-sheet[open] {
+        translate: 0 100%;
+        opacity: 0;
+    }
+}
+
+dialog.ma-sheet::backdrop,
+.ma-sheet::backdrop {
+    background: rgb(2 6 23 / 0);
+    transition:
+        background 0.35s,
+        overlay 0.35s allow-discrete,
+        display 0.35s allow-discrete;
+}
+
+dialog.ma-sheet[open]::backdrop,
+.ma-sheet[open]::backdrop {
+    background: rgb(2 6 23 / 0.65);
+}
+
+@starting-style {
+    dialog.ma-sheet[open]::backdrop,
+    .ma-sheet[open]::backdrop {
+        background: rgb(2 6 23 / 0);
+    }
+}
+
+body:has(dialog.ma-sheet[open]) {
+    overflow: hidden;
+}
+
+.ma-sheet-grab {
+    width: 42px;
+    height: 4px;
+    border-radius: 4px;
+    background: #334155;
+    margin: 0 auto 12px;
+}
+
+.ma-sheet-trap {
+    border-left: 3px solid var(--accent-danger, #ef4444);
+    padding: 6px 10px;
+    background: #1a0f17;
+    border-radius: 0 8px 8px 0;
+    margin: 8px 0;
+}
+
+.ma-sheet-rule {
+    border-left: 3px solid var(--accent-success, #10b981);
+    padding: 6px 10px;
+    background: #0b1a17;
+    border-radius: 0 8px 8px 0;
+    margin: 8px 0;
+}
+
+.ma-sheet-links {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+/* #4 Streak flame: colour and drop-shadow scale with --streak */
+.ma-flame {
+    --streak: 3;
+    width: 56px;
+    height: 56px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+    color: color-mix(in oklch, var(--accent-warning, #fbbf24), var(--accent-danger, #ef4444) calc(var(--streak, 3) * 7%));
+    filter: drop-shadow(0 0 calc(var(--streak, 3) * 1.2px) currentColor);
+    transform-origin: 50% 90%;
+    animation: jc-flicker 1.3s ease-in-out infinite alternate;
+}
+
+@keyframes jc-flicker {
+    0%   { scale: 1 1; rotate: -2deg; }
+    50%  { scale: 1.04 0.97; }
+    100% { scale: 0.98 1.05; rotate: 2deg; }
+}
+
+/* Navbar sound toggle button (Juice.mountToggle) */
+.jc-sound-li {
+    display: flex;
+    align-items: center;
+}
+
+.jc-sound-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-heading, system-ui, sans-serif);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted, #94a3b8);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    line-height: 1.2;
+}
+
+@media (hover: hover) {
+    .jc-sound-toggle:hover {
+        color: var(--accent-primary, #00f2ff);
+        border-color: var(--accent-primary, #00f2ff);
+    }
+}
+
+.jc-sound-toggle[aria-pressed="true"] {
+    color: var(--ma-glow, var(--accent-primary, #00f2ff));
+    border-color: color-mix(in oklch, var(--ma-glow, var(--accent-primary, #00f2ff)) 55%, transparent);
+    background: color-mix(in oklch, var(--ma-glow, var(--accent-primary, #00f2ff)) 12%, transparent);
+}
+
+/* ================== MAMMOTH MODE (html[data-mammoth]) ================== */
+/* Retro arcade overrides using --mm-* tokens: hard pixel shadows, no blur, steps() timing. */
+html[data-mammoth] .ma-hp {
+    background: var(--mm-deep, #0F1733);
+    border: 3px solid #000;
+    box-shadow: var(--mm-shadow, 4px 4px 0 #000);
+}
+
+html[data-mammoth] .ma-hp .ma-hp-ghost {
+    background: var(--mm-yellow, #FFEC27);
+    transition: width 0.4s steps(5) 0.35s !important;
+}
+
+html[data-mammoth] .ma-hp .ma-hp-fill {
+    background: var(--mm-red, #FF004D);
+    transition: width 0.12s steps(3) !important;
+}
+
+html[data-mammoth] .ma-count {
+    font-family: var(--mm-pixel, monospace) !important;
+    color: var(--mm-yellow, #FFEC27);
+}
+
+html[data-mammoth] .ma-ring {
+    --ring-c: var(--mm-orange, #FFA300);
+}
+
+html[data-mammoth] .ma-ring::before {
+    border-radius: 50% !important;
+    background: conic-gradient(var(--ring-c) calc(var(--pct, 0) * 1%), var(--mm-edge, #2B3C70) 0);
+}
+
+html[data-mammoth] .ma-ring.is-down {
+    --ring-c: var(--mm-green, #00E436);
+}
+
+html[data-mammoth] .ma-ring-val {
+    font-family: var(--mm-pixel, monospace) !important;
+    color: var(--mm-ink, #FFF1E8);
+}
+
+html[data-mammoth] .ma-flame {
+    color: color-mix(in srgb, var(--mm-yellow, #FFEC27), var(--mm-red, #FF004D) calc(var(--streak, 3) * 7%));
+    filter: drop-shadow(3px 3px 0 #000);
+    animation-timing-function: steps(3);
+}
+
+html[data-mammoth] dialog.ma-sheet,
+html[data-mammoth] .ma-sheet {
+    background: var(--mm-deep, #0F1733);
+    color: var(--mm-ink, #FFF1E8);
+    border: 3px solid #000;
+    box-shadow: var(--mm-shadow, 4px 4px 0 #000), inset 0 0 0 2px var(--mm-edge, #2B3C70);
+    transition-timing-function: steps(4);
+}
+
+html[data-mammoth] dialog.ma-sheet[open]::backdrop,
+html[data-mammoth] .ma-sheet[open]::backdrop {
+    background: rgba(15, 23, 51, 0.82);
+}
+
+html[data-mammoth] .ma-sheet-grab {
+    background: var(--mm-field, #5A6FB5);
+}
+
+html[data-mammoth] .ma-sheet-trap {
+    background: var(--mm-navy, #1D2B53);
+    border-left: 4px solid var(--mm-red, #FF004D);
+    box-shadow: 2px 2px 0 #000;
+}
+
+html[data-mammoth] .ma-sheet-rule {
+    background: var(--mm-navy, #1D2B53);
+    border-left: 4px solid var(--mm-green, #00E436);
+    box-shadow: 2px 2px 0 #000;
+}
+
+html[data-mammoth] .ma-overclock-aware {
+    background: var(--mm-deep, #0F1733);
+    border: 3px solid #000;
+    box-shadow: var(--mm-shadow, 4px 4px 0 #000), inset 0 0 0 2px var(--mm-edge, #2B3C70);
+}
+
+html[data-mammoth][data-daily="done"] {
+    --ma-glow: var(--mm-yellow, #FFEC27);
+    animation-timing-function: steps(4);
+}
+
+html[data-mammoth][data-daily="done"] .ma-overclock-aware {
+    box-shadow: var(--mm-shadow, 4px 4px 0 #000), inset 0 0 0 2px var(--mm-yellow, #FFEC27);
+}
+
+html[data-mammoth] .jc-correct::after {
+    box-shadow: 4px 4px 0 #000, inset 0 0 0 3px var(--mm-green, #00E436);
+    animation-timing-function: steps(4);
+}
+
+html[data-mammoth] .jc-combo {
+    box-shadow: 4px 4px 0 #000, inset 0 0 0 3px var(--mm-yellow, #FFEC27);
+    animation-timing-function: steps(4);
+}
+
+html[data-mammoth] .jc-miss,
+html[data-mammoth] .jc-rematch,
+html[data-mammoth] .jc-mastered {
+    animation-timing-function: steps(4);
+}
+
+html[data-mammoth] .jc-float {
+    font-family: var(--mm-pixel, monospace) !important;
+    text-shadow: 2px 2px 0 #000;
+    animation-timing-function: steps(5);
+}
+
+html[data-mammoth] .jc-float-good { color: var(--mm-green, #00E436); }
+html[data-mammoth] .jc-float-bad  { color: var(--mm-red, #FF004D); }
+html[data-mammoth] .jc-float-gold { color: var(--mm-yellow, #FFEC27); }
+
+html[data-mammoth] .jc-spark {
+    background: var(--mm-yellow, #FFEC27);
+    box-shadow: 2px 2px 0 #000;
+    animation-timing-function: steps(5);
+}
+
+html[data-mammoth] .jc-spark:nth-child(even) {
+    background: var(--mm-orange, #FFA300);
+}
+
+html[data-mammoth] .jc-sound-toggle {
+    font-family: var(--mm-pixel, monospace) !important;
+    background: var(--mm-deep, #0F1733);
+    color: var(--mm-ink, #FFF1E8);
+    border: 2px solid #000;
+    box-shadow: 2px 2px 0 #000;
+}
+
+html[data-mammoth] .jc-sound-toggle[aria-pressed="true"] {
+    color: var(--mm-yellow, #FFEC27);
+    border-color: var(--mm-orange, #FFA300);
+}
+
+/* ================== REDUCED MOTION ================== */
+/* No movement anywhere: shake becomes a red outline flash; floats/bursts/rings/HP
+   transitions are off or instant; colour feedback stays. */
+.jc-rm .jc-miss {
+    animation: jc-flash 0.4s ease-out !important;
+    translate: none !important;
+}
+
+.jc-rm .jc-rematch {
+    scale: 1 !important;
+}
+
+.jc-rm .jc-float,
+.jc-rm .jc-spark,
+.jc-rm .jc-correct::after,
+.jc-rm .ma-flame {
+    animation: none !important;
+}
+
+.jc-rm .jc-float,
+.jc-rm .jc-spark {
+    opacity: 0 !important;
+    translate: none !important;
+}
+
+.jc-rm .ma-count,
+.jc-rm .ma-ring,
+.jc-rm .ma-hp > i,
+.jc-rm .ma-hp .ma-hp-ghost,
+.jc-rm .ma-hp .ma-hp-fill,
+.jc-rm dialog.ma-sheet,
+.jc-rm .ma-sheet,
+.jc-rm dialog.ma-sheet::backdrop,
+.jc-rm .ma-sheet::backdrop {
+    transition: none !important;
+}
+
+.jc-rm dialog.ma-sheet[open],
+.jc-rm .ma-sheet[open] {
+    translate: 0 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root,
+    html[data-daily="done"] {
+        transition: none !important;
+    }
+
+    .jc-miss {
+        animation: jc-flash 0.4s ease-out !important;
+        translate: none !important;
+    }
+
+    .jc-rematch {
+        scale: 1 !important;
+    }
+
+    .jc-float,
+    .jc-spark,
+    .jc-correct::after,
+    .ma-flame {
+        animation: none !important;
+    }
+
+    .jc-float,
+    .jc-spark {
+        opacity: 0 !important;
+        translate: none !important;
+    }
+
+    .ma-count,
+    .ma-ring,
+    .ma-hp > i,
+    .ma-hp .ma-hp-ghost,
+    .ma-hp .ma-hp-fill,
+    dialog.ma-sheet,
+    .ma-sheet,
+    dialog.ma-sheet::backdrop,
+    .ma-sheet::backdrop {
+        transition: none !important;
+    }
+
+    dialog.ma-sheet[open],
+    .ma-sheet[open] {
+        translate: 0 0 !important;
+    }
+}
+
+/* ================== PRINT & SMALL PHONE ================== */
+@media (max-width: 480px) {
+    .jc-sound-toggle {
+        font-size: 0.76rem;
+        padding: 3px 8px;
+    }
+    dialog.ma-sheet,
+    .ma-sheet {
+        padding: 14px 14px 18px;
+    }
+}
+
+@media print {
+    .jc-sound-li,
+    .jc-sound-toggle,
+    .jc-float,
+    .jc-spark,
+    dialog.ma-sheet {
+        display: none !important;
+    }
+}

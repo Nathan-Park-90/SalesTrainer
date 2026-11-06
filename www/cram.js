@@ -265,9 +265,11 @@ const Cram = (function () {
         });
     }
 
-    function open(sheetId) {
+    function open(sheetId, query) {
         if (!drawer) build();
         if (sheetId && SHEETS.some(s => s.id === sheetId)) active = sheetId;
+        const input = drawer.querySelector('.cram-search');
+        if (input && query !== undefined) input.value = query == null ? '' : String(query);
         lastFocus = document.activeElement;
         drawer.hidden = false;
         document.documentElement.classList.add('cram-on');
@@ -294,10 +296,24 @@ const Cram = (function () {
         b.innerHTML = '⚡ <span>Cram Sheets</span>';
         b.addEventListener('click', toggle);
         document.body.appendChild(b);
-        if (location.hash === '#cram') open();
+        const checkHash = () => {
+            const h = location.hash || '';
+            if (h === '#cram') open();
+            else if (h.startsWith('#cram=')) {
+                const p = new URLSearchParams(h.slice(1));
+                const q = p.get('q');
+                open(p.get('cram'), q !== null ? q : '');
+            }
+        };
+        checkHash();
+        if (typeof window !== 'undefined' && window.addEventListener) {
+            window.addEventListener('hashchange', checkHash);
+        }
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
-    return { open, close, toggle, SHEETS, cidrRows };
+    const api = { open, close, toggle, SHEETS, cidrRows };
+    if (typeof window !== 'undefined') window.Cram = api;
+    return api;
 })();

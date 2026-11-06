@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="fonts/mammoth-fonts.css?v=202610200517">
+    <link rel="stylesheet" href="fonts/mammoth-fonts.css?v=202611052223">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
@@ -11,7 +11,8 @@
     <meta name="apple-mobile-web-app-title" content="MA Academy">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <title>MAMMOTH ACADEMY | Smart Path</title>
-    <link rel="stylesheet" href="style.css?v=202610200517">
+    <link rel="stylesheet" href="style.css?v=202611052223">
+    <link rel="stylesheet" href="juice.css?v=202611052223">
     <style>
         .path-hero {
             padding: 100px 40px 20px;
@@ -65,7 +66,7 @@
         /* ── Track cards ── */
         .path-tracks {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
             gap: 20px;
         }
         .path-card {
@@ -76,6 +77,7 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
+            min-width: 0;
         }
         .path-card-head { display: flex; align-items: center; gap: 12px; }
         .path-card-icon { font-size: 1.8rem; }
@@ -144,16 +146,248 @@
         .path-pass-pill.fail { background: rgba(239,68,68,0.15); color: var(--accent-danger); }
         .path-pass-pill.untested { background: rgba(148,163,184,0.15); color: var(--text-muted); }
 
+        /* ── Boss panel (F7) ── */
+        .path-boss {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.08);
+            min-width: 0;
+        }
+        .path-rings {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
+            gap: 10px 4px;
+            align-items: start;
+        }
+        .path-ring-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            min-width: 0;
+        }
+        .path-rings .ma-ring {
+            width: 58px;
+            height: 58px;
+        }
+        .path-rings .ma-ring-val {
+            font-size: 0.78rem;
+        }
+        .path-rings .ma-ring.is-down .ma-ring-val {
+            font-size: 0.68rem;
+        }
+        .path-rings .ma-ring.is-dim::before {
+            opacity: 0.35;
+        }
+        .path-sr {
+            position: absolute; width: 1px; height: 1px; overflow: hidden;
+            clip-path: inset(50%); white-space: nowrap;
+        }
+        .path-rings .ma-ring.is-dim .ma-ring-val {
+            font-size: 0.7rem;
+            line-height: 1.12;
+            text-align: center;
+            padding: 0 4px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .path-ring-label {
+            width: 100%;
+            /* UI sans, not mono: 'Performance' / 'Accountability' fit a 58px column without a mid-word break */
+            font-family: var(--font-ui);
+            font-size: 0.62rem;
+            letter-spacing: -0.01em;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.25;
+            /* two lines, then ellipsis: "Security Operations" fits, long CompTIA names clip cleanly */
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            overflow: hidden;
+            hyphens: auto;
+            overflow-wrap: break-word;
+        }
+        .path-boss-hp-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .path-boss-hp-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        .path-boss-hp-title {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-main);
+        }
+        .path-boss-unmeasurable {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.02);
+            border: 1px dashed rgba(255,255,255,0.14);
+            text-align: center;
+        }
+        .path-final-boss.is-locked {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .path-final-lock { font-size: 0.9rem; flex-shrink: 0; }
+        .path-final-lock-text { color: var(--text-main); font-weight: 600; }
+        .path-final-lock-count {
+            margin-left: auto;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--text-muted);
+        }
+        .path-final-btn.ma-overclock-aware {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--accent-warning);
+            background: rgba(245,158,11,0.12);
+            border: 1px solid var(--accent-warning);
+            border-radius: 10px;
+            padding: 10px 14px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .path-final-btn.ma-overclock-aware:hover {
+            background: rgba(245,158,11,0.2);
+        }
+        .path-nemesis,
+        .path-coverage {
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.015);
+            padding: 8px 12px;
+            min-width: 0;
+        }
+        .path-nemesis > summary,
+        .path-coverage > summary {
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            user-select: none;
+        }
+        .path-nemesis > summary { color: var(--accent-danger); }
+        .path-nemesis-list {
+            list-style: none;
+            padding: 8px 0 2px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .path-nemesis-item {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.78rem;
+            line-height: 1.4;
+            color: var(--text-main);
+            padding-top: 6px;
+            border-top: 1px dashed rgba(255,255,255,0.06);
+            min-width: 0;
+        }
+        .path-nemesis-item:first-child { border-top: none; padding-top: 2px; }
+        .path-nemesis-q { flex: 1 1 auto; min-width: 0; word-break: break-word; }
+        .path-nemesis-dom {
+            flex: 0 0 auto;
+            font-family: var(--font-mono);
+            font-size: 0.64rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(239,68,68,0.14);
+            color: var(--accent-danger);
+            max-width: 110px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .path-coverage-body {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 10px;
+        }
+
+        html[data-mammoth] .path-card,
+        html[data-mammoth] .path-boss,
+        html[data-mammoth] .path-coverage,
+        html[data-mammoth] .path-nemesis {
+            background: var(--bg-card);
+            border: 2px solid var(--glass-border);
+        }
+        html[data-mammoth] .path-final-btn.ma-overclock-aware {
+            color: var(--accent-warning);
+            background: var(--bg-card);
+            border-color: var(--accent-warning);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .path-reco-cta,
+            .path-bar-fill,
+            .path-card-cta,
+            .path-final-btn {
+                transition: none !important;
+            }
+        }
+        .jc-rm .path-reco-cta,
+        .jc-rm .path-bar-fill,
+        .jc-rm .path-card-cta,
+        .jc-rm .path-final-btn {
+            transition: none !important;
+        }
+
         @media (max-width: 768px) {
             .path-hero { padding: 110px 16px 40px; }
             .path-reco { flex-wrap: wrap; padding: 18px 20px; gap: 12px; }
             .path-reco-cta { margin-left: 0; width: 100%; text-align: center; }
+            .path-card { padding: 20px 16px; }
+            .path-boss { padding: 12px 10px; }
             .path-card-head { flex-wrap: wrap; }
             .path-card-head > div:last-child { margin-left: 0 !important; }
             .path-readiness-val { font-size: 2rem; }
         }
     </style>
-    <script src="mammoth/mammoth-mode.js?v=202610200517" data-site="academy" data-egg=".nav-brand"></script>
+    <script src="mammoth/mammoth-mode.js?v=202611052223" data-site="academy" data-egg=".nav-brand"></script>
 </head>
 <body>
     <canvas id="particle-canvas"></canvas>
@@ -168,6 +402,7 @@
             <li><a href="daily.html">DAILY</a></li>
             <li><a href="sprint.html">SPRINT</a></li>
             <li><a href="path.html" class="active">PATH</a></li>
+            <li><a href="doom.html" class="nav-doom">DOOM</a></li>
         </ul>
     </nav>
 
@@ -190,18 +425,20 @@
         <div class="path-tracks" id="path-tracks"></div>
     </div>
 
-    <script src="courses/aws-saa-c03.js?v=202610200517"></script>
-    <script src="courses/sales-engineering.js?v=202610200517"></script>
-    <script src="courses/psm-scrum.js?v=202610200517"></script>
-    <script src="courses/comptia-securityplus.js?v=202610200517"></script>
-    <script src="courses/comptia-networkplus.js?v=202610200517"></script>
-    <script src="courses/comptia-aplus.js?v=202610200517"></script>
-    <script src="courses/comptia-cloudplus.js?v=202610200517"></script>
-    <script src="course-loader.js?v=202610200517"></script>
-    <script src="achievements.js?v=202610200517"></script>
-    <script src="pwa.js?v=202610200517"></script>
-    <script src="sync.js?v=202610200517"></script>
-    <script src="app.js?v=202610200517"></script>
+    <script src="courses/aws-saa-c03.js?v=202611052223"></script>
+    <script src="courses/sales-engineering.js?v=202611052223"></script>
+    <script src="courses/psm-scrum.js?v=202611052223"></script>
+    <script src="courses/comptia-securityplus.js?v=202611052223"></script>
+    <script src="courses/comptia-networkplus.js?v=202611052223"></script>
+    <script src="courses/comptia-aplus.js?v=202611052223"></script>
+    <script src="courses/comptia-cloudplus.js?v=202611052223"></script>
+    <script src="course-loader.js?v=202611052223"></script>
+    <script src="game.js?v=202611052223"></script>
+    <script src="juice.js?v=202611052223"></script>
+    <script src="achievements.js?v=202611052223"></script>
+    <script src="pwa.js?v=202611052223"></script>
+    <script src="sync.js?v=202611052223"></script>
+    <script src="app.js?v=202611052223"></script>
     <script>
     // Every track card is built from each course pack's own meta — dropping in a new
     // courses/*.js file (with a <script> tag) is all it takes to get a new track here,
@@ -214,8 +451,44 @@
         name: meta.name,
         sub: meta.examKey ? meta.subtitle : 'Career Track (no exam)',
         domainModuleMap: meta.domains || null,
-        passThreshold: meta.passThreshold || 0.72
+        passThreshold: meta.passThreshold || 0.72,
+        blueprint: (meta.examFormat && meta.examFormat.blueprint) || null
     }));
+
+    function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+    function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+    function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+
+    function escapeHtml(s) {
+        return String(s == null ? '' : s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function stripTags(s) {
+        return String(s == null ? '' : s).replace(/<[^>]*>/g, '');
+    }
+
+    function loadBossLast() {
+        const raw = ssGet('ma_boss_last');
+        if (!raw) return {};
+        try {
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+        } catch (e) { return {}; }
+    }
+
+    function loadBossDown() {
+        const raw = lsGet('st_boss_down');
+        if (!raw) return [];
+        try {
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (e) { return []; }
+    }
 
     function moduleComplete(mod) {
         // Keyed by courseId+localIdx (stable identity) to match app.js —
@@ -224,7 +497,7 @@
         // Quiz topics count when their quiz is done; topics without a quiz count once read (st_read_*, app.js).
         return mod.topics.every((t, ti) => {
             const suffix = mod.courseId + '_' + mod.localIdx + '_' + ti;
-            return localStorage.getItem('st_quiz_' + suffix) === 'done' || (!(t.quiz && t.quiz.length) && localStorage.getItem('st_read_' + suffix) === 'done');
+            return lsGet('st_quiz_' + suffix) === 'done' || (!(t.quiz && t.quiz.length) && lsGet('st_read_' + suffix) === 'done');
         });
     }
 
@@ -235,7 +508,8 @@
         const nextModule = modules.find(m => !moduleComplete(m)) || null;
 
         const catCards = DATA.flashcards.filter(c => c.cat === track.cat);
-        const masteredIds = JSON.parse(localStorage.getItem('st_fc_mastered') || '[]');
+        let masteredIds = [];
+        try { masteredIds = JSON.parse(lsGet('st_fc_mastered') || '[]'); } catch (e) {}
         const masteredInCat = catCards.filter(c => masteredIds.includes(c.id)).length;
         const flashcardPct = catCards.length ? masteredInCat / catCards.length : 0;
 
@@ -243,8 +517,8 @@
         if (track.examType) {
             // Best percentage (any exam mode, e.g. A+ Core 1 alone) wins over the
             // older raw full-exam score, which is still read for attempts made before it.
-            const raw = localStorage.getItem('st_highscore_' + track.examType);
-            const rawPct = localStorage.getItem('st_highscore_pct_' + track.examType);
+            const raw = lsGet('st_highscore_' + track.examType);
+            const rawPct = lsGet('st_highscore_pct_' + track.examType);
             examAttempted = raw !== null || rawPct !== null;
             examScore = parseInt(raw || '0');
             const bank = DATA['exam_' + track.examType];
@@ -253,7 +527,8 @@
             const passBar = track.passThreshold;
             passed = examAttempted && examPct >= passBar;
 
-            const domainPerf = JSON.parse(localStorage.getItem('st_domain_perf_' + track.examType) || '{}');
+            let domainPerf = {};
+            try { domainPerf = JSON.parse(lsGet('st_domain_perf_' + track.examType) || '{}'); } catch (e) {}
             let worst = null;
             Object.entries(domainPerf).forEach(([dom, stats]) => {
                 if (dom === 'Other' || stats.total < 3) return; // need enough samples to trust it
@@ -263,27 +538,36 @@
             if (worst && worst.pct < 0.75) weak = worst;
         }
 
-        let readiness, scenarioPct = null, solvedCount = 0, salesTotal = 0;
+        let blendedReadiness, scenarioPct = null, solvedCount = 0, salesTotal = 0;
         if (track.examType) {
-            readiness = examAttempted
+            blendedReadiness = examAttempted
                 ? (moduleCompletionPct * 0.35 + flashcardPct * 0.25 + examPct * 0.40)
                 : (moduleCompletionPct * 0.6 + flashcardPct * 0.4) * 0.7;
         } else {
             salesTotal = DATA.sales.length;
-            solvedCount = JSON.parse(localStorage.getItem('st_sales_solved') || '[]').length;
+            let salesSolved = [];
+            try { salesSolved = JSON.parse(lsGet('st_sales_solved') || '[]'); } catch (e) {}
+            solvedCount = salesSolved.length;
             scenarioPct = salesTotal ? solvedCount / salesTotal : 0;
-            readiness = moduleCompletionPct * 0.4 + flashcardPct * 0.3 + scenarioPct * 0.3;
+            blendedReadiness = moduleCompletionPct * 0.4 + flashcardPct * 0.3 + scenarioPct * 0.3;
         }
+
+        const mastery = (track.examType && track.blueprint && window.Game && Game.Review)
+            ? Game.Review.mastery(track.courseId)
+            : null;
+        const readiness = (mastery && mastery.measurable) ? mastery.readiness : blendedReadiness;
+        const readinessEstimated = Boolean(track.examType && !(mastery && mastery.measurable));
 
         // CompTIA PBQ Lab: a PBQ counts as passed at 80%+ (best score kept in st_pbq_<id> by pbq.js).
         const pbqs = (DATA.pbq || []).filter(p => p.courseId === track.courseId);
-        const pbqPassed = pbqs.filter(p => parseFloat(localStorage.getItem('st_pbq_' + p.id)) >= 0.8).length;
+        const pbqPassed = pbqs.filter(p => parseFloat(lsGet('st_pbq_' + p.id)) >= 0.8).length;
 
         return {
             pbqTotal: pbqs.length, pbqPassed,
             track, modules, completedModules: completedModules.length, totalModules: modules.length,
             moduleCompletionPct, nextModule, flashcardPct, masteredInCat, totalCat: catCards.length,
-            examPct, examAttempted, examScore, examMax, passed, weak, readiness,
+            examPct, examAttempted, examScore, examMax, passed, weak, readiness, blendedReadiness,
+            readinessEstimated, mastery,
             scenarioPct, solvedCount, salesTotal
         };
     }
@@ -295,7 +579,7 @@
     function pct(x) { return Math.round(x * 100) + '%'; }
     function barClass(x) { return x >= 0.75 ? 'good' : x >= 0.4 ? 'warn' : 'danger'; }
 
-    function renderCard(r) {
+    function renderCard(r, bossLast, nextBossLast) {
         const t = r.track;
         let passPill = '';
         if (t.examType) {
@@ -322,17 +606,130 @@
             </div>`;
         }
 
+        const barsHtml = `
+            <div class="path-bar-row">
+                <div class="path-bar-label"><span>Modules Completed</span><span>${r.completedModules} / ${r.totalModules}</span></div>
+                <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.moduleCompletionPct)}" style="width:${pct(r.moduleCompletionPct)}"></div></div>
+            </div>
+
+            <div class="path-bar-row">
+                <div class="path-bar-label"><span>Flashcards Mastered</span><span>${r.masteredInCat} / ${r.totalCat}</span></div>
+                <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.flashcardPct)}" style="width:${pct(r.flashcardPct)}"></div></div>
+            </div>
+
+            ${r.pbqTotal ? `<div class="path-bar-row">
+                <div class="path-bar-label"><span><a href="gym.html#pbq" style="color:inherit;">PBQ Labs passed (80%+)</a></span><span>${r.pbqPassed} / ${r.pbqTotal}</span></div>
+                <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.pbqPassed / r.pbqTotal)}" style="width:${pct(r.pbqPassed / r.pbqTotal)}"></div></div>
+            </div>` : ''}
+
+            ${t.examType ? `<div class="path-bar-row">
+                <div class="path-bar-label"><span>Best Exam Score</span><span>${r.examAttempted ? pct(r.examPct) + ' (pass ' + pct(t.passThreshold) + ')' : '—'}</span></div>
+                <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.examPct)}" style="width:${pct(r.examPct)}"></div></div>
+            </div>` : ''}`;
+
+        let bossHtml = '';
+        let coverageHtml = barsHtml;
+        if (t.examType && t.blueprint && r.mastery) {
+            const m = r.mastery;
+            const hp = Math.round(100 - m.readiness * 100);
+            const prev = bossLast && bossLast[t.courseId];
+            const initHp = (prev && typeof prev.hp === 'number') ? prev.hp : hp;
+            if (nextBossLast) nextBossLast[t.courseId] = { hp, domains: {} };
+
+            const ringsHtml = m.domains.map(d => {
+                const ringPct = Math.round(d.pct * 100);
+                const domHp = 100 - ringPct;
+                if (nextBossLast && nextBossLast[t.courseId]) {
+                    nextBossLast[t.courseId].domains[d.domain] = domHp;
+                }
+                const prevDomHp = (prev && prev.domains && typeof prev.domains[d.domain] === 'number') ? prev.domains[d.domain] : domHp;
+                const initRingPct = d.enough ? Math.max(0, Math.min(100, 100 - prevDomHp)) : 0;
+                const isDown = d.enough && d.pct >= 0.8;
+                // Thin domain: only "13 Qs" fits inside a 58px ring; the rest is for screen readers + the tooltip.
+                const ringVal = d.enough ? (ringPct + '%') : (d.n + ' Qs<span class="path-sr">, not enough yet</span>');
+                // AWS labels all start "Design ...", so show the short domain key when it is shorter (Secure, Cost...).
+                const shortLabel = (d.domain && d.domain.length < d.label.length) ? d.domain : d.label;
+                const tip = d.enough ? d.label : (d.label + ': ' + d.n + ' questions, needs 15 to measure');
+                return `<div class="path-ring-item" title="${escapeHtml(tip)}">
+                    <div class="ma-ring${isDown ? ' is-down' : ''}${!d.enough ? ' is-dim' : ''}" data-domain="${escapeHtml(d.domain)}" data-target-pct="${d.enough ? ringPct : 0}" style="--pct:${initRingPct}"><span class="ma-ring-val">${ringVal}</span></div>
+                    <div class="path-ring-label">${escapeHtml(shortLabel)}</div>
+                </div>`;
+            }).join('');
+
+            const hpHtml = m.measurable
+                ? `<div class="path-boss-hp-wrap">
+                    <div class="path-boss-hp-head">
+                        <span class="path-boss-hp-title">Readiness boss</span>
+                        <span class="path-boss-hp-num"><span class="ma-count" data-target-num="${hp}" style="--num:${initHp}"></span>% HP</span>
+                    </div>
+                    <div class="ma-hp" data-target-hp="${hp}" style="--hp:${initHp}">
+                        <i class="ma-hp-ghost"></i>
+                        <i class="ma-hp-fill"></i>
+                    </div>
+                </div>`
+                : `<div class="path-boss-unmeasurable">Not enough questions to measure readiness yet</div>`;
+
+            const finalReady = m.bossReady;
+            const readyDomains = m.domains.filter(d => d.enough && d.pct >= 0.8).length;
+            const finalHtml = finalReady
+                ? `<div class="path-final-boss is-ready">
+                    <a class="path-final-btn ma-overclock-aware" href="arena.html#boss=${encodeURIComponent(t.examType)}">Fight the final boss</a>
+                </div>`
+                : `<div class="path-final-boss is-locked">
+                    <span class="path-final-lock" aria-hidden="true">🔒</span>
+                    <span class="path-final-lock-text">Unlocks when every domain is at 80%+</span>
+                    <span class="path-final-lock-count">${readyDomains} of ${m.domains.length} domains there</span>
+                </div>`;
+
+            const allRecs = (window.Game && Game.Review && Game.Review.all()) || {};
+            const nemesisItems = Object.keys(allRecs)
+                .filter(id => id.startsWith(t.courseId + ':') && Game.Review.nemesis(id))
+                .map(id => {
+                    const entry = Game.entry(id);
+                    return entry ? { id, entry, rec: allRecs[id] } : null;
+                })
+                .filter(Boolean)
+                .sort((a, b) => ((b.rec && b.rec.m) || 0) - ((a.rec && a.rec.m) || 0));
+
+            const nemesisHtml = nemesisItems.length
+                ? `<details class="path-nemesis">
+                    <summary>Nemesis questions (${nemesisItems.length})</summary>
+                    <ul class="path-nemesis-list">
+                        ${nemesisItems.slice(0, 10).map(({ entry }) => {
+                            const rawQ = (entry.q && (entry.q.q || entry.q.front)) || '';
+                            const cleanQ = stripTags(rawQ).trim();
+                            const shortQ = cleanQ.length > 90 ? cleanQ.slice(0, 90).trimEnd() + '…' : cleanQ;
+                            const dom = entry.domain || 'General';
+                            return `<li class="path-nemesis-item"><span class="path-nemesis-q">${escapeHtml(shortQ)}</span><span class="path-nemesis-dom">${escapeHtml(dom)}</span></li>`;
+                        }).join('')}
+                    </ul>
+                </details>`
+                : '';
+
+            bossHtml = `<div class="path-boss">
+                <div class="path-rings">${ringsHtml}</div>
+                ${hpHtml}
+                ${finalHtml}
+                ${nemesisHtml}
+            </div>`;
+
+            coverageHtml = `<details class="path-coverage">
+                <summary>Coverage</summary>
+                <div class="path-coverage-body">${barsHtml}</div>
+            </details>`;
+        }
+
         // Modules done: unpassed PBQs come before the full exam, then the exam, then sales drills.
         const pbqNext = !r.nextModule && r.pbqTotal && r.pbqPassed < r.pbqTotal;
         const ctaHref = r.nextModule ? libraryLink(t.courseId, r.nextModule.title) : pbqNext ? 'gym.html#pbq' : (t.examType ? 'arena.html' : 'gym.html');
         const ctaLabel = r.nextModule ? `Continue: ${r.nextModule.title.replace(/^Module \d+:\s*/, '')}` : pbqNext ? 'Practice the PBQs →' : (t.examType ? 'Take a Full Exam →' : 'Drill Sales Scenarios →');
 
         return `
-            <div class="path-card">
+            <div class="path-card${r.isActive ? ' active-track' : ''}" data-course="${escapeHtml(t.courseId)}">
                 <div class="path-card-head">
                     <div class="path-card-icon">${t.icon}</div>
                     <div>
-                        <div class="path-card-title">${t.name}</div>
+                        <div class="path-card-title">${t.name}${r.isActive ? ' <span class="path-pass-pill pass" style="margin-left:6px;vertical-align:middle;">Active track</span>' : ''}</div>
                         <div class="path-card-subtitle">${t.sub}</div>
                     </div>
                     ${passPill ? `<div style="margin-left:auto;">${passPill}</div>` : ''}
@@ -340,28 +737,12 @@
 
                 <div class="path-readiness">
                     <div class="path-readiness-val">${pct(r.readiness)}</div>
-                    <div class="path-readiness-label">Readiness</div>
+                    <div class="path-readiness-label">${r.readinessEstimated ? 'Readiness (estimate)' : 'Readiness'}</div>
                 </div>
 
-                <div class="path-bar-row">
-                    <div class="path-bar-label"><span>Modules Completed</span><span>${r.completedModules} / ${r.totalModules}</span></div>
-                    <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.moduleCompletionPct)}" style="width:${pct(r.moduleCompletionPct)}"></div></div>
-                </div>
+                ${bossHtml}
 
-                <div class="path-bar-row">
-                    <div class="path-bar-label"><span>Flashcards Mastered</span><span>${r.masteredInCat} / ${r.totalCat}</span></div>
-                    <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.flashcardPct)}" style="width:${pct(r.flashcardPct)}"></div></div>
-                </div>
-
-                ${r.pbqTotal ? `<div class="path-bar-row">
-                    <div class="path-bar-label"><span><a href="gym.html#pbq" style="color:inherit;">PBQ Labs passed (80%+)</a></span><span>${r.pbqPassed} / ${r.pbqTotal}</span></div>
-                    <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.pbqPassed / r.pbqTotal)}" style="width:${pct(r.pbqPassed / r.pbqTotal)}"></div></div>
-                </div>` : ''}
-
-                ${t.examType ? `<div class="path-bar-row">
-                    <div class="path-bar-label"><span>Best Exam Score</span><span>${r.examAttempted ? pct(r.examPct) + ' (pass ' + pct(t.passThreshold) + ')' : '—'}</span></div>
-                    <div class="path-bar-track"><div class="path-bar-fill ${barClass(r.examPct)}" style="width:${pct(r.examPct)}"></div></div>
-                </div>` : ''}
+                ${coverageHtml}
 
                 ${weakHtml}
 
@@ -370,9 +751,11 @@
     }
 
     function pickRecommendation(results) {
+        let masteredFc = [];
+        try { masteredFc = JSON.parse(lsGet('st_fc_mastered') || '[]'); } catch (e) {}
         // 1. Nobody's started a track at all → send them to module 1.
         const notStarted = results.find(r => r.completedModules === 0 && r.moduleCompletionPct === 0 && r.totalModules > 0
-            && JSON.parse(localStorage.getItem('st_fc_mastered') || '[]').filter(id => String(id).startsWith(r.track.courseId)).length === 0);
+            && masteredFc.filter(id => String(id).startsWith(r.track.courseId)).length === 0);
         if (notStarted && results.every(r => r.readiness < 0.05)) {
             const mod = notStarted.modules[0];
             return {
@@ -433,8 +816,65 @@
         const subjectList = names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] : (names[0] || 'your subjects');
         document.getElementById('path-desc').textContent = `Every quiz, flashcard, and exam attempt across ${subjectList} rolled into one plan: what's weak, and what to do about it next.`;
 
-        const results = TRACKS.map(computeTrack);
-        document.getElementById('path-tracks').innerHTML = results.map(renderCard).join('');
+        const params = new URLSearchParams(location.search);
+        const hashId = location.hash ? decodeURIComponent(location.hash.slice(1)) : null;
+        const known = id => TRACKS.some(t => t.courseId === id);
+        const activeId = (typeof Game !== 'undefined' && Game.Track) ? Game.Track.get() : null;
+        const firstId = known(params.get('course')) ? params.get('course') : (known(hashId) ? hashId : activeId);
+        const ordered = [...TRACKS].sort((a, b) => (b.courseId === firstId ? 1 : 0) - (a.courseId === firstId ? 1 : 0));
+
+        const bossLast = loadBossLast();
+        const nextBossLast = {};
+        const results = ordered.map(t => Object.assign(computeTrack(t), { isActive: t.courseId === activeId }));
+        const tracksEl = document.getElementById('path-tracks');
+        tracksEl.innerHTML = results.map(r => renderCard(r, bossLast, nextBossLast)).join('');
+        ssSet('ma_boss_last', JSON.stringify(nextBossLast));
+
+        if (Object.keys(bossLast).length > 0) {
+            void tracksEl.offsetWidth;
+            let applied = false;
+            const applyTargets = () => {
+                if (applied) return;
+                applied = true;
+                tracksEl.querySelectorAll('.ma-hp[data-target-hp]').forEach(el => {
+                    el.style.setProperty('--hp', el.getAttribute('data-target-hp'));
+                });
+                tracksEl.querySelectorAll('.ma-count[data-target-num]').forEach(el => {
+                    el.style.setProperty('--num', el.getAttribute('data-target-num'));
+                });
+                tracksEl.querySelectorAll('.ma-ring[data-target-pct]').forEach(el => {
+                    el.style.setProperty('--pct', el.getAttribute('data-target-pct'));
+                });
+            };
+            requestAnimationFrame(applyTargets);
+            window.addEventListener('load', applyTargets, { once: true });
+        }
+
+        const downList = loadBossDown();
+        let downChanged = false;
+        tracksEl.querySelectorAll('.path-card[data-course]').forEach(card => {
+            const cid = card.getAttribute('data-course');
+            card.querySelectorAll('.ma-ring.is-down[data-domain]').forEach(ring => {
+                const key = cid + ':' + ring.getAttribute('data-domain');
+                if (!downList.includes(key)) {
+                    downList.push(key);
+                    downChanged = true;
+                    if (window.Juice && typeof Juice.fire === 'function') {
+                        const noGesture = navigator.userActivation && !navigator.userActivation.hasBeenActive;
+                        const origVibrate = noGesture && navigator.vibrate;
+                        if (origVibrate) { try { navigator.vibrate = () => false; } catch (e) {} }
+                        try {
+                            Juice.fire('burst', ring);
+                        } finally {
+                            if (origVibrate) { try { delete navigator.vibrate; } catch (e) {} }
+                        }
+                    }
+                }
+            });
+        });
+        if (downChanged) {
+            lsSet('st_boss_down', JSON.stringify(downList));
+        }
 
         const reco = pickRecommendation(results);
         document.getElementById('path-reco').querySelector('.path-reco-icon').textContent = reco.icon;

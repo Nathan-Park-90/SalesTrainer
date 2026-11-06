@@ -9,7 +9,7 @@
  * get whatever was last cached. Bump CACHE_NAME on any app-shell file list
  * change so old caches get cleaned up on the next visit.
  */
-const CACHE_NAME = 'mammoth-academy-v14';  // v14: Oct 20, 2026 (OFFLINE button in the navbar; v13 network timeout)
+const CACHE_NAME = 'mammoth-academy-v16';  // v16: Nov 5, 2026 (doom.html: the Doom Scroll feed); v15: Nov 3 game layer
 const NETWORK_TIMEOUT_MS = 3500;          // plane Wi-Fi / one bar of signal: stop waiting and serve the saved copy
 let networkDeadUntil = 0;                 // after a timeout/failure, answer from the cache at once for a while
 const AUDIO_CACHE = 'mammoth-audio';      // NotebookLM episodes saved offline by lecture.js; survives version bumps
@@ -22,6 +22,7 @@ const APP_SHELL = [
   'daily.html',
   'sprint.html',
   'path.html',
+  'doom.html',
   'style.css',
   'app.js',
   'course-loader.js',
@@ -33,6 +34,9 @@ const APP_SHELL = [
   'cram.js',
   'diagrams.js',
   'lecture.js',
+  'game.js',
+  'juice.css',
+  'juice.js', 'home-card.js', 'intel.js',
   'mammoth/mammoth-mode.js?v=1',
   'mammoth/mammoth-mode.css?v=1',
   'courses/aws-saa-c03.js',

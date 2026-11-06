@@ -1,5 +1,5 @@
 ## MAMMOTH ACADEMY — Memory Log
-Last updated: 2026-10-19
+Last updated: 2026-11-05
 
 ---
 
@@ -95,12 +95,17 @@ Gotcha: any element toggled via the `hidden` attribute that also has its own CSS
 | st_highscore_<examKey> | int | Best raw score on a FULL-length run (read by Home/Smart Path as score / min(bank, 65)); single-core A+ runs don't write it |
 | st_highscore_pct_<examKey> | float string | Best percentage from any run/mode (Oct 18); Home and Smart Path prefer it. Written on a first attempt even at 0% |
 | st_exam_practice | '1'/'0' | Arena Practice mode toggle (instant feedback) vs. real exam rules |
-| st_failed_qs | array | Question texts missed in the Arena (drawn first next time) |
+| st_failed_qs | array | **Legacy (Nov 3, 2026).** Migrated once into st_review by game.js, then deleted; no longer written or merged |
+| st_review | object | game.js review engine: `{qid:{b,t,due,n,r,m,u}}` per question (Leitner box 0-5, last answered epoch s, due YYYY-MM-DD, seen, right, misses in a row, day of last box move). qid = `<courseId>:mc:<sha1(trimmed q) first 10 hex>` (Jake's scheme). Sync: per qid, newer t wins |
+| st_daylog | object | `{YYYY-MM-DD:{a,c,d}}` answers / correct / Daily passed, last 90 days, days roll over at 04:00 local. Source of the streak. Sync: per date higher a wins, d kept if either |
+| st_active_track | object | `{id, t}` active course (default aws-saa-c03). Sync: newer t wins |
+| st_boss_down | array | `"<courseId>:<domain>"` domains that already got their one-time 80% burst on path.html. Sync: union |
+| st_juice | object | `{sound:0/1, haptics:0/1}` juice.js settings (sound OFF by default). Device-only by design |
 | st_pbq_<pbqId> | float string | Best score (0-1) on that CompTIA PBQ (pbq.js); Smart Path counts 80%+ as passed; Sync merges by max |
 | ma_sync_undo | object | Snapshot taken right before the last Sync & Backup import (powers "Undo it"). Deliberately NOT `st_`-prefixed so it is never exported |
 | st_domain_perf_<examKey> | object | Cumulative per-domain correct/total from the Arena, feeds Smart Path's weakest domain |
-| st_streak | int | Daily study streak |
-| st_last_daily | string | Date of last daily completion |
+| st_streak | int | Daily study streak. Since Nov 3 derived from st_daylog on every load (a day counts at 5 answers anywhere or a Daily pass); kept in step for badges/kiosk |
+| st_last_daily | string | Last counted day (toDateString), derived like st_streak |
 | st_daily_day_<trackKey> | int | Current day in that course's daily track |
 | st_fc_mastered | array | Flashcard ids marked mastered (ids are `<courseId>_<originalId>`, globally unique) |
 | st_badges | array | Earned badge ids |
@@ -203,6 +208,29 @@ One Markdown transcript per module (47, one per `courses/*.js` module — regene
   (needs the academy's hosting details from Nathan).
 - Set a target exam date for AWS SAA-C03 and put it on the family calendar.
 
+## Gemini's "game engine" plan, reviewed by Claude (Nov 3, 2026) — BEING BUILT, see "Game layer" at the end
+**Full blueprint: `MammothAcademy_Game_Layer_Blueprint.html` (repo root, not deployed)**: decisions D1-D5 with defaults,
+data model (`st_review` per-question records, newest wins; `st_daylog`; `st_active_track`), Leitner boxes, readiness
+formula, features F1-F8 with code refs and acceptance tests, build order A-F (A = Claude, rest agy), and a live CSS lab.
+**Latent bug found:** `st_failed_qs` is in sync.js `UNION_KEYS`, so a question cleared on one device returns after a merge.
+Gemini proposed turning the app into a "high-dopamine training engine" (boss HP bars, shot clocks, loot, synth sounds).
+Verdict: build about a third of it, and only after checking the Jake Discord streak (the Sep 28 problem was not
+opening the app, which in-app fun can't fix). Parked because the Oct 31 focus is the kids' Learning Center.
+**Build (cheap, real learning value), as one agy spec:**
+1. Fail-first intel drawer: on a miss, slide up the matching rule (exam `whyWrong` + `meta.domains` module + `cram.js`).
+2. Instant rematch: a variation of the missed concept ~3 cards later.
+3. Active track lock: one track key in storage (AWS SAA-C03, matching Jake's `STUDY_TRACK`); the other 6 in a folded drawer.
+4. Homepage question card for the active track, **no timer**.
+5. Low daily minimum (~90 s of work) so busy days keep the streak.
+6. One "sub-boss" per `meta.examFormat.blueprint` domain (4 for SAA-C03, not Gemini's 5); HP = domain mastery (readiness), not raw volume,
+   so a dead boss means you'd likely pass.
+**Skip / change:** 15-20 s shot clocks (SAA-C03 is ~2 min per long scenario question; trains guessing); loot caches,
+streak shields, "Architecture Cheat Card", Overclock double damage (reward luck/volume); boss heals on a miss
+(punishes the moment the drawer should teach); a separate Nemesis list (Jake's Leitner + Arena missed-first already
+exist, so make ONE shared missed list instead of a third). Web Audio sounds/CSS shake: optional polish, muted by default.
+**Prerequisite:** progress is per-browser localStorage, so any boss HP / missed-list state must go through
+`sync.js` Smart Merge rules (unions, best scores) or phone and PC will split.
+
 ## Hosting (Sep 29, 2026)
 - **New home: `academy.mammothcapital.site`**, served from Nathan's home server. `www/` is copied to
   the server and served by the portfolio's web server; see `Desktop\Code\Mammoth\MammothCapitalSite\CLAUDE.md`
@@ -238,8 +266,9 @@ the "⇄ Sync & Backup" footer link, or `#sync` on any URL. CSS at the end of st
   app, where downloads don't work; it says to use the code).
 - **Validation before anything is written:** app id, version (newer = "reload to update"), only our keys, string values,
   list keys parse as arrays, checksum. A truncated or edited code says so in plain words.
-- **Smart Merge:** union for st_fc_mastered / st_badges / st_sales_solved / st_arch_done_ids / st_completed /
-  st_failed_qs; st_quiz_* done if either; max for st_highscore* / st_daily_day_* / st_streak / st_arch_completed;
+- **Smart Merge:** union for st_fc_mastered / st_badges / st_sales_solved / st_arch_done_ids / st_completed
+  (st_failed_qs removed Nov 3: a shrinking list can't be merged by union); st_review / st_daylog / st_active_track
+  have their own rules (see the keys table); st_quiz_* done if either; max for st_highscore* / st_daily_day_* / st_streak / st_arch_completed;
   most recent st_last_daily; st_domain_perf_* keeps the larger sample per domain (summing would double-count on a
   repeat merge); preferences stay this device's. Idempotent: values are only rewritten when the merge changes them.
   **Overwrite** needs a confirm tick and replaces only our keys (other apps' keys on the origin are untouched).
@@ -314,7 +343,7 @@ module/lesson/question ids kept (progress + Discord quiz unaffected); new flashc
 - Merge tool + fix scripts live in the session scratchpad (`merge-expansion.js <pack> <draftsDir> [--write]`: validates
   shapes, domains, "(Choose TWO.)" + 5 options for multi-response, then appends). Re-use it for the next track.
 - Lecture bar (same day): voice menu; default is an American male voice (Nathan doesn't want British voices).
-- SW cache `mammoth-academy-v11`. Study bank rebuilt; **Jake (VM 103) was unreachable, copy it when it's back.**
+- SW cache `mammoth-academy-v11`. Study bank rebuilt; **Jake (the private server) was unreachable, copy it when it's back.**
 
 ## Offline hardening + "Save for offline" button (Oct 19-20, 2026), cache v14
 Nathan couldn't use the app on his phone in airplane mode. The live app passed a plain offline test, but two weak spots
@@ -333,3 +362,104 @@ instead of using the cache; (2) any response was cached, so an error page could 
 - The old host learncenter.online still serves service worker **v1** (no CompTIA packs offline). Anyone who installed
   from there has the old app; install from academy.mammothcapital.site instead.
 - Tests (scratch): `offline_test.py`, `hang_test.py` (stalled network), `button_test.py` / `nav_test.py` (wipe cache, one nav tap, go offline).
+
+## Game layer (Nov 3, 2026): review engine, juice, then track lock / home card / drawer / bosses
+Built from the blueprint with defaults D1-D5 (streak = 5 answers anywhere; sound off; returning users get the question
+card, new visitors the pitch; AWS SAA-C03 active; Jake bridge later).
+- **`www/game.js`** (Claude, loaded on every page right after course-loader.js): `window.Game`. Question index over the
+  course packs (qid by pure-JS SHA-1, computed at runtime, no ids stamped into the courses), `Review.record(qid, right)`
+  (Leitner boxes [0,1,3,7,16,35] days, max one box up per day, miss → box 0 due tomorrow, nemesis = m≥2 below box 3,
+  rematch = right on box 0 with m>0, mastered = box ≥3; overdue mastered cards count half), `Review.due/priority/mastery`
+  (readiness = blueprint-weighted domain mastery; a domain needs ≥15 exam questions to be measurable), `Day` (st_daylog,
+  streak, `justHitGoal`), `Track` (st_active_track), and a one-time migration (old st_streak seeded into the day log if
+  still alive; st_failed_qs → box-0 records). `Game.env.now` is the clock seam the tests use.
+- Recording: Arena practice reveals and exam submit (once per question per exam; unanswered = miss), lesson quizzes,
+  Daily. The Arena's "missed first" draw now uses `Review.priority` (due → unseen → seen). 
+- **`www/juice.css` + `www/juice.js`** (agy job F, audited): `Juice.fire(event, el)`, `float`, `burst`, settings, the
+  navbar 🔇/🔊 toggle (auto-mounted), components `.ma-hp` `.ma-count` `.ma-ring` `.ma-flame` `.ma-sheet`. Claude added
+  `Juice.react(recordResult, el)` (correct / miss / rematch / mastered / combo every 5th right in a row, plus the one-time
+  'daily' effect when the 5th answer lands) and made the overclock hue a 3-pass shimmer instead of `infinite` (an
+  inherited property animated on `<html>` restyles the whole page every frame); later page loads that day get
+  `html.jc-oc-steady` (glow, no animation). Demo: `tools/juice-demo.html`.
+- Tests: `npm run test-game` (`tools/test-game.js` 12 Node tests with a fake clock + `--selftest` that plants 12 bugs;
+  `tools/test-game-e2e.py` Playwright over all 7 pages incl. juice wiring and a storage-denied context),
+  `npm run test-juice`.
+- Fixed on the way: daily.html slides overflowed 360 px phones by 4 px during the slideIn animation (`overflow-x: clip`).
+- Known debt: with localStorage fully denied, the inline `<head>` script on line 3 of each page throws (pre-existing,
+  not game.js). The blueprint's "5 at 23:50 + 5 at 00:10 = 2 days" contradicts its own 04:00 rollover; the code follows the
+  rollover (that is one day of 10).
+- **Lesson refs** (agy job B, merged): every AWS exam question has `ref: {module, topic, cram?:{sheet,q}, gap?:true}`
+  (exact titles in that course). `npm run validate-refs` proves they resolve (`tools/validate-refs.test.js` plants 4 bug
+  kinds). 89 of 213 are `gap: true`: the deciding fact is not taught in any lesson yet (SSM Patch Manager, CloudHSM,
+  AWS Backup, Transfer Family...); the list to write lessons from is `tools/refs/aws-gaps.md`. Other packs have no refs.
+- **Active track + homepage card** (agy job D, merged): index.html shows the active track first with the others in a
+  `<details class="ma-switch">` drawer ("Make active"); daily.html, the Arena exam list, library.html and path.html put
+  the active track first (deep links still win). Returning visitors (old isReturning test + any st_review record) get
+  `#ma-next` from `www/home-card.js` above the stats row (due → unseen in the weakest domain → any; lesson quiz for
+  exam-less tracks), "Next" / "5 more", a collapsed hero; new visitors get the pitch unchanged. Claude switched it to
+  `Juice.react`. Test: `python tools/test-home.py` (runs its own --selftest too), shots in `tools/home-shots/`.
+- **Path bosses** (agy job E, merged): exam-track cards on path.html get one `.ma-ring` per blueprint domain, a
+  "Readiness boss" `.ma-hp` bar (chip damage from sessionStorage `ma_boss_last`), a one-time burst when a domain first
+  reaches 80% (localStorage `st_boss_down`, a sync UNION key), a locked final boss until `bossReady` →
+  `arena.html#boss=<examKey>` (full exam in exam mode, `st_exam_practice` untouched; Claude made it put the checkbox
+  back after starting), a nemesis `<details>`, and the old bars folded into "Coverage". Claude shortened the ring
+  labels (AWS ones all started "Design ..."). Test: `python tools/test-path-bosses.py [--selftest]`, shots in
+  `tools/path-shots/`.
+- **Intel drawer + Rematch** (agy job C, merged): `www/intel.js` → `Intel.open({q, chosen, courseId, onClose})`, one
+  reusable `dialog.ma-sheet` with the trap (`whyWrong[chosen]`), the rule (correct option + explanation), "Read the
+  lesson" (`library.html?course=&title=&topic=` from `q.ref`, else the course `domains` map) and "Cram sheet"
+  (`Cram.open(sheet, query)` on library, else `library.html#cram=<sheet>&q=<term>`). Opens on a miss in Arena practice,
+  lesson quizzes and Daily (Daily pauses its 2.5 s auto-advance until it closes); never in exam mode. The results autopsy
+  gets the same links inline. Rematch (`Intel.makeRematch`): a missed question comes back 3 cards later (or last) with
+  shuffled options, a "⚔ Rematch" tag, once per question; copies never count toward score, %, high score, domain perf,
+  grid, Daily score or pips. Claude's audit fixes: a rematch copy never reached before submit is not recorded (it was a
+  second miss → false nemesis); Q labels in review/autopsy skip copies (`app.examNum`); one `flushExamReveal` helper.
+  Explanations must name options, not letters ("Option B is correct"), because rematches shuffle them. Test:
+  `npm run test-intel` (20 checks + --selftest), shots in `tools/intel-shots/`.
+- Shipped prep (Nov 3): sw.js `mammoth-academy-v15` precaches game.js, juice.*, home-card.js, intel.js; `npm run stamp`
+  run; study bank rebuilt (copy to the study coach at deploy). Specs: `HomeLab/.delegation/specs/academy-*.md`.
+  All suites: test-game, test-game-e2e, validate-refs, test-juice, test-home, test-bosses, test-intel, and
+  `npm run test-sync` (`tools/test-sync-roundtrip.py`: phone ↔ PC Sync Code through the real modal, new keys merge right,
+  st_juice stays per device, repeat merge is a no-op). **Not deployed yet** (needs Nathan's OK).
+
+---
+
+## Doom Scroll (`www/doom.html`, Nov 5 2026) — https://doom.mammothcapital.site
+Nathan: "a learning tool that hits like doom scrolling", AWS first. A full-screen vertical snap feed, one course pack at a time.
+- **Own shell, no app.js / style.css**: loads the course packs, course-loader, game.js, juice.js(+css), pwa.js and mammoth-mode only, with its
+  own CSS, so it feels like a feed and nothing in app.js runs against a page it doesn't know. Nav link `DOOM` on every other page.
+- **Cards**: question (exam bank + lesson quizzes; after the answer: verdict, `exp`, the `whyWrong` Trap for the picked option, "Show the other
+  traps"; multi-answer gets select + CHECK), flashcard (FLIP → KNEW IT / NOPE), fact (one Daily slide, always followed by one of that lesson's
+  quiz questions), checkpoint/win card every 20 answers (session count, today, streak, readiness; a line from WIN_LINES). Cards are
+  `min-height: 100dvh` (long questions scroll inside the feed); rendering stays 3 cards ahead via an IntersectionObserver.
+- **Mix** (`MIX` in the page): while anything is due, 40% of slots take the lowest-box due question first; otherwise 45% unseen question /
+  25% flashcard / 30% fact. Unseen (priority 1) before seen-not-due (priority 2); when the pack is exhausted, the end card + loop by due date.
+- **Progress** goes through `Game.Review.record` (flashcards get `Game.qid(fc, courseId)` = hash of `front`, outside the exam index so they
+  never count toward readiness), `Game.Day` (top bar: answers today, flame + streak), `Game.Track.set`. Juice.react on every answer.
+- **Landing** = track picker (current track first, cards count, readiness, due count); `?track=<courseId>` skips it (doom. forwards the query).
+  Keys: ↓/space/j next, ↑/k back, 1-4 answer (flashcard: any key flips, then 1 = knew it, 2 = nope), f flip, t tracks.
+- **Voice**: browser `speechSynthesis`, off by default, remembered in `ma_doom_voice` (device-only, not `st_`), prefers an en-US male voice.
+  Phase 2 plan = real narrated cards (Fable scripts for the 89 AWS gaps, TTS rendered offline, validator) — persona still Nathan's call.
+- **Hosting**: `doom.mammothcapital.site` is an nginx 301 to `academy.mammothcapital.site/doom` (one origin = one localStorage/streak);
+  `/doom` is a clean URL in the academy server block (MammothCapitalSite `nginx/portfolio.conf`). Cache `mammoth-academy-v16`.
+- **LEARN mode (Nov 5 evening, default; Nathan: "I feel like I am being quizzed on information I haven't learned")**: the feed walks the
+  pack module by module. `teachSeq(m)` = a cover card, then per topic the prose split into ~520-character fact cards (`chunkProse`: top-level
+  `<p>`/`<ul>` blocks grouped; the `.lesson-alert` div becomes its own ⚓ Anchor card), then that topic's lesson quiz; a module-done card
+  marks the module learned and queues a **boss round** of up to 3 of its exam questions. Exam questions are gated per module
+  (`moduleOf`: `q.ref.module` for AWS, the lesson's module for quizzes, else `meta.domains[domain]` → module title, else the last module);
+  a due review every 4th slot and an unlocked exam question every 6th keep the variable reward. Pointer `st_doom_learn`
+  `{courseId: {m, i, done[]}}` is saved when a card is reached (reload resumes mid-module); Sync merges it "further along wins".
+  All modules done → the feed becomes GRIND. **GRIND** = the original mix, picked on the landing or `?mode=grind`; `ma_doom_mode` remembers.
+  Module 1 of AWS (Cloud 101) has no exam questions, so its done card unlocks 0 and has no boss round: expected.
+- **Voice (Nov 5 night)**: Jake is on hold ("dry and robotic" to Nathan; Jake content must also stay out of this public repo). Nathan picked
+  **Kokoro am_onyx + am_michael** from six samples: Onyx = teacher (cover, prose, anchor, flashcards, Daily slides, module done), Michael =
+  quizmaster (question + options, "Correct."/"Trap." + explanation, the picked option's trap). Clips are pre-rendered:
+  `audio/doom/<voice>/<Game.hash10(spoken text)>.mp3` + `manifest.json` `{voice: {hash: seconds}}`; the page's `SAY` builders produce the
+  text for both playback and `DoomDebug.speechList(courseId)` (the render list), so they can't drift. Playback: one shared `Audio` with a
+  queue (`say(items, replace)`); anything without a clip falls back to the browser's speechSynthesis. Pipeline: `tools/doom-speech.py`
+  (list / render --local / manifest / push; remote render + pull exist but the render box is in the git-ignored `.local.json`) and
+  `tools/render_doom.py` (kokoro-onnx, ffmpeg 48 kb/s mono, light speech normalisation of acronyms, low priority). AWS = 1955 clips
+  (~12 h of audio, ~250 MB), **generated, git-ignored (`www/audio/doom/`), excluded from the deploy tar and served from a separate volume on the web host**
+  (hosting details live in Nathan's private ops notes, not in this public repo). Other packs: `list <courseId>` then render again (it skips what exists).
+- **Test**: `npm run test-doom` (`tools/test-doom.py`, Playwright, phone + desktop, 40 checks incl. Learn/Grind, screenshots in `tools/doom-shots/`).
+- **Nov 6, 2026 01:15:** all 1955 AWS narration clips rendered (laptop, 2 shards after a 4-shard run thrashed the cores) and pushed; live manifest Onyx 565 / Michael 1390, 300 MB at `academy.mammothcapital.site/audio/doom/`.

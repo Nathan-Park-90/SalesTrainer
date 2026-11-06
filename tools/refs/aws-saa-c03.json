@@ -1,0 +1,1654 @@
+{
+  "0": {
+    "q60": "High Stakes Scenario: Mammoth Capital is experiencing a mass",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS WAF, Shield, & Macie"
+    }
+  },
+  "1": {
+    "q60": "A company wants to store data for 5 years for regulatory com",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "S3 Lifecycle Policies & Cost Optimization",
+      "cram": {
+        "sheet": "aws",
+        "q": "Glacier Deep Archive"
+      }
+    }
+  },
+  "2": {
+    "q60": "You are designing an application that requires a relational ",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "Aurora & RDS Proxy"
+    }
+  },
+  "3": {
+    "q60": "An application runs on EC2 instances behind an ALB. You need",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Auto Scaling Groups (ASG)"
+    }
+  },
+  "4": {
+    "q60": "Your security team mandates that all EBS volumes must be enc",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS KMS & Encryption at Rest"
+    }
+  },
+  "5": {
+    "q60": "Mammoth Capital's quant team wants to run a Monte Carlo simu",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Cost Optimization: Reserved, Spot & Savings Plans"
+    }
+  },
+  "6": {
+    "q60": "You are explaining AWS Networking to a Junior Dev. 'Think of",
+    "ref": {
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "Public vs Private Subnets"
+    }
+  },
+  "7": {
+    "q60": "The Mammoth Capital trading dashboard is crashing. The backe",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "RDS: The Relational Behemoth"
+    }
+  },
+  "8": {
+    "q60": "Your web application stores user session state on the local ",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Load Balancer Family: ALB vs NLB vs GWLB"
+    }
+  },
+  "9": {
+    "q60": "The Head of Security at Mammoth Capital drops a requirement ",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "CloudWatch vs. CloudTrail vs. Config"
+    }
+  },
+  "10": {
+    "q60": "You are building a decoupled order processing system. The we",
+    "ref": {
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "SQS: The Message Queue (Decoupling Services)",
+      "cram": {
+        "sheet": "aws",
+        "q": "SQS FIFO"
+      }
+    }
+  },
+  "11": {
+    "q60": "Your company has a massive 50TB on-premises NAS full of vide",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "The AWS Snow Family"
+    }
+  },
+  "12": {
+    "q60": "A developer accidentally hardcoded their AWS Access Key and ",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "IAM Deep Dive: Policies & Federation"
+    }
+  },
+  "13": {
+    "q60": "Which AWS service is conceptually identical to running a Doc",
+    "ref": {
+      "module": "Advanced Compute & Containers",
+      "topic": "ECS vs. EKS vs. Fargate"
+    }
+  },
+  "14": {
+    "q60": "You have a fleet of 50 EC2 instances. You want them to autom",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2: The Workhorse",
+      "gap": true
+    }
+  },
+  "15": {
+    "q60": "Mammoth Capital's architecture uses Amazon API Gateway trigg",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "Lambda: The Sniper Rifle",
+      "cram": {
+        "sheet": "aws",
+        "q": "Lambda concurrency"
+      }
+    }
+  },
+  "16": {
+    "q60": "You are hosting a static website for a marketing campaign. Y",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "CloudFront vs. Global Accelerator"
+    }
+  },
+  "17": {
+    "q60": "Mammoth Capital's algo-trading platform requires static IP a",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "CloudFront vs. Global Accelerator"
+    }
+  },
+  "18": {
+    "q60": "The quants at Mammoth left PII inside their high-frequency t",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS WAF, Shield, & Macie"
+    }
+  },
+  "19": {
+    "q60": "Mammoth's on-premises NAS is full of legacy market data. The",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "AWS DataSync & Storage Gateway"
+    }
+  },
+  "20": {
+    "q60": "A junior admin deployed a Bitcoin miner in the dev environme",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "AWS Organizations & SCPs"
+    }
+  },
+  "21": {
+    "q60": "Mammoth Capital wants to standardize their serverless deploy",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "Lambda: The Sniper Rifle",
+      "gap": true
+    }
+  },
+  "22": {
+    "q60": "The auditors demand proof that Mammoth's EC2 security groups",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "CloudWatch vs. CloudTrail vs. Config"
+    }
+  },
+  "23": {
+    "q60": "Mammoth is deploying an internally developed Kubernetes app.",
+    "ref": {
+      "module": "Advanced Compute & Containers",
+      "topic": "ECS vs. EKS vs. Fargate"
+    }
+  },
+  "24": {
+    "q60": "Mammoth has an on-prem tape library they want to replace wit",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "AWS DataSync & Storage Gateway"
+    }
+  },
+  "25": {
+    "q60": "Mammoth wants to securely access a third-party SaaS provider",
+    "ref": {
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "VPC Endpoints (Gateway vs Interface)"
+    }
+  },
+  "26": {
+    "q60": "A rogue algorithm at Mammoth started making millions of API ",
+    "ref": {
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "SNS: The Notification Bus (Fan-Out Pattern)"
+    }
+  },
+  "27": {
+    "q60": "Mammoth's new risk analysis app needs to run a complex workf",
+    "ref": {
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "Step Functions: Orchestrating Serverless Workflows",
+      "cram": {
+        "sheet": "aws",
+        "q": "Step Functions"
+      }
+    }
+  },
+  "28": {
+    "q60": "Mammoth needs to share a central Transit Gateway created in ",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "VPC Peering vs. Transit Gateway",
+      "gap": true
+    }
+  },
+  "29": {
+    "q60": "The CFO is furious about EC2 licensing costs for their propr",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2: The Workhorse",
+      "gap": true
+    }
+  },
+  "30": {
+    "q60": "Mammoth is under a massive DDoS attack. They want proactive ",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS WAF, Shield, & Macie"
+    }
+  },
+  "31": {
+    "q60": "Mammoth needs to query huge parquets files stored in S3 usin",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Kinesis & Big Data"
+    }
+  },
+  "32": {
+    "q60": "Mammoth's developers keep hardcoding database credentials in",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "Secrets Manager vs Parameter Store & AWS STS"
+    }
+  },
+  "33": {
+    "q60": "Mammoth wants to detect if any of their EC2 instances have k",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "Threat Detection: GuardDuty, Inspector, Security Hub, Detective"
+    }
+  },
+  "34": {
+    "q60": "Mammoth requires an isolated, single-tenant hardware securit",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS KMS & Encryption at Rest",
+      "gap": true
+    }
+  },
+  "35": {
+    "q60": "Mammoth needs to transfer 5 PB of market data to AWS. They h",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "The AWS Snow Family"
+    }
+  },
+  "36": {
+    "q60": "Mammoth's compliance team mandates that all EBS snapshots an",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "Disaster Recovery Strategies (RTO & RPO)",
+      "gap": true
+    }
+  },
+  "37": {
+    "q60": "Mammoth wants to run ultra-low latency trading apps on AWS i",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2: The Workhorse",
+      "gap": true
+    }
+  },
+  "38": {
+    "q60": "Mammoth's remote traders need to access VPC resources from t",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Hybrid Connectivity: Site-to-Site VPN vs Direct Connect",
+      "gap": true
+    }
+  },
+  "39": {
+    "q60": "Mammoth wants to intercept and inspect all traffic entering ",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "The Load Balancer (Traffic Cop)"
+    }
+  },
+  "40": {
+    "q60": "Mammoth's machine learning models need a high-performance, P",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "EFS & the FSx Family"
+    }
+  },
+  "41": {
+    "q60": "Mammoth has an app that processes streaming market data with",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "ElastiCache: The Caching Layer (Redis vs Memcached)"
+    }
+  },
+  "42": {
+    "q60": "Mammoth needs to route users to a backup site if their prima",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Route 53: Global Traffic Management"
+    }
+  },
+  "43": {
+    "q60": "Mammoth's DynamoDB table is getting hammered with read reque",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "DynamoDB: The Speed Demon"
+    }
+  },
+  "44": {
+    "q60": "Mammoth needs to continuously replicate a massive on-prem Or",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "Migrating Databases & Servers: DMS, SCT, MGN"
+    }
+  },
+  "45": {
+    "q60": "Mammoth is receiving streaming ticker data from thousands of",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Kinesis & Big Data"
+    }
+  },
+  "46": {
+    "q60": "Mammoth's developers want to run a web app using Docker cont",
+    "ref": {
+      "module": "Advanced Compute & Containers",
+      "topic": "AWS Batch & Elastic Beanstalk",
+      "gap": true
+    }
+  },
+  "47": {
+    "q60": "Mammoth requires centralized management of single sign-on (S",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "App vs Workforce Identity: Cognito vs IAM Identity Center"
+    }
+  },
+  "48": {
+    "q60": "Mammoth wants to offload the SSL/TLS decryption for their we",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS Certificate Manager (ACM): Encryption in Transit"
+    }
+  },
+  "49": {
+    "q60": "Mammoth's analytical jobs run once a week and can be interru",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Cost Optimization: Reserved, Spot & Savings Plans"
+    }
+  },
+  "50": {
+    "q60": "Mammoth wants to map a hostname like 'app.mammoth.local' to ",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Route 53: Global Traffic Management",
+      "gap": true
+    }
+  },
+  "51": {
+    "q60": "Mammoth needs to establish a dedicated, private connection f",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Hybrid Connectivity: Site-to-Site VPN vs Direct Connect"
+    }
+  },
+  "52": {
+    "q60": "Mammoth's web app allows users to upload profile pictures to",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "Lambda: The Sniper Rifle"
+    }
+  },
+  "53": {
+    "q60": "Mammoth's developers want to access EC2 instances securely w",
+    "ref": {
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "Public vs Private Subnets",
+      "gap": true
+    }
+  },
+  "54": {
+    "q60": "Mammoth needs a serverless data integration service that mak",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Analytics Stack: Athena, Glue, Redshift, EMR, OpenSearch"
+    }
+  },
+  "55": {
+    "q60": "Mammoth's mobile app requires user authentication and author",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "App vs Workforce Identity: Cognito vs IAM Identity Center"
+    }
+  },
+  "56": {
+    "q60": "Mammoth wants to ensure that all data written to an S3 bucke",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "S3 Encryption & Cross-Account KMS"
+    }
+  },
+  "57": {
+    "q60": "Mammoth needs to deploy a globally distributed application w",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "DynamoDB: The Speed Demon",
+      "gap": true
+    }
+  },
+  "58": {
+    "q60": "Mammoth wants to define their infrastructure as code using f",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "Lambda: The Sniper Rifle",
+      "gap": true
+    }
+  },
+  "59": {
+    "q60": "Mammoth's workload experiences unpredictable spikes in traff",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Auto Scaling Groups (ASG)",
+      "gap": true
+    }
+  },
+  "60": {
+    "q60": "Mammoth needs to retain compliance logs for 10 years. The da",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "S3 Lifecycle Policies & Cost Optimization",
+      "cram": {
+        "sheet": "aws",
+        "q": "Glacier Deep Archive"
+      }
+    }
+  },
+  "61": {
+    "q60": "Mammoth has an RDS MySQL database that is bottlenecked on re",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "RDS: The Relational Behemoth"
+    }
+  },
+  "62": {
+    "q60": "Mammoth needs to securely transfer files via SFTP directly i",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "AWS DataSync & Storage Gateway",
+      "gap": true
+    }
+  },
+  "63": {
+    "q60": "Mammoth's web application is being targeted by SQL injection",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS WAF, Shield, & Macie"
+    }
+  },
+  "64": {
+    "q60": "Mammoth wants to connect multiple VPCs and their on-premise ",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "VPC Peering vs. Transit Gateway"
+    }
+  },
+  "65": {
+    "q60": "Mammoth needs to analyze VPC Flow Logs to determine which IP",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Kinesis & Big Data"
+    }
+  },
+  "66": {
+    "q60": "Mammoth's disaster recovery plan requires that their critica",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "Disaster Recovery Strategies (RTO & RPO)",
+      "gap": true
+    }
+  },
+  "67": {
+    "q60": "Mammoth Capital runs a financial modeling job every night fr",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Cost Optimization: Reserved, Spot & Savings Plans"
+    }
+  },
+  "68": {
+    "q60": "A company has 50 EC2 instances spread across 4 AWS accounts.",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "AWS Organizations & SCPs",
+      "gap": true
+    }
+  },
+  "69": {
+    "q60": "An RDS PostgreSQL database (db.r5.2xlarge, Multi-AZ) runs 24",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "RDS: The Relational Behemoth",
+      "gap": true
+    }
+  },
+  "70": {
+    "q60": "A startup stores 500TB of user-generated videos on S3 Standa",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "S3 Lifecycle Policies & Cost Optimization",
+      "cram": {
+        "sheet": "aws",
+        "q": "Glacier Deep Archive"
+      }
+    }
+  },
+  "71": {
+    "q60": "AWS Trusted Advisor flags 12 EC2 instances with CPU utilizat",
+    "ref": {
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "AWS Cost Tools: Explorer, Budgets & Trusted Advisor"
+    }
+  },
+  "72": {
+    "q60": "A data analytics team spins up 30 large EC2 instances every ",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Cost Optimization: Reserved, Spot & Savings Plans"
+    }
+  },
+  "73": {
+    "q60": "A company is designing a new microservices application. The ",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "Lambda: The Sniper Rifle"
+    }
+  },
+  "74": {
+    "q60": "Mammoth Capital runs a trading platform on EC2 instances acr",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "Disaster Recovery Strategies (RTO & RPO)"
+    }
+  },
+  "75": {
+    "q60": "Mammoth Capital's BTC OmniData feed consumes from a Kinesis ",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Kinesis & Big Data",
+      "gap": true
+    }
+  },
+  "76": {
+    "q60": "A Mammoth Capital application stores session state in a sing",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "ElastiCache: The Caching Layer (Redis vs Memcached)"
+    }
+  },
+  "77": {
+    "q60": "Mammoth Capital's trading platform runs hundreds of EC2 inst",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Cost Optimization: Reserved, Spot & Savings Plans"
+    }
+  },
+  "78": {
+    "q60": "Mammoth Capital ingests terabytes of tick data, trade logs, ",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "S3 Lifecycle Policies & Cost Optimization",
+      "cram": {
+        "sheet": "aws",
+        "q": "Glacier Deep Archive"
+      }
+    }
+  },
+  "79": {
+    "q60": "Mammoth Capital's platform engineering team notices their AW",
+    "ref": {
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "AWS Cost Tools: Explorer, Budgets & Trusted Advisor"
+    }
+  },
+  "80": {
+    "q60": "A company runs a massive data processing workload on EC2 ins",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Cost Optimization: Reserved, Spot & Savings Plans"
+    }
+  },
+  "81": {
+    "q60": "An organization stores petabytes of compliance logs in Amazo",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "S3 Lifecycle Policies & Cost Optimization",
+      "cram": {
+        "sheet": "aws",
+        "q": "Glacier Deep Archive"
+      }
+    }
+  },
+  "82": {
+    "q60": "A company wants to identify the AWS services and accounts re",
+    "ref": {
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "AWS Cost Tools: Explorer, Budgets & Trusted Advisor"
+    }
+  },
+  "83": {
+    "q60": "An application runs on EC2 instances in a single Availabilit",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Auto Scaling Groups (ASG)"
+    }
+  },
+  "84": {
+    "q60": "A company's RDS database must survive the complete loss of i",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "RDS: The Relational Behemoth"
+    }
+  },
+  "85": {
+    "q60": "An Auto Scaling Group is configured with a minimum of 2, des",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Auto Scaling Groups (ASG)"
+    }
+  },
+  "86": {
+    "q60": "A company needs a Recovery Time Objective (RTO) of a few min",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "Disaster Recovery Strategies (RTO & RPO)"
+    }
+  },
+  "87": {
+    "q60": "Mammoth Capital runs EC2 instances in isolated private subne",
+    "ref": {
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "VPC Endpoints (Gateway vs Interface)"
+    }
+  },
+  "88": {
+    "q60": "A FinTech company hosts a static Single-Page Application (SP",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "CloudFront vs. Global Accelerator"
+    }
+  },
+  "89": {
+    "q60": "An e-commerce company runs a stateful web application on EC2",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Vertical vs Horizontal Scaling"
+    }
+  },
+  "90": {
+    "q60": "Mammoth Capital is building an event-driven settlement syste",
+    "ref": {
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "SNS: The Notification Bus (Fan-Out Pattern)"
+    }
+  },
+  "91": {
+    "q60": "A financial analytics application runs on an Amazon RDS for ",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "Aurora & RDS Proxy"
+    }
+  },
+  "92": {
+    "q60": "During a monthly finops review, a Solutions Architect finds ",
+    "ref": {
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "The Hidden Bill: Data Transfer & NAT Costs"
+    }
+  },
+  "93": {
+    "q60": "Mammoth Capital runs a stateful order-settlement engine on 1",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "Migrating Databases & Servers: DMS, SCT, MGN",
+      "gap": true
+    }
+  },
+  "94": {
+    "q60": "A trading API at Mammoth Capital runs on EC2 instances acros",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Load Balancer Family: ALB vs NLB vs GWLB"
+    }
+  },
+  "95": {
+    "q60": "Mammoth Capital's compliance portal runs on an EC2 Auto Scal",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Auto Scaling Groups (ASG)",
+      "gap": true
+    }
+  },
+  "96": {
+    "q60": "An engineering team at Mammoth Capital runs a multi-Region a",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Route 53: Global Traffic Management",
+      "gap": true
+    }
+  },
+  "97": {
+    "q60": "A FinTech company processes incoming wire transfers through ",
+    "ref": {
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "SQS: The Message Queue (Decoupling Services)",
+      "gap": true
+    }
+  },
+  "98": {
+    "q60": "Mammoth Capital runs a real-time options-pricing service on ",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Auto Scaling Groups (ASG)",
+      "gap": true
+    }
+  },
+  "99": {
+    "q60": "A risk-reporting microservice at Mammoth Capital writes trad",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "Aurora & RDS Proxy"
+    }
+  },
+  "100": {
+    "q60": "A healthcare SaaS provider runs three microservices in an Am",
+    "ref": {
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "Step Functions: Orchestrating Serverless Workflows",
+      "cram": {
+        "sheet": "aws",
+        "q": "Step Functions"
+      }
+    }
+  },
+  "101": {
+    "q60": "Mammoth Capital operates a high-availability web application",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Route 53: Global Traffic Management"
+    }
+  },
+  "102": {
+    "q60": "A media transcoding company runs a stateless video-chunk wor",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Cost Optimization: Reserved, Spot & Savings Plans",
+      "gap": true
+    }
+  },
+  "103": {
+    "q60": "Mammoth Capital stores petabytes of immutable SEC Rule 17a-4",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "S3 Encryption & Cross-Account KMS"
+    }
+  },
+  "104": {
+    "q60": "A financial data vendor exposes a TCP-based FIX protocol ord",
+    "ref": {
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "VPC Endpoints (Gateway vs Interface)",
+      "gap": true
+    }
+  },
+  "105": {
+    "q60": "Mammoth Capital's quant research cluster runs 40 Linux EC2 i",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "EFS & the FSx Family"
+    }
+  },
+  "106": {
+    "q60": "An e-commerce platform runs a containerized checkout API on ",
+    "ref": {
+      "module": "Advanced Compute & Containers",
+      "topic": "ECS vs. EKS vs. Fargate",
+      "gap": true
+    }
+  },
+  "107": {
+    "q60": "Mammoth Capital connects its Chicago trading floor to AWS `u",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Hybrid Connectivity: Site-to-Site VPN vs Direct Connect"
+    }
+  },
+  "108": {
+    "q60": "Mammoth Capital runs a mission-critical trade ledger on Amaz",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "RDS: The Relational Behemoth",
+      "gap": true
+    }
+  },
+  "109": {
+    "q60": "A media transcoding company runs a fleet of EC2 worker insta",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Auto Scaling Groups (ASG)",
+      "gap": true
+    }
+  },
+  "110": {
+    "q60": "Mammoth Capital's compliance board requires a 99.99% availab",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Hybrid Connectivity: Site-to-Site VPN vs Direct Connect",
+      "gap": true
+    }
+  },
+  "111": {
+    "q60": "A healthcare clearinghouse stores incoming HL7 clinical reco",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "S3: The Infinite Hard Drive",
+      "gap": true
+    }
+  },
+  "112": {
+    "q60": "An enterprise media studio is migrating an on-premises NetAp",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "EFS & the FSx Family"
+    }
+  },
+  "113": {
+    "q60": "Mammoth Capital stores customer portfolio positions in an Am",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "DynamoDB: The Speed Demon",
+      "gap": true
+    }
+  },
+  "114": {
+    "q60": "An order fulfillment platform uses an Amazon EventBridge cus",
+    "ref": {
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "EventBridge: The Event Router"
+    }
+  },
+  "115": {
+    "q60": "A financial risk engine pulls simulation jobs from an Amazon",
+    "ref": {
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "SQS: The Message Queue (Decoupling Services)",
+      "cram": {
+        "sheet": "aws",
+        "q": "SQS visibility timeout"
+      },
+      "gap": true
+    }
+  },
+  "116": {
+    "q60": "Mammoth Capital runs its core equities database on Amazon Au",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "Aurora & RDS Proxy",
+      "gap": true
+    }
+  },
+  "117": {
+    "q60": "After reading about ransomware attacks where attackers compr",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "Disaster Recovery Strategies (RTO & RPO)",
+      "gap": true
+    }
+  },
+  "118": {
+    "q60": "A streaming analytics team is deploying a self-managed 21-no",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Networking & Placement"
+    }
+  },
+  "119": {
+    "q60": "Mammoth Capital is connecting its on-premises Windows Active",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Route 53: Global Traffic Management",
+      "gap": true
+    }
+  },
+  "120": {
+    "q60": "Before Mammoth Capital launches its new Multi-AZ derivatives",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Auto Scaling Groups (ASG)",
+      "gap": true
+    }
+  },
+  "121": {
+    "q60": "A retail bank exposes a loan-application webhook to hundreds",
+    "ref": {
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "API Gateway: The Serverless Front Door",
+      "cram": {
+        "sheet": "aws",
+        "q": "API Gateway"
+      }
+    }
+  },
+  "122": {
+    "q60": "A healthcare SaaS team deploys its patient portal using AWS ",
+    "ref": {
+      "module": "Advanced Compute & Containers",
+      "topic": "AWS Batch & Elastic Beanstalk",
+      "gap": true
+    }
+  },
+  "123": {
+    "q60": "Mammoth Capital's cloud security policy requires all product",
+    "ref": {
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "Public vs Private Subnets"
+    }
+  },
+  "124": {
+    "q60": "Mammoth Capital runs a latency-sensitive options pricing dat",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "EBS: The Flash Drive",
+      "cram": {
+        "sheet": "aws",
+        "q": "io2 Block Express"
+      }
+    }
+  },
+  "125": {
+    "q60": "Every morning at 06:30 EST before the stock market opens, Ma",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "EBS: The Flash Drive",
+      "gap": true
+    }
+  },
+  "126": {
+    "q60": "A computational fluid dynamics (CFD) research firm runs tigh",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Networking & Placement"
+    }
+  },
+  "127": {
+    "q60": "A global fintech news portal serves 85,000 requests per seco",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "CloudFront vs. Global Accelerator",
+      "gap": true
+    }
+  },
+  "128": {
+    "q60": "Mammoth Capital's quantitative research team downloads 250 G",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "S3: The Infinite Hard Drive",
+      "gap": true
+    }
+  },
+  "129": {
+    "q60": "A genomics startup runs containerized bioinformatics pipelin",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "EFS & the FSx Family",
+      "gap": true
+    }
+  },
+  "130": {
+    "q60": "Mammoth Capital ingests real-time equity tick data into an A",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Kinesis & Big Data",
+      "gap": true
+    }
+  },
+  "131": {
+    "q60": "A legal-tech SaaS platform stores 180 million court filings ",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Analytics Stack: Athena, Glue, Redshift, EMR, OpenSearch"
+    }
+  },
+  "132": {
+    "q60": "Mammoth Capital's financial crime unit is building a real-ti",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "DynamoDB: The Speed Demon",
+      "gap": true
+    }
+  },
+  "133": {
+    "q60": "A smart-grid energy provider collects voltage, frequency, an",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "DynamoDB: The Speed Demon",
+      "gap": true
+    }
+  },
+  "134": {
+    "q60": "Mammoth Capital runs a Java 21 AWS Lambda function that vali",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "Lambda: The Sniper Rifle",
+      "cram": {
+        "sheet": "aws",
+        "q": "Lambda memory"
+      },
+      "gap": true
+    }
+  },
+  "135": {
+    "q60": "An IoT fleet management company writes sensor status updates",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "DynamoDB: The Speed Demon"
+    }
+  },
+  "136": {
+    "q60": "A global video-on-demand service uses Amazon CloudFront in f",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "CloudFront vs. Global Accelerator",
+      "gap": true
+    }
+  },
+  "137": {
+    "q60": "Mammoth Capital stores 450 TB of raw equity execution logs a",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Analytics Stack: Athena, Glue, Redshift, EMR, OpenSearch"
+    }
+  },
+  "138": {
+    "q60": "A SaaS analytics company runs an Amazon Aurora PostgreSQL cl",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "Aurora & RDS Proxy",
+      "gap": true
+    }
+  },
+  "139": {
+    "q60": "Mammoth Capital runs a real-time enterprise data warehouse o",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Analytics Stack: Athena, Glue, Redshift, EMR, OpenSearch",
+      "gap": true
+    }
+  },
+  "140": {
+    "q60": "Inside an Amazon Redshift data warehouse, Mammoth Capital fr",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Analytics Stack: Athena, Glue, Redshift, EMR, OpenSearch",
+      "gap": true
+    }
+  },
+  "141": {
+    "q60": "A healthcare records startup runs an on-premises hospital im",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "AWS DataSync & Storage Gateway"
+    }
+  },
+  "142": {
+    "q60": "Mammoth Capital's user-profile microservice reads customer K",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "ElastiCache: The Caching Layer (Redis vs Memcached)",
+      "gap": true
+    }
+  },
+  "143": {
+    "q60": "A high-frequency foreign exchange (FX) venue runs UDP market",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Load Balancer Family: ALB vs NLB vs GWLB"
+    }
+  },
+  "144": {
+    "q60": "Mammoth Capital runs a fleet of 150 stateless Go and Python ",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2: The Workhorse",
+      "gap": true
+    }
+  },
+  "145": {
+    "q60": "An ad-tech platform processes real-time bidding streams on `",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Networking & Placement"
+    }
+  },
+  "146": {
+    "q60": "A bioinformatics lab runs nightly genome alignment jobs usin",
+    "ref": {
+      "module": "Advanced Compute & Containers",
+      "topic": "AWS Batch & Elastic Beanstalk"
+    }
+  },
+  "147": {
+    "q60": "Mammoth Capital exposes a REST API through Amazon API Gatewa",
+    "ref": {
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "API Gateway: The Serverless Front Door"
+    }
+  },
+  "148": {
+    "q60": "A document processing company runs a fleet of EC2 worker ins",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Auto Scaling Groups (ASG)",
+      "gap": true
+    }
+  },
+  "149": {
+    "q60": "An e-commerce company is migrating two specialized NoSQL wor",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "DynamoDB: The Speed Demon",
+      "gap": true
+    }
+  },
+  "150": {
+    "q60": "Mammoth Capital's quantitative trading desk runs a competiti",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "CloudFront vs. Global Accelerator"
+    }
+  },
+  "151": {
+    "q60": "A machine learning team at Mammoth Capital trains large fina",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "EFS & the FSx Family"
+    }
+  },
+  "152": {
+    "q60": "A retail analytics company runs an Apache Spark ETL pipeline",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Analytics Stack: Athena, Glue, Redshift, EMR, OpenSearch",
+      "gap": true
+    }
+  },
+  "153": {
+    "q60": "Mammoth Capital allows senior platform engineers to create I",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "IAM Deep Dive: Policies & Federation",
+      "gap": true
+    }
+  },
+  "154": {
+    "q60": "Mammoth Capital hired an external security vendor to audit t",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "Secrets Manager vs Parameter Store & AWS STS",
+      "gap": true
+    }
+  },
+  "155": {
+    "q60": "After migrating a legacy trading application from an on-prem",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "IAM Deep Dive: Policies & Federation",
+      "gap": true
+    }
+  },
+  "156": {
+    "q60": "Mammoth Capital manages 40 AWS accounts under AWS Organizati",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "IAM Deep Dive: Policies & Federation",
+      "gap": true
+    }
+  },
+  "157": {
+    "q60": "Mammoth Capital's AWS Organization has a 'Production' Organi",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "AWS Organizations & SCPs"
+    }
+  },
+  "158": {
+    "q60": "A trading desk in Account A (111122223333) has a custom Ubun",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS KMS & Encryption at Rest",
+      "gap": true
+    }
+  },
+  "159": {
+    "q60": "Mammoth Capital stores client brokerage statements in an Ama",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS KMS & Encryption at Rest",
+      "gap": true
+    }
+  },
+  "160": {
+    "q60": "A financial compliance regulation requires Mammoth Capital t",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "S3 Encryption & Cross-Account KMS"
+    }
+  },
+  "161": {
+    "q60": "Mammoth Capital has a central 500 TB S3 data lake bucket sha",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "S3 Security: Bucket Policies, ACLs & Pre-Signed URLs",
+      "gap": true
+    }
+  },
+  "162": {
+    "q60": "Mammoth Academy sells premium video courses where each 2-hou",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "CloudFront vs. Global Accelerator",
+      "gap": true
+    }
+  },
+  "163": {
+    "q60": "A healthcare fintech partner submits loan applications throu",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "CloudFront vs. Global Accelerator",
+      "gap": true
+    }
+  },
+  "164": {
+    "q60": "Mammoth Capital's public API runs on an internet-facing Appl",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Load Balancer Family: ALB vs NLB vs GWLB",
+      "gap": true
+    }
+  },
+  "165": {
+    "q60": "Mammoth Capital's security policy mandates that EC2 worker i",
+    "ref": {
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "VPC: Your Private Cloud Moat",
+      "gap": true
+    }
+  },
+  "166": {
+    "q60": "Mammoth Capital has 15 VPCs connected via an AWS Transit Gat",
+    "ref": {
+      "module": "High Availability & Scaling",
+      "topic": "Load Balancer Family: ALB vs NLB vs GWLB"
+    }
+  },
+  "167": {
+    "q60": "Mammoth Capital built a proprietary low-latency market-data ",
+    "ref": {
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "VPC Endpoints (Gateway vs Interface)",
+      "gap": true
+    }
+  },
+  "168": {
+    "q60": "Mammoth Capital's Threat Hunting team suspects that a legacy",
+    "ref": {
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "VPC: Your Private Cloud Moat",
+      "gap": true
+    }
+  },
+  "169": {
+    "q60": "A solo developer runs a fleet of 18 Ubuntu EC2 instances in ",
+    "ref": {
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "VPC Endpoints (Gateway vs Interface)",
+      "gap": true
+    }
+  },
+  "170": {
+    "q60": "Mammoth Capital uses an Amazon Aurora PostgreSQL Global Data",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "Secrets Manager vs Parameter Store & AWS STS"
+    }
+  },
+  "171": {
+    "q60": "Mammoth Capital's internal microservices communicate over gR",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS Certificate Manager (ACM): Encryption in Transit"
+    }
+  },
+  "172": {
+    "q60": "At 03:15 UTC, an attacker exploits a deserialization flaw in",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "Threat Detection: GuardDuty, Inspector, Security Hub, Detective"
+    }
+  },
+  "173": {
+    "q60": "Mammoth Capital deploys Python and Go trading containers to ",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "Threat Detection: GuardDuty, Inspector, Security Hub, Detective"
+    }
+  },
+  "174": {
+    "q60": "Mammoth Capital has enabled Amazon GuardDuty, Amazon Inspect",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "Threat Detection: GuardDuty, Inspector, Security Hub, Detective"
+    }
+  },
+  "175": {
+    "q60": "During a hasty migration of historical client onboarding doc",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS WAF, Shield, & Macie"
+    }
+  },
+  "176": {
+    "q60": "Mammoth Capital is preparing for its annual PCI-DSS v4.0 ass",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "Threat Detection: GuardDuty, Inspector, Security Hub, Detective",
+      "gap": true
+    }
+  },
+  "177": {
+    "q60": "Despite training, developers in Mammoth Capital's R&D accoun",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "CloudWatch vs. CloudTrail vs. Config"
+    }
+  },
+  "178": {
+    "q60": "During a regulatory examination, an enforcement attorney cha",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "CloudWatch vs. CloudTrail vs. Config",
+      "gap": true
+    }
+  },
+  "179": {
+    "q60": "Mammoth Capital runs 30 Python microservices on AWS Lambda a",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "Aurora & RDS Proxy"
+    }
+  },
+  "180": {
+    "q60": "Mammoth Capital is building a customer-facing mobile wealth-",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "App vs Workforce Identity: Cognito vs IAM Identity Center"
+    }
+  },
+  "181": {
+    "q60": "During a penetration test on a containerized chart-rendering",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2: The Workhorse",
+      "gap": true
+    }
+  },
+  "182": {
+    "q60": "Mammoth Capital operates 55 AWS accounts inside an AWS Organ",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS WAF, Shield, & Macie",
+      "gap": true
+    }
+  },
+  "183": {
+    "q60": "Mammoth Capital processes multi-party dark-pool trade orders",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2: The Workhorse",
+      "gap": true
+    }
+  },
+  "184": {
+    "q60": "A derivatives clearinghouse subsidiary of Mammoth Capital is",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS KMS & Encryption at Rest",
+      "gap": true
+    }
+  },
+  "185": {
+    "q60": "Mammoth Capital runs 12 containerized risk-modeling microser",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "EFS & the FSx Family",
+      "gap": true
+    }
+  },
+  "186": {
+    "q60": "A junior engineer at Mammoth Capital deployed a containerize",
+    "ref": {
+      "module": "Advanced Compute & Containers",
+      "topic": "ECS vs. EKS vs. Fargate",
+      "gap": true
+    }
+  },
+  "187": {
+    "q60": "Mammoth Capital uses an Amazon DynamoDB Global Table replica",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS KMS & Encryption at Rest",
+      "gap": true
+    }
+  },
+  "188": {
+    "q60": "Mammoth Capital's Threat Intelligence team maintains a dynam",
+    "ref": {
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Route 53: Global Traffic Management",
+      "gap": true
+    }
+  },
+  "189": {
+    "q60": "Mammoth Capital currently spends $85,000/month on On-Demand ",
+    "ref": {
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "Right-Sizing & Savings Plans Architecture"
+    }
+  },
+  "190": {
+    "q60": "Mammoth Capital runs a nightly Monte Carlo portfolio simulat",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Cost Optimization: Reserved, Spot & Savings Plans",
+      "gap": true
+    }
+  },
+  "191": {
+    "q60": "A solo founder runs a SaaS telemetry platform on AWS consist",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2: The Workhorse",
+      "gap": true
+    }
+  },
+  "192": {
+    "q60": "Mammoth Capital ingests 600 million tiny JSON market-tick fi",
+    "ref": {
+      "module": "Security, Identity, & Compliance",
+      "topic": "S3 Encryption & Cross-Account KMS"
+    }
+  },
+  "193": {
+    "q60": "Mammoth Capital's Quantitative Research group stores 800 TB ",
+    "ref": {
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "Right-Sizing & Savings Plans Architecture",
+      "cram": {
+        "sheet": "aws",
+        "q": "Intelligent-Tiering"
+      }
+    }
+  },
+  "194": {
+    "q60": "During a quarterly cloud cost review, Mammoth Capital's FinO",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "S3 Lifecycle Policies & Cost Optimization",
+      "cram": {
+        "sheet": "aws",
+        "q": "multipart upload"
+      },
+      "gap": true
+    }
+  },
+  "195": {
+    "q60": "Mammoth Capital stores 2 PB of 7-year historical equities ti",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "S3 Lifecycle Policies & Cost Optimization",
+      "cram": {
+        "sheet": "aws",
+        "q": "Glacier Flexible Retrieval"
+      }
+    }
+  },
+  "196": {
+    "q60": "Mammoth Capital runs a high-throughput Apache Kafka cluster ",
+    "ref": {
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "The Hidden Bill: Data Transfer & NAT Costs"
+    }
+  },
+  "197": {
+    "q60": "Mammoth Capital distributes daily financial research videos ",
+    "ref": {
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "The Hidden Bill: Data Transfer & NAT Costs"
+    }
+  },
+  "198": {
+    "q60": "Mammoth Capital runs 40 self-managed TimescaleDB nodes on Am",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "EBS: The Flash Drive",
+      "cram": {
+        "sheet": "aws",
+        "q": "gp3"
+      }
+    }
+  },
+  "199": {
+    "q60": "To satisfy a regulatory record-keeping rule, Mammoth Capital",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "EBS: The Flash Drive",
+      "gap": true
+    }
+  },
+  "200": {
+    "q60": "Mammoth Capital uses two Amazon EFS file systems: (1) `efs-r",
+    "ref": {
+      "module": "Storage (S3 & EBS)",
+      "topic": "EFS & the FSx Family"
+    }
+  },
+  "201": {
+    "q60": "Mammoth Capital's core trade-confirmation ledger runs on an ",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "DynamoDB: The Speed Demon"
+    }
+  },
+  "202": {
+    "q60": "Mammoth Capital stores 180 TB of order-routing telemetry rec",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "DynamoDB: The Speed Demon",
+      "gap": true
+    }
+  },
+  "203": {
+    "q60": "Mammoth Capital has 15 non-production Amazon Aurora PostgreS",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "Aurora & RDS Proxy"
+    }
+  },
+  "204": {
+    "q60": "Mammoth Capital's primary settlement database runs on an Ama",
+    "ref": {
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "Aurora & RDS Proxy",
+      "gap": true
+    }
+  },
+  "205": {
+    "q60": "Last month, a developer in Mammoth Capital's Quantitative Sa",
+    "ref": {
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "AWS Cost Tools: Explorer, Budgets & Trusted Advisor",
+      "gap": true
+    }
+  },
+  "206": {
+    "q60": "Mammoth Capital gives each of its 25 quantitative interns a ",
+    "ref": {
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "AWS Cost Tools: Explorer, Budgets & Trusted Advisor"
+    }
+  },
+  "207": {
+    "q60": "Mammoth Capital's Finance Committee wants an automated, exec",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Analytics Stack: Athena, Glue, Redshift, EMR, OpenSearch",
+      "gap": true
+    }
+  },
+  "208": {
+    "q60": "Mammoth Capital wants to right-size 200 long-running `r6i.4x",
+    "ref": {
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "Right-Sizing & Savings Plans Architecture"
+    }
+  },
+  "209": {
+    "q60": "A solo engineer runs a web-scraping and threat-intelligence ",
+    "ref": {
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "Public vs Private Subnets",
+      "gap": true
+    }
+  },
+  "210": {
+    "q60": "Mammoth Capital's compliance analysts run 2,500 ad-hoc SQL q",
+    "ref": {
+      "module": "Management, Governance, & Analytics",
+      "topic": "Analytics Stack: Athena, Glue, Redshift, EMR, OpenSearch"
+    }
+  },
+  "211": {
+    "q60": "Mammoth Capital has an Amazon SQS queue that receives 80 mil",
+    "ref": {
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "Lambda: The Sniper Rifle",
+      "gap": true
+    }
+  },
+  "212": {
+    "q60": "A quantitative researcher maintains a self-hosted Proxmox VE",
+    "ref": {
+      "module": "Migration & Disaster Recovery",
+      "topic": "AWS DataSync & Storage Gateway",
+      "cram": {
+        "sheet": "aws",
+        "q": "Glacier Instant Retrieval"
+      }
+    }
+  }
+}
