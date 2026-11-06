@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="fonts/mammoth-fonts.css?v=202611052223">
+    <link rel="stylesheet" href="fonts/mammoth-fonts.css?v=202611060826">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <link rel="manifest" href="manifest.json">
@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <meta name="description" content="Doom Scroll: a study feed that hits like the feed. Swipe. Read. Answer. Repeat. Every answer feeds your Mammoth Academy review engine.">
     <title>MAMMOTH ACADEMY | Doom Scroll</title>
-    <link rel="stylesheet" href="juice.css?v=202611052223">
+    <link rel="stylesheet" href="juice.css?v=202611060826">
     <style>
         /* ═══════════════════════════════════════════════════════════════════════
            DOOM SCROLL (doom.html, Nov 5 2026). A full-screen vertical feed of study cards for one course pack.
@@ -33,6 +33,12 @@
              flashcards, Daily slides, module done); Michael is the quizmaster (questions, verdicts, traps). Anything
              without a clip falls back to the browser's own speech. DoomDebug.speechList(courseId) is the list the
              build script renders, so the page and the clips can never disagree about the text or the hash.
+           CLIPS (Phase 3, Nov 6): courses/<pack>-clips.json lists short segments of real AWS videos (official channels,
+             start/end in seconds, verified ids) with one question each about what the segment showed. A clip card is a
+             youtube-nocookie iframe behind a big play button (no autoplay; the user taps), then the question through
+             the same answer UI, recorded as <courseId>:clip:<id>. Learn shows up to two of a module's clips interleaved
+             with its boss round; Grind mixes one into ~10% of slots once a module is done, never two in a row.
+             Offline, or when the iframe never loads, the question shows anyway with the "why" line as the prompt.
            ═══════════════════════════════════════════════════════════════════════ */
         :root {
             --bg: #020617; --card: #0d1324; --card2: #121a33;
@@ -128,6 +134,18 @@
         .d-btn.yes { border-color: var(--ok); color: var(--ok); } .d-btn.no { border-color: var(--bad); color: var(--bad); }
         .d-btn.flip { border-color: var(--c); color: var(--c); }
 
+        /* clip: a real video segment behind a play button, then its question */
+        .d-clip h2 { margin: 0; font-size: clamp(1.1rem, 4.4vw, 1.4rem); line-height: 1.3; font-weight: 700; }
+        .d-clip .d-why { margin: 0; color: var(--muted); font-size: .95rem; line-height: 1.5; border-left: 3px solid var(--c); padding-left: 12px; }
+        .d-clip .d-video { position: relative; aspect-ratio: 16 / 9; width: 100%; border-radius: 14px; overflow: hidden; background: #000 center / cover no-repeat; border: 1px solid rgba(255,255,255,.1); }
+        .d-clip .d-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+        .d-clip .d-play { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: linear-gradient(180deg, rgba(2,6,23,.1), rgba(2,6,23,.6)); color: #fff; font-size: clamp(3rem, 14vw, 4.5rem); display: grid; place-items: center; text-shadow: 0 4px 24px rgba(0,0,0,.7); }
+        .d-clip .d-play::after { content: "TAP TO PLAY THE SEGMENT"; position: absolute; bottom: 12px; left: 0; right: 0; font-size: .68rem; letter-spacing: 2px; font-family: var(--mono); color: var(--muted); text-shadow: none; }
+        .d-clip .d-video.playing .d-play { display: none; }
+        .d-clip .d-quiz { display: flex; flex-direction: column; gap: 12px; animation: d-in .25s ease-out; }
+        .d-clip .d-cq { margin: 0; font-size: clamp(1rem, 4vw, 1.25rem); line-height: 1.35; font-weight: 600; }
+        .d-clip.offline .d-why { color: var(--text); font-weight: 600; }
+
         /* fact (a Daily slide, or a slice of a lesson's prose) + anchor */
         .d-fact .d-icon-big { font-size: 2.2rem; line-height: 1; }
         .d-fact h2 { margin: 0; font-size: clamp(1.3rem, 5.2vw, 1.8rem); line-height: 1.2; font-weight: 800; }
@@ -202,7 +220,7 @@
         @media (min-width: 720px) { .d-card { padding-left: 32px; padding-right: 32px; } .d-opt { font-size: 1.02rem; } }
         @media (prefers-reduced-motion: reduce) { .d-swipe, .d-after { animation: none; } }
     </style>
-    <script src="mammoth/mammoth-mode.js?v=202611052223" data-site="academy" data-egg=".d-brand"></script>
+    <script src="mammoth/mammoth-mode.js?v=202611060826" data-site="academy" data-egg=".d-brand"></script>
 </head>
 <body>
     <header class="d-top">
@@ -227,17 +245,17 @@
     <main class="d-feed" id="d-feed" aria-live="polite"></main>
     <div class="d-toast" id="d-toast"></div>
 
-    <script src="courses/aws-saa-c03.js?v=202611052223"></script>
-    <script src="courses/sales-engineering.js?v=202611052223"></script>
-    <script src="courses/psm-scrum.js?v=202611052223"></script>
-    <script src="courses/comptia-securityplus.js?v=202611052223"></script>
-    <script src="courses/comptia-networkplus.js?v=202611052223"></script>
-    <script src="courses/comptia-aplus.js?v=202611052223"></script>
-    <script src="courses/comptia-cloudplus.js?v=202611052223"></script>
-    <script src="course-loader.js?v=202611052223"></script>
-    <script src="game.js?v=202611052223"></script>
-    <script src="juice.js?v=202611052223"></script>
-    <script src="pwa.js?v=202611052223"></script>
+    <script src="courses/aws-saa-c03.js?v=202611060826"></script>
+    <script src="courses/sales-engineering.js?v=202611060826"></script>
+    <script src="courses/psm-scrum.js?v=202611060826"></script>
+    <script src="courses/comptia-securityplus.js?v=202611060826"></script>
+    <script src="courses/comptia-networkplus.js?v=202611060826"></script>
+    <script src="courses/comptia-aplus.js?v=202611060826"></script>
+    <script src="courses/comptia-cloudplus.js?v=202611060826"></script>
+    <script src="course-loader.js?v=202611060826"></script>
+    <script src="game.js?v=202611060826"></script>
+    <script src="juice.js?v=202611060826"></script>
+    <script src="pwa.js?v=202611060826"></script>
     <script>
     (function () {
         'use strict';
@@ -245,8 +263,9 @@
         const feed = $('#d-feed'), pick = $('#d-pick'), toastEl = $('#d-toast');
         const LETTERS = 'ABCDEF';
         const WIN_EVERY = 20;            // Grind: a checkpoint card after this many answers in the session
-        const MIX = { due: 0.4, question: 0.45, flash: 0.25 };   // Grind: due reviews first (40% of slots while any are due), then question 45% / flashcard 25% / fact 30%
-        const LEARN = { dueEvery: 4, examEvery: 6, boss: 3, chunk: 520 };   // Learn: a due review every 4th slot, an unlocked exam question every 6th, boss round size, chars per fact card
+        const MIX = { due: 0.4, question: 0.45, flash: 0.25, clip: 0.10 };   // Grind: due reviews first (40% of slots while any are due), then question 45% / flashcard 25% / fact 30%; a real clip in ~10% of slots once a module is done
+        const LEARN = { dueEvery: 4, examEvery: 6, boss: 3, chunk: 520, clips: 2 };   // Learn: a due review every 4th slot, an unlocked exam question every 6th, boss round size, chars per fact card, clips per module-done
+        const CLIP_FILES = ['courses/aws-clips.json'];   // real-video segments per pack (see the header comment); loaded at start, non-blocking
         const LEARN_KEY = 'st_doom_learn';   // {courseId: {m, i, done[]}}; st_ so Sync & Backup carries it (merge rule in sync.js)
         const WIN_LINES = [
             'Certifications don\'t make experts. Pressure does.',
@@ -282,12 +301,12 @@
         let touched = false;   // Chrome blocks navigator.vibrate before the first tap or key, so juice waits for one
         ['pointerdown', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, () => { touched = true; }, { once: true, passive: true }));
         const S = { mode: 'learn', courseId: null, pack: null, unseen: [], later: [], flash: [], facts: [], queued: [], used: new Set(),
-                    answered: 0, correct: 0, wins: 0, cards: 0, flashIdx: 0, factIdx: 0, slot: 0, seq: null, seqM: -1, cursor: null };
+                    answered: 0, correct: 0, wins: 0, cards: 0, flashIdx: 0, factIdx: 0, slot: 0, seq: null, seqM: -1, cursor: null, clipsUsed: new Set(), lastKind: '' };
 
         function build(courseId) {
             const p = packOf(courseId);
             if (!p) return false;
-            Object.assign(S, { courseId, pack: p, queued: [], used: new Set(), answered: 0, correct: 0, wins: 0, cards: 0, flashIdx: 0, factIdx: 0, slot: 0, seq: null, seqM: -1 });
+            Object.assign(S, { courseId, pack: p, queued: [], used: new Set(), answered: 0, correct: 0, wins: 0, cards: 0, flashIdx: 0, factIdx: 0, slot: 0, seq: null, seqM: -1, clipsUsed: new Set(), lastKind: '' });
             document.documentElement.style.setProperty('--c', p.meta.color || '#00f2ff');
             // Questions: exam bank + lesson quizzes, as Game ids (one per distinct text).
             const ids = new Set();
@@ -321,9 +340,23 @@
             fcFront: fc => [{ role: 'teach', text: fc.front }],
             fcBack: fc => [{ role: 'teach', text: fc.back + (fc.analogy ? ' ' + fc.analogy : '') }],
             daily: (l, sl) => [{ role: 'teach', text: (l.concept || '') + '. ' + (sl.title || '') + '. ' + text(sl.body) + (sl.anchor ? ' ' + sl.anchor : '') }],
-            moddone: (m, line) => [{ role: 'teach', text: `Module ${m + 1} done.` }, { role: 'teach', text: line }]
+            moddone: (m, line) => [{ role: 'teach', text: `Module ${m + 1} done.` }, { role: 'teach', text: line }],
+            clip: c => [{ role: 'teach', text: 'A real one. ' + c.title + '. Watch for this. ' + c.why }]
         };
         const DONE_LAST = 'Every module learned. The feed is all Grind from here: due reviews first, then everything.';
+
+        // ---------- clips: real video segments per pack (courses/<pack>-clips.json), with one question each ----------
+        const CLIPS = {};   // courseId -> [clip]
+        const validClip = c => !!(c && c.id && c.youtubeId && c.module && c.title && c.q && c.q.q && Array.isArray(c.q.opts) && c.q.opts.length >= 2 && (c.end | 0) > (c.start | 0));
+        const clipsReady = Promise.all(CLIP_FILES.map(f => fetch(f, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null)
+            .then(j => { if (j && j.course && Array.isArray(j.clips)) CLIPS[j.course] = j.clips.filter(validClip); }).catch(() => { })));
+        const modIndex = title => (S.pack && S.pack.modules || []).findIndex(m => m.title === title);
+        const clipsFor = m => (CLIPS[S.courseId] || []).filter(c => !S.clipsUsed.has(c.id) && modIndex(c.module) === m);
+        function pickClip() {   // Grind: an unseen clip from a module that Learn has finished (any module once all are done)
+            const done = doneSet(), all = allDone();
+            const cand = (CLIPS[S.courseId] || []).filter(c => !S.clipsUsed.has(c.id) && (all || done.has(modIndex(c.module))));
+            return cand.length ? cand[Math.floor(Math.random() * cand.length)] : null;
+        }
 
         // ---------- Learn: the pointer, the module → question map, the teach sequence ----------
         function learnState(courseId) {
@@ -431,6 +464,7 @@
             if (S.answered && S.answered % WIN_EVERY === 0 && S.wins < Math.floor(S.answered / WIN_EVERY)) { S.wins++; return { kind: 'win' }; }
             const due = dueList();
             if (due.length && Math.random() < MIX.due) return { kind: 'q', id: due[0], due: true };
+            if (S.lastKind !== 'clip' && doneSet().size && Math.random() < MIX.clip) { const c = pickClip(); if (c) return { kind: 'clip', clip: c }; }
             const r = Math.random();
             if (r < MIX.question || (!S.flash.length && !S.facts.length)) {
                 const id = popQ();
@@ -468,8 +502,10 @@
             else if (spec.kind === 'anchor') card = anchorCard(spec);
             else if (spec.kind === 'cover') card = coverCard(spec);
             else if (spec.kind === 'moddone') card = moduleDoneCard(spec);
+            else if (spec.kind === 'clip') card = clipCard(spec.clip);
             else card = winCard(spec);
             if (!card) return null;
+            S.lastKind = spec.kind;
             card.dataset.idx = String(S.cards++);
             if (spec.ptr) card._ptr = spec.ptr;
             card.appendChild(el('<div class="d-swipe">SWIPE UP ↑</div>'));
@@ -493,11 +529,21 @@
             const card = el(`<article class="d-card d-q" data-kind="q" data-src="${e.source}">
                 <div class="d-meta"><span class="d-dom">${esc(e.domain || e.source)}</span>${boxLabel(spec.id)}${spec.boss ? '<span class="d-box boss">BOSS ROUND</span>' : ''}<span>${e.source === 'exam' ? 'exam bank' : 'lesson quiz'}</span>${multi ? '<span class="d-box">CHOOSE ' + q.ans.length + '</span>' : ''}</div>
                 <h2 class="${String(q.q).length > 220 ? 'long' : ''}">${esc(q.q)}</h2>
-                <div class="d-opts"></div>
-                ${multi ? '<button class="d-check" disabled>CHECK</button>' : ''}
             </article>`);
-            const opts = $('.d-opts', card);
+            attachQuiz(card, q, spec.id);
+            card._say = SAY.question(q);
+            return card;
+        }
+
+        // The answer UI shared by exam/lesson questions and the clip questions: the options, CHECK for a multi-answer, the
+        // verdict with exp and the picked option's trap, Game.Review.record(qid), juice, narration. host = where the options
+        // and the verdict go (the card itself for a question card; the .d-quiz box of a clip card). Sets card._grade for the keys.
+        function attachQuiz(card, q, qid, host) {
+            const multi = Array.isArray(q.ans), box = host || card;
+            const opts = el('<div class="d-opts"></div>');
+            box.appendChild(opts);
             (q.opts || []).forEach((o, i) => opts.appendChild(el(`<button class="d-opt" data-i="${i}"><span class="k">${LETTERS[i] || i + 1}</span><span>${esc(o)}</span></button>`)));
+            if (multi) box.appendChild(el('<button class="d-check" disabled>CHECK</button>'));
             const sel = new Set();
             let done = false;
             const grade = picked => {
@@ -510,8 +556,8 @@
                     else if (picked.includes(i)) b.classList.add('wrong');
                     else b.classList.add('dim');
                 });
-                const chk = $('.d-check', card); if (chk) chk.remove();
-                const res = Game.Review.record(spec.id, right);
+                const chk = $('.d-check', box); if (chk) chk.remove();
+                const res = Game.Review.record(qid, right);
                 S.answered++; if (right) S.correct++;
                 const after = el(`<div class="d-after ${right ? 'good' : 'bad'}">
                     <div class="d-verdict">${right ? (res && res.mastered ? 'MASTERED ✔' : res && res.rematch ? 'REMATCH WON ✔' : 'CORRECT ✔') : 'TRAP ✘'}</div>
@@ -526,7 +572,7 @@
                     more.addEventListener('click', () => { otherTraps.forEach(x => after.appendChild(el(`<p class="d-trap"><b>${LETTERS[x.i]}</b> ${esc(x.t)}</p>`))); more.remove(); });
                     after.appendChild(more);
                 }
-                card.insertBefore(after, $('.d-swipe', card));
+                if (host) box.appendChild(after); else card.insertBefore(after, $('.d-swipe', card));
                 card.classList.add('answered');
                 try { Juice.react(res, card); } catch (err) { }
                 stats();
@@ -539,14 +585,72 @@
                 const i = +b.dataset.i;
                 if (!multi) return grade([i]);
                 if (sel.has(i)) { sel.delete(i); b.classList.remove('sel'); } else if (sel.size < q.ans.length) { sel.add(i); b.classList.add('sel'); }
-                $('.d-check', card).disabled = sel.size !== q.ans.length;
+                $('.d-check', box).disabled = sel.size !== q.ans.length;
             });
-            const chk = $('.d-check', card);
+            const chk = $('.d-check', box);
             if (chk) chk.addEventListener('click', () => grade([...sel]));
             card._grade = i => { if (!done && !multi && i < (q.opts || []).length) grade([i]); };
-            card._say = SAY.question(q);
+        }
+
+        // A clip card: title + "why" line, the segment behind a play button (the iframe is only created on tap, so nothing
+        // autoplays and phones allow the sound), then the question in the same answer UI, recorded as <courseId>:clip:<id>.
+        // The question appears when the player reports the segment ended (enablejsapi messages), on DONE WATCHING, when
+        // the iframe has not loaded 8 s after the tap, or right away when the device is offline (the why line is the prompt).
+        const mmss = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+        const YT_MSG = s => { try { return JSON.stringify(s); } catch (e) { return ''; } };
+        function clipCard(c) {
+            S.clipsUsed.add(c.id);
+            const m = modIndex(c.module), dur = (c.end | 0) - (c.start | 0);
+            const origin = /^https?:/.test(location.origin) ? '&origin=' + encodeURIComponent(location.origin) : '';
+            const src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(c.youtubeId) + '?start=' + (c.start | 0) + '&end=' + (c.end | 0)
+                + '&rel=0&modestbranding=1&playsinline=1&autoplay=1&enablejsapi=1' + origin;
+            const offline = navigator.onLine === false;
+            const card = el(`<article class="d-card d-clip${offline ? ' offline' : ''}" data-kind="clip" data-clip="${esc(c.id)}">
+                <div class="d-meta"><span class="d-dom">${m >= 0 ? 'Module ' + (m + 1) : esc(c.module)}</span><span class="d-box">REAL VIDEO · ${mmss(dur)}</span>${c.topic ? '<span>' + esc(c.topic) + '</span>' : ''}</div>
+                <h2>${esc(c.title)}</h2>
+                <p class="d-why">${esc(c.why)}</p>
+                <div class="d-video" data-src="${esc(src)}" style="background-image:url(https://i.ytimg.com/vi/${encodeURIComponent(c.youtubeId)}/hqdefault.jpg)"><button class="d-play" aria-label="Play the segment">▶</button></div>
+                <div class="d-row"><button class="d-btn flip d-done">DONE WATCHING →</button></div>
+                <div class="d-quiz hidden"></div>
+            </article>`);
+            const video = $('.d-video', card), quiz = $('.d-quiz', card);
+            let shown = false, loadT = 0;
+            const showQuiz = () => {
+                if (shown) return; shown = true; card._quizShown = true;
+                clearTimeout(loadT);
+                const row = $('.d-row', card); if (row) row.remove();
+                quiz.classList.remove('hidden');
+                quiz.appendChild(el('<div class="d-kind">WHAT DID IT SHOW?</div>'));
+                quiz.appendChild(el(`<h3 class="d-cq">${esc(c.q.q)}</h3>`));
+                attachQuiz(card, c.q, S.courseId + ':clip:' + c.id, quiz);
+                say(SAY.question(c.q), true);
+                quiz.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            };
+            $('.d-play', card).addEventListener('click', () => {
+                if (card._frame) return;
+                stopAll();                                  // narration never talks over the video
+                const f = el(`<iframe src="${esc(src)}" title="${esc(c.title)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`);
+                card._frame = f;
+                video.appendChild(f); video.classList.add('playing');
+                loadT = setTimeout(() => { if (!f._loaded && !shown) { toast('The video did not load. Answer from the hint.'); showQuiz(); } }, 8000);
+                f.addEventListener('load', () => { f._loaded = true; clearTimeout(loadT); try { f.contentWindow.postMessage(YT_MSG({ event: 'listening', id: c.id, channel: 'widget' }), '*'); } catch (e) { } });
+            });
+            $('.d-done', card).addEventListener('click', showQuiz);
+            card._showQuiz = showQuiz;
+            card._say = SAY.clip(c);
+            if (offline) { video.remove(); showQuiz(); }
             return card;
         }
+        // The YouTube player (enablejsapi) posts {event:'onStateChange', info:0} when the segment ends; a card's frame is matched by its window.
+        window.addEventListener('message', ev => {
+            if (!/(^|\.)youtube(-nocookie)?\.com$/.test(String(ev.origin).replace(/^https?:\/\//, ''))) return;
+            let d = ev.data; if (typeof d === 'string') { try { d = JSON.parse(d); } catch (e) { return; } }
+            if (!d || d.event !== 'onStateChange' || d.info !== 0) return;
+            const card = [...feed.querySelectorAll('.d-clip')].find(x => x._frame && x._frame.contentWindow === ev.source);
+            if (card && card._showQuiz) card._showQuiz();
+        });
+        const pauseVideo = card => { if (card && card._frame) { try { card._frame.contentWindow.postMessage(YT_MSG({ event: 'command', func: 'pauseVideo', args: '' }), '*'); } catch (e) { } } };
+        const videoBusy = card => !!(card && card._frame && !card._quizShown);   // a segment is playing: narration waits
 
         function flashCard(fc) {
             const card = el(`<article class="d-card d-fc" data-kind="fc">
@@ -639,7 +743,14 @@
             const n = (S.pack.exam || []).filter(q => moduleOf(Game.entry(Game.qid(q))) === spec.m).length;
             // The boss round: up to three of this module's exam questions, right after this card.
             const boss = []; for (let k = 0; k < LEARN.boss; k++) { const id = popExam(spec.m); if (!id) break; boss.push({ kind: 'q', id, boss: true }); }
-            S.queued.unshift(...boss);
+            // Up to two of this module's real clips, interleaved with the boss round (one clip after each boss question;
+            // with no boss question, just one clip, so clips never run back to back). The rest surface in Grind later.
+            const clips = shuffle(clipsFor(spec.m)).slice(0, LEARN.clips);
+            const round = [];
+            boss.forEach((b, i) => { round.push(b); if (clips[i]) round.push({ kind: 'clip', clip: clips[i] }); });
+            if (!boss.length && clips[0]) round.push({ kind: 'clip', clip: clips[0] });
+            const nClips = round.filter(x => x.kind === 'clip').length;
+            S.queued.unshift(...round);
             const left = mods.length - doneSet().size;
             const line = left ? DONE_LINES[spec.m % DONE_LINES.length] : DONE_LAST;
             const card = el(`<article class="d-card d-win" data-kind="moddone">
@@ -652,7 +763,8 @@
                     <div class="d-tile"><b>${Game.Day.streak().days}</b><span>day streak</span></div>
                 </div>
                 <div class="d-line">${esc(line)}</div>
-                ${boss.length ? '<div class="d-kind" style="color:var(--bad)">BOSS ROUND: ' + boss.length + ' EXAM QUESTIONS NEXT</div>' : ''}
+                ${boss.length ? '<div class="d-kind" style="color:var(--bad)">BOSS ROUND: ' + boss.length + ' EXAM QUESTION' + (boss.length === 1 ? '' : 'S') + (nClips ? ' + ' + nClips + ' REAL CLIP' + (nClips === 1 ? '' : 'S') : '') + ' NEXT</div>'
+                    : nClips ? '<div class="d-kind" style="color:var(--c)">A REAL CLIP NEXT</div>' : ''}
             </article>`);
             if (touched) { try { Juice.fire('daily', card); } catch (e) { } }
             card._say = SAY.moddone(spec.m, line);
@@ -688,13 +800,14 @@
             entries.forEach(en => {
                 if (en.intersectionRatio < 0.6) return;
                 if (active === en.target) return;
+                pauseVideo(active);   // scrolling past a playing clip pauses it, so it never talks under the next card
                 active = en.target;
                 if (active._ptr) {   // Learn: remember the card you reached, so a reload continues here
                     const st = learnState(), p = active._ptr;
                     if (!st.done.includes(p.m) && (p.m !== st.m || p.i > st.i)) saveLearn({ m: p.m, i: p.i, done: st.done });
                 }
                 ensureAhead();
-                if (voiceOn) say(active._say, true);
+                if (voiceOn && !videoBusy(active)) say(active._say, true);
             });
         }, { root: feed, threshold: [0.6] });
 
@@ -763,7 +876,7 @@
         $('#d-voice').addEventListener('click', function () {
             voiceOn = !voiceOn; this.setAttribute('aria-pressed', String(voiceOn));
             store.put('ma_doom_voice', voiceOn ? '1' : '0');
-            if (voiceOn && active) say(active._say, true); else if (!voiceOn) stopAll();
+            if (voiceOn && active && !videoBusy(active)) say(active._say, true); else if (!voiceOn) stopAll();
         });
         $('#d-sound').addEventListener('click', function () {
             const on = !Juice.settings().sound; Juice.set('sound', on);
@@ -821,8 +934,9 @@
             if (!pick.classList.contains('hidden')) return;
             if (ev.key === 'ArrowDown' || ev.key === ' ' || ev.key === 'j' || ev.key === 'PageDown') { ev.preventDefault(); nextCard(); }
             else if (ev.key === 'ArrowUp' || ev.key === 'k' || ev.key === 'PageUp') { ev.preventDefault(); prevCard(); }
+            else if (ev.key === 'Enter' && active && active._showQuiz) active._showQuiz();   // clip: done watching
             else if (/^[1-6]$/.test(ev.key) && active) {
-                if (active.dataset.kind === 'q' && active._grade) active._grade(+ev.key - 1);
+                if ((active.dataset.kind === 'q' || active.dataset.kind === 'clip') && active._grade) active._grade(+ev.key - 1);
                 else if (active.dataset.kind === 'fc') { if (active._flip && !$('.d-btn.yes', active)) active._flip(); else { const b = $(ev.key === '1' ? '.d-btn.yes' : '.d-btn.no', active); if (b) b.click(); } }
             }
             else if (ev.key === 'f' && active && active._flip) active._flip();
@@ -848,9 +962,12 @@
                 (p.exam || []).forEach(q => { add(SAY.question(q)); add(SAY.verdict(true, q)); add(SAY.verdict(false, q)); (q.whyWrong || []).forEach(w => { if (w) add(SAY.trap(w)); }); });
                 (p.flashcards || []).forEach(fc => { if (fc.front && fc.back) { add(SAY.fcFront(fc)); add(SAY.fcBack(fc)); } });
                 (p.daily || []).forEach(l => (l.slides || []).forEach(sl => add(SAY.daily(l, sl))));
+                (CLIPS[courseId] || []).forEach(c => { add(SAY.clip(c)); add(SAY.question(c.q)); add(SAY.verdict(true, c.q)); add(SAY.verdict(false, c.q)); });
                 return out;
             },
-            manifest: () => manifest
+            manifest: () => manifest,
+            clips: courseId => CLIPS[courseId] || [],
+            clipsReady
         };
 
         // ---------- boot ----------
@@ -861,7 +978,8 @@
         const qs = new URLSearchParams(location.search);
         setMode(qs.get('mode') || store.raw('ma_doom_mode') || 'learn');
         const want = qs.get('track');
-        if (want && packOf(want)) start(want); else showPick();
+        // A deep link starts the feed once the clip lists are in (a local fetch; 1.5 s at most, so a slow network never holds the feed).
+        if (want && packOf(want)) Promise.race([clipsReady, new Promise(r => setTimeout(r, 1500))]).then(() => start(want)); else showPick();
     })();
     </script>
 </body>

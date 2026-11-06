@@ -1,0 +1,691 @@
+{
+  "course": "aws-saa-c03",
+  "about": "Doom Scroll clip cards (Phase 3, Nov 6 2026): short segments of real AWS videos, each followed by one question about what the segment showed. Only official AWS YouTube channels (Amazon Web Services, AWS Events). Every youtubeId was verified on the date given: oEmbed returned 200, the watch page reported status OK and playableInEmbed true, and start/end were chosen from the video's own captions. Times are seconds; segments run 45 to 150 seconds. module = exact module title in courses/aws-saa-c03.js; topic = exact topic title in that module (optional).",
+  "verified": "2026-11-06",
+  "clips": [
+    {
+      "id": "cloud-capex-opex",
+      "module": "Cloud 101 (The Absolute Foundation)",
+      "topic": "The Financial Shift: CapEx vs OpEx",
+      "youtubeId": "mxT233EdY5c",
+      "start": 64,
+      "end": 185,
+      "title": "Trading CapEx for OpEx",
+      "why": "Listen for the exact phrase AWS uses for the money shift, capital expense traded for variable expense, and what deploying globally in minutes buys you.",
+      "q": {
+        "q": "According to the narrator, what does cloud computing let you trade?",
+        "opts": ["Variable expense for fixed monthly fees", "Hardware leases for software licenses", "Capital expense for variable expense", "Regional capacity for a single data center"],
+        "ans": 2,
+        "exp": "You stop making large upfront investments in hardware and pay for IT as you consume it; the clip also notes you can grow or shrink capacity instantly and deploy to new Regions in minutes."
+      },
+      "channel": "Amazon Web Services",
+      "source": "What is Cloud Computing? | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "cloud-region-anatomy",
+      "module": "Cloud 101 (The Absolute Foundation)",
+      "topic": "The Physical Cloud (Regions & AZs)",
+      "youtubeId": "PAr1DY82ymE",
+      "start": 181,
+      "end": 262,
+      "title": "Inside an AWS Region (re:Invent 2024)",
+      "why": "Watch for how far apart Availability Zones sit, what they do not share, and why AWS deploys changes one AZ at a time.",
+      "q": {
+        "q": "How far apart does the speaker say Availability Zones are kept within a Region?",
+        "opts": ["In the same building, on separate racks", "About 60 miles (100 km) apart, on separate flood plains and power grids", "At least 1,000 km apart, in different countries", "Exactly 10 km apart, sharing one electrical grid"],
+        "ans": 1,
+        "exp": "AZs are meaningfully distant (about 60 miles) with separate flood plains, electrical grids, power and cooling so one disaster cannot take out two of them, yet close enough to keep latency inside the Region low. Service changes roll out one AZ at a time for the same reason."
+      },
+      "channel": "AWS Events",
+      "source": "AWS re:Invent 2024 - Anatomy of an AWS Region (ARC204)",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "ha-sticky-sessions",
+      "module": "High Availability & Scaling",
+      "topic": "The Load Balancer (Traffic Cop)",
+      "youtubeId": "uRmdTJva7vI",
+      "start": 41,
+      "end": 150,
+      "title": "Sticky sessions on the load balancer",
+      "why": "Watch why one instance is a bad idea, why adding instances needs a load balancer, and what the ELB trick for keeping a user's session is called.",
+      "q": {
+        "q": "What does the clip call the load balancer setting that keeps sending one user to the same EC2 instance?",
+        "opts": ["Round robin", "Connection draining", "Cross-zone balancing", "Sticky sessions"],
+        "ans": 3,
+        "exp": "Sticky sessions pin a session to one instance with a single checkbox. Simple, but if that server dies its sessions are lost, which is why the episode later moves session data into ElastiCache."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Back to Basics: Managing Your Web Application's Session",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "ha-asg-target-tracking",
+      "module": "High Availability & Scaling",
+      "topic": "Auto Scaling Groups (ASG)",
+      "youtubeId": "5Hq5YxOrKYs",
+      "start": 305,
+      "end": 381,
+      "title": "Auto Scaling that follows the demand curve",
+      "why": "Catch which scaling policy the speaker recommends, which metrics it tracks, and the two other policy types he names.",
+      "q": {
+        "q": "Which scaling policy does the speaker strongly recommend for following demand?",
+        "opts": ["Target tracking on a metric like average CPU or request count per target", "Manual scaling from the console", "A fixed schedule only", "Scaling only on EC2 status checks"],
+        "ans": 0,
+        "exp": "Target tracking keeps a metric at the value you choose (around 70% CPU for availability, 40% for cost, or a mix); step scaling uses CloudWatch alarm bounds and predictive scaling forecasts the next 48 hours from history."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Back to Basics: Designing for Failure with EC2",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "vpc-public-private",
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "Public vs Private Subnets",
+      "youtubeId": "t7keOHhYYE0",
+      "start": 52,
+      "end": 160,
+      "title": "Whiteboarding your first VPC",
+      "why": "Watch what gives a public subnet its internet path, what controls traffic between subnets, and which gateway reaches your data center.",
+      "q": {
+        "q": "On the whiteboard, what gives the public subnet access to and from the internet?",
+        "opts": ["A NAT gateway in the private subnet", "The virtual private gateway", "The internet gateway on the VPC", "A security group rule"],
+        "ans": 2,
+        "exp": "Public subnets route through the internet gateway; the private subnet talks to the public one through VPC routing, policed by network ACLs and security groups; the virtual private gateway is for VPN tunnels or Direct Connect back to your data center."
+      },
+      "channel": "Amazon Web Services",
+      "source": "AWS SA Whiteboarding | Amazon Virtual Private Cloud (VPC)",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "vpc-privatelink",
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "VPC Endpoints (Gateway vs Interface)",
+      "youtubeId": "_mHLkFeTuFo",
+      "start": 0,
+      "end": 121,
+      "title": "PrivateLink: services that appear inside your VPC",
+      "why": "Listen for where the traffic travels and which three things you no longer need once it stays on the AWS network.",
+      "q": {
+        "q": "With AWS PrivateLink, which of these does the clip say your VPC no longer needs to reach a service?",
+        "opts": ["A route table", "An internet gateway, NAT device or public IP address", "A security group", "An Availability Zone"],
+        "ans": 1,
+        "exp": "PrivateLink routes traffic between VPCs and services over the AWS network, so no internet gateway, NAT device or public IP is required; it also works over Direct Connect for on-premises access."
+      },
+      "channel": "Amazon Web Services",
+      "source": "AWS PrivateLink",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "vpc-resilient-baseline",
+      "module": "The Networking Thunderdome (VPC)",
+      "topic": "VPC: Your Private Cloud Moat",
+      "youtubeId": "iO3_8iYp2Zs",
+      "start": 125,
+      "end": 201,
+      "title": "A resilient VPC baseline",
+      "why": "Count the minimum Availability Zones, notice the warning about IP ranges, and spot the shared-exit pattern for internet traffic.",
+      "q": {
+        "q": "What pattern does the clip suggest for outbound internet traffic from many VPCs?",
+        "opts": ["A NAT gateway in every subnet of every VPC", "Public IPs on every instance", "VPC peering to a single bastion host", "A Transit Gateway with a shared egress VPC holding the NAT and internet gateways"],
+        "ans": 3,
+        "exp": "Transit Gateway handles inter-VPC traffic and one egress VPC centralizes the NAT and internet gateways instead of duplicating them per VPC; the VPC itself should span at least two AZs with an IP range that will not overlap partners."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Back to Basics: Start Your AWS Journey with a Resilient Infrastructure Baseline Architecture",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "compute-ec2-nitro",
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2: The Workhorse",
+      "youtubeId": "t48aVpw6kkI",
+      "start": 62,
+      "end": 156,
+      "title": "EC2 and the Nitro hypervisor",
+      "why": "Notice what the Nitro System is described as: a lightweight hypervisor that offloads virtualization work to dedicated hardware.",
+      "q": {
+        "q": "What does the clip say the AWS Nitro System does?",
+        "opts": ["Offloads virtualization functions to dedicated hardware so instances get nearly all of the server's resources", "Replaces EC2 instances with containers", "Stores instance data on S3 for durability", "Caches web content at edge locations"],
+        "ans": 0,
+        "exp": "Nitro is the lightweight hypervisor under modern EC2; it hands practically all the server's resources to your instances, which also run on AWS Graviton and other specialized chips."
+      },
+      "channel": "Amazon Web Services",
+      "source": "What is Amazon EC2? | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "compute-lambda-90s",
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "Lambda: The Sniper Rifle",
+      "youtubeId": "qlkr0h9JQ6U",
+      "start": 0,
+      "end": 97,
+      "title": "Lambda in 90 seconds",
+      "why": "Notice what Lambda scales on and what you pay for.",
+      "q": {
+        "q": "According to the clip, how does Lambda scale?",
+        "opts": ["You add instances to an Auto Scaling group", "It scales once a day on a schedule", "Automatically, up and down with incoming requests", "You choose a fixed number of servers per Region"],
+        "ans": 2,
+        "exp": "Lambda runs code without provisioning servers, scales automatically with incoming requests and bills only for the resources you use."
+      },
+      "channel": "Amazon Web Services",
+      "source": "AWS Lambda explained in 90 seconds | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "compute-spot-rules",
+      "module": "Compute (EC2 & Lambda)",
+      "topic": "EC2 Cost Optimization: Reserved, Spot & Savings Plans",
+      "youtubeId": "C0XyPoLsUN0",
+      "start": 27,
+      "end": 100,
+      "title": "Two rules of Spot Instances",
+      "why": "Catch what defines a Spot pool and how much warning you get before an interruption.",
+      "q": {
+        "q": "How much warning does EC2 give before reclaiming a Spot Instance?",
+        "opts": ["Thirty seconds", "Two minutes", "One hour", "None"],
+        "ans": 1,
+        "exp": "Each instance type, size and Availability Zone is its own Spot pool with its own price; when AWS needs the capacity back you get a two-minute warning in the instance status and metadata."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Amazon EC2 Spot Instances: Spot Rules",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "storage-ebs-volumes",
+      "module": "Storage (S3 & EBS)",
+      "topic": "EBS: The Flash Drive",
+      "youtubeId": "b6vaNi1SD7Y",
+      "start": 16,
+      "end": 109,
+      "title": "EBS volume types and snapshots",
+      "why": "Note which volume type is the balanced default and which one is named for latency-sensitive databases.",
+      "q": {
+        "q": "Which EBS volume does the clip pair with SAP HANA, Oracle and SQL Server?",
+        "opts": ["gp3", "Instance store", "Magnetic standard", "io2 Block Express"],
+        "ans": 3,
+        "exp": "gp3 balances price and performance for everyday transactional workloads; io2 Block Express delivers consistent sub-millisecond latency for the demanding databases. Snapshots give point-in-time copies for DR and cross-Region migration."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Introduction to Amazon EBS | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "storage-glacier-classes",
+      "module": "Storage (S3 & EBS)",
+      "topic": "S3 Lifecycle Policies & Cost Optimization",
+      "youtubeId": "gMzVi7Z8zBo",
+      "start": 18,
+      "end": 90,
+      "title": "The three Glacier classes",
+      "why": "Match each Glacier class to its retrieval time as the narrator walks down the price ladder.",
+      "q": {
+        "q": "Which Glacier class returns data in milliseconds?",
+        "opts": ["S3 Glacier Instant Retrieval", "S3 Glacier Flexible Retrieval", "S3 Glacier Deep Archive", "S3 Standard-IA"],
+        "ans": 0,
+        "exp": "Instant Retrieval is milliseconds, Flexible Retrieval is minutes to hours (backups, DR), Deep Archive is hours at the lowest cost in the cloud (compliance archives); all three offer 11 nines of durability."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Introduction to the Amazon S3 Glacier Storage Classes | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "storage-efs-shared",
+      "module": "Storage (S3 & EBS)",
+      "topic": "EFS & the FSx Family",
+      "youtubeId": "6ZIPBC78U0s",
+      "start": 20,
+      "end": 125,
+      "title": "EFS: one file system, many instances",
+      "why": "Catch the protocol EFS speaks, how it is billed, and where it keeps copies of your data.",
+      "q": {
+        "q": "What protocol does the clip say Amazon EFS uses?",
+        "opts": ["iSCSI", "SMB only", "NFS version 4", "The S3 REST API"],
+        "ans": 2,
+        "exp": "EFS is a shared NFSv4 file system for EC2: many instances mount it at once, it grows and shrinks automatically, you pay only for space used, and data is replicated across multiple AZs in the Region."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Introduction to Amazon Elastic File System (EFS) - Cloud File Storage on AWS",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "db-rds-multiaz",
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "RDS: The Relational Behemoth",
+      "youtubeId": "_MROZtLtCcA",
+      "start": 13,
+      "end": 80,
+      "title": "RDS Multi-AZ: one standby or two",
+      "why": "Count the Availability Zones each option spans and compare the two failover times.",
+      "q": {
+        "q": "What does the two-readable-standby option add over one standby?",
+        "opts": ["Asynchronous replication to another Region", "Three AZs, read endpoints and failover typically under 35 seconds", "Cheaper storage with no failover", "A single AZ with faster disks"],
+        "ans": 1,
+        "exp": "One standby replicates synchronously to a second AZ with failover as quick as 60 seconds; two readable standbys span three AZs, add read capacity and lower write latency, and fail over in under 35 seconds. Both give zero data loss."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Introduction to Amazon RDS Multi-AZ deployments | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "db-dynamodb-scale",
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "DynamoDB: The Speed Demon",
+      "youtubeId": "IED0R9rh48I",
+      "start": 8,
+      "end": 85,
+      "title": "DynamoDB at any scale",
+      "why": "Catch the latency promise, the pricing model and the multi-Region feature.",
+      "q": {
+        "q": "What does the clip say about DynamoDB performance as the workload grows?",
+        "opts": ["Latency doubles with each table partition", "It needs a read replica per Region", "Performance depends on the instance size you pick", "Consistent single-digit millisecond performance at any scale"],
+        "ans": 3,
+        "exp": "DynamoDB is serverless NoSQL with single-digit millisecond latency at any scale, on-demand pay-per-request pricing, built-in multi-AZ replication and global tables for multi-Region, multi-active deployments."
+      },
+      "channel": "Amazon Web Services",
+      "source": "What is Amazon DynamoDB? | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "db-elasticache-redis",
+      "module": "Databases (RDS & DynamoDB)",
+      "topic": "ElastiCache: The Caching Layer (Redis vs Memcached)",
+      "youtubeId": "GoNsuTqeMto",
+      "start": 34,
+      "end": 150,
+      "title": "ElastiCache for Redis",
+      "why": "Note why in-memory beats disk and how Redis scales reads versus writes.",
+      "q": {
+        "q": "How does the clip say ElastiCache for Redis scales writes?",
+        "opts": ["Partitioning with Redis cluster mode", "Read replicas across Availability Zones", "Bigger EBS volumes", "Multi-AZ auto failover"],
+        "ans": 0,
+        "exp": "In-memory data is orders of magnitude faster than disk; replicas scale reads across AZs, partitioning (cluster mode) scales writes, and Multi-AZ auto failover promotes a replica when a node dies."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Introduction to Amazon ElastiCache for Redis",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "msg-fanout-sns",
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "SNS: The Notification Bus (Fan-Out Pattern)",
+      "youtubeId": "CEj0yyubNgQ",
+      "start": 15,
+      "end": 150,
+      "title": "Fan-out with SNS",
+      "why": "Watch why point-to-point connections fall apart at scale and which service AWS names for pub/sub fan-out.",
+      "q": {
+        "q": "In the pub/sub model shown, what happens when a publisher sends a message to a topic?",
+        "opts": ["It waits in a queue until one consumer polls it", "It is written to DynamoDB first", "It is immediately pushed to every subscriber of the topic", "The publisher must call each subscriber's API"],
+        "ans": 2,
+        "exp": "A topic is the logical access point; SNS fans each message out to every subscriber, with retries and failure handling built in, so publishers and subscribers never need to know about each other."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Back to Basics: Building Fan-Out Serverless Architectures Using SNS, SQS and Lambda",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "msg-step-functions",
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "Step Functions: Orchestrating Serverless Workflows",
+      "youtubeId": "wdJ5DN15jus",
+      "start": 0,
+      "end": 81,
+      "title": "Step Functions in 90 seconds",
+      "why": "Note what Step Functions tracks between steps and what it removes from your functions.",
+      "q": {
+        "q": "What does the clip say Step Functions takes care of so your code does not have to?",
+        "opts": ["Container image builds", "State checkpoints, error handling and restarts between workflow steps", "DNS failover", "Database schema migrations"],
+        "ans": 1,
+        "exp": "Step Functions is serverless orchestration: it breaks a workflow into steps, adds flow logic, tracks inputs and outputs, and handles checkpoints, errors and restarts in a visual workflow."
+      },
+      "channel": "Amazon Web Services",
+      "source": "AWS Step Functions explained in 90 seconds | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "msg-eventbridge-bus",
+      "module": "Messaging & Decoupled Architecture",
+      "topic": "EventBridge: The Event Router",
+      "youtubeId": "TXh5oU_yo9M",
+      "start": 267,
+      "end": 415,
+      "title": "Commands vs events, and the event bus",
+      "why": "Catch the difference between a directed command and an observable event, and what the bus rules do for a newly added service.",
+      "q": {
+        "q": "In the clip, what is the key difference between a command and an event?",
+        "opts": ["A command is asynchronous; an event is synchronous", "Events must be acknowledged with a 201; commands are fire-and-forget", "Commands use SQS; events use SNS", "A command targets a specific recipient; an event is simply observable by anyone listening"],
+        "ans": 3,
+        "exp": "Producers emit events without knowing the consumers; the EventBridge bus applies rules to route and filter events to targets, so a new service adds a rule instead of asking the producer team for changes."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Intro to Amazon EventBridge",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "net-route53-traffic-flow",
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Route 53: Global Traffic Management",
+      "youtubeId": "RGWgfhZByAI",
+      "start": 0,
+      "end": 91,
+      "title": "Route 53 and Traffic Flow",
+      "why": "Catch the availability figure and what Traffic Flow does for an application running in several Regions.",
+      "q": {
+        "q": "What does Route 53 Traffic Flow do, according to the clip?",
+        "opts": ["Sends each user to the best location and fails over to an alternate endpoint", "Caches web pages at edge locations", "Issues SSL certificates", "Load-balances TCP traffic inside a VPC"],
+        "ans": 0,
+        "exp": "Route 53 is DNS with 100% availability; Traffic Flow routes users to the best location for them and re-routes to an alternate location when the primary endpoint becomes unavailable."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Amazon Route 53",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "net-cloudfront-100s",
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "CloudFront vs. Global Accelerator",
+      "youtubeId": "AT-nHW3_SVI",
+      "start": 0,
+      "end": 105,
+      "title": "CloudFront in 100 seconds",
+      "why": "Note what comes with CloudFront at no charge: Shield Standard, ACM certificates and data transfer from AWS origins.",
+      "q": {
+        "q": "What does the clip say about data transfer from other AWS origins to CloudFront?",
+        "opts": ["It costs the same as internet egress", "It is billed per edge location", "It is free", "It requires a Direct Connect link"],
+        "ans": 2,
+        "exp": "CloudFront delivers static and dynamic content from edge locations; you get Shield Standard DDoS protection, free ACM TLS certificates, WAF integration and Lambda@Edge, and no charge for data transfer out from other AWS origins to CloudFront."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Introduction to Amazon CloudFront",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "net-transit-gateway",
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "VPC Peering vs. Transit Gateway",
+      "youtubeId": "xlTHkoKR-Os",
+      "start": 0,
+      "end": 76,
+      "title": "Transit Gateway: one big cloud router",
+      "why": "Listen for what Transit Gateway connects and the analogy AWS uses for it.",
+      "q": {
+        "q": "How does the clip describe AWS Transit Gateway?",
+        "opts": ["A content delivery network", "One big cloud router connecting VPCs, VPNs and Direct Connect to a single gateway", "A per-VPC NAT device", "A DNS resolver for hybrid networks"],
+        "ans": 1,
+        "exp": "Transit Gateway centralizes connectivity for hundreds of VPCs, VPNs, accounts and Direct Connect, even across Regions over the AWS global network, with Network Manager for a single view of it all."
+      },
+      "channel": "Amazon Web Services",
+      "source": "What is AWS Transit Gateway - Design and Build Your Network Around a Central Hub",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "net-direct-connect",
+      "module": "Advanced Networking & Content Delivery",
+      "topic": "Hybrid Connectivity: Site-to-Site VPN vs Direct Connect",
+      "youtubeId": "uP68iqyuqTg",
+      "start": 100,
+      "end": 210,
+      "title": "Direct Connect vs VPN, on the whiteboard",
+      "why": "Catch the bandwidth increments and where the physical cross-connect into AWS happens.",
+      "q": {
+        "q": "Where is the physical cross-connect into AWS made for Direct Connect?",
+        "opts": ["Inside your own data center", "At any internet exchange", "On the EC2 instance", "At a Direct Connect partner facility colocated near AWS"],
+        "ans": 3,
+        "exp": "VPN is quick and runs over the internet; Direct Connect is a dedicated line (1 or 10 Gbps increments) into a partner facility that cross-connects into AWS, terminating in one or more VPCs over 802.1Q VLANs."
+      },
+      "channel": "Amazon Web Services",
+      "source": "AWS SA Whiteboarding | AWS Direct Connect",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "sec-iam-federation",
+      "module": "Security, Identity, & Compliance",
+      "topic": "IAM Deep Dive: Policies & Federation",
+      "youtubeId": "Ul6FW4UANGc",
+      "start": 0,
+      "end": 130,
+      "title": "IAM in two minutes",
+      "why": "Catch what permissions apply to, how an existing directory plugs in, and what IAM costs.",
+      "q": {
+        "q": "How does the clip say you can reuse an existing identity system like Active Directory with AWS?",
+        "opts": ["Standards-based federation", "Copying users into IAM by hand", "Sharing the root account password", "Using S3 bucket policies"],
+        "ans": 0,
+        "exp": "IAM permissions apply to individual API calls (who, which action, which resource); federation lets admins and developers administer AWS with existing identities, CloudTrail logs the activity, and IAM has no additional charge."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Introduction to AWS IAM - Identity and Access Management on AWS",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "sec-kms-key-policy",
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS KMS & Encryption at Rest",
+      "youtubeId": "8Z0wsE2HoSo",
+      "start": 0,
+      "end": 88,
+      "title": "KMS in 90 seconds",
+      "why": "Catch what governs access to a key, where keys are protected, and which service records every key use.",
+      "q": {
+        "q": "According to the clip, what controls when, how and who can use a KMS key?",
+        "opts": ["The S3 bucket ACL", "The VPC route table", "The key policy", "The IAM root user only"],
+        "ans": 2,
+        "exp": "KMS keys are generated and protected in FIPS 140 validated hardware security modules; the key policy governs access, asymmetric key pairs sign and verify data, and CloudTrail records every key management action and use."
+      },
+      "channel": "Amazon Web Services",
+      "source": "What is AWS Key Management Service? | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "sec-shield-advanced",
+      "module": "Security, Identity, & Compliance",
+      "topic": "AWS WAF, Shield, & Macie",
+      "youtubeId": "7rgiXEa0_jE",
+      "start": 0,
+      "end": 83,
+      "title": "Shield Standard vs Shield Advanced",
+      "why": "Catch what every AWS customer gets automatically and what the paid tier adds on top.",
+      "q": {
+        "q": "Which of these does the clip list as a Shield Advanced benefit?",
+        "opts": ["Free SSL certificates for CloudFront", "Cost protection against charges from DDoS-related usage spikes", "Automatic patching of EC2 instances", "Encryption of EBS volumes"],
+        "ans": 1,
+        "exp": "Everyone gets automatic protection against common network and transport layer floods; Shield Advanced adds tailored detection, automatic mitigations, the Shield Response Team, WAF and Firewall Manager at no extra cost, and DDoS cost protection."
+      },
+      "channel": "Amazon Web Services",
+      "source": "AWS Shield Animated Explainer Video | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "sec-secrets-rotation",
+      "module": "Security, Identity, & Compliance",
+      "topic": "Secrets Manager vs Parameter Store & AWS STS",
+      "youtubeId": "NwEg5yKv_QE",
+      "start": 121,
+      "end": 245,
+      "title": "Secrets Manager: retrieve and rotate",
+      "why": "Catch the anti-pattern the speaker calls out, how the app gets the secret at runtime, and what performs the automatic rotation.",
+      "q": {
+        "q": "What does Secrets Manager use to rotate credentials automatically?",
+        "opts": ["A cron job on your EC2 instance", "CloudTrail events", "An S3 lifecycle rule", "AWS Lambda functions on a schedule"],
+        "ans": 3,
+        "exp": "Never hardcode credentials; pull them at runtime through the API with an IAM policy on the application role. Rotation runs through Lambda, ready-made for RDS, Aurora, DocumentDB and Redshift and custom for anything else."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Back to Basics: Secrets Management",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "gov-multi-account-ous",
+      "module": "Management, Governance, & Analytics",
+      "topic": "AWS Organizations & SCPs",
+      "youtubeId": "ubdJlHrxlXE",
+      "start": 64,
+      "end": 160,
+      "title": "Why one AWS account stops working",
+      "why": "Catch the problems of prod and non-prod sharing an account, then the two foundation OUs and what each holds.",
+      "q": {
+        "q": "Which organizational unit does the clip say holds the log-aggregation and security read-only accounts?",
+        "opts": ["The Security OU", "The Workload OU", "The Sandbox OU", "The Infrastructure OU"],
+        "ans": 0,
+        "exp": "A single account mixes prod and non-prod, needs complex condition and tag policies and complicates chargeback; AWS Organizations starts with a Security OU (log archive, security read) and an Infrastructure OU (networking, shared services)."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Back to Basics: Design Patterns for Building AWS Multi-Account Organization",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "gov-xray-tracing",
+      "module": "Management, Governance, & Analytics",
+      "topic": "AWS X-Ray: Distributed Tracing & Debugging",
+      "youtubeId": "Td7ZSS8p6DA",
+      "start": 14,
+      "end": 110,
+      "title": "X-Ray announced: tracing microservices",
+      "why": "Catch why traditional debugging fails for microservices and what X-Ray's visual map shows per request.",
+      "q": {
+        "q": "What does the clip say X-Ray provides to spot where errors occur?",
+        "opts": ["A list of CloudTrail API events", "An EC2 CPU dashboard", "A visual map of the application with per-request latency, status and downstream calls", "A VPC flow-log viewer"],
+        "ans": 2,
+        "exp": "X-Ray traces requests across EC2, ECS, DynamoDB, Elastic Beanstalk and Lambda, showing latency, HTTP status, error counts and downstream calls on a service map."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Announcing AWS X-Ray",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "cont-ecs-no-charge",
+      "module": "Advanced Compute & Containers",
+      "topic": "ECS vs. EKS vs. Fargate",
+      "youtubeId": "FnFvpIsBrog",
+      "start": 0,
+      "end": 95,
+      "title": "What ECS takes off your plate",
+      "why": "Catch what ECS itself costs and what Fargate removes.",
+      "q": {
+        "q": "What does the clip say you pay for Amazon ECS itself?",
+        "opts": ["A per-cluster hourly fee", "Nothing extra; you pay only for the AWS resources that run your application", "A per-container fee", "A fixed monthly subscription"],
+        "ans": 1,
+        "exp": "ECS has no control plane to manage and no additional charge; with Fargate there are no hosts to patch or upgrade, and ECS Anywhere extends it to on-premises."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Introduction to Amazon Elastic Container Service (ECS) | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "cont-fargate-45s",
+      "module": "Advanced Compute & Containers",
+      "topic": "ECS vs. EKS vs. Fargate",
+      "youtubeId": "4CHu1ErN51o",
+      "start": 0,
+      "end": 46,
+      "title": "Fargate in 45 seconds",
+      "why": "Note what you stop managing when containers go serverless.",
+      "q": {
+        "q": "What does Fargate remove the need for, according to the clip?",
+        "opts": ["Writing a Dockerfile", "Using a container registry", "Defining task CPU and memory", "Provisioning and managing servers for your containers"],
+        "ans": 3,
+        "exp": "Fargate runs serverless containers: no servers to manage, it launches tens of thousands of containers quickly and scales to the application's compute requirements."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Introduction to AWS Fargate",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "dr-four-strategies",
+      "module": "Migration & Disaster Recovery",
+      "topic": "Disaster Recovery Strategies (RTO & RPO)",
+      "youtubeId": "OT1EJ_kyP_g",
+      "start": 51,
+      "end": 150,
+      "title": "Four DR options and where DRS fits",
+      "why": "Count the four DR strategies and note which one a storage-replication solution maps to.",
+      "q": {
+        "q": "Which DR strategy does the speaker say a storage-replication solution like AWS DRS typically maps to?",
+        "opts": ["Pilot light", "Backup and restore", "Multi-site active-active", "Warm standby"],
+        "ans": 0,
+        "exp": "The four options are backup and restore, pilot light, warm standby and multi-site active-active; DRS replicates at block level into a replication subnet and launches recovery instances only when needed, which is pilot light."
+      },
+      "channel": "Amazon Web Services",
+      "source": "Back to Basics: How to Implement a Multi-Region Disaster Recovery Strategy Using AWS DRS",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "dr-storage-gateway-types",
+      "module": "Migration & Disaster Recovery",
+      "topic": "AWS DataSync & Storage Gateway",
+      "youtubeId": "XXQNXwx8nfE",
+      "start": 33,
+      "end": 135,
+      "title": "Storage Gateway: file, tape, volume",
+      "why": "Match the three gateway types to the protocol each one presents and where the data lands.",
+      "q": {
+        "q": "Which Storage Gateway type presents iSCSI block storage to your application servers?",
+        "opts": ["File Gateway", "Tape Gateway", "Volume Gateway", "Snowball Edge"],
+        "ans": 2,
+        "exp": "File Gateway offers SMB/NFS shares stored as S3 objects or FSx files, Tape Gateway is a virtual tape library for backup software archiving to Glacier, and Volume Gateway presents iSCSI volumes with EBS snapshots for recovery."
+      },
+      "channel": "Amazon Web Services",
+      "source": "AWS Storage Gateway",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "cost-savings-plans-types",
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "Right-Sizing & Savings Plans Architecture",
+      "youtubeId": "2LJwrTtg2IU",
+      "start": 11,
+      "end": 112,
+      "title": "Savings Plans walkthrough",
+      "why": "Catch the maximum discount, what the recommendations are based on, and the three plan types in the console.",
+      "q": {
+        "q": "Which Savings Plan type covers EC2, Fargate and Lambda together?",
+        "opts": ["EC2 Instance Savings Plans", "Compute Savings Plans", "SageMaker Savings Plans", "Reserved Instances"],
+        "ans": 1,
+        "exp": "Savings Plans discount on-demand prices by up to 72% for an hourly commitment; Compute plans span EC2, Fargate and Lambda, EC2 Instance plans lock to a family and Region, and the recommendations in Cost Explorer come from your past usage."
+      },
+      "channel": "Amazon Web Services",
+      "source": "AWS Cost Optimisation Series: Saving Plans | Amazon Web Services",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "cost-nat-data-transfer",
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "The Hidden Bill: Data Transfer & NAT Costs",
+      "youtubeId": "hq4KtPRezus",
+      "start": 135,
+      "end": 240,
+      "title": "Cutting NAT gateway charges",
+      "why": "Catch the two cheapest fixes: a NAT gateway in the same AZ as the talkers, and gateway endpoints for S3 and DynamoDB.",
+      "q": {
+        "q": "If most NAT gateway traffic goes to S3 or DynamoDB in the same Region, what does the clip recommend?",
+        "opts": ["A second NAT gateway", "A larger NAT instance", "CloudFront in front of the bucket", "A gateway VPC endpoint, which has no data processing or hourly charge"],
+        "ans": 3,
+        "exp": "Put the NAT gateway in the same AZ as the busiest instances to avoid cross-AZ charges, use gateway endpoints for S3 and DynamoDB (free), interface endpoints for other AWS services, and an internet gateway for instances that may sit in a public subnet."
+      },
+      "channel": "Amazon Web Services",
+      "source": "How can I reduce data transfer charges for my NAT gateway?",
+      "verified": "2026-11-06"
+    },
+    {
+      "id": "cost-trusted-advisor",
+      "module": "Cost Optimization (The CFO's Architecture)",
+      "topic": "AWS Cost Tools: Explorer, Budgets & Trusted Advisor",
+      "youtubeId": "uEIrFbesvP8",
+      "start": 17,
+      "end": 84,
+      "title": "Trusted Advisor in a minute",
+      "why": "Catch what Trusted Advisor compares your environment against and the three pillars it names.",
+      "q": {
+        "q": "What does the clip say Trusted Advisor compares your environment to?",
+        "opts": ["AWS best practices, producing prioritized recommendations", "Your competitors' AWS bills", "Last year's invoices", "The SAA-C03 exam blueprint"],
+        "ans": 0,
+        "exp": "Trusted Advisor checks cost optimization, security and resilience against AWS best practices and benchmarks, with context-driven, prioritized recommendations and guided next steps."
+      },
+      "channel": "Amazon Web Services",
+      "source": "AWS Trusted Advisor | Amazon Web Services",
+      "verified": "2026-11-06"
+    }
+  ]
+}

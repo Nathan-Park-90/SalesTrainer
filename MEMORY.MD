@@ -463,3 +463,11 @@ Nathan: "a learning tool that hits like doom scrolling", AWS first. A full-scree
   (hosting details live in Nathan's private ops notes, not in this public repo). Other packs: `list <courseId>` then render again (it skips what exists).
 - **Test**: `npm run test-doom` (`tools/test-doom.py`, Playwright, phone + desktop, 40 checks incl. Learn/Grind, screenshots in `tools/doom-shots/`).
 - **Nov 6, 2026 01:15:** all 1955 AWS narration clips rendered (laptop, 2 shards after a 4-shard run thrashed the cores) and pushed; live manifest Onyx 565 / Michael 1390, 300 MB at `academy.mammothcapital.site/audio/doom/`.
+- **Nov 6, 2026 08:30 (Doom Scroll Phases 2 + 3):** the 89 AWS exam-to-lesson gaps are now TAUGHT in the course: one 60-110 word paragraph per
+  gap appended to the target topic's prose before its anchor (37 topics, +9.3k words; `ref.gap` false everywhere; `tools/refs/aws-gaps.md`
+  marked done), so the Library, the Learn feed (350 prose cards for AWS) and the narration all carry them. **Real video cards**:
+  `www/courses/aws-clips.json` = 36 YouTube segments (45-150 s, official AWS channels, verified embeddable Nov 6, caption-grounded start/end)
+  mapped to module + topic, each with a question; `doom.html` `clip` card (thumbnail + ▶, youtube-nocookie iframe created on tap, question on
+  `ended`/DONE WATCHING/offline, qid `aws-saa-c03:clip:<id>`, Learn: up to 2 per module interleaved with the boss round; Grind: 10% of slots
+  from done modules, never two in a row; narration pauses while a video plays). `tools/test-doom.py` = 57 checks. Speech list now 3665 clips
+  across all seven packs (the six non-AWS packs narrate too once their render lands).

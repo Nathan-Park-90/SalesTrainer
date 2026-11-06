@@ -1,9 +1,11 @@
 # AWS SAA-C03 Exam-to-Lesson Gaps Report
 
-This report lists every exam question in `www/courses/aws-saa-c03.js` marked with `"gap": true` (where the deciding fact is not currently taught in any lesson topic's `.prose`).
+**DONE — 2026-11-06 (Doom Scroll Phase 2, "narrated gap cards").** Every row below is now taught inside the course: each deciding fact got one short paragraph (60–110 words, Academy voice) appended to the target topic's `prose`, placed before the topic's closing ⚓ Anchor / Exam Tip callouts so the anchor card stays last in the Learn feed; topics that received 3+ paragraphs got a one-line `<p><strong>…</strong></p>` lead-in. All 89 questions now carry `"gap": false`. `node tools/validate-refs.js` → `aws-saa-c03: 213/213 refs, 0 errors, 18 cram links, 0 gaps`. 89 paragraphs / 37 topics / 9,319 words of prose (9,448 incl. lead-ins). The table is kept as the historical list of what was missing. Note: `tools/validate-refs.test.js` (the `--self-test`) still asserts "at least 1 gap" on the real file; that assertion is now stale and needs updating by whoever owns the tests.
+
+This report lists every exam question in `www/courses/aws-saa-c03.js` that was marked with `"gap": true` on 2026-11-03 (the deciding fact was not taught in any lesson topic's `.prose` at the time).
 
 - **Total exam questions:** 213
-- **Questions with `gap: true`:** 89
+- **Questions with `gap: true`:** 89 at the Nov 3 audit → **0** as of 2026-11-06
 
 | Index | Domain | First 100 chars of `q` | Target Module → Topic | Missing Deciding Fact |
 |---:|---|---|---|---|

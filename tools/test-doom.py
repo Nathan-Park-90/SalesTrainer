@@ -1,7 +1,9 @@
 """Doom Scroll (doom.html) end-to-end check, Nov 5 2026.
 Serves www/ on a free port, opens the page on a phone-sized viewport, picks the AWS track, answers a question,
 flips a flashcard, scrolls through a few cards and checks that Game recorded the answers (st_review, st_daylog)
-and that the top bar counts them. Screenshots land in tools/doom-shots/.
+and that the top bar counts them. Nov 6: also validates courses/aws-clips.json against the pack and walks a clip
+card (play overlay, no iframe before the tap, DONE WATCHING -> question -> :clip: record); YouTube is never loaded.
+Screenshots land in tools/doom-shots/.
 Run: python tools/test-doom.py            (needs: pip install playwright; python -m playwright install chromium)
 """
 from __future__ import annotations
@@ -42,6 +44,27 @@ def main() -> int:
         check(page.locator(".d-mode.on").get_attribute("data-mode") == "learn", "Learn is the default mode")
         check("module 1 of 13" in page.locator(".d-track", has_text="AWS").first.inner_text(), "AWS row shows module 1 of 13 in Learn")
         page.screenshot(path=str(SHOTS / "landing.png"))
+        # ---- CLIPS: courses/aws-clips.json validates against the AWS pack (titles exist, times sane, ids unique) ----
+        clips = page.evaluate("fetch('courses/aws-clips.json').then(r => r.json())")
+        mods = page.evaluate("COURSE_AWS.modules.map(m => ({t: m.title, topics: m.topics.map(x => x.title)}))")
+        titles = {m["t"]: set(m["topics"]) for m in mods}
+        items = clips.get("clips", [])
+        check(clips.get("course") == "aws-saa-c03" and 24 <= len(items) <= 36, f"aws-clips.json: {len(items)} clips for {clips.get('course')}")
+        bad = [c["id"] for c in items if c.get("module") not in titles]
+        check(not bad, f"every clip names an existing module title: {bad}")
+        bad = [c["id"] for c in items if c.get("topic") and c["topic"] not in titles.get(c.get("module"), set())]
+        check(not bad, f"every clip topic exists in its module: {bad}")
+        bad = [c["id"] for c in items if not (45 <= int(c["end"]) - int(c["start"]) <= 150) or int(c["start"]) < 0]
+        check(not bad, f"every segment runs 45 to 150 s: {bad}")
+        ids = [c["id"] for c in items]
+        check(len(ids) == len(set(ids)), "clip ids are unique")
+        import re as _re
+        bad = [c["id"] for c in items if not _re.fullmatch(r"[A-Za-z0-9_-]{11}", c.get("youtubeId", ""))]
+        check(not bad, f"every youtubeId is an 11-character id: {bad}")
+        bad = [c["id"] for c in items if not (c.get("q") and len(c["q"].get("opts", [])) == 4 and 0 <= int(c["q"].get("ans", -1)) < 4 and c["q"].get("exp") and c.get("why") and c.get("title") and c.get("channel") and c.get("verified"))]
+        check(not bad, f"every clip has title, why, channel, verified date and a 4-option question with exp: {bad}")
+        covered = {c["module"] for c in items}
+        check(len(covered) == len(titles), f"every module has at least one clip ({len(covered)} of {len(titles)})")
         # ---- LEARN: cover, prose cards, anchor, then the topic quiz; no exam-bank question before a module is done ----
         page.locator(".d-track", has_text="AWS").first.click()
         page.wait_for_timeout(300)
@@ -80,6 +103,35 @@ def main() -> int:
         if mi >= 0:
             page.locator(".d-card").nth(mi).scroll_into_view_if_needed(); page.wait_for_timeout(300)
             page.screenshot(path=str(SHOTS / "learn-done.png"))
+        # ---- CLIP card: interleaved with the boss round, play overlay, question on DONE WATCHING, recorded as :clip: ----
+        check("clip:" in kinds3, f"a clip card follows the module-done card: {kinds3}")
+        check(not any(a == "clip:" and b == "clip:" for a, b in zip(kinds3, kinds3[1:])), "never two clips in a row")
+        ci = kinds3.index("clip:") if "clip:" in kinds3 else -1
+        if ci >= 0:
+            clip = page.locator(".d-card").nth(ci)
+            clip.scroll_into_view_if_needed(); page.wait_for_timeout(400)
+            cid = clip.get_attribute("data-clip")
+            entry = next((c for c in items if c["id"] == cid), None)
+            check(entry is not None and entry["module"] == mods[3]["t"], f"the clip belongs to the module just finished ({cid})")
+            check(clip.locator(".d-play").is_visible(), "the play overlay shows (no iframe until the tap)")
+            check(clip.locator("iframe").count() == 0, "no YouTube iframe is created before the tap")
+            src = clip.locator(".d-video").get_attribute("data-src") or ""
+            want_src = f"youtube-nocookie.com/embed/{entry['youtubeId']}?start={entry['start']}&end={entry['end']}&rel=0&modestbranding=1&playsinline=1" if entry else ""
+            check(want_src and want_src in src, f"embed src carries the id, start/end, rel=0, modestbranding, playsinline: {src}")
+            check(clip.locator(".d-why").inner_text().strip() == (entry or {}).get("why", "").strip(), "the why line shows above the video")
+            page.screenshot(path=str(SHOTS / "clip.png"))
+            clip.locator(".d-done").click(); page.wait_for_timeout(300)
+            check(clip.locator(".d-opt").count() == 4, "DONE WATCHING reveals the 4-option question")
+            check(clip.locator(".d-done").count() == 0, "the done button goes away once the question shows")
+            clip.locator(".d-opt").nth(int(entry["q"]["ans"]) if entry else 0).click(); page.wait_for_timeout(300)
+            check(clip.locator(".d-after.good").count() == 1 and clip.locator(".d-opt.right").count() == 1, "the clip question grades like any question")
+            rev = page.evaluate("JSON.parse(localStorage.getItem('st_review')||'{}')")
+            check(any(k == f"aws-saa-c03:clip:{cid}" for k in rev), f"the answer is recorded as aws-saa-c03:clip:<id>: {list(rev)}")
+            page.screenshot(path=str(SHOTS / "clip-question.png"))
+        sl = page.evaluate("DoomDebug.speechList('aws-saa-c03')")
+        check(any(x["text"].startswith("A real one.") and x["voice"] == "onyx" for x in sl), "speechList carries the clip teach lines (Onyx)")
+        check(any(x["text"].startswith((items[0]["q"]["q"] if items else "~")) and x["voice"] == "michael" for x in sl), "speechList carries the clip questions (Michael)")
+        page.evaluate("localStorage.removeItem('st_review'); localStorage.removeItem('st_daylog')")
         # ---- GRIND: the original feed ----
         page.evaluate("localStorage.removeItem('st_doom_learn')")
         page.goto(base + "/doom.html?track=aws-saa-c03&mode=grind"); page.wait_for_load_state("networkidle"); page.wait_for_timeout(300)
@@ -123,13 +175,18 @@ def main() -> int:
                 found_fc = True; break
             page.keyboard.press("ArrowDown"); page.wait_for_timeout(350)
         check(found_fc, "found and answered a flashcard")
-        kinds = page.evaluate("[...document.querySelectorAll('.d-card')].map(c=>c.dataset.kind)")
+        # a fact card: 30% of Grind slots, so keep scrolling (rendering ahead) until one is in the DOM instead of trusting six draws
+        for _ in range(30):
+            kinds = page.evaluate("[...document.querySelectorAll('.d-card')].map(c=>c.dataset.kind)")
+            if "fact" in kinds: break
+            page.keyboard.press("ArrowDown"); page.wait_for_timeout(300)
         check("fact" in kinds, f"a fact card appeared in the mix: {kinds}")
         fi = kinds.index("fact") if "fact" in kinds else -1
-        check(fi >= 0 and fi + 1 < len(kinds) and kinds[fi + 1] == "q", "a fact is followed by a question")
         if fi >= 0:
-            page.locator(".d-card").nth(fi).scroll_into_view_if_needed(); page.wait_for_timeout(300)
+            page.locator(".d-card").nth(fi).scroll_into_view_if_needed(); page.wait_for_timeout(400)   # reaching it renders the cards after it
             page.screenshot(path=str(SHOTS / "fact.png"))
+            kinds = page.evaluate("[...document.querySelectorAll('.d-card')].map(c=>c.dataset.kind)")
+        check(fi >= 0 and fi + 1 < len(kinds) and kinds[fi + 1] == "q", f"a fact is followed by a question: {kinds}")
         total = page.evaluate("document.querySelectorAll('.d-card').length")
         check(total >= 6, f"feed keeps rendering ahead ({total} cards)")
         day = page.evaluate("Game.Day.today()")
